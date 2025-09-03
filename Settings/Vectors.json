@@ -1,0 +1,29 @@
+{
+  "vectors": [
+    {
+      "dataclassName": "Table_1",
+      "dataclassNumber": 1,
+      "vectorName": "Field_5",
+      "vectorNumber": 5,
+      "model": "",
+      "fields": []
+    },
+    {
+      "dataclassName": "Table_1",
+      "dataclassNumber": 1,
+      "vectorName": "zdesc",
+      "vectorNumber": 4,
+      "model": "",
+      "fields": []
+    },
+    {
+      "dataclassName": "Table_2",
+      "dataclassNumber": 2,
+      "vectorName": "Field_5",
+      "vectorNumber": 5,
+      "model": "",
+      "fields": []
+    }
+  ],
+  "models": []
+}
