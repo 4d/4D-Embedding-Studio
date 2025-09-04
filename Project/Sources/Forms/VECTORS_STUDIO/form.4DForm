@@ -46,6 +46,7 @@
 					"right": 400,
 					"sizingX": "grow",
 					"sizingY": "grow",
+					"resizingMode": "legacy",
 					"columns": [
 						{
 							"header": {
@@ -83,7 +84,9 @@
 					"events": [
 						"onClick"
 					],
-					"action": "cancel"
+					"action": "cancel",
+					"sizingY": "move",
+					"sizingX": "move"
 				},
 				"Button1": {
 					"type": "button",
@@ -95,12 +98,13 @@
 					"events": [
 						"onClick"
 					],
-					"method": "ObjectMethods/Button1.4dm"
+					"method": "ObjectMethods/Button1.4dm",
+					"sizingY": "move"
 				}
 			}
 		}
 	],
-	"geometryStamp": 17,
+	"geometryStamp": 20,
 	"method": "method.4dm",
 	"editor": {
 		"activeView": "View 1",
