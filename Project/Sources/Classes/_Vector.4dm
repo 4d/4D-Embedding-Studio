@@ -15,8 +15,8 @@ property settings : Object
 Class constructor
 	
 	This:C1470.settings:=This:C1470.readSettings()
-	This:C1470.vectors:=This:C1470.readStructure()
 	This:C1470.models:=This:C1470.readModels()
+	This:C1470.vectors:=This:C1470.readStructure()
 	
 	
 	// MARK:-[SETTINGS]
@@ -25,13 +25,15 @@ Function readSettings() : Object
 	
 	Try
 		
-		return JSON Parse:C1218(This:C1470.settingsFile.getText())
+		var $settings:=JSON Parse:C1218(This:C1470.settingsFile.getText())
 		
 	Catch
 		
 		return {}
 		
 	End try
+	
+	return $settings
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get settingsFile() : 4D:C1709.File
