@@ -47,6 +47,9 @@
 					"sizingX": "grow",
 					"sizingY": "grow",
 					"resizingMode": "legacy",
+					"currentItemSource": "Form:C1466.currentVector",
+					"currentItemPositionSource": "Form:C1466.currentVectorPosition",
+					"selectedItemsSource": "Form:C1466.selectedVectors",
 					"columns": [
 						{
 							"header": {
@@ -58,7 +61,8 @@
 							"footer": {
 								"name": "Footer1"
 							},
-							"dataSource": "This:C1470.dataclassName"
+							"dataSource": "This:C1470.dataclassName",
+							"width": 141
 						},
 						{
 							"header": {
@@ -74,25 +78,11 @@
 						}
 					]
 				},
-				"Button": {
-					"type": "button",
-					"text": ".Close",
-					"top": 423,
-					"left": 323,
-					"width": 77,
-					"height": 22,
-					"events": [
-						"onClick"
-					],
-					"action": "cancel",
-					"sizingY": "move",
-					"sizingX": "move"
-				},
 				"Button1": {
 					"type": "button",
 					"text": ".Save",
-					"top": 423,
-					"left": 20,
+					"top": 378,
+					"left": 420,
 					"width": 77,
 					"height": 22,
 					"events": [
@@ -100,11 +90,56 @@
 					],
 					"method": "ObjectMethods/Button1.4dm",
 					"sizingY": "move"
+				},
+				"Input": {
+					"type": "input",
+					"left": 419,
+					"top": 62,
+					"width": 380,
+					"height": 113,
+					"dataSource": "Form:C1466.currentVector.phrase"
+				},
+				"Text": {
+					"type": "text",
+					"text": ".Explanatory Phrase",
+					"top": 27,
+					"left": 419,
+					"width": 381,
+					"height": 16,
+					"fontWeight": "bold"
+				},
+				"Line": {
+					"type": "line",
+					"top": 41,
+					"left": 7,
+					"width": 792,
+					"height": 0,
+					"stroke": "#1e90ff",
+					"startPoint": "topLeft"
+				},
+				"Text1": {
+					"type": "text",
+					"text": ".Model",
+					"top": 195,
+					"left": 419,
+					"width": 381,
+					"height": 16,
+					"fontWeight": "bold"
+				},
+				"Popup Dropdown List": {
+					"type": "dropdown",
+					"left": 420,
+					"top": 219,
+					"width": 379,
+					"height": 22,
+					"events": [
+						"onDataChange"
+					]
 				}
 			}
 		}
 	],
-	"geometryStamp": 20,
+	"geometryStamp": 45,
 	"method": "method.4dm",
 	"editor": {
 		"activeView": "View 1",
@@ -113,5 +148,5 @@
 			"View 1": {}
 		}
 	},
-	"formClass": "_Vector"
+	"formClass": "_VECTOR_STUDIO"
 }

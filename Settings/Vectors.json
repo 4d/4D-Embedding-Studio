@@ -1,29 +1,35 @@
 {
-  "vectors": [
-    {
-      "dataclassName": "Table_1",
-      "dataclassNumber": 1,
-      "vectorName": "Field_5",
-      "vectorNumber": 5,
-      "model": "",
-      "fields": []
-    },
-    {
-      "dataclassName": "Table_1",
-      "dataclassNumber": 1,
-      "vectorName": "zdesc",
-      "vectorNumber": 4,
-      "model": "",
-      "fields": []
-    },
-    {
-      "dataclassName": "Table_2",
-      "dataclassNumber": 2,
-      "vectorName": "Field_5",
-      "vectorNumber": 5,
-      "model": "",
-      "fields": []
-    }
-  ],
-  "models": []
+	"vectors": [
+		{
+			"error": null,
+			"phrase": "",
+			"model": "",
+			"version": -1,
+			"dataclassName": "Table_1",
+			"dataclassNumber": 1,
+			"vectorName": "Field_5",
+			"vectorNumber": 5
+		},
+		{
+			"error": null,
+			"phrase": "",
+			"model": "",
+			"version": -1,
+			"dataclassName": "Table_1",
+			"dataclassNumber": 1,
+			"vectorName": "zdesc",
+			"vectorNumber": 4
+		},
+		{
+			"error": null,
+			"phrase": "",
+			"model": "",
+			"version": -1,
+			"dataclassName": "Table_2",
+			"dataclassNumber": 2,
+			"vectorName": "Field_5",
+			"vectorNumber": 5
+		}
+	],
+	"models": []
 }
