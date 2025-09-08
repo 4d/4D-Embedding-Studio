@@ -135,3 +135,83 @@ Function readModels() : Collection
 	
 	// TODO: Read models
 	return []
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function moreManager()
+	
+	//
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function phraseManager()
+	
+	var $e:=FORM Event:C1606
+	var $vector : cs:C1710.Vector:=This:C1470.currentVector
+	var $plainText:=ST Get plain text:C1092(*; "phrase")  //Get edited text
+	
+	Case of 
+			
+			// ______________________________________________________
+		: ($e.code=On Clicked:K2:4)
+			
+			If ($vector=Null:C1517) || Not:C34(Contextual click:C713)
+				
+				return 
+				
+			End if 
+			
+			var $menu:=cs:C1710.menu.new()
+			
+			// TODO: Menu Cut, Copy, Paste, Select All & sub menu insert
+			var $attribute : Object
+			
+			For each ($attribute; $vector.supportedAttributes.sort(Formula:C1597(String:C10($1.name)<String:C10($1.name))))
+				
+				$menu.append($attribute.name; "{"+$attribute.name+"}")
+				
+			End for each 
+			
+			If (Not:C34($menu.popup().selected))
+				
+				return 
+				
+			End if 
+			var $startSel; $endSel : Integer
+			GET HIGHLIGHT:C209(*; "phrase"; $startSel; $endSel)
+			
+			var $newValue:=Substring:C12($plainText; 1; $startSel-1)+$menu.choice+Substring:C12($plainText; $endSel)
+			
+			OBJECT SET VALUE:C1742("phrase"; $newValue)
+			
+			$endSel:=$startSel+Length:C16($menu.choice)
+			HIGHLIGHT TEXT:C210(*; "phrase"; $endSel; $endSel)
+			
+			// ______________________________________________________
+		: ($e.code=On Before Keystroke:K2:6)
+			
+			//
+			
+			// ______________________________________________________
+		: ($e.code=On After Edit:K2:43)
+			
+			// Remove styles
+			OBJECT SET VALUE:C1742("phrase"; $plainText)
+			
+			// Highlight any errors, if any
+			$vector.phrase:=$vector.parsePhrase($vector.phrase)
+			
+			// ______________________________________________________
+		: ($e.code=On Data Change:K2:15)
+			
+			// Highlight any errors, if any
+			ST SET TEXT:C1115(*; "phrase"; $vector.parsePhrase(OBJECT Get value:C1743("phrase")); ST Start text:K78:15; ST End text:K78:16)
+			
+			// ______________________________________________________
+		Else 
+			
+			// A "Case of" statement should never omit "Else"
+			
+			// ______________________________________________________
+	End case 
+	
+	
+	
