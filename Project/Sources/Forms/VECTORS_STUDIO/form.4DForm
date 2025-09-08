@@ -91,13 +91,22 @@
 					"method": "ObjectMethods/Button1.4dm",
 					"sizingY": "move"
 				},
-				"Input": {
+				"phrase": {
 					"type": "input",
 					"left": 419,
-					"top": 62,
+					"top": 52,
 					"width": 380,
 					"height": 113,
-					"dataSource": "Form:C1466.currentVector.phrase"
+					"dataSource": "Form:C1466.currentVector.phrase",
+					"events": [
+						"onClick",
+						"onDataChange",
+						"onAfterKeystroke",
+						"onAfterEdit"
+					],
+					"method": "ObjectMethods/phrase.4dm",
+					"styledText": true,
+					"contextMenu": "none"
 				},
 				"Text": {
 					"type": "text",
@@ -108,19 +117,10 @@
 					"height": 16,
 					"fontWeight": "bold"
 				},
-				"Line": {
-					"type": "line",
-					"top": 41,
-					"left": 7,
-					"width": 792,
-					"height": 0,
-					"stroke": "#1e90ff",
-					"startPoint": "topLeft"
-				},
 				"Text1": {
 					"type": "text",
 					"text": ".Model",
-					"top": 195,
+					"top": 177,
 					"left": 419,
 					"width": 381,
 					"height": 16,
@@ -129,17 +129,75 @@
 				"Popup Dropdown List": {
 					"type": "dropdown",
 					"left": 420,
-					"top": 219,
+					"top": 201,
 					"width": 379,
 					"height": 22,
 					"events": [
 						"onDataChange"
 					]
+				},
+				"more": {
+					"type": "button",
+					"top": 33,
+					"left": 783,
+					"width": 16,
+					"height": 16,
+					"events": [
+						"onClick"
+					],
+					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/more.png",
+					"style": "custom",
+					"iconFrames": 4,
+					"method": "ObjectMethods/more.4dm"
+				},
+				"Line": {
+					"type": "line",
+					"top": 41,
+					"left": 7,
+					"width": 792,
+					"height": 0,
+					"stroke": "#1e90ff",
+					"startPoint": "topLeft",
+					"visibility": "hidden",
+					"strokeDashArray": [
+						2,
+						2
+					]
+				},
+				"Line1": {
+					"type": "line",
+					"top": 51,
+					"left": 7,
+					"width": 792,
+					"height": 0,
+					"stroke": "#1e90ff",
+					"startPoint": "topLeft",
+					"visibility": "hidden",
+					"strokeDashArray": [
+						2,
+						2
+					]
+				},
+				"phrase1": {
+					"type": "input",
+					"left": 872,
+					"top": 52,
+					"width": 411,
+					"height": 113,
+					"dataSource": "Form:C1466.currentVector.phrase",
+					"events": [
+						"onClick",
+						"onDataChange",
+						"onAfterKeystroke",
+						"onAfterEdit"
+					],
+					"styledText": false,
+					"contextMenu": "none"
 				}
 			}
 		}
 	],
-	"geometryStamp": 45,
+	"geometryStamp": 146,
 	"method": "method.4dm",
 	"editor": {
 		"activeView": "View 1",

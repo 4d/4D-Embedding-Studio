@@ -1,6 +1,6 @@
 {
 	"tables": {
-		"Table_2": {
+		"Cities": {
 			"color": {
 				"red": 255,
 				"green": 255,
@@ -8,14 +8,47 @@
 				"alpha": 0
 			},
 			"coordinates": {
-				"left": 240,
-				"top": 40,
+				"left": 603.2421875,
+				"top": 169.9375,
 				"width": 120,
 				"height": 167.33203125
 			},
 			"displayable_fields_count": 6
 		},
-		"Table_1": {
+		"School": {
+			"color": {
+				"red": 255,
+				"green": 255,
+				"blue": 255,
+				"alpha": 0
+			},
+			"coordinates": {
+				"left": 342.47265625,
+				"top": 75.8984375,
+				"width": 120,
+				"height": 167.33203125
+			},
+			"displayable_fields_count": 6,
+			"fields_ordering": 2,
+			"fields": {
+				"vector": {
+					"position": 5
+				},
+				"city_ID": {
+					"position": 3
+				},
+				"university": {
+					"position": 4
+				},
+				"name": {
+					"position": 2
+				},
+				"ID": {
+					"position": 1
+				}
+			}
+		},
+		"Students": {
 			"color": {
 				"red": 255,
 				"green": 255,
@@ -25,10 +58,49 @@
 			"coordinates": {
 				"left": 40,
 				"top": 40,
-				"width": 120,
-				"height": 167.33203125
+				"width": 181.4765625,
+				"height": 307.25390625
 			},
-			"displayable_fields_count": 6
+			"displayable_fields_count": 12,
+			"fields_ordering": 2,
+			"fields": {
+				"school_ID": {
+					"position": 4
+				},
+				"vector_2": {
+					"position": 6
+				},
+				"vector_1": {
+					"position": 5
+				},
+				"lastName": {
+					"position": 3
+				},
+				"firstName": {
+					"position": 2
+				},
+				"ID": {
+					"position": 1
+				}
+			}
+		}
+	},
+	"relations": {
+		"F9801E17AE2F41F99B6EE24E51829F8E": {
+			"color": {
+				"red": 255,
+				"green": 255,
+				"blue": 255,
+				"alpha": 0
+			}
+		},
+		"E1051A6110B84E558DFE7C41F2DDDB0A": {
+			"color": {
+				"red": 255,
+				"green": 255,
+				"blue": 255,
+				"alpha": 0
+			}
 		}
 	}
 }

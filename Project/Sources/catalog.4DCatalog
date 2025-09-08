@@ -2,36 +2,77 @@
 <!DOCTYPE base SYSTEM "http://www.4d.com/dtd/2007/base.dtd" >
 <base name="4D Vector Studio" uuid="ACC63E6DF97A4977B66A16020642C600" collation_locale="en">
 	<schema name="DEFAULT_SCHEMA"/>
-	<table name="Table_1" uuid="32D85E6A49EF4EB5A51A993D95FD4E3B" id="1">
+	<table name="Students" uuid="32D85E6A49EF4EB5A51A993D95FD4E3B" id="1">
 		<field name="ID" uuid="8C8244E61CBA42229EE02B9CE64EE77C" type="4" unique="true" autosequence="true" not_null="true" id="1"/>
-		<field name="Name" uuid="C61F81D5BF754E64B1F232061C65F9A7" type="10" limiting_length="255" id="2"/>
-		<field name="Color" uuid="CB705F9EFB2C42D5BEFA35F7ABC8BF4B" type="10" limiting_length="255" id="3"/>
-		<field name="zdesc" uuid="7A8E5B214E394345A4870D675BC1C936" type="21" blob_switch_size="2147483647" id="4">
+		<field name="firstName" uuid="C61F81D5BF754E64B1F232061C65F9A7" type="10" limiting_length="255" id="2"/>
+		<field name="lastName" uuid="CB705F9EFB2C42D5BEFA35F7ABC8BF4B" type="10" limiting_length="255" id="3"/>
+		<field name="vector_1" uuid="7A8E5B214E394345A4870D675BC1C936" type="21" blob_switch_size="2147483647" id="4">
 			<field_extra class_id="4D.Vector"/>
 		</field>
-		<field name="Field_5" uuid="4F45DE7AB8BB41369750D4DABB31A83F" type="21" blob_switch_size="2147483647" id="5">
+		<field name="vector_2" uuid="4F45DE7AB8BB41369750D4DABB31A83F" type="21" blob_switch_size="2147483647" id="5">
 			<field_extra class_id="4D.Vector"/>
 		</field>
+		<field name="school_ID" uuid="DFD80A6D16704C70BE334E7C411D2177" type="4" id="6"/>
 		<primary_key field_name="ID" field_uuid="8C8244E61CBA42229EE02B9CE64EE77C"/>
 	</table>
-	<table name="Table_2" uuid="459BCA81417F4262A46553B1E206CFD5" id="2">
+	<table name="School" uuid="459BCA81417F4262A46553B1E206CFD5" id="2">
 		<field name="ID" uuid="831CC1629E0046FAB04863BCD7E2A017" type="4" unique="true" autosequence="true" not_null="true" id="1"/>
-		<field name="Field_2" uuid="38C34312B538416F822165FAC9EB5D63" type="10" limiting_length="255" id="2"/>
-		<field name="Field_3" uuid="A4368A16CE9C44D0AD7895EBFCB870D5" type="10" limiting_length="255" id="3"/>
-		<field name="Field_4" uuid="C833C0D9C1EC4614969E7A58B6AC5435" type="10" limiting_length="255" id="4"/>
-		<field name="Field_5" uuid="28521D0C1AAE48869C166FD7C9730F34" type="21" blob_switch_size="2147483647" id="5">
+		<field name="name" uuid="38C34312B538416F822165FAC9EB5D63" type="10" limiting_length="255" id="2"/>
+		<field name="university" uuid="A4368A16CE9C44D0AD7895EBFCB870D5" type="10" limiting_length="255" id="3"/>
+		<field name="city_ID" uuid="30393E5A8F5A4C989197942A5FED4DE5" type="4" id="4"/>
+		<field name="vector" uuid="28521D0C1AAE48869C166FD7C9730F34" type="21" blob_switch_size="2147483647" id="5">
 			<field_extra class_id="4D.Vector"/>
 		</field>
 		<primary_key field_name="ID" field_uuid="831CC1629E0046FAB04863BCD7E2A017"/>
 	</table>
+	<table name="Cities" uuid="BEAD477F60C44BA48389849A9AD01D77" id="3">
+		<field name="ID" uuid="45CF80D3D19E42B783C60886681A5586" type="4" unique="true" autosequence="true" not_null="true" id="1"/>
+		<field name="name" uuid="73C6788103CC42E18DB3EBFB2AC190B5" type="10" limiting_length="255" id="2"/>
+		<field name="state" uuid="145A07C638AD43D286B95D090B4087E6" type="10" limiting_length="255" id="3"/>
+		<primary_key field_name="ID" field_uuid="45CF80D3D19E42B783C60886681A5586"/>
+	</table>
+	<relation uuid="E1051A6110B84E558DFE7C41F2DDDB0A" name_Nto1="location" name_1toN="strudents" state="1">
+		<related_field kind="source">
+			<field_ref uuid="DFD80A6D16704C70BE334E7C411D2177" name="school_ID">
+				<table_ref uuid="32D85E6A49EF4EB5A51A993D95FD4E3B" name="Students"/>
+			</field_ref>
+		</related_field>
+		<related_field kind="destination">
+			<field_ref uuid="831CC1629E0046FAB04863BCD7E2A017" name="ID">
+				<table_ref uuid="459BCA81417F4262A46553B1E206CFD5" name="School"/>
+			</field_ref>
+		</related_field>
+	</relation>
+	<relation uuid="F9801E17AE2F41F99B6EE24E51829F8E" name_Nto1="city" name_1toN="schools" state="1">
+		<related_field kind="source">
+			<field_ref uuid="30393E5A8F5A4C989197942A5FED4DE5" name="city_ID">
+				<table_ref uuid="459BCA81417F4262A46553B1E206CFD5" name="School"/>
+			</field_ref>
+		</related_field>
+		<related_field kind="destination">
+			<field_ref uuid="45CF80D3D19E42B783C60886681A5586" name="ID">
+				<table_ref uuid="BEAD477F60C44BA48389849A9AD01D77" name="Cities"/>
+			</field_ref>
+		</related_field>
+	</relation>
+	<index kind="regular" uuid="521BD0AB5ED44DB18AC5D9C43749690B" type="7">
+		<field_ref uuid="73C6788103CC42E18DB3EBFB2AC190B5" name="name">
+			<table_ref uuid="BEAD477F60C44BA48389849A9AD01D77" name="Cities"/>
+		</field_ref>
+	</index>
 	<index kind="regular" unique_keys="true" uuid="BBA554CCFB1F41E491FCEC16D853AEBF" type="7">
 		<field_ref uuid="831CC1629E0046FAB04863BCD7E2A017" name="ID">
-			<table_ref uuid="459BCA81417F4262A46553B1E206CFD5" name="Table_2"/>
+			<table_ref uuid="459BCA81417F4262A46553B1E206CFD5" name="School"/>
+		</field_ref>
+	</index>
+	<index kind="regular" unique_keys="true" uuid="C8D65742ADA446639A1465F24F5519B4" type="7">
+		<field_ref uuid="45CF80D3D19E42B783C60886681A5586" name="ID">
+			<table_ref uuid="BEAD477F60C44BA48389849A9AD01D77" name="Cities"/>
 		</field_ref>
 	</index>
 	<index kind="regular" unique_keys="true" uuid="CE4D4750567F4748BC04184BFBF33B5E" type="7">
 		<field_ref uuid="8C8244E61CBA42229EE02B9CE64EE77C" name="ID">
-			<table_ref uuid="32D85E6A49EF4EB5A51A993D95FD4E3B" name="Table_1"/>
+			<table_ref uuid="32D85E6A49EF4EB5A51A993D95FD4E3B" name="Students"/>
 		</field_ref>
 	</index>
 </base>
