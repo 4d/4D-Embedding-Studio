@@ -92,24 +92,25 @@ Function readStructure() : Collection
 				
 				$v:=OB Copy:C1225($vector)  // Keep the saved definition
 				
-				// FIXME: To Localize
-				
 				Case of 
 						
 						// ______________________________________________________
 					: (This:C1470.catalog[$vector.dataclassName]=Null:C1517)
 						
-						$v.error:="Missing dataclass \""+$vector.dataclassName+"\""
+						// FIXME: To Localize
+						$v.error:=".Missing dataclass \""+$vector.dataclassName+"\""
 						
 						// ______________________________________________________
 					: (This:C1470.catalog[$vector.dataclassName][$vector.vectorName]=Null:C1517)
 						
-						$v.error:="Missing vector \""+$vector.vectorName+"\"of dataclass \""+$vector.dataclassName+"\""
+						// FIXME: To Localize
+						$v.error:=".Missing vector \""+$vector.vectorName+"\"of dataclass \""+$vector.dataclassName+"\""
 						
 						// ______________________________________________________
 					: (String:C10(This:C1470.catalog[$vector.dataclassName][$vector.vectorName].classID)#"4D.Vector")
 						
-						$v.error:=$vector.vectorName+"\"of dataclass \""+$vector.dataclassName+"\" is not a Vector"
+						// FIXME: To Localize
+						$v.error:="."+$vector.vectorName+"\"of dataclass \""+$vector.dataclassName+"\" is not a Vector"
 						
 						// ______________________________________________________
 				End case 
@@ -148,37 +149,62 @@ Function phraseManager()
 	var $vector : cs:C1710.Vector:=This:C1470.currentVector
 	var $plainText:=ST Get plain text:C1092(*; "phrase")  //Get edited text
 	
+	//var $edited:=Get edited text
+	//var $plain:=ST Get plain text($edited)
+	
 	Case of 
+			
+			// ______________________________________________________
+		: ($vector=Null:C1517)
+			
+			return 
+			
+			// ______________________________________________________
+		: ($e.code=On Mouse Move:K2:35)
+			
+			OBJECT SET HELP TIP:C1181(*; "phrase"; $vector.helptip)
 			
 			// ______________________________________________________
 		: ($e.code=On Clicked:K2:4)
 			
-			If ($vector=Null:C1517) || Not:C34(Contextual click:C713)
+			If (Not:C34(Contextual click:C713))
 				
 				return 
 				
 			End if 
 			
-			var $menu:=cs:C1710.menu.new()
+			var $menu:=cs:C1710.menu.new().edit(True:C214).line()
+			var $embed:=cs:C1710.menu.new()
 			
-			// TODO: Menu Cut, Copy, Paste, Select All & sub menu insert
 			var $attribute : Object
-			
 			For each ($attribute; $vector.supportedAttributes.sort(Formula:C1597(String:C10($1.name)<String:C10($1.name))))
 				
-				$menu.append($attribute.name; "{"+$attribute.name+"}")
+				$embed.append($attribute.name; "{"+$attribute.name+"}")
 				
 			End for each 
+			
+			// FIXME: To Localize
+			$menu.append(".Embed"; $embed)
 			
 			If (Not:C34($menu.popup().selected))
 				
 				return 
 				
 			End if 
+			
+			// 📌 Ignored if an associated action (edit)
 			var $startSel; $endSel : Integer
 			GET HIGHLIGHT:C209(*; "phrase"; $startSel; $endSel)
 			
-			var $newValue:=Substring:C12($plainText; 1; $startSel-1)+$menu.choice+Substring:C12($plainText; $endSel)
+			If (Length:C16($plainText)=0)
+				
+				var $newValue:="<span>"+$menu.choice+"</span>"
+				
+			Else 
+				
+				$newValue:=Substring:C12($plainText; 1; $startSel-1)+$menu.choice+Substring:C12($plainText; $endSel)
+				
+			End if 
 			
 			OBJECT SET VALUE:C1742("phrase"; $newValue)
 			
@@ -188,27 +214,27 @@ Function phraseManager()
 			// ______________________________________________________
 		: ($e.code=On Before Keystroke:K2:6)
 			
-			//
+			var $char:=Keystroke:C390
+			
+			If (["<"; ">"; "&"].includes($char))
+				
+				FILTER KEYSTROKE:C389("")
+				GET HIGHLIGHT:C209(*; "phrase"; $startSel; $endSel)
+				ST SET TEXT:C1115(*; "phrase"; $char; $startSel; $endSel)
+				
+			End if 
 			
 			// ______________________________________________________
 		: ($e.code=On After Edit:K2:43)
 			
-			// Remove styles
-			OBJECT SET VALUE:C1742("phrase"; $plainText)
-			
 			// Highlight any errors, if any
-			$vector.phrase:=$vector.parsePhrase($vector.phrase)
+			$vector.phrase:=$vector.parsePhrase($plainText)
 			
 			// ______________________________________________________
 		: ($e.code=On Data Change:K2:15)
 			
 			// Highlight any errors, if any
 			ST SET TEXT:C1115(*; "phrase"; $vector.parsePhrase(OBJECT Get value:C1743("phrase")); ST Start text:K78:15; ST End text:K78:16)
-			
-			// ______________________________________________________
-		Else 
-			
-			// A "Case of" statement should never omit "Else"
 			
 			// ______________________________________________________
 	End case 
