@@ -59,6 +59,7 @@ In the embedding phrase, the supported attributes shall be:
 	End for each 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Parse a plain text sentence and return a formatted text with any errors highlighted.
 Function parsePhrase($phrase : Text) : Text
 	
 /*
@@ -70,10 +71,20 @@ and show a tooltip with an error message when the developer hovers over it.
 	var $rgx:=cs:C1710.regex.new($phrase; $pattern)
 	var $inputs:=$rgx.extract(1)
 	var $dataclass : 4D:C1709.DataClass:=ds:C1482[This:C1470.dataclassName]
+	
+	$phrase:=Replace string:C233($phrase; "&"; "&amp;")
+	$phrase:=Replace string:C233($phrase; "<"; "&lt;")
+	$phrase:=Replace string:C233($phrase; ">"; "&gt;")
+	
+	This:C1470[""].errors:=[]
+	
 	var $t : Text
 	For each ($t; $inputs)
 		
 		If ($dataclass[$t]=Null:C1517)
+			
+			// FIXME: To Localize
+			This:C1470.error:=".The attribute \""+$t+"\" doesn't exists in the dataclass \""+This:C1470.dataclassName+"\""
 			
 			var $old:=$t
 			ST SET ATTRIBUTES:C1093($t; ST Start text:K78:15; ST End text:K78:16; Attribute text color:K65:7; "red")
@@ -83,6 +94,11 @@ and show a tooltip with an error message when the developer hovers over it.
 	End for each 
 	
 	return "<span>"+$phrase+"</span>"
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+Function get helptip() : Text
+	
+	return This:C1470[""].errors.join("\r")
 	
 	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> 
 Function set error($message : Text)
