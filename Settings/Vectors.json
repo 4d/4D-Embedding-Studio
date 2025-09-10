@@ -1,8 +1,7 @@
 {
 	"vectors": [
 		{
-			"error": null,
-			"phrase": "",
+			"phrase": "was Table_1 Field_5",
 			"model": "",
 			"version": -1,
 			"dataclassName": "Table_1",
@@ -11,7 +10,6 @@
 			"vectorNumber": 5
 		},
 		{
-			"error": null,
 			"phrase": "",
 			"model": "",
 			"version": -1,
@@ -21,14 +19,40 @@
 			"vectorNumber": 4
 		},
 		{
-			"error": null,
-			"phrase": "",
+			"phrase": "Non existing attribute {toto}",
 			"model": "",
 			"version": -1,
 			"dataclassName": "Table_2",
 			"dataclassNumber": 2,
 			"vectorName": "Field_5",
 			"vectorNumber": 5
+		},
+		{
+			"phrase": "Missing dataclass",
+			"model": "",
+			"version": -1,
+			"dataclassName": "Uknown dataclass",
+			"dataclassNumber": 8858,
+			"vectorName": "Field_5",
+			"vectorNumber": 5
+		},
+		{
+			"phrase": "Not a vector",
+			"model": "",
+			"version": -1,
+			"dataclassName": "Table_1",
+			"dataclassNumber": 1,
+			"vectorName": "Field_5",
+			"vectorNumber": 1
+		},
+		{
+			"phrase": "Missing vector",
+			"model": "",
+			"version": -1,
+			"dataclassName": "Table_1",
+			"dataclassNumber": 2,
+			"vectorName": "Field_5",
+			"vectorNumber": 8858
 		}
 	],
 	"models": []

@@ -13,6 +13,9 @@
 			<field_extra class_id="4D.Vector"/>
 		</field>
 		<field name="school_ID" uuid="DFD80A6D16704C70BE334E7C411D2177" type="4" id="6"/>
+		<field name="vector_not_defined" uuid="E5A4EA4FB2284FFD92F076DE914B5996" type="21" blob_switch_size="2147483647" id="7">
+			<field_extra class_id="4D.Vector"/>
+		</field>
 		<primary_key field_name="ID" field_uuid="8C8244E61CBA42229EE02B9CE64EE77C"/>
 	</table>
 	<table name="School" uuid="459BCA81417F4262A46553B1E206CFD5" id="2">
@@ -20,7 +23,10 @@
 		<field name="name" uuid="38C34312B538416F822165FAC9EB5D63" type="10" limiting_length="255" id="2"/>
 		<field name="university" uuid="A4368A16CE9C44D0AD7895EBFCB870D5" type="10" limiting_length="255" id="3"/>
 		<field name="city_ID" uuid="30393E5A8F5A4C989197942A5FED4DE5" type="4" id="4"/>
-		<field name="vector" uuid="28521D0C1AAE48869C166FD7C9730F34" type="21" blob_switch_size="2147483647" id="5">
+		<field name="vector_with_error" uuid="28521D0C1AAE48869C166FD7C9730F34" type="21" blob_switch_size="2147483647" id="5">
+			<field_extra class_id="4D.Vector"/>
+		</field>
+		<field name="vector_1" uuid="BE5E1E2C6BFB48A48C47C18152802362" type="21" blob_switch_size="2147483647" id="6">
 			<field_extra class_id="4D.Vector"/>
 		</field>
 		<primary_key field_name="ID" field_uuid="831CC1629E0046FAB04863BCD7E2A017"/>

@@ -29,14 +29,14 @@
 					"width": 380,
 					"height": 380,
 					"events": [
-						"onClick",
-						"onHeaderClick",
-						"onDataChange",
-						"onSelectionChange"
+						"onLoad",
+						"onSelectionChange",
+						"onMouseEnter",
+						"onMouseLeave",
+						"onMouseMove"
 					],
 					"listboxType": "collection",
 					"dataSource": "Form:C1466.vectors",
-					"focusable": false,
 					"horizontalLineStroke": "transparent",
 					"selectionMode": "single",
 					"horizontalPadding": 2,
@@ -50,31 +50,36 @@
 					"currentItemSource": "Form:C1466.currentVector",
 					"currentItemPositionSource": "Form:C1466.currentVectorPosition",
 					"selectedItemsSource": "Form:C1466.selectedVectors",
+					"metaSource": "Form:C1466.listMetaInfo(This:C1470)",
+					"method": "ObjectMethods/list.4dm",
+					"hideFocusRing": true,
 					"columns": [
 						{
 							"header": {
-								"text": "Dataclass",
+								"text": ":xliff:dataclass",
 								"name": "Header1",
 								"fontWeight": "bold"
 							},
-							"name": "Column1",
+							"name": "dataclass",
 							"footer": {
 								"name": "Footer1"
 							},
 							"dataSource": "This:C1470.dataclassName",
-							"width": 141
+							"width": 141,
+							"enterable": false
 						},
 						{
 							"header": {
 								"name": "Header2",
-								"text": "Vector",
+								"text": ":xliff:vector",
 								"fontWeight": "bold"
 							},
-							"name": "Column2",
+							"name": "vector",
 							"footer": {
 								"name": "Footer2"
 							},
-							"dataSource": "This:C1470.vectorName"
+							"dataSource": "This:C1470.vectorName",
+							"enterable": false
 						}
 					]
 				},
@@ -111,11 +116,12 @@
 					"method": "ObjectMethods/phrase.4dm",
 					"styledText": true,
 					"contextMenu": "none",
-					"storeDefaultStyle": true
+					"storeDefaultStyle": true,
+					"sizingX": "grow"
 				},
 				"Text": {
 					"type": "text",
-					"text": ".Explanatory Phrase",
+					"text": ":xliff:explanatoryPhrase",
 					"top": 27,
 					"left": 419,
 					"width": 381,
@@ -124,14 +130,14 @@
 				},
 				"Text1": {
 					"type": "text",
-					"text": ".Model",
+					"text": ":xliff:model",
 					"top": 177,
 					"left": 419,
 					"width": 381,
 					"height": 16,
 					"fontWeight": "bold"
 				},
-				"Popup Dropdown List": {
+				"models": {
 					"type": "dropdown",
 					"left": 420,
 					"top": 201,
@@ -153,7 +159,8 @@
 					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/more.png",
 					"style": "custom",
 					"iconFrames": 4,
-					"method": "ObjectMethods/more.4dm"
+					"method": "ObjectMethods/more.4dm",
+					"sizingX": "move"
 				},
 				"Line": {
 					"type": "line",
@@ -182,28 +189,11 @@
 						2,
 						2
 					]
-				},
-				"phrase1": {
-					"type": "input",
-					"left": 420,
-					"top": 266,
-					"width": 379,
-					"height": 81,
-					"dataSource": "Form:C1466.currentVector.phrase",
-					"events": [
-						"onClick",
-						"onDataChange",
-						"onAfterKeystroke",
-						"onAfterEdit"
-					],
-					"styledText": false,
-					"contextMenu": "none",
-					"stroke": "#1e90ff"
 				}
 			}
 		}
 	],
-	"geometryStamp": 159,
+	"geometryStamp": 168,
 	"method": "method.4dm",
 	"editor": {
 		"activeView": "View 1",
