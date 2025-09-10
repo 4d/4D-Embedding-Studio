@@ -11,6 +11,29 @@
 	"(Default Forms)": {},
 	"(Default Project Methods)": {},
 	"(Default Tables)": {},
+	"API": {
+		"methods": [
+			"VECTOR_STUDIO"
+		]
+	},
+	"DEV": {
+		"tables": [
+			"Cities",
+			"School",
+			"Students"
+		],
+		"classes": [
+			"StudentsEntity"
+		]
+	},
+	"VECTOR_STUDIO": {
+		"forms": [
+			"VECTORS_STUDIO"
+		],
+		"classes": [
+			"_VECTOR_STUDIO"
+		]
+	},
 	"trash": {
 		"groups": [
 			"(Default Folder)"

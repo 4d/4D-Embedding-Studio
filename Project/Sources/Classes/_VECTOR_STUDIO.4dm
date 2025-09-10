@@ -9,10 +9,6 @@ property currentVector : Object
 property currentVectorPosition : Integer
 property selectedVectors : Collection
 
-/* Phase 1
-
-*/
-
 property settings : Object
 
 Class constructor
@@ -20,6 +16,155 @@ Class constructor
 	This:C1470.settings:=This:C1470.readSettings()
 	This:C1470.models:=This:C1470.readModels()
 	This:C1470.vectors:=This:C1470.readStructure()
+	
+	// MARK:- [MANAGERS]
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function listManager($e : Object)
+	
+	$e:=$e || FORM Event:C1606
+	
+	var $vector : cs:C1710.Vector:=This:C1470.currentVector
+	var $me:="list"
+	
+	If ($vector=Null:C1517)
+		
+		OBJECT SET ENABLED:C1123(*; "phrase"; False:C215)
+		OBJECT SET ENABLED:C1123(*; "more"; False:C215)
+		OBJECT SET ENABLED:C1123(*; "models"; False:C215)
+		
+		return 
+		
+	Else 
+		
+		OBJECT SET ENABLED:C1123(*; "phrase"; True:C214)
+		OBJECT SET ENABLED:C1123(*; "more"; True:C214)
+		OBJECT SET ENABLED:C1123(*; "models"; True:C214)
+		
+		//Case of 
+		////______________________________________________________
+		//: ($e.code=On Mouse Move)
+		//OBJECT SET HELP TIP(*; $me; $vector.helptip)
+		////______________________________________________________
+		//: ($e.code=On Mouse Leave)
+		//OBJECT SET HELP TIP(*; $me; "")
+		////______________________________________________________
+		//Else 
+		//// A "Case of" statement should never omit "Else"
+		////______________________________________________________
+		//End case 
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function listMetaInfo($me : cs:C1710.Vector) : Object
+	
+	If ($me[""].errors.length>0) || (Length:C16(String:C10($me.error))>0)
+		
+		return {cell: {dataclass: {fill: "red"; stroke: "white"}; vector: {fill: "red"; stroke: "white"}}}
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function moreManager()
+	
+	//
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function phraseManager($e : Object)
+	
+	$e:=$e || FORM Event:C1606
+	
+	var $vector : cs:C1710.Vector:=This:C1470.currentVector
+	var $me:="phrase"
+	var $plainText:=ST Get plain text:C1092(*; $me)  //Get edited text
+	
+	Case of 
+			
+			// ______________________________________________________
+		: ($vector=Null:C1517)
+			
+			return 
+			
+			// ______________________________________________________
+		: ($e.code=On Mouse Move:K2:35)
+			
+			OBJECT SET HELP TIP:C1181(*; $me; $vector[""]#Null:C1517 ? String:C10($vector.helptip) : String:C10($vector.error))
+			
+			// ______________________________________________________
+		: ($e.code=On Clicked:K2:4)
+			
+			If (Not:C34(Contextual click:C713))
+				
+				return 
+				
+			End if 
+			
+			var $menu:=cs:C1710.menu.new().edit(True:C214).line()
+			var $embed:=cs:C1710.menu.new()
+			$menu.append(":xliff:embed"; $embed)
+			
+			var $attribute : Object
+			For each ($attribute; $vector.supportedAttributes.orderBy("name"))
+				
+				$embed.append($attribute.name; "{"+$attribute.name+"}")
+				
+			End for each 
+			
+			If (Not:C34($menu.popup().selected))
+				
+				return 
+				
+			End if 
+			
+			// 📌 Ignored if an associated action (for edit items)
+			var $startSel; $endSel : Integer
+			GET HIGHLIGHT:C209(*; $me; $startSel; $endSel)
+			
+			If (Length:C16($plainText)=0)
+				
+				var $newValue:="<span>"+$menu.choice+"</span>"
+				
+			Else 
+				
+				$newValue:=Substring:C12($plainText; 1; $startSel-1)+$menu.choice+Substring:C12($plainText; $endSel)
+				
+			End if 
+			
+			OBJECT SET VALUE:C1742($me; $newValue)
+			
+			$endSel:=$startSel+Length:C16($menu.choice)
+			HIGHLIGHT TEXT:C210(*; $me; $endSel; $endSel)
+			
+			// Highlight any errors, if any
+			$vector.phrase:=$vector.parsePhrase(ST Get plain text:C1092($newValue))
+			
+			// ______________________________________________________
+		: ($e.code=On Before Keystroke:K2:6)
+			
+			var $char:=Keystroke:C390
+			
+			If (["<"; ">"; "&"].includes($char))
+				
+				FILTER KEYSTROKE:C389("")
+				GET HIGHLIGHT:C209(*; $me; $startSel; $endSel)
+				ST SET TEXT:C1115(*; $me; $char; $startSel; $endSel)
+				
+			End if 
+			
+			// ______________________________________________________
+		: ($e.code=On After Edit:K2:43)
+			
+			// Highlight any errors, if any
+			$vector.phrase:=$vector.parsePhrase($plainText)
+			
+			// ______________________________________________________
+		: ($e.code=On Data Change:K2:15)
+			
+			// Highlight any errors, if any
+			ST SET TEXT:C1115(*; $me; $vector.parsePhrase($plainText); ST Start text:K78:15; ST End text:K78:16)
+			
+			// ______________________________________________________
+	End case 
 	
 	// MARK:- [SETTINGS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -40,15 +185,31 @@ Function readSettings() : Object
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get settingsFile() : 4D:C1709.File
 	
+/* Requirement 17311
+The vector structure shall be saved in a JSON file named “vectors.json” in the “settings” folder
+*/
+	
 	// For now, we are the developer who saves in the Settings folder.
 	return Folder:C1567(fk database folder:K87:14).file("Settings/vectors.json")
 	
-	// For Admin, we'll need to search near the data and copy the internal file, if necessary, to enable modification.
+	// For the administrator, in order to enable modification, we will need to search for nearby data and copy the internal file, if necessary.
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function saveSettings()
 	
-	This:C1470.settings.vectors:=This:C1470.vectors
+	// Keep only defined vectors
+	This:C1470.settings.vectors:=[]
+	
+	var $vector : cs:C1710.Vector
+	For each ($vector; Form:C1466.vectors)
+		
+		If ($vector.defined)
+			
+			This:C1470.settings.vectors.push($vector.definition)
+			
+		End if 
+	End for each 
+	
 	This:C1470.settings.models:=This:C1470.models
 	
 	This:C1470.settingsFile.setText(JSON Stringify:C1217(This:C1470.settings; *))
@@ -61,7 +222,6 @@ Function readStructure() : Collection
 	var $vectors:=[]
 	
 	var $tableName; $fieldName : Text
-	
 	For each ($tableName; This:C1470.catalog)
 		
 		var $dataclass : 4D:C1709.DataClass:=This:C1470.catalog[$tableName]
@@ -82,7 +242,6 @@ Function readStructure() : Collection
 	If (This:C1470.settings.vectors#Null:C1517)
 		
 		var $vector : cs:C1710.Vector
-		
 		For each ($vector; This:C1470.settings.vectors)
 			
 			// Queries are performed using internal table/field numbers, to avoid failure in the event of a name change.
@@ -92,25 +251,26 @@ Function readStructure() : Collection
 				
 				$v:=OB Copy:C1225($vector)  // Keep the saved definition
 				
+				// Automatic name corrections, where applicable and possible
+				$v.dataclassName:=Try(Table name:C256($v.dataclassNumber)) || $v.dataclassName
+				$v.vectorName:=Try(Field name:C257($v.dataclassNumber; $v.vectorNumber)) || $v.vectorName
+				
 				Case of 
 						
 						// ______________________________________________________
-					: (This:C1470.catalog[$vector.dataclassName]=Null:C1517)
+					: (This:C1470.catalog[$v.dataclassName]=Null:C1517)
 						
-						// FIXME: To Localize
-						$v.error:=".Missing dataclass \""+$vector.dataclassName+"\""
-						
-						// ______________________________________________________
-					: (This:C1470.catalog[$vector.dataclassName][$vector.vectorName]=Null:C1517)
-						
-						// FIXME: To Localize
-						$v.error:=".Missing vector \""+$vector.vectorName+"\"of dataclass \""+$vector.dataclassName+"\""
+						$v.error:=Replace string:C233(Localized string:C991("missingDataclass"); "{dataclass}"; $v.dataclassName)
 						
 						// ______________________________________________________
-					: (String:C10(This:C1470.catalog[$vector.dataclassName][$vector.vectorName].classID)#"4D.Vector")
+					: (This:C1470.catalog[$v.dataclassName][$v.vectorName]=Null:C1517)
 						
-						// FIXME: To Localize
-						$v.error:="."+$vector.vectorName+"\"of dataclass \""+$vector.dataclassName+"\" is not a Vector"
+						$v.error:=Replace string:C233(Replace string:C233(Localized string:C991("missingVector"); "{attribute}"; $v.vectorName); "{dataclass}"; $v.dataclassName)
+						
+						// ______________________________________________________
+					: (String:C10(This:C1470.catalog[$v.dataclassName][$v.vectorName].classID)#"4D.Vector")
+						
+						$v.error:=Replace string:C233(Replace string:C233(Localized string:C991("attributeIsNotAVector"); "{attribute}"; $v.vectorName); "{dataclass}"; $v.dataclassName)
 						
 						// ______________________________________________________
 				End case 
@@ -121,7 +281,7 @@ Function readStructure() : Collection
 				
 				// Update with saved definition
 				$v.model:=String:C10($vector.model)
-				$v.phrase:=$vector.phrase
+				$v.phrase:=$v.parsePhrase($vector.phrase)
 				$v.version:=$vector.version#Null:C1517 ? Num:C11($vector.version) : $v.version
 				
 			End if 
@@ -136,108 +296,3 @@ Function readModels() : Collection
 	
 	// TODO: Read models
 	return []
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function moreManager()
-	
-	//
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function phraseManager()
-	
-	var $e:=FORM Event:C1606
-	var $vector : cs:C1710.Vector:=This:C1470.currentVector
-	var $plainText:=ST Get plain text:C1092(*; "phrase")  //Get edited text
-	
-	//var $edited:=Get edited text
-	//var $plain:=ST Get plain text($edited)
-	
-	Case of 
-			
-			// ______________________________________________________
-		: ($vector=Null:C1517)
-			
-			return 
-			
-			// ______________________________________________________
-		: ($e.code=On Mouse Move:K2:35)
-			
-			OBJECT SET HELP TIP:C1181(*; "phrase"; $vector.helptip)
-			
-			// ______________________________________________________
-		: ($e.code=On Clicked:K2:4)
-			
-			If (Not:C34(Contextual click:C713))
-				
-				return 
-				
-			End if 
-			
-			var $menu:=cs:C1710.menu.new().edit(True:C214).line()
-			var $embed:=cs:C1710.menu.new()
-			
-			var $attribute : Object
-			For each ($attribute; $vector.supportedAttributes.sort(Formula:C1597(String:C10($1.name)<String:C10($1.name))))
-				
-				$embed.append($attribute.name; "{"+$attribute.name+"}")
-				
-			End for each 
-			
-			// FIXME: To Localize
-			$menu.append(".Embed"; $embed)
-			
-			If (Not:C34($menu.popup().selected))
-				
-				return 
-				
-			End if 
-			
-			// 📌 Ignored if an associated action (edit)
-			var $startSel; $endSel : Integer
-			GET HIGHLIGHT:C209(*; "phrase"; $startSel; $endSel)
-			
-			If (Length:C16($plainText)=0)
-				
-				var $newValue:="<span>"+$menu.choice+"</span>"
-				
-			Else 
-				
-				$newValue:=Substring:C12($plainText; 1; $startSel-1)+$menu.choice+Substring:C12($plainText; $endSel)
-				
-			End if 
-			
-			OBJECT SET VALUE:C1742("phrase"; $newValue)
-			
-			$endSel:=$startSel+Length:C16($menu.choice)
-			HIGHLIGHT TEXT:C210(*; "phrase"; $endSel; $endSel)
-			
-			// ______________________________________________________
-		: ($e.code=On Before Keystroke:K2:6)
-			
-			var $char:=Keystroke:C390
-			
-			If (["<"; ">"; "&"].includes($char))
-				
-				FILTER KEYSTROKE:C389("")
-				GET HIGHLIGHT:C209(*; "phrase"; $startSel; $endSel)
-				ST SET TEXT:C1115(*; "phrase"; $char; $startSel; $endSel)
-				
-			End if 
-			
-			// ______________________________________________________
-		: ($e.code=On After Edit:K2:43)
-			
-			// Highlight any errors, if any
-			$vector.phrase:=$vector.parsePhrase($plainText)
-			
-			// ______________________________________________________
-		: ($e.code=On Data Change:K2:15)
-			
-			// Highlight any errors, if any
-			ST SET TEXT:C1115(*; "phrase"; $vector.parsePhrase(OBJECT Get value:C1743("phrase")); ST Start text:K78:15; ST End text:K78:16)
-			
-			// ______________________________________________________
-	End case 
-	
-	
-	

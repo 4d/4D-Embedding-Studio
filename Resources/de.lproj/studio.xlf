@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
+  <file datatype="x-STR#" original="Undefined" source-language="en" target-language="de">
+    <header>
+      <prop-group name="4DPop XLIFF Pro">
+        <prop prop-type="version">3.1</prop>
+      </prop-group>
+    </header>
+    <body>
+      <group resname="Studio">
+        <trans-unit id="JqIF_AVmMEIaEFmXDPJsNw" resname="dataclass">
+          <source>Dataclass</source>
+          <target state="new">Dataclass</target>
+        </trans-unit>
+        <trans-unit id="dIxUIuEAJHHpAIkWpGtuuQ" resname="vector">
+          <source>Vector</source>
+          <target state="new">Vector</target>
+        </trans-unit>
+        <trans-unit id="JYKDsb27uy+KpxSK+dvutw" resname="explanatoryPhrase">
+          <source>Explanatory Phrase</source>
+          <target state="new">Explanatory Phrase</target>
+        </trans-unit>
+        <trans-unit id="NtpZAlEShoFWf7WZJZry+w" resname="model">
+          <source>Model</source>
+          <target state="new">Model</target>
+        </trans-unit>
+        <trans-unit id="lT6Q0uzsEG77tFMLsSaq9g" resname="embed">
+          <source>Embed</source>
+          <target state="new">Embed</target>
+        </trans-unit>
+      </group>
+      <group resname="Errors">
+        <trans-unit id="suXoXY7MtyrPp3TbcwctFA" resname="theAttibuteDoesn'tExistsInTheDataclass">
+          <source>The attibute "{attribute}" doesn't exists in the dataclass "{dataclass}"</source>
+          <target state="new">The attibute "{attribute}" doesn't exists in the dataclass "{dataclass}"</target>
+        </trans-unit>
+        <trans-unit id="_LwpaGzK46P7aaOnDetHbw" resname="missingDataclass">
+          <source>Missing dataclass "{dataclass}"</source>
+          <target state="new">Missing dataclass "{dataclass}"</target>
+        </trans-unit>
+        <trans-unit id="XaqkumyArJDVUJogIdn+dA" resname="missingVector">
+          <source>Missing vector "{attribute}" of dataclass "{dataclass}"</source>
+          <target state="new">Missing vector "{attribute}" of dataclass "{dataclass}"</target>
+        </trans-unit>
+        <trans-unit id="+IG2zemb6TaPiJqSOqtmOQ" resname="attributeIsNotAVector">
+          <source>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector</source>
+          <target state="new">The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+
+
+</xliff>

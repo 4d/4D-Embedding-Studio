@@ -8,12 +8,12 @@
 				"alpha": 0
 			},
 			"coordinates": {
-				"left": 603.2421875,
-				"top": 169.9375,
-				"width": 120,
-				"height": 167.33203125
+				"left": 559,
+				"top": 121.63671875,
+				"width": 87,
+				"height": 104.33203125
 			},
-			"displayable_fields_count": 6
+			"displayable_fields_count": 3
 		},
 		"School": {
 			"color": {
@@ -23,15 +23,14 @@
 				"alpha": 0
 			},
 			"coordinates": {
-				"left": 342.47265625,
-				"top": 75.8984375,
-				"width": 120,
-				"height": 167.33203125
+				"left": 312.8671875,
+				"top": 92.96484375,
+				"width": 145.20572916667,
+				"height": 191.49088541667
 			},
-			"displayable_fields_count": 6,
-			"fields_ordering": 2,
+			"displayable_fields_count": 7,
 			"fields": {
-				"vector": {
+				"vector_with_error": {
 					"position": 5
 				},
 				"city_ID": {
@@ -58,12 +57,15 @@
 			"coordinates": {
 				"left": 40,
 				"top": 40,
-				"width": 181.4765625,
-				"height": 307.25390625
+				"width": 154,
+				"height": 188.33203125
 			},
-			"displayable_fields_count": 12,
+			"displayable_fields_count": 7,
 			"fields_ordering": 2,
 			"fields": {
+				"vector_not_defined": {
+					"position": 7
+				},
 				"school_ID": {
 					"position": 4
 				},
