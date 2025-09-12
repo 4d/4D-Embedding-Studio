@@ -157,7 +157,8 @@
 					"events": [
 						"onDataChange"
 					],
-					"dataSourceTypeHint": "object"
+					"dataSourceTypeHint": "object",
+					"dataSource": "Form:C1466.models"
 				},
 				"more": {
 					"type": "button",
@@ -205,8 +206,7 @@
 			}
 		}
 	],
-	"geometryStamp": 170,
-	"method": "method.4dm",
+	"geometryStamp": 171,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -214,5 +214,6 @@
 			"View 1": {}
 		}
 	},
-	"formClass": "_VECTOR_STUDIO"
+	"formClass": "_VECTOR_STUDIO",
+	"method": "FORM_MANAGER"
 }

@@ -28,9 +28,11 @@
 	},
 	"VECTOR_STUDIO": {
 		"forms": [
+			"MODELS_MANAGER",
 			"VECTORS_STUDIO"
 		],
 		"classes": [
+			"_MODELS_MANAGER",
 			"_VECTOR_STUDIO"
 		]
 	},
