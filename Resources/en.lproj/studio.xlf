@@ -17,8 +17,8 @@
           <target>Vector</target>
         </trans-unit>
         <trans-unit id="JYKDsb27uy+KpxSK+dvutw" resname="explanatoryPhrase">
-          <source>Explanatory Phrase</source>
-          <target>Explanatory Phrase</target>
+          <source>Descriptive Phrase</source>
+          <target>Descriptive Phrase</target>
         </trans-unit>
         <trans-unit id="NtpZAlEShoFWf7WZJZry+w" resname="model">
           <source>Model</source>

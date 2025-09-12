@@ -67,7 +67,7 @@ In the embedding phrase, the supported attributes shall be:
 		
 		var $attribute : Object:=$dataclass[$key]
 		
-		// TODO: Ignore 1:N relationships 
+		// TODO: Ignore 1:N relationships ?
 		
 		If (String:C10($attribute.classID)="4D.Vector")
 			

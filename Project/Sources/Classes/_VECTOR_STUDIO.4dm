@@ -31,6 +31,7 @@ Function manager($e : Object)
 			: ($e.code=On Load:K2:1)
 				
 				This:C1470.listManager($e)
+				This:C1470.modelsManager($e)
 				
 				//______________________________________________________
 		End case 
@@ -56,6 +57,11 @@ Function manager($e : Object)
 		: ($e.objectName="more")
 			
 			This:C1470.moreManager()
+			
+			//______________________________________________________
+		: ($e.objectName="models")
+			
+			This:C1470.modelsManager()
 			
 			//______________________________________________________
 		: ($e.objectName="save")
@@ -112,7 +118,9 @@ Function listMetaInfo($me : cs:C1710.Vector) : Object
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function moreManager()
+Function moreManager($e : Object)
+	
+	$e:=$e || FORM Event:C1606
 	
 	//
 	
@@ -211,6 +219,57 @@ Function phraseManager($e : Object)
 			ST SET TEXT:C1115(*; $me; $vector.parsePhrase($plainText); ST Start text:K78:15; ST End text:K78:16)
 			
 			// ______________________________________________________
+	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function modelsManager($e : Object)
+	
+	$e:=$e || FORM Event:C1606
+	
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($e.code=On Load:K2:1)
+			
+			var $c:=["New model…"; "-"; "myModel"]
+			var $me:={values: $c; index: -1; placeholder: "Choose a model…"}
+			$me.currentValue:=$me.placeholder
+			
+			Form:C1466.models:=$me
+			
+			//______________________________________________________
+		: ($e.code=On Data Change:K2:15)
+			
+			$me:=Form:C1466.models
+			
+			If ($me.index=0)  // New
+				
+				// Create a new model
+				
+				If (Bool:C1537(OK))  //
+					
+					$me.values.push("myNewModel")
+					$me.currentValue:="myNewModel"
+					$me.index:=$me.values.length-1
+					
+				Else 
+					
+					$me.currentValue:=$me.placeholder
+					$me.index:=-1
+					
+				End if 
+				
+				Form:C1466.models:=Form:C1466.models
+				
+				return 
+				
+			End if 
+			
+			var $vector : cs:C1710.Vector:=This:C1470.currentVector
+			$vector.model:=$me.currentValue
+			
+			//______________________________________________________
 	End case 
 	
 	// MARK:- [SETTINGS]
