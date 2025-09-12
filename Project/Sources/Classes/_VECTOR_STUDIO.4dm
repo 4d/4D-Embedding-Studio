@@ -19,6 +19,53 @@ Class constructor
 	
 	// MARK:- [MANAGERS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function manager($e : Object)
+	
+	$e:=$e || FORM Event:C1606
+	
+	If ($e.objectName=Null:C1517)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($e.code=On Load:K2:1)
+				
+				This:C1470.listManager($e)
+				
+				//______________________________________________________
+		End case 
+		
+		
+		return 
+		
+	End if 
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($e.objectName="list")
+			
+			This:C1470.listManager($e)
+			
+			//______________________________________________________
+		: ($e.objectName="phrase")
+			
+			This:C1470.phraseManager($e)
+			
+			//______________________________________________________
+		: ($e.objectName="more")
+			
+			This:C1470.moreManager()
+			
+			//______________________________________________________
+		: ($e.objectName="save")
+			
+			This:C1470.saveSettings()
+			
+			//______________________________________________________
+	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function listManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
@@ -247,7 +294,7 @@ Function readStructure() : Collection
 			// Queries are performed using internal table/field numbers, to avoid failure in the event of a name change.
 			var $v : cs:C1710.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $vector.dataclassNumber; $vector.vectorNumber).first()
 			
-			If ($v=Null:C1517)  // ERRORS: Table deleted or field modified/deleted
+			If ($v=Null:C1517)  // ERRORS: Table deleted or field modified/deleted or field is a vector
 				
 				$v:=OB Copy:C1225($vector)  // Keep the saved definition
 				
@@ -277,14 +324,15 @@ Function readStructure() : Collection
 				
 				$vectors.push($v)
 				
-			Else 
-				
-				// Update with saved definition
-				$v.model:=String:C10($vector.model)
-				$v.phrase:=$v.parsePhrase($vector.phrase)
-				$v.version:=$vector.version#Null:C1517 ? Num:C11($vector.version) : $v.version
+				continue
 				
 			End if 
+			
+			// Update with saved definition
+			$v.model:=String:C10($vector.model)
+			$v.phrase:=$v.parsePhrase($vector.phrase)
+			$v.version:=$vector.version#Null:C1517 ? Num:C11($vector.version) : $v.version
+			
 		End for each 
 	End if 
 	

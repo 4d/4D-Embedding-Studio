@@ -12,7 +12,21 @@
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"events": [
-		"onLoad"
+		"onLoad",
+		"onClick",
+		"onDoubleClick",
+		"onLosingFocus",
+		"onGettingFocus",
+		"onBeforeKeystroke",
+		"onDataChange",
+		"onTimer",
+		"onAfterKeystroke",
+		"onSelectionChange",
+		"onMouseEnter",
+		"onMouseLeave",
+		"onMouseMove",
+		"onAfterEdit",
+		"onPageChange"
 	],
 	"windowTitle": "4D Vector Sudio",
 	"destination": "detailScreen",
@@ -24,7 +38,7 @@
 			"objects": {
 				"list": {
 					"type": "listbox",
-					"left": 20,
+					"left": 19,
 					"top": 20,
 					"width": 380,
 					"height": 380,
@@ -43,7 +57,7 @@
 					"scrollbarHorizontal": "hidden",
 					"verticalAlign": "middle",
 					"headerHeight": "2em",
-					"right": 400,
+					"right": 399,
 					"sizingX": "fixed",
 					"sizingY": "grow",
 					"resizingMode": "legacy",
@@ -51,7 +65,6 @@
 					"currentItemPositionSource": "Form:C1466.currentVectorPosition",
 					"selectedItemsSource": "Form:C1466.selectedVectors",
 					"metaSource": "Form:C1466.listMetaInfo(This:C1470)",
-					"method": "ObjectMethods/list.4dm",
 					"hideFocusRing": true,
 					"columns": [
 						{
@@ -83,7 +96,7 @@
 						}
 					]
 				},
-				"Button1": {
+				"save": {
 					"type": "button",
 					"text": ".Save",
 					"top": 378,
@@ -93,7 +106,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "ObjectMethods/Button1.4dm",
 					"sizingY": "move"
 				},
 				"phrase": {
@@ -113,7 +125,6 @@
 						"onMouseMove",
 						"onAfterEdit"
 					],
-					"method": "ObjectMethods/phrase.4dm",
 					"styledText": true,
 					"contextMenu": "none",
 					"storeDefaultStyle": true,
@@ -145,7 +156,8 @@
 					"height": 22,
 					"events": [
 						"onDataChange"
-					]
+					],
+					"dataSourceTypeHint": "object"
 				},
 				"more": {
 					"type": "button",
@@ -193,7 +205,7 @@
 			}
 		}
 	],
-	"geometryStamp": 168,
+	"geometryStamp": 170,
 	"method": "method.4dm",
 	"editor": {
 		"activeView": "View 1",
