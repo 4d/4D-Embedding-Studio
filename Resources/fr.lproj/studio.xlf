@@ -30,25 +30,30 @@
         </trans-unit>
       </group>
       <group resname="Errors">
-        <trans-unit id="suXoXY7MtyrPp3TbcwctFA" resname="theAttibuteDoesn'tExistsInTheDataclass">
-          <source>The attibute "{attribute}" doesn't exists in the dataclass "{dataclass}"</source>
-          <target>L'attribut "{attribute}" n'existe pas dans la dataclasse "{dataclass}"</target>
+        <trans-unit id="suXoXY7MtyrPp3TbcwctFA" resname="theAttributeDoesn'tExistsInTheDataclass">
+          <source>The attribute "{attribute}" doesn't exists in the dataclass "{dataclass}".</source>
+          <target>L'attribut "{attribute}" n'existe pas dans la dataclasse "{dataclass}".</target>
         </trans-unit>
         <trans-unit id="_LwpaGzK46P7aaOnDetHbw" resname="missingDataclass">
-          <source>Missing dataclass "{dataclass}"</source>
-          <target>Dataclasse manquante "{dataclass}"</target>
+          <source>Missing dataclass "{dataclass}".</source>
+          <target>Dataclasse manquante "{dataclass}".</target>
         </trans-unit>
         <trans-unit id="XaqkumyArJDVUJogIdn+dA" resname="missingVector">
-          <source>Missing vector "{attribute}" of dataclass "{dataclass}"</source>
-          <target>Vecteur "{attribute}" manquant dans la dataclasse "{dataclass}"</target>
+          <source>Missing vector "{attribute}" of dataclass "{dataclass}".</source>
+          <target>Vecteur "{attribute}" manquant dans la dataclasse "{dataclass}".</target>
         </trans-unit>
         <trans-unit id="+IG2zemb6TaPiJqSOqtmOQ" resname="attributeIsNotAVector">
-          <source>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector</source>
+          <source>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</source>
           <target>L'attribut "{attribute}" de la dataclasse "{dataclass}" n'est pas un vecteur.</target>
+        </trans-unit>
+        <trans-unit id="+gL2VQ1OOUDUqfl8RkNB7g" resname="theAttributeIsAVector">
+          <source>The "{attribute}" attribute is a vector and cannot be used in this context.</source>
+          <target>L'attribut "{attribute}" est un vecteur et ne peut pas être utilisé dans ce contexte.</target>
         </trans-unit>
       </group>
     </body>
   </file>
+
 
 
 </xliff>

@@ -104,18 +104,32 @@ and show a tooltip with an error message when the developer hovers over it.
 	var $t : Text
 	For each ($t; $inputs)
 		
-		If ($dataclass[$t]=Null:C1517)
-			
-			This:C1470.error:=This:C1470._localizedErrorMessage("theAttibuteDoesn'tExistsInTheDataclass"; $t)
-			
-			var $old:=$t
-			ST SET ATTRIBUTES:C1093($t; ST Start text:K78:15; ST End text:K78:16; Attribute text color:K65:7; "red")
-			$phrase:=Replace string:C233($phrase; "{"+$old+"}"; "{"+$t+"}")
-			
-		End if 
+		Case of 
+				//______________________________________________________
+			: ($dataclass[$t]=Null:C1517)  // Not available
+				
+				This:C1470.error:=This:C1470._localizedErrorMessage("theAttributeDoesn'tExistsInTheDataclass"; $t)
+				
+				//______________________________________________________
+			: (String:C10($dataclass[$t].classID)="4D.Vector")  // Vector
+				
+				This:C1470.error:=This:C1470._localizedErrorMessage("theAttributeIsAVector"; $t)
+				
+				//______________________________________________________
+			Else 
+				
+				continue
+				
+				//______________________________________________________
+		End case 
+		
+		var $old:=$t
+		ST SET ATTRIBUTES:C1093($t; ST Start text:K78:15; ST End text:K78:16; Attribute text color:K65:7; "red")
+		$phrase:=Replace string:C233($phrase; "{"+$old+"}"; "{"+$t+"}")
+		
 	End for each 
 	
-	return "<span>"+$phrase+"</span>"
+	return "<span>"+$phrase+"</span>"  // In multistyle text format
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _localizedErrorMessage($resname : Text; $attribute : Text; $dataclass : Text) : Text
