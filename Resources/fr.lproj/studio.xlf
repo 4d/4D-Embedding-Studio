@@ -51,8 +51,48 @@
           <target>L'attribut "{attribute}" est un vecteur et ne peut pas être utilisé dans ce contexte.</target>
         </trans-unit>
       </group>
+      <group resname="Models">
+        <trans-unit id="Yq5vxj6oKJ1vSIjdQfUn0A" resname="name">
+          <source>Name</source>
+          <target>Nom</target>
+        </trans-unit>
+        <trans-unit id="_jiGpXOTcdcAW2WBhl0ZbQ" resname="models">
+          <source>Models</source>
+          <target>Modèles</target>
+        </trans-unit>
+        <trans-unit id="QYoAm6ZFQCg_HDzBFYQLBQ" resname="apiKey">
+          <source>API Key</source>
+          <target>Clé API</target>
+        </trans-unit>
+        <trans-unit id="w62gdHQ9pSuXfLQU2VkhSA" resname="baseURL">
+          <source>Base URL</source>
+          <target>URL de base</target>
+        </trans-unit>
+        <trans-unit id="1ZXG4pM34XBSewKIPUiNbw" resname="organization">
+          <source>Organization</source>
+          <target>Organisation</target>
+        </trans-unit>
+        <trans-unit id="_Y5gs8TV+n8MkFuNAxM3XA" resname="project">
+          <source>Project</source>
+          <target>Projet</target>
+        </trans-unit>
+        <trans-unit id="Pj7rsRD69Eu+o3ySMBNo0Q" resname="done">
+          <source>Done</source>
+          <target state="needs-review-translation">Fermer</target>
+        </trans-unit>
+        <trans-unit id="t543px4J9MAd+BhhlohSkA" resname="newModel">
+          <source>New model…</source>
+          <target>Nouveau modèle…</target>
+        </trans-unit>
+        <trans-unit id="Sty7zz3fssBbMx21cj8xLw" resname="selectAModel">
+          <source>Select a model</source>
+          <target>Sélectionnez un modèle</target>
+        </trans-unit>
+      </group>
     </body>
   </file>
+
+
 
 
 

@@ -1,5 +1,8 @@
-
 Class constructor
+	
+	BEEP:C151
+	//
+	
 	
 	
 	// MARK:- [MANAGERS]
@@ -15,6 +18,11 @@ Function manager($e : Object)
 				//______________________________________________________
 			: ($e.code=On Load:K2:1)
 				
+				OBJECT SET VISIBLE:C603(*; "close"; OBJECT Get subform container value:C1785#Null:C1517)
+				
+				//______________________________________________________
+			: ($e.code=On Resize:K2:27)
+				
 				//
 				
 				//______________________________________________________
@@ -28,10 +36,15 @@ Function manager($e : Object)
 	Case of 
 			
 			//______________________________________________________
-		: ($e.objectName="list")
+		: ($e.objectName="backButton")
 			
-			//
+			BEEP:C151
+			
+			//______________________________________________________
+		: ($e.objectName="close")
+			
+			//Form.me.close()
+			CALL SUBFORM CONTAINER:C1086(-1)
 			
 			//______________________________________________________
 	End case 
-	
