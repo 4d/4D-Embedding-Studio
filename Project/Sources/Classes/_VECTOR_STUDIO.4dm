@@ -2,14 +2,15 @@ property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project 
 
 property defaultModel:="text-embedding-3-large"
 
+property settings : Object
 property models; vectors : Collection
 
 // Vector list
-property currentVector : Object
-property currentVectorPosition : Integer
-property selectedVectors : Collection
+property currentItem : Object
+property itemPosition : Integer
+property selectedItems : Collection
 
-property settings : Object
+property modelsDropdown : Object
 
 Class constructor
 	
@@ -31,11 +32,17 @@ Function manager($e : Object)
 			: ($e.code=On Load:K2:1)
 				
 				This:C1470.listManager($e)
-				This:C1470.modelsManager($e)
+				This:C1470.modelsDropdownManager($e)
+				
+				SET TIMER:C645(-1)
+				
+				//______________________________________________________
+			: ($e.code=On Timer:K2:25)
+				
+				SET TIMER:C645(0)
 				
 				//______________________________________________________
 		End case 
-		
 		
 		return 
 		
@@ -56,12 +63,31 @@ Function manager($e : Object)
 			//______________________________________________________
 		: ($e.objectName="more")
 			
-			This:C1470.moreManager()
+			This:C1470.moreManager($e)
 			
 			//______________________________________________________
 		: ($e.objectName="models")
 			
-			This:C1470.modelsManager()
+			This:C1470.modelsDropdownManager($e)
+			
+			//______________________________________________________
+			//: ($e.objectName="modelManager")
+			
+			//This.modelManager($e)
+			
+			//______________________________________________________
+		: ($e.objectName="manageModels")
+			
+			If ($e.code=On Clicked:K2:4)
+				
+				FORM GOTO PAGE:C247(2)
+				
+			End if 
+			
+			//______________________________________________________
+		: ($e.objectName="backButton")
+			
+			BEEP:C151
 			
 			//______________________________________________________
 		: ($e.objectName="save")
@@ -76,7 +102,7 @@ Function listManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	var $vector : cs:C1710.Vector:=This:C1470.currentVector
+	var $vector : cs:C1710.Vector:=This:C1470.currentItem
 	var $me:="list"
 	
 	If ($vector=Null:C1517)
@@ -93,18 +119,22 @@ Function listManager($e : Object)
 		OBJECT SET ENABLED:C1123(*; "more"; True:C214)
 		OBJECT SET ENABLED:C1123(*; "models"; True:C214)
 		
-		//Case of 
-		////______________________________________________________
-		//: ($e.code=On Mouse Move)
-		//OBJECT SET HELP TIP(*; $me; $vector.helptip)
-		////______________________________________________________
-		//: ($e.code=On Mouse Leave)
-		//OBJECT SET HELP TIP(*; $me; "")
-		////______________________________________________________
-		//Else 
-		//// A "Case of" statement should never omit "Else"
-		////______________________________________________________
-		//End case 
+		// TODO: Error help tips based on the line hovered
+		
+/*
+Case of 
+//______________________________________________________
+: ($e.code=On Mouse Move)
+OBJECT SET HELP TIP(*; $me; $vector.helptip)
+//______________________________________________________
+: ($e.code=On Mouse Leave)
+OBJECT SET HELP TIP(*; $me; "")
+//______________________________________________________
+Else 
+// A "Case of" statement should never omit "Else"
+//______________________________________________________
+End case 
+*/
 		
 	End if 
 	
@@ -122,14 +152,12 @@ Function moreManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	//
-	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function phraseManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	var $vector : cs:C1710.Vector:=This:C1470.currentVector
+	var $vector : cs:C1710.Vector:=This:C1470.currentItem
 	var $me:="phrase"
 	var $plainText:=ST Get plain text:C1092(*; $me)  //Get edited text
 	
@@ -222,55 +250,103 @@ Function phraseManager($e : Object)
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function modelsManager($e : Object)
+Function modelsDropdownManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
-	
 	
 	Case of 
 			
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			var $c:=["New model…"; "-"; "myModel"]
-			var $me:={values: $c; index: -1; placeholder: "Choose a model…"}
-			$me.currentValue:=$me.placeholder
+			var $me:={\
+				values: This:C1470._getModelDropdownValues(); \
+				index: -1; \
+				placeholder: Localized string:C991("selectAModel")}
 			
-			Form:C1466.models:=$me
+			$me.currentValue:=$me.placeholder
+			Form:C1466.modelsDropdown:=$me
 			
 			//______________________________________________________
 		: ($e.code=On Data Change:K2:15)
 			
-			$me:=Form:C1466.models
+			$me:=Form:C1466.modelsDropdown
 			
-			If ($me.index=0)  // New
+/*If ($me.index=0)  // New*/
+			If ($me.currentValue=Localized string:C991("newModel"))  // New
+				
 				
 				// Create a new model
+				var $name:="myNewModel"
+				var $o : Object:=OBJECT Get value:C1743("modelManager") || {models: Form:C1466.models}
+				$o.context:="add"
+				$o.name:=$name
 				
-				If (Bool:C1537(OK))  //
-					
-					$me.values.push("myNewModel")
-					$me.currentValue:="myNewModel"
-					$me.index:=$me.values.length-1
-					
-				Else 
-					
-					$me.currentValue:=$me.placeholder
-					$me.index:=-1
-					
-				End if 
+				FORM GOTO PAGE:C247(2)
+				OBJECT SET VALUE:C1742("modelManager"; $o)
 				
-				Form:C1466.models:=Form:C1466.models
+				
+				//If (Bool(OK))  //
+				
+				//This.models.push({name: $name})
+				//$me.values:=This._getModelDropdownValues()
+				//$me.index:=$me.values.indexOf($name)
+				//$me.currentValue:=$name
+				
+				//Else 
+				
+				//$me.currentValue:=$me.placeholder
+				//$me.index:=-1
+				
+				//End if 
+				
+				//Form.modelsDropdown:=Form.modelsDropdown  // Redraw
 				
 				return 
 				
 			End if 
 			
-			var $vector : cs:C1710.Vector:=This:C1470.currentVector
+			var $vector : cs:C1710.Vector:=This:C1470.currentItem
 			$vector.model:=$me.currentValue
 			
 			//______________________________________________________
 	End case 
+	
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function modelManager($e : Object)
+	
+	$e:=$e || FORM Event:C1606
+	
+	If ($e.code<0)
+		
+		var $o : Object:=OBJECT Get value:C1743("modelManager")
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($o.context=Null:C1517)
+				
+				// <NOTHING MORE TO DO>
+				
+				//______________________________________________________
+			: ($o.context="add")
+				
+				
+				
+				//______________________________________________________
+			Else 
+				
+				// A "Case of" statement should never omit "Else"
+				
+				//______________________________________________________
+		End case 
+	End if 
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _getModelDropdownValues() : Collection
+	
+	return This:C1470.models.extract("name").orderBy().combine(["-"; Localized string:C991("newModel")])
 	
 	// MARK:- [SETTINGS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -282,7 +358,7 @@ Function readSettings() : Object
 		
 	Catch
 		
-		return {}
+		return {vectors: []; models: []}
 		
 	End try
 	
@@ -298,7 +374,10 @@ The vector structure shall be saved in a JSON file named “vectors.json” in t
 	// For now, we are the developer who saves in the Settings folder.
 	return Folder:C1567(fk database folder:K87:14).file("Settings/vectors.json")
 	
-	// For the administrator, in order to enable modification, we will need to search for nearby data and copy the internal file, if necessary.
+/*
+For the administrator, in order to enable modification, 
+we will need to search for nearby data and copy the internal file, if necessary.
+*/
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function saveSettings()
@@ -324,7 +403,12 @@ Function saveSettings()
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function readStructure() : Collection
 	
-	// Get all vector fields in the current catalog
+/* Requirement 17301
+Get the possible vector fields in the current catalog
+The list is displayed with:
+• table/dataclass
+• vector field
+*/
 	var $vectors:=[]
 	
 	var $tableName; $fieldName : Text
@@ -344,18 +428,32 @@ Function readStructure() : Collection
 		End for each 
 	End for each 
 	
-	// Enrichment with saved structure
+/* Enrichment with saved structure
+{
+    "vectors": [ {
+        "version": "number",
+        "dataclassName": "string",
+        "dataclassNumber": "number",
+        "vectorName": "string",
+        "vectorNumber": "number", 
+        "model": "string",
+        "phrase": "string"
+    }, { ... }
+    ]
+}
+*/
+	
 	If (This:C1470.settings.vectors#Null:C1517)
 		
-		var $vector : cs:C1710.Vector
-		For each ($vector; This:C1470.settings.vectors)
+		var $o : cs:C1710.Vector
+		For each ($o; This:C1470.settings.vectors)
 			
 			// Queries are performed using internal table/field numbers, to avoid failure in the event of a name change.
-			var $v : cs:C1710.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $vector.dataclassNumber; $vector.vectorNumber).first()
+			var $v : cs:C1710.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $o.dataclassNumber; $o.vectorNumber).first()
 			
-			If ($v=Null:C1517)  // ERRORS: Table deleted or field modified/deleted or field is a vector
+			If ($v=Null:C1517)  // ERROR
 				
-				$v:=OB Copy:C1225($vector)  // Keep the saved definition
+				$v:=OB Copy:C1225($o)  // Keep the saved definition
 				
 				// Automatic name corrections, where applicable and possible
 				$v.dataclassName:=Try(Table name:C256($v.dataclassNumber)) || $v.dataclassName
@@ -387,10 +485,12 @@ Function readStructure() : Collection
 				
 			End if 
 			
+			// TODO: Check if the model exists
+			
 			// Update with saved definition
-			$v.model:=String:C10($vector.model)
-			$v.phrase:=$v.parsePhrase($vector.phrase)
-			$v.version:=$vector.version#Null:C1517 ? Num:C11($vector.version) : $v.version
+			$v.model:=String:C10($o.model)
+			$v.phrase:=$v.parsePhrase($o.phrase)
+			$v.version:=$o.version#Null:C1517 ? Num:C11($o.version) : $v.version
 			
 		End for each 
 	End if 
@@ -401,5 +501,14 @@ Function readStructure() : Collection
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function readModels() : Collection
 	
+	var $models:=[]
+	
+	var $o : cs:C1710.Vector
+	For each ($o; This:C1470.settings.models)
+		
+		$models.push($o)
+		
+	End for each 
+	
 	// TODO: Read models
-	return []
+	return $models.orderBy("name asc")

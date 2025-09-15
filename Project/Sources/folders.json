@@ -16,6 +16,19 @@
 			"VECTOR_STUDIO"
 		]
 	},
+	"COMMON": {
+		"methods": [
+			"FORM_MANAGER"
+		],
+		"forms": [
+			"BACK"
+		],
+		"classes": [
+			"menu",
+			"menuBar",
+			"regex"
+		]
+	},
 	"DEV": {
 		"tables": [
 			"Cities",

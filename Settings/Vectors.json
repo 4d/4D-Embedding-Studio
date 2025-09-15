@@ -1,59 +1,46 @@
 {
 	"vectors": [
 		{
-			"phrase": "was Table_1 Field_5",
-			"model": "",
 			"version": -1,
-			"dataclassName": "Table_1",
-			"dataclassNumber": 1,
-			"vectorName": "Field_5",
-			"vectorNumber": 5
-		},
-		{
-			"phrase": "",
-			"model": "",
-			"version": -1,
-			"dataclassName": "Table_1",
-			"dataclassNumber": 1,
-			"vectorName": "zdesc",
-			"vectorNumber": 4
-		},
-		{
-			"phrase": "Non existing attribute {toto}",
-			"model": "",
-			"version": -1,
-			"dataclassName": "Table_2",
+			"dataclassName": "School",
 			"dataclassNumber": 2,
-			"vectorName": "Field_5",
-			"vectorNumber": 5
+			"vectorName": "vector_with_error",
+			"vectorNumber": 5,
+			"model": "",
+			"phrase": "Non existing attribute {toto}"
 		},
 		{
-			"phrase": "Missing dataclass",
-			"model": "",
 			"version": -1,
-			"dataclassName": "Uknown dataclass",
-			"dataclassNumber": 8858,
-			"vectorName": "Field_5",
-			"vectorNumber": 5
-		},
-		{
-			"phrase": "Not a vector",
-			"model": "",
-			"version": -1,
-			"dataclassName": "Table_1",
+			"dataclassName": "Students",
 			"dataclassNumber": 1,
-			"vectorName": "Field_5",
-			"vectorNumber": 1
+			"vectorName": "vector_1",
+			"vectorNumber": 4,
+			"model": "",
+			"phrase": ""
 		},
 		{
-			"phrase": "Missing vector",
-			"model": "",
 			"version": -1,
-			"dataclassName": "Table_1",
-			"dataclassNumber": 2,
-			"vectorName": "Field_5",
-			"vectorNumber": 8858
+			"dataclassName": "Students",
+			"dataclassNumber": 1,
+			"vectorName": "vector_2",
+			"vectorNumber": 5,
+			"model": "",
+			"phrase": "was Table_1 Field_5"
 		}
 	],
-	"models": []
+	"models": [
+		{
+			"name": "first model",
+			"model": "",
+			"apiKey": ""
+		},
+		{
+			"name": "my model",
+			"model": "text-embedding-3-large",
+			"apiKey": "",
+			"baseURL": "",
+			"organization": "myOrg",
+			"project": "muProj"
+		}
+	]
 }
