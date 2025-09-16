@@ -20,9 +20,6 @@
 		"methods": [
 			"FORM_MANAGER"
 		],
-		"forms": [
-			"BACK"
-		],
 		"classes": [
 			"menu",
 			"menuBar",
@@ -41,6 +38,7 @@
 	},
 	"VECTOR_STUDIO": {
 		"forms": [
+			"MODEL",
 			"MODELS_MANAGER",
 			"VECTORS_STUDIO"
 		],

@@ -71,11 +71,6 @@ Function manager($e : Object)
 			This:C1470.modelsDropdownManager($e)
 			
 			//______________________________________________________
-			//: ($e.objectName="modelManager")
-			
-			//This.modelManager($e)
-			
-			//______________________________________________________
 		: ($e.objectName="manageModels")
 			
 			If ($e.code=On Clicked:K2:4)
@@ -257,7 +252,7 @@ Function modelsDropdownManager($e : Object)
 	Case of 
 			
 			//______________________________________________________
-		: ($e.code=On Load:K2:1)
+		: ($e.code=On Load:K2:1)  // Define dropdown
 			
 			var $me:={\
 				values: This:C1470._getModelDropdownValues(); \
@@ -272,42 +267,21 @@ Function modelsDropdownManager($e : Object)
 			
 			$me:=Form:C1466.modelsDropdown
 			
-/*If ($me.index=0)  // New*/
 			If ($me.currentValue=Localized string:C991("newModel"))  // New
 				
-				
 				// Create a new model
-				var $name:="myNewModel"
 				var $o : Object:=OBJECT Get value:C1743("modelManager") || {models: Form:C1466.models}
 				$o.context:="add"
-				$o.name:=$name
 				
 				FORM GOTO PAGE:C247(2)
 				OBJECT SET VALUE:C1742("modelManager"; $o)
-				
-				
-				//If (Bool(OK))  //
-				
-				//This.models.push({name: $name})
-				//$me.values:=This._getModelDropdownValues()
-				//$me.index:=$me.values.indexOf($name)
-				//$me.currentValue:=$name
-				
-				//Else 
-				
-				//$me.currentValue:=$me.placeholder
-				//$me.index:=-1
-				
-				//End if 
-				
-				//Form.modelsDropdown:=Form.modelsDropdown  // Redraw
 				
 				return 
 				
 			End if 
 			
-			var $vector : cs:C1710.Vector:=This:C1470.currentItem
-			$vector.model:=$me.currentValue
+			// Update current vector
+			This:C1470.currentItem.model:=$me.currentValue
 			
 			//______________________________________________________
 	End case 
@@ -332,6 +306,12 @@ Function modelManager($e : Object)
 				//______________________________________________________
 			: ($o.context="add")
 				
+				This:C1470.models:=$o.models
+				Form:C1466.modelsDropdown.values:=This:C1470._getModelDropdownValues()
+				Form:C1466.modelsDropdown.currentValue:=$o.currentItem.name
+				Form:C1466.modelsDropdown.index:=Form:C1466.modelsDropdown.values.indexOf(Form:C1466.modelsDropdown.currentValue)
+				This:C1470.currentItem.model:=Form:C1466.modelsDropdown.currentValue
+				
 				
 				
 				//______________________________________________________
@@ -341,6 +321,9 @@ Function modelManager($e : Object)
 				
 				//______________________________________________________
 		End case 
+		
+		OB REMOVE:C1226($o; "context")
+		
 	End if 
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***

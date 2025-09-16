@@ -88,9 +88,14 @@
           <source>Select a model</source>
           <target>Sélectionnez un modèle</target>
         </trans-unit>
+        <trans-unit id="h2QVpV9jVxTyv6KzO1tkhw" resname="informations">
+          <source>Informations</source>
+          <target>Informations</target>
+        </trans-unit>
       </group>
     </body>
   </file>
+
 
 
 

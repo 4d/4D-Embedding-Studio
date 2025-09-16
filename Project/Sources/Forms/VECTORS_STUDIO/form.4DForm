@@ -275,12 +275,20 @@
 					"detailForm": "MODELS_MANAGER",
 					"sizingX": "grow",
 					"sizingY": "grow",
-					"method": "ObjectMethods/modelManager.4dm"
+					"method": "ObjectMethods/modelManager.4dm",
+					"events": [
+						"onLoad",
+						"onValidate",
+						"onLosingFocus",
+						"onGettingFocus",
+						"onDataChange",
+						"onUnload"
+					]
 				}
 			}
 		}
 	],
-	"geometryStamp": 370,
+	"geometryStamp": 372,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
