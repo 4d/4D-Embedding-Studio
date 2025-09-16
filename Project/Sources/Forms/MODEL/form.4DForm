@@ -1,0 +1,165 @@
+{
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"windowSizingX": "variable",
+	"windowSizingY": "variable",
+	"windowMinWidth": 0,
+	"windowMinHeight": 0,
+	"windowMaxWidth": 32767,
+	"windowMaxHeight": 32767,
+	"rightMargin": 20,
+	"bottomMargin": 20,
+	"events": [
+		"onLoad",
+		"onPageChange",
+		"onValidate",
+		"onClick",
+		"onDoubleClick",
+		"onOutsideCall",
+		"onBeginDragOver",
+		"onDragOver",
+		"onDrop",
+		"onAfterKeystroke",
+		"onMenuSelect",
+		"onPluginArea",
+		"onAfterEdit",
+		"onTimer",
+		"onBoundVariableChange"
+	],
+	"windowTitle": "window title",
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {}
+		},
+		{
+			"objects": {
+				"Text": {
+					"type": "text",
+					"text": ":xliff:name",
+					"top": 16,
+					"left": 33,
+					"width": 82,
+					"height": 17,
+					"textAlign": "right"
+				},
+				"Text1": {
+					"type": "text",
+					"text": ":xliff:model",
+					"top": 53,
+					"left": 30,
+					"width": 85,
+					"height": 17,
+					"textAlign": "right"
+				},
+				"Text2": {
+					"type": "text",
+					"text": ":xliff:apiKey",
+					"top": 90,
+					"left": 22,
+					"width": 93,
+					"height": 17,
+					"textAlign": "right"
+				},
+				"Text3": {
+					"type": "text",
+					"text": ":xliff:baseURL",
+					"top": 159,
+					"left": 22,
+					"width": 95,
+					"height": 16,
+					"textAlign": "right"
+				},
+				"Text4": {
+					"type": "text",
+					"text": ":xliff:organization",
+					"top": 195,
+					"left": 9,
+					"width": 106,
+					"height": 16,
+					"textAlign": "right"
+				},
+				"Text5": {
+					"type": "text",
+					"text": ":xliff:project",
+					"top": 232,
+					"left": 33,
+					"width": 82,
+					"height": 16,
+					"textAlign": "right"
+				},
+				"name": {
+					"type": "input",
+					"left": 135,
+					"top": 16,
+					"width": 324,
+					"height": 17,
+					"sizingX": "grow",
+					"right": 459,
+					"dataSource": "Form:C1466.name"
+				},
+				"model": {
+					"type": "input",
+					"left": 135,
+					"top": 53,
+					"width": 324,
+					"height": 17,
+					"sizingX": "grow",
+					"right": 459,
+					"dataSource": "Form:C1466.model"
+				},
+				"apiKey": {
+					"type": "input",
+					"left": 135,
+					"top": 90,
+					"width": 324,
+					"height": 49,
+					"sizingX": "grow",
+					"right": 459,
+					"dataSource": "Form:C1466.apiKey"
+				},
+				"baseURL": {
+					"type": "input",
+					"left": 135,
+					"top": 159,
+					"width": 324,
+					"height": 16,
+					"sizingX": "grow",
+					"right": 459,
+					"dataSource": "Form:C1466.baseURL"
+				},
+				"organization": {
+					"type": "input",
+					"left": 135,
+					"top": 195,
+					"width": 324,
+					"height": 17,
+					"sizingX": "grow",
+					"right": 459,
+					"dataSource": "Form:C1466.organization"
+				},
+				"project": {
+					"type": "input",
+					"left": 135,
+					"top": 232,
+					"width": 324,
+					"height": 17,
+					"sizingX": "grow",
+					"right": 459,
+					"dataSource": "Form:C1466.project"
+				}
+			}
+		}
+	],
+	"geometryStamp": 12,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	},
+	"method": "method.4dm"
+}

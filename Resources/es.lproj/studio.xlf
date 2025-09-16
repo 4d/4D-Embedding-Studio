@@ -88,9 +88,14 @@
           <source>Select a model</source>
           <target state="new">Select a model</target>
         </trans-unit>
+        <trans-unit id="h2QVpV9jVxTyv6KzO1tkhw" resname="informations">
+          <source>Informations</source>
+          <target state="new">Informations</target>
+        </trans-unit>
       </group>
     </body>
   </file>
+
 
 
 

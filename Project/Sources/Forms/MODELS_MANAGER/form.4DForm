@@ -6,6 +6,8 @@
 	"events": [
 		"onLoad",
 		"onClick",
+		"onActivate",
+		"onGettingFocus",
 		"onResize",
 		"onBoundVariableChange"
 	],
@@ -44,126 +46,6 @@
 					],
 					"visibility": "hidden"
 				},
-				"Text": {
-					"type": "text",
-					"text": ":xliff:name",
-					"top": 53,
-					"left": 250,
-					"width": 82,
-					"height": 17,
-					"fontWeight": "bold",
-					"textAlign": "right"
-				},
-				"Text1": {
-					"type": "text",
-					"text": ":xliff:model",
-					"top": 90,
-					"left": 247,
-					"width": 85,
-					"height": 17,
-					"fontWeight": "bold",
-					"textAlign": "right"
-				},
-				"Text2": {
-					"type": "text",
-					"text": ":xliff:apiKey",
-					"top": 127,
-					"left": 239,
-					"width": 93,
-					"height": 17,
-					"fontWeight": "bold",
-					"textAlign": "right"
-				},
-				"Text3": {
-					"type": "text",
-					"text": ":xliff:baseURL",
-					"top": 184,
-					"left": 237,
-					"width": 95,
-					"height": 16,
-					"fontWeight": "bold",
-					"textAlign": "right"
-				},
-				"Text4": {
-					"type": "text",
-					"text": ":xliff:organization",
-					"top": 232,
-					"left": 205,
-					"width": 127,
-					"height": 17,
-					"fontWeight": "bold",
-					"textAlign": "right"
-				},
-				"Text5": {
-					"type": "text",
-					"text": ":xliff:project",
-					"top": 269,
-					"left": 241,
-					"width": 91,
-					"height": 17,
-					"fontWeight": "bold",
-					"textAlign": "right"
-				},
-				"Input": {
-					"type": "input",
-					"left": 352,
-					"top": 53,
-					"width": 328,
-					"height": 17,
-					"sizingX": "grow",
-					"right": 680,
-					"dataSource": "Form:C1466.currentItem.name"
-				},
-				"Input1": {
-					"type": "input",
-					"left": 352,
-					"top": 90,
-					"width": 328,
-					"height": 17,
-					"sizingX": "grow",
-					"right": 680,
-					"dataSource": "Form:C1466.currentItem.model"
-				},
-				"Input2": {
-					"type": "input",
-					"left": 352,
-					"top": 127,
-					"width": 328,
-					"height": 49,
-					"sizingX": "grow",
-					"right": 680,
-					"dataSource": "Form:C1466.currentItem.apiKey"
-				},
-				"Input3": {
-					"type": "input",
-					"left": 352,
-					"top": 196,
-					"width": 328,
-					"height": 16,
-					"sizingX": "grow",
-					"right": 680,
-					"dataSource": "Form:C1466.currentItem.baseURL"
-				},
-				"Input4": {
-					"type": "input",
-					"left": 352,
-					"top": 232,
-					"width": 328,
-					"height": 17,
-					"sizingX": "grow",
-					"right": 680,
-					"dataSource": "Form:C1466.currentItem.organization"
-				},
-				"Input5": {
-					"type": "input",
-					"left": 352,
-					"top": 269,
-					"width": 328,
-					"height": 17,
-					"sizingX": "grow",
-					"right": 680,
-					"dataSource": "Form:C1466.currentItem.project"
-				},
 				"list": {
 					"type": "listbox",
 					"left": 20,
@@ -192,7 +74,6 @@
 					"currentItemSource": "Form:C1466.currentItem",
 					"currentItemPositionSource": "Form:C1466.itemPosition",
 					"selectedItemsSource": "Form:C1466.selectedItems",
-					"metaSource": "Form:C1466.listMetaInfo(This:C1470)",
 					"hideFocusRing": true,
 					"bottom": 371,
 					"columns": [
@@ -212,9 +93,9 @@
 						}
 					]
 				},
-				"Text6": {
+				"title": {
 					"type": "text",
-					"text": ".Informations",
+					"text": ":xliff:informations",
 					"top": 19,
 					"left": 226,
 					"width": 381,
@@ -233,7 +114,7 @@
 						3
 					],
 					"visibility": "hidden",
-					"startPoint": "bottomLeft"
+					"startPoint": "topLeft"
 				},
 				"Line1": {
 					"type": "line",
@@ -247,7 +128,7 @@
 						3
 					],
 					"visibility": "hidden",
-					"startPoint": "bottomLeft"
+					"startPoint": "topLeft"
 				},
 				"close": {
 					"type": "button",
@@ -259,7 +140,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "ObjectMethods/close.4dm",
 					"sizingX": "move",
 					"sizingY": "move",
 					"right": 680
@@ -289,8 +169,43 @@
 					],
 					"style": "bevel",
 					"sizingY": "move"
+				},
+				"model": {
+					"type": "subform",
+					"left": 217,
+					"top": 30,
+					"width": 464,
+					"height": 269,
+					"detailForm": "MODEL",
+					"dataSource": "Form:C1466.currentItem",
+					"events": [
+						"onGettingFocus"
+					]
+				},
+				"Input": {
+					"type": "input",
+					"left": 381,
+					"top": 6,
+					"width": 300,
+					"height": 17,
+					"dataSource": "OBJECT Get name:C1087(Object with focus:K67:3)",
+					"enterable": false,
+					"contextMenu": "none",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"textAlign": "right",
+					"stroke": "#c0c0c0",
+					"focusable": false
 				}
-			}
+			},
+			"entryOrder": [
+				"list",
+				"model",
+				"close",
+				"Button",
+				"Button1",
+				"Input"
+			]
 		}
 	],
 	"editor": {
@@ -301,8 +216,9 @@
 			"Guides": {}
 		}
 	},
-	"geometryStamp": 458,
+	"geometryStamp": 495,
 	"rightMargin": 20,
 	"bottomMargin": 20,
-	"method": "method.4dm"
+	"method": "method.4dm",
+	"formClass": "_MODELS_MANAGER"
 }
