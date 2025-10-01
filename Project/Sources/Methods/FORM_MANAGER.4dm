@@ -1,2 +1,10 @@
 //%attributes = {"invisible":true,"preemptive":"incapable"}
-Form:C1466.manager(FORM Event:C1606)
+Try
+	
+	Form:C1466.manager(FORM Event:C1606)
+	
+Catch
+	
+	TRACE:C157
+	
+End try
