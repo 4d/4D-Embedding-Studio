@@ -25,6 +25,92 @@
 	"pages": [
 		{
 			"objects": {
+				"more": {
+					"type": "button",
+					"top": 27,
+					"left": 783,
+					"width": 16,
+					"height": 16,
+					"events": [
+						"onClick"
+					],
+					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/more.png",
+					"style": "custom",
+					"iconFrames": 4,
+					"method": "ObjectMethods/more.4dm",
+					"sizingX": "move"
+				},
+				"Line": {
+					"type": "line",
+					"top": 41,
+					"left": 7,
+					"width": 799,
+					"height": 0,
+					"stroke": "#1e90ff",
+					"startPoint": "topLeft",
+					"visibility": "hidden",
+					"strokeDashArray": [
+						2,
+						2
+					]
+				},
+				"Line1": {
+					"type": "line",
+					"top": 51,
+					"left": 7,
+					"width": 799,
+					"height": 0,
+					"stroke": "#1e90ff",
+					"startPoint": "topLeft",
+					"visibility": "hidden",
+					"strokeDashArray": [
+						2,
+						2
+					]
+				},
+				"Line2": {
+					"type": "line",
+					"top": 20,
+					"left": 419,
+					"width": 0,
+					"height": 560,
+					"stroke": "#1e90ff",
+					"startPoint": "topLeft",
+					"visibility": "hidden",
+					"strokeDashArray": [
+						2,
+						2
+					]
+				},
+				"Line3": {
+					"type": "line",
+					"top": 19,
+					"left": 800,
+					"width": 0,
+					"height": 560,
+					"stroke": "#1e90ff",
+					"startPoint": "topLeft",
+					"visibility": "hidden",
+					"strokeDashArray": [
+						2,
+						2
+					]
+				},
+				"on-board": {
+					"type": "subform",
+					"left": 20,
+					"top": 558,
+					"width": 62,
+					"height": 21,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"method": "ObjectMethods/on-board.4dm"
+				}
+			}
+		},
+		{
+			"objects": {
 				"list": {
 					"type": "listbox",
 					"left": 20,
@@ -140,49 +226,6 @@
 					"dataSource": "Form:C1466.modelsDropdown",
 					"right": 763
 				},
-				"more": {
-					"type": "button",
-					"top": 27,
-					"left": 783,
-					"width": 16,
-					"height": 16,
-					"events": [
-						"onClick"
-					],
-					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/more.png",
-					"style": "custom",
-					"iconFrames": 4,
-					"method": "ObjectMethods/more.4dm",
-					"sizingX": "move"
-				},
-				"Line": {
-					"type": "line",
-					"top": 41,
-					"left": 7,
-					"width": 799,
-					"height": 0,
-					"stroke": "#1e90ff",
-					"startPoint": "topLeft",
-					"visibility": "hidden",
-					"strokeDashArray": [
-						2,
-						2
-					]
-				},
-				"Line1": {
-					"type": "line",
-					"top": 51,
-					"left": 7,
-					"width": 799,
-					"height": 0,
-					"stroke": "#1e90ff",
-					"startPoint": "topLeft",
-					"visibility": "hidden",
-					"strokeDashArray": [
-						2,
-						2
-					]
-				},
 				"manageModels": {
 					"type": "button",
 					"text": "...",
@@ -193,114 +236,11 @@
 					"events": [
 						"onClick"
 					]
-				},
-				"Line2": {
-					"type": "line",
-					"top": 20,
-					"left": 419,
-					"width": 0,
-					"height": 560,
-					"stroke": "#1e90ff",
-					"startPoint": "topLeft",
-					"visibility": "hidden",
-					"strokeDashArray": [
-						2,
-						2
-					]
-				},
-				"Line3": {
-					"type": "line",
-					"top": 19,
-					"left": 800,
-					"width": 0,
-					"height": 560,
-					"stroke": "#1e90ff",
-					"startPoint": "topLeft",
-					"visibility": "hidden",
-					"strokeDashArray": [
-						2,
-						2
-					]
-				},
-				"on-board": {
-					"type": "subform",
-					"left": 7,
-					"top": 569,
-					"width": 62,
-					"height": 21,
-					"visibility": "hidden",
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"method": "ObjectMethods/on-board.4dm"
-				}
-			}
-		},
-		{
-			"objects": {}
-		},
-		{
-			"objects": {
-				"background": {
-					"type": "picture",
-					"top": 0,
-					"left": 0,
-					"width": 820,
-					"height": 600,
-					"picture": "/RESOURCES/Images/overlay.png",
-					"pictureFormat": "tiled",
-					"sizingX": "grow",
-					"sizingY": "grow"
-				},
-				"main": {
-					"type": "rectangle",
-					"top": 27,
-					"left": 57,
-					"width": 707,
-					"height": 423,
-					"borderRadius": 10,
-					"fill": "automatic",
-					"stroke": "automatic",
-					"sizingX": "grow",
-					"sizingY": "grow"
-				},
-				"backButton": {
-					"type": "button",
-					"text": "MODELS_MANAGER",
-					"top": 0,
-					"left": 0,
-					"width": 820,
-					"height": 600,
-					"events": [
-						"onClick"
-					],
-					"display": false,
-					"sizingX": "grow",
-					"sizingY": "grow"
-				},
-				"modelManager": {
-					"type": "subform",
-					"left": 56,
-					"top": 27,
-					"width": 710,
-					"height": 425,
-					"detailForm": "MODELS_MANAGER",
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"method": "ObjectMethods/modelManager.4dm",
-					"events": [
-						"onLoad",
-						"onValidate",
-						"onLosingFocus",
-						"onGettingFocus",
-						"onDataChange",
-						"onUnload"
-					],
-					"dataSourceTypeHint": "undefined"
 				}
 			}
 		}
 	],
-	"geometryStamp": 383,
+	"geometryStamp": 391,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -309,8 +249,8 @@
 		}
 	},
 	"formClass": "_VECTOR_STUDIO",
-	"rightMargin": 0,
-	"bottomMargin": 0,
+	"rightMargin": 20,
+	"bottomMargin": 20,
 	"windowMinHeight": 600,
 	"method": "FORM_MANAGER"
 }
