@@ -221,6 +221,17 @@
 						2,
 						2
 					]
+				},
+				"on-board": {
+					"type": "subform",
+					"left": 7,
+					"top": 569,
+					"width": 62,
+					"height": 21,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"method": "ObjectMethods/on-board.4dm"
 				}
 			}
 		},
@@ -283,12 +294,13 @@
 						"onGettingFocus",
 						"onDataChange",
 						"onUnload"
-					]
+					],
+					"dataSourceTypeHint": "undefined"
 				}
 			}
 		}
 	],
-	"geometryStamp": 372,
+	"geometryStamp": 383,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

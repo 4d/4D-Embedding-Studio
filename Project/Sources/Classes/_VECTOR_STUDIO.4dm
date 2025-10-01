@@ -12,6 +12,8 @@ property selectedItems : Collection
 
 property modelsDropdown : Object
 
+property newModel : cs:C1710.onBoard
+
 Class constructor
 	
 	This:C1470.settings:=This:C1470.readSettings()
@@ -32,6 +34,10 @@ Function manager($e : Object)
 			: ($e.code=On Load:K2:1)
 				
 				This:C1470.listManager($e)
+				
+				Form:C1466.newModel:=cs:C1710.onBoard.new("on-board"; "NEW_MODEL")
+				Form:C1466.newModel.me:=Form:C1466.newModel
+				
 				This:C1470.modelsDropdownManager($e)
 				
 				SET TIMER:C645(-1)
@@ -267,14 +273,32 @@ Function modelsDropdownManager($e : Object)
 			
 			$me:=Form:C1466.modelsDropdown
 			
-			If ($me.currentValue=Localized string:C991("newModel"))  // New
+			If ($me.currentValue=Localized string:C991("newModelItem"))  // Create a new model
 				
-				// Create a new model
-				var $o : Object:=OBJECT Get value:C1743("modelManager") || {models: Form:C1466.models}
-				$o.context:="add"
+				// Ensure that the proposed name is unique.
+				var $name:=Localized string:C991("newModel")
+				var $i; $indx : Integer
 				
-				FORM GOTO PAGE:C247(2)
-				OBJECT SET VALUE:C1742("modelManager"; $o)
+				Repeat 
+					
+					If (Form:C1466.models.includes($name))
+						
+						$i+=1
+						$name:=Localized string:C991("newModel")+String:C10($i; " #")
+						
+					Else 
+						
+						break
+						
+					End if 
+				Until (False:C215)
+				
+				Form:C1466.newModel.show()
+				
+				var $o : Object:=Form:C1466.newModel.instance
+				$o.data.name:=$name
+				$o.data.models:=Form:C1466.models
+				$o.data.context:="add"
 				
 				return 
 				
@@ -285,7 +309,6 @@ Function modelsDropdownManager($e : Object)
 			
 			//______________________________________________________
 	End case 
-	
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function modelManager($e : Object)
@@ -329,7 +352,7 @@ Function modelManager($e : Object)
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _getModelDropdownValues() : Collection
 	
-	return This:C1470.models.extract("name").orderBy().combine(["-"; Localized string:C991("newModel")])
+	return This:C1470.models.extract("name").orderBy().combine(["-"; Localized string:C991("newModelItem")])
 	
 	// MARK:- [SETTINGS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -350,7 +373,7 @@ Function readSettings() : Object
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get settingsFile() : 4D:C1709.File
 	
-/* Requirement 17311
+/* #17311
 The vector structure shall be saved in a JSON file named “vectors.json” in the “settings” folder
 */
 	
