@@ -50,6 +50,14 @@
           <source>The "{attribute}" attribute is a vector and cannot be used in this context.</source>
           <target state="new">The "{attribute}" attribute is a vector and cannot be used in this context.</target>
         </trans-unit>
+        <trans-unit id="3774uWkyNzGYHRnlfn05pg" resname="theModelNameMustBeUnique">
+          <source>The model name must be unique.</source>
+          <target state="new">The model name must be unique.</target>
+        </trans-unit>
+        <trans-unit id="w9dR9S467ayEHGojqm+KIA" resname="theValueIsRequired.">
+          <source>The value "{value}" is required.</source>
+          <target state="new">The value "{value}" is required.</target>
+        </trans-unit>
       </group>
       <group resname="Models">
         <trans-unit id="Yq5vxj6oKJ1vSIjdQfUn0A" resname="name">
@@ -76,11 +84,8 @@
           <source>Project</source>
           <target state="new">Project</target>
         </trans-unit>
-        <trans-unit id="Pj7rsRD69Eu+o3ySMBNo0Q" resname="done">
-          <source>Done</source>
-          <target state="new">Done</target>
-        </trans-unit>
-        <trans-unit id="t543px4J9MAd+BhhlohSkA" resname="newModel">
+        
+        <trans-unit id="t543px4J9MAd+BhhlohSkA" resname="newModelItem">
           <source>New model…</source>
           <target state="new">New model…</target>
         </trans-unit>
@@ -92,9 +97,27 @@
           <source>Informations</source>
           <target state="new">Informations</target>
         </trans-unit>
+        <trans-unit id="h5EYvSoKG5G3YrhHVTIvGQ" resname="newModel">
+          <source>Model</source>
+          <target state="new">Model</target>
+        </trans-unit>
+      </group>
+      <group resname="Common">
+        <trans-unit id="1ksF1sjptpuuz2N54rsrBg" resname="cancel">
+          <source>Cancel</source>
+          <target state="new">Cancel</target>
+        </trans-unit>
+        <trans-unit id="rg2y2b6FpUQih1IjPssXIg" resname="done">
+          <source>Done</source>
+          <target state="new">Done</target>
+        </trans-unit>
       </group>
     </body>
   </file>
+
+
+
+
 
 
 

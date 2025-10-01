@@ -23,6 +23,8 @@
 		"classes": [
 			"menu",
 			"menuBar",
+			"onBoard",
+			"onBoard",
 			"regex"
 		]
 	},
@@ -36,13 +38,21 @@
 			"StudentsEntity"
 		]
 	},
+	"NAMESPACE": {
+		"classes": [
+			"Model",
+			"Vector"
+		]
+	},
 	"VECTOR_STUDIO": {
 		"forms": [
 			"MODEL",
 			"MODELS_MANAGER",
+			"NEW_MODEL",
 			"VECTORS_STUDIO"
 		],
 		"classes": [
+			"_MODEL",
 			"_MODELS_MANAGER",
 			"_VECTOR_STUDIO"
 		]

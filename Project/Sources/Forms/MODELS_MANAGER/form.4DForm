@@ -8,6 +8,7 @@
 		"onClick",
 		"onActivate",
 		"onGettingFocus",
+		"onTimer",
 		"onResize",
 		"onBoundVariableChange"
 	],
@@ -177,10 +178,10 @@
 					"width": 464,
 					"height": 269,
 					"detailForm": "MODEL",
-					"dataSource": "Form:C1466.currentItem",
 					"events": [
 						"onGettingFocus"
-					]
+					],
+					"dataSourceTypeHint": "undefined"
 				},
 				"Input": {
 					"type": "input",
@@ -216,7 +217,7 @@
 			"Guides": {}
 		}
 	},
-	"geometryStamp": 495,
+	"geometryStamp": 498,
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"method": "method.4dm",

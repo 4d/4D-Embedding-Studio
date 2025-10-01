@@ -1,4 +1,3 @@
-
 property _class : cs:C1710._MODELS_MANAGER
 
 property models : Collection
@@ -10,14 +9,13 @@ Class constructor
 	
 	//
 	
-	
 	// MARK:- [MANAGERS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function manager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	// MARK:-Form method
+	// MARK:- Form method
 	If ($e.objectName=Null:C1517)
 		
 		Case of 
@@ -25,11 +23,9 @@ Function manager($e : Object)
 				// ________________________________________________________________________________
 			: ($e.code=On Load:K2:1)
 				
-				Form:C1466.isSubform:=OBJECT Get subform container value:C1785#Null:C1517
-				
-				OBJECT SET VISIBLE:C603(*; "close"; Form:C1466.isSubform)
-				
 				If (Form:C1466.context=Null:C1517)
+					
+					SET TIMER:C645(-1)
 					
 					return 
 					
@@ -58,9 +54,6 @@ Function manager($e : Object)
 							
 						Until (False:C215)
 						
-						
-						
-						
 						var $model:=cs:C1710.Model.new(Form:C1466.name)
 						
 						Form:C1466.models.push($model)
@@ -72,11 +65,25 @@ Function manager($e : Object)
 						LISTBOX SELECT ROW:C912(*; "list"; Form:C1466.models.indexOf($model)+1)
 						GOTO OBJECT:C206(*; "model")
 						
-						
 						// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
 				End case 
 				
-				//______________________________________________________
+				SET TIMER:C645(-1)
+				
+				// ______________________________________________________
+			: ($e.code=On Timer:K2:25)
+				
+				SET TIMER:C645(0)
+				
+				Form:C1466.isSubform:=OBJECT Get subform container value:C1785#Null:C1517
+				OBJECT SET VISIBLE:C603(*; "close"; Form:C1466.isSubform)
+				
+				// ________________________________________________________________________________
+			: ($e.code=On Bound Variable Change:K2:52)
+				
+				// ???????????????????
+				
+				// ______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
 				If (Form:C1466.context=Null:C1517)
@@ -96,7 +103,7 @@ Function manager($e : Object)
 		
 	End if 
 	
-	// MARK:-Widget methods
+	// MARK:- Widget methods
 	Case of 
 			
 			// ________________________________________________________________________________
@@ -112,13 +119,7 @@ Function manager($e : Object)
 				
 				If (Form:C1466.context="add")
 					
-					
-					
-					
-					
-					
-					
-					
+					// ???????????????????
 					
 				End if 
 				

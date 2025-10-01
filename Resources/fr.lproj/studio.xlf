@@ -50,6 +50,14 @@
           <source>The "{attribute}" attribute is a vector and cannot be used in this context.</source>
           <target>L'attribut "{attribute}" est un vecteur et ne peut pas être utilisé dans ce contexte.</target>
         </trans-unit>
+        <trans-unit id="3774uWkyNzGYHRnlfn05pg" resname="theModelNameMustBeUnique">
+          <source>The model name must be unique.</source>
+          <target>Le nom du modèle doit être unique.</target>
+        </trans-unit>
+        <trans-unit id="w9dR9S467ayEHGojqm+KIA" resname="theValueIsRequired.">
+          <source>The value "{value}" is required.</source>
+          <target>La valeur "{value}" est obligatoire.</target>
+        </trans-unit>
       </group>
       <group resname="Models">
         <trans-unit id="Yq5vxj6oKJ1vSIjdQfUn0A" resname="name">
@@ -76,11 +84,8 @@
           <source>Project</source>
           <target>Projet</target>
         </trans-unit>
-        <trans-unit id="Pj7rsRD69Eu+o3ySMBNo0Q" resname="done">
-          <source>Done</source>
-          <target state="needs-review-translation">Fermer</target>
-        </trans-unit>
-        <trans-unit id="t543px4J9MAd+BhhlohSkA" resname="newModel">
+        
+        <trans-unit id="t543px4J9MAd+BhhlohSkA" resname="newModelItem">
           <source>New model…</source>
           <target>Nouveau modèle…</target>
         </trans-unit>
@@ -92,9 +97,27 @@
           <source>Informations</source>
           <target>Informations</target>
         </trans-unit>
+        <trans-unit id="h5EYvSoKG5G3YrhHVTIvGQ" resname="newModel">
+          <source>Model</source>
+          <target>Modèle</target>
+        </trans-unit>
+      </group>
+      <group resname="Common">
+        <trans-unit id="1ksF1sjptpuuz2N54rsrBg" resname="cancel">
+          <source>Cancel</source>
+          <target>Annuler</target>
+        </trans-unit>
+        <trans-unit id="rg2y2b6FpUQih1IjPssXIg" resname="done">
+          <source>Done</source>
+          <target>Fermer</target>
+        </trans-unit>
       </group>
     </body>
   </file>
+
+
+
+
 
 
 
