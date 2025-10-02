@@ -1,2 +1,25 @@
-Form:C1466._class:=Form:C1466._class || cs:C1710._MODELS_MANAGER.new()
-Form:C1466._class.manager(FORM Event:C1606)
+var $e:=FORM Event:C1606
+
+Case of 
+		
+		// ______________________________________________________
+	: ($e.code=On Load:K2:1)
+		
+		SET TIMER:C645(-1)
+		
+		// ______________________________________________________
+	: ($e.code=On Timer:K2:25)
+		
+		SET TIMER:C645(0)
+		
+		var $data : Object:=Form:C1466.me.instance.data
+		var $model:={name: $data.name}
+		OBJECT SET VALUE:C1742("model"; $model)
+		
+		// ______________________________________________________
+	: ($e.code=On Resize:K2:27)
+		
+		Form:C1466.me.onResize()
+		
+		// ______________________________________________________
+End case 

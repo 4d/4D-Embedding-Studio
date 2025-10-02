@@ -14,9 +14,6 @@
 		"onTimer",
 		"onAfterKeystroke",
 		"onSelectionChange",
-		"onMouseEnter",
-		"onMouseLeave",
-		"onMouseMove",
 		"onAfterEdit",
 		"onPageChange"
 	],
@@ -25,21 +22,6 @@
 	"pages": [
 		{
 			"objects": {
-				"more": {
-					"type": "button",
-					"top": 27,
-					"left": 783,
-					"width": 16,
-					"height": 16,
-					"events": [
-						"onClick"
-					],
-					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/more.png",
-					"style": "custom",
-					"iconFrames": 4,
-					"method": "ObjectMethods/more.4dm",
-					"sizingX": "move"
-				},
 				"Line": {
 					"type": "line",
 					"top": 41,
@@ -98,9 +80,9 @@
 				},
 				"on-board": {
 					"type": "subform",
-					"left": 20,
-					"top": 558,
-					"width": 62,
+					"left": 7,
+					"top": 5,
+					"width": 159,
 					"height": 21,
 					"visibility": "hidden",
 					"sizingX": "grow",
@@ -119,35 +101,25 @@
 					"height": 560,
 					"events": [
 						"onLoad",
-						"onSelectionChange",
-						"onMouseEnter",
-						"onMouseLeave",
-						"onMouseMove"
+						"onSelectionChange"
 					],
 					"listboxType": "collection",
 					"dataSource": "Form:C1466.vectors",
-					"horizontalLineStroke": "transparent",
-					"selectionMode": "single",
-					"horizontalPadding": 2,
-					"scrollbarHorizontal": "hidden",
-					"verticalAlign": "middle",
 					"headerHeight": "2em",
 					"right": 400,
 					"sizingX": "fixed",
 					"sizingY": "grow",
-					"resizingMode": "legacy",
 					"currentItemSource": "Form:C1466.currentItem",
 					"currentItemPositionSource": "Form:C1466.itemPosition",
 					"selectedItemsSource": "Form:C1466.selectedItems",
 					"metaSource": "Form:C1466.listMetaInfo(This:C1470)",
-					"hideFocusRing": true,
 					"bottom": 580,
 					"columns": [
 						{
 							"header": {
 								"text": ":xliff:dataclass",
 								"name": "Header1",
-								"fontWeight": "bold"
+								"class": "title"
 							},
 							"name": "dataclass",
 							"footer": {
@@ -161,7 +133,7 @@
 							"header": {
 								"name": "Header2",
 								"text": ":xliff:vector",
-								"fontWeight": "bold"
+								"class": "title"
 							},
 							"name": "vector",
 							"footer": {
@@ -193,25 +165,28 @@
 					"contextMenu": "none",
 					"storeDefaultStyle": true,
 					"sizingX": "grow",
-					"right": 800
+					"right": 800,
+					"visibility": "hidden"
 				},
-				"Text": {
+				"phraseLabel": {
 					"type": "text",
 					"text": ":xliff:explanatoryPhrase",
 					"top": 27,
 					"left": 419,
-					"width": 381,
+					"width": 351,
 					"height": 16,
-					"fontWeight": "bold"
+					"class": "title",
+					"visibility": "hidden"
 				},
-				"Text1": {
+				"modelsLabel": {
 					"type": "text",
 					"text": ":xliff:model",
 					"top": 177,
 					"left": 419,
 					"width": 381,
 					"height": 16,
-					"fontWeight": "bold"
+					"class": "title",
+					"visibility": "hidden"
 				},
 				"models": {
 					"type": "dropdown",
@@ -224,9 +199,10 @@
 					],
 					"dataSourceTypeHint": "object",
 					"dataSource": "Form:C1466.modelsDropdown",
-					"right": 763
+					"right": 763,
+					"visibility": "hidden"
 				},
-				"manageModels": {
+				"openModelsManager": {
 					"type": "button",
 					"text": "...",
 					"top": 201,
@@ -235,12 +211,29 @@
 					"height": 22,
 					"events": [
 						"onClick"
-					]
+					],
+					"visibility": "hidden"
+				},
+				"more": {
+					"type": "button",
+					"top": 27,
+					"left": 783,
+					"width": 16,
+					"height": 16,
+					"events": [
+						"onClick"
+					],
+					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/more.png",
+					"style": "custom",
+					"iconFrames": 4,
+					"method": "ObjectMethods/more.4dm",
+					"sizingX": "move",
+					"visibility": "hidden"
 				}
 			}
 		}
 	],
-	"geometryStamp": 391,
+	"geometryStamp": 415,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

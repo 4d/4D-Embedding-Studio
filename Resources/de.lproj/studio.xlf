@@ -101,6 +101,26 @@
           <source>Model</source>
           <target state="new">Model</target>
         </trans-unit>
+        <trans-unit id="VbgVxN3NGWRgxSbBBWpPMw" resname="yourOpenaiApiKey">
+          <source>Your OpenAI API Key.</source>
+          <target state="new">Your OpenAI API Key.</target>
+        </trans-unit>
+        <trans-unit id="i9KHZUKWAfNNo09pAbOjdQ" resname="baseUrlForOpenaiApiRequests">
+          <source>Base URL for OpenAI API requests.</source>
+          <target state="new">Base URL for OpenAI API requests.</target>
+        </trans-unit>
+        <trans-unit id="E4BLvZeMHn7J_X3ta364aQ" resname="yourOpenaiOrganizationId">
+          <source>Your OpenAI Organization ID.</source>
+          <target state="new">Your OpenAI Organization ID.</target>
+        </trans-unit>
+        <trans-unit id="4874Vxt2DVg1LULn+kRyZQ" resname="yourOpenaiProjectId">
+          <source>Your OpenAI Project ID.</source>
+          <target state="new">Your OpenAI Project ID.</target>
+        </trans-unit>
+        <trans-unit id="2WkUMnB_U4kJz0eo_kd7hQ" resname="idDisplayedInTheDropdownList">
+          <source>ID displayed in the drop-down list</source>
+          <target state="new">ID displayed in the drop-down list</target>
+        </trans-unit>
       </group>
       <group resname="Common">
         <trans-unit id="1ksF1sjptpuuz2N54rsrBg" resname="cancel">
@@ -114,6 +134,8 @@
       </group>
     </body>
   </file>
+
+
 
 
 

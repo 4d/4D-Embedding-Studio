@@ -15,174 +15,36 @@
 	"destination": "detailScreen",
 	"pages": [
 		{
-			"objects": {}
+			"objects": {
+				"background": {
+					"type": "picture",
+					"top": 0,
+					"left": 0,
+					"width": 765,
+					"height": 478,
+					"picture": "/RESOURCES/Images/overlay.png",
+					"pictureFormat": "tiled",
+					"sizingX": "grow",
+					"sizingY": "grow"
+				},
+				"backButton": {
+					"type": "button",
+					"text": "MODELS_MANAGER",
+					"top": 0,
+					"left": 0,
+					"width": 765,
+					"height": 478,
+					"events": [
+						"onClick"
+					],
+					"display": false,
+					"sizingX": "grow",
+					"sizingY": "grow"
+				}
+			}
 		},
 		{
 			"objects": {
-				"Line3": {
-					"type": "line",
-					"top": 0,
-					"left": 680,
-					"width": 0,
-					"height": 400,
-					"startPoint": "bottomLeft",
-					"stroke": "#1e90ff",
-					"strokeDashArray": [
-						1,
-						3
-					],
-					"visibility": "hidden"
-				},
-				"Line2": {
-					"type": "line",
-					"top": 0,
-					"left": 20,
-					"width": 0,
-					"height": 400,
-					"startPoint": "bottomLeft",
-					"stroke": "#1e90ff",
-					"strokeDashArray": [
-						1,
-						3
-					],
-					"visibility": "hidden"
-				},
-				"list": {
-					"type": "listbox",
-					"left": 20,
-					"top": 12,
-					"width": 192,
-					"height": 359,
-					"events": [
-						"onLoad",
-						"onSelectionChange",
-						"onMouseEnter",
-						"onMouseLeave",
-						"onMouseMove"
-					],
-					"listboxType": "collection",
-					"dataSource": "Form:C1466.models",
-					"horizontalLineStroke": "transparent",
-					"selectionMode": "single",
-					"horizontalPadding": 2,
-					"scrollbarHorizontal": "hidden",
-					"verticalAlign": "middle",
-					"headerHeight": "2em",
-					"right": 212,
-					"sizingX": "fixed",
-					"sizingY": "grow",
-					"resizingMode": "legacy",
-					"currentItemSource": "Form:C1466.currentItem",
-					"currentItemPositionSource": "Form:C1466.itemPosition",
-					"selectedItemsSource": "Form:C1466.selectedItems",
-					"hideFocusRing": true,
-					"bottom": 371,
-					"columns": [
-						{
-							"header": {
-								"text": ":xliff:models",
-								"name": "Header1",
-								"fontWeight": "bold"
-							},
-							"name": "dataclass",
-							"footer": {
-								"name": "Footer1"
-							},
-							"dataSource": "This:C1470.name",
-							"width": 141,
-							"enterable": false
-						}
-					]
-				},
-				"title": {
-					"type": "text",
-					"text": ":xliff:informations",
-					"top": 19,
-					"left": 226,
-					"width": 381,
-					"height": 16,
-					"fontWeight": "bold"
-				},
-				"Line": {
-					"type": "line",
-					"top": 33,
-					"left": 0,
-					"width": 680,
-					"height": 0,
-					"stroke": "#1e90ff",
-					"strokeDashArray": [
-						1,
-						3
-					],
-					"visibility": "hidden",
-					"startPoint": "topLeft"
-				},
-				"Line1": {
-					"type": "line",
-					"top": 400,
-					"left": 0,
-					"width": 680,
-					"height": 0,
-					"stroke": "#1e90ff",
-					"strokeDashArray": [
-						1,
-						3
-					],
-					"visibility": "hidden",
-					"startPoint": "topLeft"
-				},
-				"close": {
-					"type": "button",
-					"text": ":xliff:done",
-					"top": 378,
-					"left": 587,
-					"width": 93,
-					"height": 22,
-					"events": [
-						"onClick"
-					],
-					"sizingX": "move",
-					"sizingY": "move",
-					"right": 680
-				},
-				"Button": {
-					"type": "button",
-					"text": "+",
-					"top": 378,
-					"left": 20,
-					"width": 22,
-					"height": 22,
-					"events": [
-						"onClick"
-					],
-					"style": "bevel",
-					"sizingY": "move"
-				},
-				"Button1": {
-					"type": "button",
-					"text": "-",
-					"top": 378,
-					"left": 49,
-					"width": 22,
-					"height": 22,
-					"events": [
-						"onClick"
-					],
-					"style": "bevel",
-					"sizingY": "move"
-				},
-				"model": {
-					"type": "subform",
-					"left": 217,
-					"top": 30,
-					"width": 464,
-					"height": 269,
-					"detailForm": "MODEL",
-					"events": [
-						"onGettingFocus"
-					],
-					"dataSourceTypeHint": "undefined"
-				},
 				"Input": {
 					"type": "input",
 					"left": 381,
@@ -197,15 +59,49 @@
 					"textAlign": "right",
 					"stroke": "#c0c0c0",
 					"focusable": false
+				},
+				"main": {
+					"type": "rectangle",
+					"top": 21,
+					"left": 30,
+					"width": 701,
+					"height": 420,
+					"fill": "automatic",
+					"borderRadius": 10,
+					"sizingX": "move",
+					"sizingY": "move"
+				},
+				"Subform": {
+					"type": "subform",
+					"left": 30,
+					"top": 21,
+					"width": 701,
+					"height": 420,
+					"detailForm": "MODELS",
+					"sizingX": "move",
+					"sizingY": "move",
+					"dataSourceTypeHint": "undefined"
+				},
+				"close": {
+					"type": "button",
+					"text": ":xliff:done",
+					"top": 401,
+					"left": 620,
+					"width": 93,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"sizingX": "move",
+					"sizingY": "move",
+					"right": 713,
+					"method": "ObjectMethods/close.4dm"
 				}
 			},
 			"entryOrder": [
-				"list",
-				"model",
-				"close",
-				"Button",
-				"Button1",
-				"Input"
+				"Input",
+				"Subform",
+				"close"
 			]
 		}
 	],
@@ -217,9 +113,9 @@
 			"Guides": {}
 		}
 	},
-	"geometryStamp": 498,
-	"rightMargin": 20,
-	"bottomMargin": 20,
+	"geometryStamp": 579,
+	"rightMargin": 0,
+	"bottomMargin": 0,
 	"method": "method.4dm",
 	"formClass": "_MODELS_MANAGER"
 }
