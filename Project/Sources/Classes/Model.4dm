@@ -11,16 +11,20 @@ property valid : Boolean
 Class constructor(\
 $name : Text; \
 $model : Text; \
-$api : Text; \
-$options : Object)
+$apiKey : Text; \
+$optionals : Object)
 	
 	This:C1470.name:=$name
-	This:C1470.model:=$model || "text-embedding-3-large"
+	This:C1470.model:=$model  //|| "text-embedding-3-large"
+	This:C1470.apiKey:=$apiKey
 	
-	If ($options#Null:C1517)
+	If ($optionals#Null:C1517)
 		
+		var $key : Text
 		
-		
-		
+		For each ($key; $optionals)
+			
+			This:C1470[$key]:=$optionals[$key]
+			
+		End for each 
 	End if 
-	

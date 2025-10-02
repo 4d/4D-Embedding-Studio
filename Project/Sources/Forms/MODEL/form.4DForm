@@ -33,7 +33,7 @@
 					"left": 33,
 					"width": 82,
 					"height": 17,
-					"textAlign": "right"
+					"class": "label mandatory"
 				},
 				"Text1": {
 					"type": "text",
@@ -42,7 +42,7 @@
 					"left": 30,
 					"width": 85,
 					"height": 17,
-					"textAlign": "right"
+					"class": "label mandatory"
 				},
 				"Text2": {
 					"type": "text",
@@ -51,7 +51,7 @@
 					"left": 22,
 					"width": 93,
 					"height": 17,
-					"textAlign": "right"
+					"class": "label mandatory"
 				},
 				"Text3": {
 					"type": "text",
@@ -60,7 +60,7 @@
 					"left": 22,
 					"width": 95,
 					"height": 16,
-					"textAlign": "right"
+					"class": "label"
 				},
 				"Text4": {
 					"type": "text",
@@ -69,7 +69,7 @@
 					"left": 9,
 					"width": 106,
 					"height": 16,
-					"textAlign": "right"
+					"class": "label"
 				},
 				"Text5": {
 					"type": "text",
@@ -78,7 +78,7 @@
 					"left": 33,
 					"width": 82,
 					"height": 16,
-					"textAlign": "right"
+					"class": "label"
 				},
 				"name": {
 					"type": "input",
@@ -91,7 +91,9 @@
 					"dataSource": "Form:C1466.name",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"placeholder": ":xliff:idDisplayedInTheDropdownList",
+					"tooltip": ":xliff:idDisplayedInTheDropdownList"
 				},
 				"model": {
 					"type": "input",
@@ -104,7 +106,8 @@
 					"dataSource": "Form:C1466.model",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"placeholder": "e.g., “text-embedding-3-large”"
 				},
 				"apiKey": {
 					"type": "input",
@@ -117,7 +120,8 @@
 					"dataSource": "Form:C1466.apiKey",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"placeholder": ":xliff:yourOpenaiApiKey"
 				},
 				"baseURL": {
 					"type": "input",
@@ -130,7 +134,8 @@
 					"dataSource": "Form:C1466.baseURL",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"placeholder": ":xliff:baseUrlForOpenaiApiRequests"
 				},
 				"organization": {
 					"type": "input",
@@ -143,7 +148,8 @@
 					"dataSource": "Form:C1466.organization",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"placeholder": ":xliff:yourOpenaiOrganizationId"
 				},
 				"project": {
 					"type": "input",
@@ -156,12 +162,13 @@
 					"dataSource": "Form:C1466.project",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"placeholder": ":xliff:yourOpenaiProjectId"
 				}
 			}
 		}
 	],
-	"geometryStamp": 12,
+	"geometryStamp": 30,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

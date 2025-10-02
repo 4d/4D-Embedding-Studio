@@ -88,7 +88,9 @@
 					"sizingX": "move",
 					"sizingY": "move",
 					"right": 634,
-					"method": "ObjectMethods/done.4dm"
+					"method": "ObjectMethods/done.4dm",
+					"defaultButton": true,
+					"action": ""
 				},
 				"cancel": {
 					"type": "button",
@@ -103,7 +105,8 @@
 					"sizingX": "move",
 					"sizingY": "move",
 					"right": 521,
-					"method": "ObjectMethods/cancel.4dm"
+					"method": "ObjectMethods/cancel.4dm",
+					"action": ""
 				}
 			}
 		}

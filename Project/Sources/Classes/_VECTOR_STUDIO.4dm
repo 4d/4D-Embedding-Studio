@@ -10,9 +10,11 @@ property currentItem : Object
 property itemPosition : Integer
 property selectedItems : Collection
 
+// Vector details
+property details:=["phrase"; "phraseLabel"; "models"; "modelsLabel"; "openModelsManager"]
 property modelsDropdown : Object
 
-property newModel : cs:C1710.onBoard
+property newModel; modelManager : cs:C1710.onBoard
 
 Class constructor
 	
@@ -35,8 +37,11 @@ Function manager($e : Object)
 				
 				This:C1470.listManager($e)
 				
-				Form:C1466.newModel:=cs:C1710.onBoard.new("on-board"; "NEW_MODEL")
-				Form:C1466.newModel.me:=Form:C1466.newModel
+				This:C1470.newModel:=cs:C1710.onBoard.new("on-board"; "NEW_MODEL")
+				This:C1470.newModel.me:=This:C1470.newModel
+				
+				This:C1470.modelManager:=cs:C1710.onBoard.new("on-board"; "MODELS_MANAGER")
+				This:C1470.modelManager.me:=This:C1470.modelManager
 				
 				This:C1470.modelsDropdownManager($e)
 				
@@ -77,13 +82,9 @@ Function manager($e : Object)
 			This:C1470.modelsDropdownManager($e)
 			
 			//______________________________________________________
-		: ($e.objectName="manageModels")
+		: ($e.objectName="openModelsManager")
 			
-			If ($e.code=On Clicked:K2:4)
-				
-				FORM GOTO PAGE:C247(2)
-				
-			End if 
+			This:C1470.modelManager.show()
 			
 			//______________________________________________________
 		: ($e.objectName="backButton")
@@ -103,39 +104,28 @@ Function listManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	var $vector : cs:C1710.Vector:=This:C1470.currentItem
-	var $me:="list"
+	// TODO: Error help tips based on the line hovered
 	
-	If ($vector=Null:C1517)
+	If (This:C1470.currentItem=Null:C1517)
 		
-		OBJECT SET ENABLED:C1123(*; "phrase"; False:C215)
-		OBJECT SET ENABLED:C1123(*; "more"; False:C215)
-		OBJECT SET ENABLED:C1123(*; "models"; False:C215)
+		var $t : Text
+		For each ($t; This:C1470.details)
+			
+			OBJECT SET VISIBLE:C603(*; $t; False:C215)
+			
+		End for each 
 		
 		return 
 		
 	Else 
 		
-		OBJECT SET ENABLED:C1123(*; "phrase"; True:C214)
-		OBJECT SET ENABLED:C1123(*; "more"; True:C214)
-		OBJECT SET ENABLED:C1123(*; "models"; True:C214)
+		For each ($t; This:C1470.details)
+			
+			OBJECT SET VISIBLE:C603(*; $t; True:C214)
+			
+		End for each 
 		
-		// TODO: Error help tips based on the line hovered
-		
-/*
-Case of 
-//______________________________________________________
-: ($e.code=On Mouse Move)
-OBJECT SET HELP TIP(*; $me; $vector.helptip)
-//______________________________________________________
-: ($e.code=On Mouse Leave)
-OBJECT SET HELP TIP(*; $me; "")
-//______________________________________________________
-Else 
-// A "Case of" statement should never omit "Else"
-//______________________________________________________
-End case 
-*/
+		This:C1470.modelsDropdownUpdate(This:C1470.currentItem)
 		
 	End if 
 	
@@ -260,20 +250,20 @@ Function modelsDropdownManager($e : Object)
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)  // Define dropdown
 			
-			var $me:={\
+			var $dropDown:={\
 				values: This:C1470._getModelDropdownValues(); \
 				index: -1; \
 				placeholder: Localized string:C991("selectAModel")}
 			
-			$me.currentValue:=$me.placeholder
-			Form:C1466.modelsDropdown:=$me
+			$dropDown.currentValue:=$dropDown.placeholder
+			This:C1470.modelsDropdown:=$dropDown
 			
 			//______________________________________________________
 		: ($e.code=On Data Change:K2:15)
 			
-			$me:=Form:C1466.modelsDropdown
+			$dropDown:=This:C1470.modelsDropdown
 			
-			If ($me.currentValue=Localized string:C991("newModelItem"))  // Create a new model
+			If ($dropDown.currentValue=Localized string:C991("newModelItem"))  // Create a new model
 				
 				// Ensure that the proposed name is unique.
 				var $name:=Localized string:C991("newModel")
@@ -281,10 +271,10 @@ Function modelsDropdownManager($e : Object)
 				
 				Repeat 
 					
-					If (Form:C1466.models.includes($name))
+					If ($dropDown.values.includes($name))
 						
 						$i+=1
-						$name:=Localized string:C991("newModel")+String:C10($i; " #")
+						$name:=Localized string:C991("newModel")+String:C10($i; " ##")
 						
 					Else 
 						
@@ -293,11 +283,11 @@ Function modelsDropdownManager($e : Object)
 					End if 
 				Until (False:C215)
 				
-				Form:C1466.newModel.show()
+				This:C1470.newModel.show()
 				
-				var $o : Object:=Form:C1466.newModel.instance
+				var $o : Object:=This:C1470.newModel.instance
 				$o.data.name:=$name
-				$o.data.models:=Form:C1466.models
+				$o.data.models:=This:C1470.models
 				$o.data.context:="add"
 				
 				return 
@@ -305,54 +295,118 @@ Function modelsDropdownManager($e : Object)
 			End if 
 			
 			// Update current vector
-			This:C1470.currentItem.model:=$me.currentValue
+			This:C1470.currentItem.model:=$dropDown.currentValue
+			This:C1470.saveSettings()
 			
 			//______________________________________________________
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function modelManager($e : Object)
+Function modelsDropdownUpdate($vector : cs:C1710.Vector)
 	
-	$e:=$e || FORM Event:C1606
+	$vector:=$vector || This:C1470.currentItem
 	
-	If ($e.code<0)
+	If ($vector=Null:C1517)
 		
-		var $o : Object:=OBJECT Get value:C1743("modelManager")
-		
-		Case of 
-				
-				//______________________________________________________
-			: ($o.context=Null:C1517)
-				
-				// <NOTHING MORE TO DO>
-				
-				//______________________________________________________
-			: ($o.context="add")
-				
-				This:C1470.models:=$o.models
-				Form:C1466.modelsDropdown.values:=This:C1470._getModelDropdownValues()
-				Form:C1466.modelsDropdown.currentValue:=$o.currentItem.name
-				Form:C1466.modelsDropdown.index:=Form:C1466.modelsDropdown.values.indexOf(Form:C1466.modelsDropdown.currentValue)
-				This:C1470.currentItem.model:=Form:C1466.modelsDropdown.currentValue
-				
-				
-				
-				//______________________________________________________
-			Else 
-				
-				// A "Case of" statement should never omit "Else"
-				
-				//______________________________________________________
-		End case 
-		
-		OB REMOVE:C1226($o; "context")
+		return 
 		
 	End if 
+	var $dropDown : Object:=This:C1470.modelsDropdown
+	
+	If ($dropDown.values.includes($vector.model))
+		
+		$dropDown.index:=$dropDown.values.indexOf($vector.model)
+		
+	Else 
+		
+		$dropDown.index:=-1
+		
+	End if 
+	
+	$dropDown.currentValue:=$vector.model || $dropDown.placeholder
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _getModelDropdownValues() : Collection
 	
 	return This:C1470.models.extract("name").orderBy().combine(["-"; Localized string:C991("newModelItem")])
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function newModelCallback($instance : Object) : Boolean
+	
+	var $data : Object:=$instance.data
+	
+	Case of 
+			
+			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
+		: ($data.CANCELLED)
+			
+			// Restore dropdown
+			This:C1470.modelsDropdownUpdate()
+			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
+		: ($data.ACCEPTED)
+			
+			var $o : Object:=$data.model
+			var $model:=cs:C1710.Model.new($o.name; $o.model; $o.apiKey; {\
+				baseURL: $o.baseURL; \
+				organization: $o.organization; \
+				project: $o.project\
+				})
+			
+/* #17322
+For each model, the name, api Key and model are required.
+*/
+			var $t : Text
+			For each ($t; ["name"; "model"; "apiKey"])
+				
+				If (Length:C16(String:C10($model[$t]))=0)
+					
+					BEEP:C151
+					ALERT:C41(Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t)))
+					EXECUTE METHOD IN SUBFORM:C1085(String:C10($instance.name); Formula:C1597(GOTO OBJECT:C206(*; $t)))
+					
+					return 
+					
+				End if 
+			End for each 
+			
+/* #17323
+The model name shall be unique.
+*/
+			If (This:C1470.modelsDropdown.values.includes($model.name))
+				
+				BEEP:C151
+				ALERT:C41(Localized string:C991("theModelNameMustBeUnique"))
+				EXECUTE METHOD IN SUBFORM:C1085(String:C10($instance.name); Formula:C1597(GOTO OBJECT:C206(*; "name")))
+				
+				return 
+				
+			End if 
+			
+			// Update the current vector
+			This:C1470.currentItem.model:=$model.name
+			
+/* #17326
+The structure of the models shall be saved in a JSON file named “vectors.json” in the “settings” folder.
+*/
+			This:C1470.models.push($model)
+			This:C1470.saveSettings()
+			
+			// Update the dropdown
+			This:C1470.modelsDropdown.values:=This:C1470._getModelDropdownValues()
+			
+			This:C1470.modelsDropdownUpdate()
+			
+			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
+	End case 
+	
+	return True:C214  // Success
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function modelsManagerCallback($instance : Object) : Boolean
+	
+	
+	
+	return True:C214  // Success
 	
 	// MARK:- [SETTINGS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -392,7 +446,7 @@ Function saveSettings()
 	This:C1470.settings.vectors:=[]
 	
 	var $vector : cs:C1710.Vector
-	For each ($vector; Form:C1466.vectors)
+	For each ($vector; This:C1470.vectors)
 		
 		If ($vector.defined)
 			
@@ -516,5 +570,4 @@ Function readModels() : Collection
 		
 	End for each 
 	
-	// TODO: Read models
 	return $models.orderBy("name asc")
