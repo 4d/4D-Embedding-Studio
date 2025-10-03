@@ -69,7 +69,8 @@
 					"fill": "automatic",
 					"borderRadius": 10,
 					"sizingX": "move",
-					"sizingY": "move"
+					"sizingY": "move",
+					"stroke": "#808080"
 				},
 				"Subform": {
 					"type": "subform",
@@ -77,7 +78,7 @@
 					"top": 21,
 					"width": 701,
 					"height": 420,
-					"detailForm": "MODELS",
+					"detailForm": "MODELS_WIZARD",
 					"sizingX": "move",
 					"sizingY": "move",
 					"dataSourceTypeHint": "undefined"
@@ -116,6 +117,5 @@
 	"geometryStamp": 579,
 	"rightMargin": 0,
 	"bottomMargin": 0,
-	"method": "method.4dm",
-	"formClass": "_MODELS_MANAGER"
+	"method": "method.4dm"
 }

@@ -1,0 +1,2243 @@
+{
+	"_method_": {},
+	"cs.vectorStudio": {
+		"_MODELS_WIZARD": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_VECTORS_WIZARD": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"Model": {
+			"new()": {
+				"Syntax": "**.new**( *name* : Text; *model* : Text; *apiKey* : Text; *optionals* : Object )",
+				"Params": [
+					[
+						"name",
+						"Text",
+						"->"
+					],
+					[
+						"model",
+						"Text",
+						"->"
+					],
+					[
+						"apiKey",
+						"Text",
+						"->"
+					],
+					[
+						"optionals",
+						"Object",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_MANAGE_MODELS": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"Vector": {
+			"new()": {
+				"Syntax": "**.new**( *dataclass* : Object; *attribute* : Object; *model* : Text; *phrase* : Text )",
+				"Params": [
+					[
+						"dataclass",
+						"Object",
+						"->"
+					],
+					[
+						"attribute",
+						"Object",
+						"->"
+					],
+					[
+						"model",
+						"Text",
+						"->"
+					],
+					[
+						"phrase",
+						"Text",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"onBoard": {
+			"new()": {
+				"Syntax": "**.new**( *widget* : Text; *form* : Text; *options* : Object )",
+				"Params": [
+					[
+						"widget",
+						"Text",
+						"->"
+					],
+					[
+						"form",
+						"Text",
+						"->"
+					],
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_WIZARD": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"menuBar": {
+			"new()": {
+				"Syntax": "**.new**( *menus* : Collection )",
+				"Params": [
+					[
+						"menus",
+						"Collection",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"menu": {
+			"new()": {
+				"Syntax": "**.new**( *data* : Variant )",
+				"Params": [
+					[
+						"data",
+						"Variant",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"regex": {
+			"new()": {
+				"Syntax": "**.new**( *target* : Variant; *pattern* : Text )",
+				"Params": [
+					[
+						"target",
+						"Variant",
+						"->"
+					],
+					[
+						"pattern",
+						"Text",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_MODEL": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		}
+	},
+	"_MODELS_WIZARD": {
+		"manager()": {
+			"Syntax": "**.manager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"currentItem": {
+			"Syntax": "currentItem : cs.vectorStudio.Model"
+		},
+		"models": {
+			"Syntax": "models : Collection"
+		},
+		"selectedItems": {
+			"Syntax": "selectedItems : Collection"
+		},
+		"itemPosition": {
+			"Syntax": "itemPosition : Integer"
+		},
+		"_inheritedFrom_": "_WIZARD"
+	},
+	"_VECTORS_WIZARD": {
+		"newModelCallback()": {
+			"Syntax": "**.newModelCallback**( *instance* : Object ) : Boolean",
+			"Params": [
+				[
+					"instance",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"modelsDropdownUpdate()": {
+			"Syntax": "**.modelsDropdownUpdate**( *vector* : cs.vectorStudio.Vector )",
+			"Params": [
+				[
+					"vector",
+					"cs.vectorStudio.Vector",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"modelsDropdownManager()": {
+			"Syntax": "**.modelsDropdownManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"listMetaInfo()": {
+			"Syntax": "**.listMetaInfo**( *me* : cs.vectorStudio.Vector ) : Object",
+			"Params": [
+				[
+					"me",
+					"cs.vectorStudio.Vector",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"phraseManager()": {
+			"Syntax": "**.phraseManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"listManager()": {
+			"Syntax": "**.listManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"modelsManagerCallback()": {
+			"Syntax": "**.modelsManagerCallback**( *instance* : Object ) : Boolean",
+			"Params": [
+				[
+					"instance",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"moreManager()": {
+			"Syntax": "**.moreManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"manager()": {
+			"Syntax": "**.manager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"modelManager": {
+			"Syntax": "modelManager : cs.vectorStudio.onBoard"
+		},
+		"details": {
+			"Syntax": "details : Collection"
+		},
+		"modelsDropdown": {
+			"Syntax": "modelsDropdown : Object"
+		},
+		"vectors": {
+			"Syntax": "vectors : Collection"
+		},
+		"selectedItems": {
+			"Syntax": "selectedItems : Collection"
+		},
+		"itemPosition": {
+			"Syntax": "itemPosition : Integer"
+		},
+		"currentItem": {
+			"Syntax": "currentItem : Object"
+		},
+		"debug": {
+			"Syntax": "debug : Boolean"
+		},
+		"newModel": {
+			"Syntax": "newModel : cs.vectorStudio.onBoard"
+		},
+		"models": {
+			"Syntax": "models : Collection"
+		},
+		"_inheritedFrom_": "_WIZARD"
+	},
+	"Model": {
+		"valid": {
+			"Syntax": "valid : Boolean"
+		},
+		"apiKey": {
+			"Syntax": "apiKey : Text"
+		},
+		"organization": {
+			"Syntax": "organization : Text"
+		},
+		"project": {
+			"Syntax": "project : Text"
+		},
+		"baseURL": {
+			"Syntax": "baseURL : Text"
+		},
+		"model": {
+			"Syntax": "model : Text"
+		},
+		"name": {
+			"Syntax": "name : Text"
+		}
+	},
+	"_MANAGE_MODELS": {
+		"manager()": {
+			"Syntax": "**.manager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"currentItem": {
+			"Syntax": "currentItem : cs.vectorStudio.Model"
+		},
+		"models": {
+			"Syntax": "models : Collection"
+		},
+		"selectedItems": {
+			"Syntax": "selectedItems : Collection"
+		},
+		"itemPosition": {
+			"Syntax": "itemPosition : Integer"
+		}
+	},
+	"Vector": {
+		"set error()": {
+			"Syntax": "**.set error**( *message* : Text )",
+			"Params": [
+				[
+					"message",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get helptip()": {
+			"Syntax": "**.get helptip**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get definition()": {
+			"Syntax": "**.get definition**() : cs.vectorStudio.Vector",
+			"Params": [
+				[
+					"",
+					"cs.vectorStudio.Vector",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get defined()": {
+			"Syntax": "**.get defined**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"parsePhrase()": {
+			"Syntax": "**.parsePhrase**( *phrase* : Text ) : Text",
+			"Params": [
+				[
+					"phrase",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"getSupportedAttributes()": {
+			"Syntax": "**.getSupportedAttributes**( *dataclass* : 4D.DataClass )",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"embedded": {
+			"Syntax": "embedded : Collection"
+		},
+		"model": {
+			"Syntax": "model : Text"
+		},
+		"phrase": {
+			"Syntax": "phrase : Text"
+		},
+		"vectorName": {
+			"Syntax": "vectorName : Text"
+		},
+		"supportedAttributes": {
+			"Syntax": "supportedAttributes : Collection"
+		},
+		"version": {
+			"Syntax": "version : Integer"
+		},
+		"dataclassName": {
+			"Syntax": "dataclassName : Text"
+		},
+		"vectorNumber": {
+			"Syntax": "vectorNumber : Integer"
+		},
+		"dataclassNumber": {
+			"Syntax": "dataclassNumber : Integer"
+		}
+	},
+	"onBoard": {
+		"setProgress()": {
+			"Syntax": "**.setProgress**( *progress* : Integer; *message* : Text )",
+			"Params": [
+				[
+					"progress",
+					"Integer",
+					"->"
+				],
+				[
+					"message",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"cancel()": {
+			"Syntax": "**.cancel**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"accept()": {
+			"Syntax": "**.accept**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"onLoad()": {
+			"Syntax": "**.onLoad**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"hide()": {
+			"Syntax": "**.hide**( *widget* : Text )",
+			"Params": [
+				[
+					"widget",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get data()": {
+			"Syntax": "**.get data**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"show()": {
+			"Syntax": "**.show**( *data* : Object ) : Text",
+			"Params": [
+				[
+					"data",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get visible()": {
+			"Syntax": "**.get visible**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get parent()": {
+			"Syntax": "**.get parent**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get name()": {
+			"Syntax": "**.get name**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set data()": {
+			"Syntax": "**.set data**( *data* : Object )",
+			"Params": [
+				[
+					"data",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"close()": {
+			"Syntax": "**.close**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"onResize()": {
+			"Syntax": "**.onResize**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"get instance()": {
+			"Syntax": "**.get instance**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set parent()": {
+			"Syntax": "**.set parent**( *parent* : Object )",
+			"Params": [
+				[
+					"parent",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"set me()": {
+			"Syntax": "**.set me**( *me* : cs.vectorStudio.onBoard )",
+			"Params": [
+				[
+					"me",
+					"cs.vectorStudio.onBoard",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"top": {
+			"Syntax": "top : Integer"
+		},
+		"instances": {
+			"Syntax": "instances : Collection"
+		},
+		"form": {
+			"Syntax": "form : Text"
+		}
+	},
+	"_WIZARD": {
+		"writeSettings()": {
+			"Syntax": "**.writeSettings**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"readModels()": {
+			"Syntax": "**.readModels**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"saveVectors()": {
+			"Syntax": "**.saveVectors**( *vectors* : Collection )",
+			"Params": [
+				[
+					"vectors",
+					"Collection",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"uniqueNewModelName()": {
+			"Syntax": "**.uniqueNewModelName**( *names* : Collection ) : Text",
+			"Params": [
+				[
+					"names",
+					"Collection",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"saveModels()": {
+			"Syntax": "**.saveModels**( *models* : Collection )",
+			"Params": [
+				[
+					"models",
+					"Collection",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"readVectors()": {
+			"Syntax": "**.readVectors**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"readSettings()": {
+			"Syntax": "**.readSettings**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get settingsFile()": {
+			"Syntax": "**.get settingsFile**() : 4D.File",
+			"Params": [
+				[
+					"",
+					"4D.File",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"catalog": {
+			"Syntax": "catalog : cs.vectorStudio.DataStore"
+		},
+		"settings": {
+			"Syntax": "settings : Object"
+		}
+	},
+	"menuBar": {
+		"defaultMinimalMenuBar()": {
+			"Syntax": "**.defaultMinimalMenuBar**() : cs.vectorStudio.menuBar",
+			"Params": [
+				[
+					"",
+					"cs.vectorStudio.menuBar",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"getMenuItemParameter()": {
+			"Syntax": "**.getMenuItemParameter**( *type* : Integer ) : Variant",
+			"Params": [
+				[
+					"type",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Variant",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"menuSelected()": {
+			"Syntax": "**.menuSelected**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"setMenuBar()": {
+			"Syntax": "**.setMenuBar**( *menu* : Variant; *retain* : Boolean )",
+			"Params": [
+				[
+					"menu",
+					"Variant",
+					"->"
+				],
+				[
+					"retain",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"hide()": {
+			"Syntax": "**.hide**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"setHelpMenu()": {
+			"Syntax": "**.setHelpMenu**( *items* : Collection )",
+			"Params": [
+				[
+					"items",
+					"Collection",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"enableItem()": {
+			"Syntax": "**.enableItem**( *item* : Text; *enabled* : Boolean )",
+			"Params": [
+				[
+					"item",
+					"Text",
+					"->"
+				],
+				[
+					"enabled",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"disableItem()": {
+			"Syntax": "**.disableItem**( *item* : Text )",
+			"Params": [
+				[
+					"item",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"update()": {
+			"Syntax": "**.update**( *index* : Integer; *menu* : cs.vectorStudio.menu ) : cs.vectorStudio.menuBar",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"menu",
+					"cs.vectorStudio.menu",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menuBar",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"show()": {
+			"Syntax": "**.show**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"resetsAbout()": {
+			"Syntax": "**.resetsAbout**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"setAbout()": {
+			"Syntax": "**.setAbout**( *label* : Text; *method* : Text )",
+			"Params": [
+				[
+					"label",
+					"Text",
+					"->"
+				],
+				[
+					"method",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"set()": {
+			"Syntax": "**.set**() : cs.vectorStudio.menuBar",
+			"Params": [
+				[
+					"",
+					"cs.vectorStudio.menuBar",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"populate()": {
+			"Syntax": "**.populate**( *menus* : Collection ) : cs.vectorStudio.menuBar",
+			"Params": [
+				[
+					"menus",
+					"Collection",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menuBar",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"_inheritedFrom_": "menu"
+	},
+	"menu": {
+		"fonts()": {
+			"Syntax": "**.fonts**( *withStyle* : Variant; *callback* : Text ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"withStyle",
+					"Variant",
+					"->"
+				],
+				[
+					"callback",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"edit()": {
+			"Syntax": "**.edit**( *contextual* : Boolean ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"contextual",
+					"Boolean",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"windows()": {
+			"Syntax": "**.windows**( *callback* : Text ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"callback",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"popup()": {
+			"Syntax": "**.popup**( *where* : Variant; *x* : Variant; *y* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"where",
+					"Variant",
+					"->"
+				],
+				[
+					"x",
+					"Variant",
+					"->"
+				],
+				[
+					"y",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"getProperty()": {
+			"Syntax": "**.getProperty**( *property* : Text; *index* : Integer ) : Variant",
+			"Params": [
+				[
+					"property",
+					"Text",
+					"->"
+				],
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Variant",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"icon()": {
+			"Syntax": "**.icon**( *proxy* : Text; *index* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"proxy",
+					"Text",
+					"->"
+				],
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"disable()": {
+			"Syntax": "**.disable**( *index* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"itemSubMenuRef()": {
+			"Syntax": "**.itemSubMenuRef**( *withTitle* : Text ) : Text",
+			"Params": [
+				[
+					"withTitle",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"item()": {
+			"Syntax": "**.item**( *item* : Variant; *ref* : Text ) : Object",
+			"Params": [
+				[
+					"item",
+					"Variant",
+					"->"
+				],
+				[
+					"ref",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"itemCount()": {
+			"Syntax": "**.itemCount**() : Integer",
+			"Params": [
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"setData()": {
+			"Syntax": "**.setData**( *name* : Text; *value* : Variant; *index* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"name",
+					"Text",
+					"->"
+				],
+				[
+					"value",
+					"Variant",
+					"->"
+				],
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"enable()": {
+			"Syntax": "**.enable**( *enabled* : Boolean; *index* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"enabled",
+					"Boolean",
+					"->"
+				],
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"getData()": {
+			"Syntax": "**.getData**( *name* : Text; *ref* : Text ) : Variant",
+			"Params": [
+				[
+					"name",
+					"Text",
+					"->"
+				],
+				[
+					"ref",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Variant",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"property()": {
+			"Syntax": "**.property**( *property* : Text; *value* : Variant; *index* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"property",
+					"Text",
+					"->"
+				],
+				[
+					"value",
+					"Variant",
+					"->"
+				],
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"indent()": {
+			"Syntax": "**.indent**( *index* : Integer; *number* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"number",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"parameter()": {
+			"Syntax": "**.parameter**( *param* : Text; *index* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"param",
+					"Text",
+					"->"
+				],
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"mark()": {
+			"Syntax": "**.mark**( *checked* : Boolean; *index* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"checked",
+					"Boolean",
+					"->"
+				],
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"method()": {
+			"Syntax": "**.method**( *method* : Text; *index* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"method",
+					"Text",
+					"->"
+				],
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"isSeparatorItem()": {
+			"Syntax": "**.isSeparatorItem**( *item* : Integer; *ref* : Text ) : Boolean",
+			"Params": [
+				[
+					"item",
+					"Integer",
+					"->"
+				],
+				[
+					"ref",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"items()": {
+			"Syntax": "**.items**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"setStyle()": {
+			"Syntax": "**.setStyle**( *tyle* : Integer; *index* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"tyle",
+					"Integer",
+					"->"
+				],
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"delete()": {
+			"Syntax": "**.delete**( *index* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"file()": {
+			"Syntax": "**.file**() : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"shortcut()": {
+			"Syntax": "**.shortcut**( *key* : Variant; *modifier* : Integer; *index* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"key",
+					"Variant",
+					"->"
+				],
+				[
+					"modifier",
+					"Integer",
+					"->"
+				],
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"add()": {
+			"Syntax": "**.add**( *ref* : Text; *text* : Text; *param* : Variant; *mark* : Boolean )",
+			"Params": [
+				[
+					"ref",
+					"Text",
+					"->"
+				],
+				[
+					"text",
+					"Text",
+					"->"
+				],
+				[
+					"param",
+					"Variant",
+					"->"
+				],
+				[
+					"mark",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"release()": {
+			"Syntax": "**.release**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"action()": {
+			"Syntax": "**.action**( *action* : Variant; *index* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"action",
+					"Variant",
+					"->"
+				],
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"line()": {
+			"Syntax": "**.line**( *afterItem* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"afterItem",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"append()": {
+			"Syntax": "**.append**( *item* : Variant; *param* : Variant; *mark* : Variant; *afterItem* : Integer ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"item",
+					"Variant",
+					"->"
+				],
+				[
+					"param",
+					"Variant",
+					"->"
+				],
+				[
+					"mark",
+					"Variant",
+					"->"
+				],
+				[
+					"afterItem",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"selected": {
+			"Syntax": "selected : Boolean"
+		},
+		"localize": {
+			"Syntax": "localize : Boolean"
+		},
+		"metacharacters": {
+			"Syntax": "metacharacters : Boolean"
+		},
+		"released": {
+			"Syntax": "released : Boolean"
+		},
+		"autoRelease": {
+			"Syntax": "autoRelease : Boolean"
+		},
+		"submenus": {
+			"Syntax": "submenus : Collection"
+		},
+		"ref": {
+			"Syntax": "ref : Text"
+		},
+		"choice": {
+			"Syntax": "choice : Text"
+		},
+		"data": {
+			"Syntax": "data : Collection"
+		}
+	},
+	"regex": {
+		"countWords()": {
+			"Syntax": "**.countWords**( *target* : Text ) : Integer",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"split()": {
+			"Syntax": "**.split**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"Trim()": {
+			"Syntax": "**.Trim**( *char* : Text ) : Text",
+			"Params": [
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"trim()": {
+			"Syntax": "**.trim**( *target* : Text; *char* : Text ) : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set pattern()": {
+			"Syntax": "**.set pattern**( *pattern* : Text )",
+			"Params": [
+				[
+					"pattern",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"TrimTrailing()": {
+			"Syntax": "**.TrimTrailing**( *char* : Text ) : Text",
+			"Params": [
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set target()": {
+			"Syntax": "**.set target**( *target* : Variant )",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"setOptions()": {
+			"Syntax": "**.setOptions**( *options* : Integer ) : cs.vectorStudio.regex",
+			"Params": [
+				[
+					"options",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.regex",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"TrimLeading()": {
+			"Syntax": "**.TrimLeading**( *char* : Text ) : Text",
+			"Params": [
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"group()": {
+			"Syntax": "**.group**( *index* : Integer ) : Text",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"trimLeading()": {
+			"Syntax": "**.trimLeading**( *target* : Text; *char* : Text ) : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"extractMailsAdresses()": {
+			"Syntax": "**.extractMailsAdresses**( *target* : Variant; *domains* : Collection ) : Collection",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				],
+				[
+					"domains",
+					"Collection",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"extractDates()": {
+			"Syntax": "**.extractDates**( *target* : Variant; *pivotYear* : Integer ) : Collection",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				],
+				[
+					"pivotYear",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"start()": {
+			"Syntax": "**.start**( *index* : Integer ) : Integer",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"stripTags()": {
+			"Syntax": "**.stripTags**( *target* : Text; *allow* : Variant ) : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"allow",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"addslashes()": {
+			"Syntax": "**.addslashes**( *in* : Text ) : Text",
+			"Params": [
+				[
+					"in",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"LookingAt()": {
+			"Syntax": "**.LookingAt**( *pattern* : Text ) : Boolean",
+			"Params": [
+				[
+					"pattern",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"StripTags()": {
+			"Syntax": "**.StripTags**( *allow* : Variant ) : Text",
+			"Params": [
+				[
+					"allow",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"lookingAt()": {
+			"Syntax": "**.lookingAt**( *target* : Text; *pattern* : Text ) : Boolean",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"pattern",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"replace()": {
+			"Syntax": "**.replace**( *replacement* : Text; *count* : Integer; *position* : Integer ) : Text",
+			"Params": [
+				[
+					"replacement",
+					"Text",
+					"->"
+				],
+				[
+					"count",
+					"Integer",
+					"->"
+				],
+				[
+					"position",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"end()": {
+			"Syntax": "**.end**( *index* : Integer ) : Integer",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get count()": {
+			"Syntax": "**.get count**() : Integer",
+			"Params": [
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get allowSpaceAndComments()": {
+			"Syntax": "**.get allowSpaceAndComments**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"extract()": {
+			"Syntax": "**.extract**( *groups* : Variant ) : Collection",
+			"Params": [
+				[
+					"groups",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set allowSpaceAndComments()": {
+			"Syntax": "**.set allowSpaceAndComments**( *on* : Boolean )",
+			"Params": [
+				[
+					"on",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"escape()": {
+			"Syntax": "**.escape**( *in* : Text ) : Text",
+			"Params": [
+				[
+					"in",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get pattern()": {
+			"Syntax": "**.get pattern**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"length()": {
+			"Syntax": "**.length**( *index* : Integer ) : Integer",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set treatTargetAsOneLine()": {
+			"Syntax": "**.set treatTargetAsOneLine**( *on* : Boolean )",
+			"Params": [
+				[
+					"on",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get treatTargetAsOneLine()": {
+			"Syntax": "**.get treatTargetAsOneLine**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set caseSensitve()": {
+			"Syntax": "**.set caseSensitve**( *on* : Boolean )",
+			"Params": [
+				[
+					"on",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"trimTrailing()": {
+			"Syntax": "**.trimTrailing**( *target* : Text; *char* : Text ) : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"validateMail()": {
+			"Syntax": "**.validateMail**( *target* : Text ) : Boolean",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get target()": {
+			"Syntax": "**.get target**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"setPattern()": {
+			"Syntax": "**.setPattern**( *pattern* : Text ) : cs.vectorStudio.regex",
+			"Params": [
+				[
+					"pattern",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.regex",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set dotMatchNewLine()": {
+			"Syntax": "**.set dotMatchNewLine**( *on* : Boolean )",
+			"Params": [
+				[
+					"on",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get dotMatchNewLine()": {
+			"Syntax": "**.get dotMatchNewLine**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get caseSensitve()": {
+			"Syntax": "**.get caseSensitve**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"setTarget()": {
+			"Syntax": "**.setTarget**( *target* : Variant ) : cs.vectorStudio.regex",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.regex",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"loadPattern()": {
+			"Syntax": "**.loadPattern**( *ID* : Text; *file* : 4D.File ) : cs.vectorStudio.regex",
+			"Params": [
+				[
+					"ID",
+					"Text",
+					"->"
+				],
+				[
+					"file",
+					"4D.File",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.regex",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"substitute()": {
+			"Syntax": "**.substitute**( *replacement* : Text; *count* : Integer; *position* : Integer ) : Text",
+			"Params": [
+				[
+					"replacement",
+					"Text",
+					"->"
+				],
+				[
+					"count",
+					"Integer",
+					"->"
+				],
+				[
+					"position",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"match()": {
+			"Syntax": "**.match**( *start* : Variant; *all* : Boolean ) : Boolean",
+			"Params": [
+				[
+					"start",
+					"Variant",
+					"->"
+				],
+				[
+					"all",
+					"Boolean",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get lastError()": {
+			"Syntax": "**.get lastError**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"errors": {
+			"Syntax": "errors : Collection"
+		},
+		"searchTime": {
+			"Syntax": "searchTime : Integer"
+		},
+		"matches": {
+			"Syntax": "matches : Collection"
+		},
+		"success": {
+			"Syntax": "success : Boolean"
+		}
+	},
+	"_MODEL": {
+		"manager()": {
+			"Syntax": "**.manager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"focus": {
+			"Syntax": "focus : Text"
+		},
+		"apiKey": {
+			"Syntax": "apiKey : Text"
+		},
+		"organization": {
+			"Syntax": "organization : Text"
+		},
+		"project": {
+			"Syntax": "project : Text"
+		},
+		"baseURL": {
+			"Syntax": "baseURL : Text"
+		},
+		"model": {
+			"Syntax": "model : Text"
+		},
+		"name": {
+			"Syntax": "name : Text"
+		}
+	}
+}

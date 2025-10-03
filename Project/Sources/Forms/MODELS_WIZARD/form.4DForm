@@ -190,6 +190,6 @@
 	"geometryStamp": 505,
 	"rightMargin": 20,
 	"bottomMargin": 20,
-	"method": "method.4dm",
-	"formClass": "_MODELS_MANAGER"
+	"formClass": "_MODELS_WIZARD",
+	"method": "FORM_MANAGER"
 }

@@ -88,17 +88,28 @@ listbox {
 	fill: automatic;
 	verticalAlign: middle;
 	alternateFill: automaticAlternate;
+	headerHeight: 2em;
 	dragging: none;
 	dropping: none;
 	sortable: false;
 	movableRows: false;
 	hideExtraBlankRows: false;
 	hideFocusRing: true;
+	listboxType: "collection";
 	selectionMode: "single";
+	currentItemSource: "Form:C1466.currentItem";
+	currentItemPositionSource: "Form:C1466.itemPosition";
+	selectedItemsSource: "Form:C1466.selectedItems";
 }
 
 header {
 	fontWeight: bold;
+}
+
+#on-board {
+	visibility: "hidden";
+	sizingX: "grow";
+	sizingY: "grow";
 }
 
 list {
@@ -108,6 +119,12 @@ list {
 	scrollbarHorizontal: "hidden";
 }
 
+
+[id|="OK"]{
+    defaultButton: true;
+}
+
+/* 
 #OK,
 #bOK {
 	defaultButton: true;
@@ -115,6 +132,7 @@ list {
 	action: accept;
 	text: ":xliff:bOK";
 }
+ */
 
 #Cancel,
 #bCancel {

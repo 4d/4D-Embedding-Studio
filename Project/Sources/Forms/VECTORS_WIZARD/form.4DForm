@@ -80,13 +80,10 @@
 				},
 				"on-board": {
 					"type": "subform",
-					"left": 7,
-					"top": 5,
-					"width": 159,
-					"height": 21,
-					"visibility": "hidden",
-					"sizingX": "grow",
-					"sizingY": "grow",
+					"left": 0,
+					"top": 0,
+					"width": 16,
+					"height": 16,
 					"method": "ObjectMethods/on-board.4dm"
 				}
 			}
@@ -103,15 +100,10 @@
 						"onLoad",
 						"onSelectionChange"
 					],
-					"listboxType": "collection",
 					"dataSource": "Form:C1466.vectors",
-					"headerHeight": "2em",
 					"right": 400,
 					"sizingX": "fixed",
 					"sizingY": "grow",
-					"currentItemSource": "Form:C1466.currentItem",
-					"currentItemPositionSource": "Form:C1466.itemPosition",
-					"selectedItemsSource": "Form:C1466.selectedItems",
 					"metaSource": "Form:C1466.listMetaInfo(This:C1470)",
 					"bottom": 580,
 					"columns": [
@@ -226,14 +218,13 @@
 					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/more.png",
 					"style": "custom",
 					"iconFrames": 4,
-					"method": "ObjectMethods/more.4dm",
 					"sizingX": "move",
 					"visibility": "hidden"
 				}
 			}
 		}
 	],
-	"geometryStamp": 415,
+	"geometryStamp": 438,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -241,9 +232,10 @@
 			"View 1": {}
 		}
 	},
-	"formClass": "_VECTOR_STUDIO",
+	"formClass": "_VECTORS_WIZARD",
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"windowMinHeight": 600,
-	"method": "FORM_MANAGER"
+	"method": "FORM_MANAGER",
+	"windowMinWidth": 820
 }

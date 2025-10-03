@@ -14,7 +14,8 @@
 	"events": [
 		"onLoad",
 		"onTimer",
-		"onResize"
+		"onResize",
+		"onBoundVariableChange"
 	],
 	"windowTitle": "window title",
 	"destination": "detailScreen",
@@ -57,7 +58,7 @@
 					"height": 339,
 					"borderRadius": 10,
 					"fill": "automatic",
-					"stroke": "automatic",
+					"stroke": "#808080",
 					"sizingX": "move",
 					"sizingY": "move"
 				},

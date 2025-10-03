@@ -51,8 +51,8 @@
           <target state="new">The "{attribute}" attribute is a vector and cannot be used in this context.</target>
         </trans-unit>
         <trans-unit id="3774uWkyNzGYHRnlfn05pg" resname="theModelNameMustBeUnique">
-          <source>The model name must be unique.</source>
-          <target state="new">The model name must be unique.</target>
+          <source>"{name}" is already in use, the model name must be unique.</source>
+          <target state="new">"{name}" is already in use, the model name must be unique.</target>
         </trans-unit>
         <trans-unit id="w9dR9S467ayEHGojqm+KIA" resname="theValueIsRequired.">
           <source>The value "{value}" is required.</source>

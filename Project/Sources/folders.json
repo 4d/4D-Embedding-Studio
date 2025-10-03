@@ -11,9 +11,11 @@
 	"(Default Forms)": {},
 	"(Default Project Methods)": {},
 	"(Default Tables)": {},
+	"(VECTOR_STUDIO)": {},
 	"API": {
 		"methods": [
-			"VECTOR_STUDIO"
+			"_MODELS_WIZARD",
+			"_VECTORS_WIZARD"
 		]
 	},
 	"COMMON": {
@@ -30,6 +32,8 @@
 	"DEV": {
 		"tables": [
 			"Cities",
+			"No Primary Key",
+			"No vector",
 			"School",
 			"Students"
 		],
@@ -43,22 +47,26 @@
 			"Vector"
 		]
 	},
-	"VECTOR_STUDIO": {
+	"STUDIO": {
 		"forms": [
+			"MANAGE_MODELS",
 			"MODEL",
-			"MODELS",
-			"MODELS_MANAGER",
+			"MODELS_WIZARD",
 			"NEW_MODEL",
-			"VECTORS_STUDIO"
+			"VECTORS_WIZARD"
 		],
 		"classes": [
+			"_MANAGE_MODELS",
 			"_MODEL",
-			"_VECTOR_STUDIO"
+			"_MODELS_WIZARD",
+			"_VECTORS_WIZARD",
+			"_WIZARD"
 		]
 	},
 	"trash": {
 		"groups": [
-			"(Default Folder)"
+			"(Default Folder)",
+			"(VECTOR_STUDIO)"
 		]
 	}
 }
