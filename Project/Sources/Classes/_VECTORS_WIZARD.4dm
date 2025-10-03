@@ -1,8 +1,5 @@
-property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project datastore
+Class extends _WIZARD
 
-property defaultModel:="text-embedding-3-large"
-
-property settings : Object
 property models; vectors : Collection
 
 // Vector list
@@ -11,16 +8,21 @@ property itemPosition : Integer
 property selectedItems : Collection
 
 // Vector details
-property details:=["phrase"; "phraseLabel"; "models"; "modelsLabel"; "openModelsManager"]
+property details:=["phrase"; "phraseLabel"; "models"; "modelsLabel"; "openModelsManager"; "more"]
 property modelsDropdown : Object
 
+// Embedded dialogs
 property newModel; modelManager : cs:C1710.onBoard
+
+property debug:=Structure file:C489=Structure file:C489(*)
 
 Class constructor
 	
+	Super:C1705()
+	
 	This:C1470.settings:=This:C1470.readSettings()
 	This:C1470.models:=This:C1470.readModels()
-	This:C1470.vectors:=This:C1470.readStructure()
+	This:C1470.vectors:=This:C1470.readVectors()
 	
 	// MARK:- [MANAGERS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -37,10 +39,10 @@ Function manager($e : Object)
 				
 				This:C1470.listManager($e)
 				
-				This:C1470.newModel:=cs:C1710.onBoard.new("on-board"; "NEW_MODEL")
+				This:C1470.newModel:=cs:C1710.onBoard.new("on-board"; "NEW_MODEL"; {top: 40})
 				This:C1470.newModel.me:=This:C1470.newModel
 				
-				This:C1470.modelManager:=cs:C1710.onBoard.new("on-board"; "MODELS_MANAGER")
+				This:C1470.modelManager:=cs:C1710.onBoard.new("on-board"; "MANAGE_MODELS"; {top: 40})
 				This:C1470.modelManager.me:=This:C1470.modelManager
 				
 				This:C1470.modelsDropdownManager($e)
@@ -87,14 +89,33 @@ Function manager($e : Object)
 			This:C1470.modelManager.show()
 			
 			//______________________________________________________
-		: ($e.objectName="backButton")
+		: ($e.objectName="backButton")  // Background button for embedded dialog boxes
 			
-			BEEP:C151
+			If (This:C1470.debug && Macintosh option down:C545)
+				
+				var $new:=This:C1470.newModel.visible
+				var $manager:=This:C1470.modelManager.visible
+				
+				var $widget : Object:=This:C1470.newModel.instances.query("visible = true").first()\
+					 || This:C1470.modelManager.instances.query("visible = true").first()
+				
+				If ($widget#Null:C1517)
+					
+					OBJECT SET VISIBLE:C603(*; $widget.name; False:C215)
+					
+				End if 
+				
+			Else 
+				
+				BEEP:C151
+				
+			End if 
 			
 			//______________________________________________________
 		: ($e.objectName="save")
 			
-			This:C1470.saveSettings()
+			This:C1470.saveVectors()
+			This:C1470.saveModels()
 			
 			//______________________________________________________
 	End case 
@@ -132,9 +153,10 @@ Function listManager($e : Object)
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function listMetaInfo($me : cs:C1710.Vector) : Object
 	
-	If ($me[""].errors.length>0) || (Length:C16(String:C10($me.error))>0)
+	If ($me#This:C1470.currentItem)\
+		 && (($me[""].errors.length>0) || (Length:C16(String:C10($me.error))>0))
 		
-		return {cell: {dataclass: {fill: "red"; stroke: "white"}; vector: {fill: "red"; stroke: "white"}}}
+		return {cell: {dataclass: {stroke: "red"}; vector: {stroke: "red"}}}
 		
 	End if 
 	
@@ -142,6 +164,8 @@ Function listMetaInfo($me : cs:C1710.Vector) : Object
 Function moreManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
+	
+	// TODO: More button
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function phraseManager($e : Object)
@@ -175,7 +199,6 @@ Function phraseManager($e : Object)
 			
 			var $menu:=cs:C1710.menu.new().edit(True:C214).line()
 			var $embed:=cs:C1710.menu.new()
-			$menu.append(":xliff:embed"; $embed)
 			
 			var $attribute : Object
 			For each ($attribute; $vector.supportedAttributes.orderBy("name"))
@@ -183,6 +206,16 @@ Function phraseManager($e : Object)
 				$embed.append($attribute.name; "{"+$attribute.name+"}")
 				
 			End for each 
+			
+			If ($embed.itemCount()>0)
+				
+				$menu.append(":xliff:embed"; $embed)
+				
+			Else 
+				
+				$embed.release()
+				
+			End if 
 			
 			If (Not:C34($menu.popup().selected))
 				
@@ -219,6 +252,7 @@ Function phraseManager($e : Object)
 			
 			If (["<"; ">"; "&"].includes($char))
 				
+				// Special characters that must be encoded in styled text
 				FILTER KEYSTROKE:C389("")
 				GET HIGHLIGHT:C209(*; $me; $startSel; $endSel)
 				ST SET TEXT:C1115(*; $me; $char; $startSel; $endSel)
@@ -265,30 +299,11 @@ Function modelsDropdownManager($e : Object)
 			
 			If ($dropDown.currentValue=Localized string:C991("newModelItem"))  // Create a new model
 				
-				// Ensure that the proposed name is unique.
-				var $name:=Localized string:C991("newModel")
-				var $i; $indx : Integer
-				
-				Repeat 
-					
-					If ($dropDown.values.includes($name))
-						
-						$i+=1
-						$name:=Localized string:C991("newModel")+String:C10($i; " ##")
-						
-					Else 
-						
-						break
-						
-					End if 
-				Until (False:C215)
-				
 				This:C1470.newModel.show()
 				
-				var $o : Object:=This:C1470.newModel.instance
-				$o.data.name:=$name
-				$o.data.models:=This:C1470.models
-				$o.data.context:="add"
+				var $instance : Object:=This:C1470.newModel.instance
+				$instance.data.name:=This:C1470.uniqueNewModelName($dropDown.values)
+				$instance.data.models:=This:C1470.models
 				
 				return 
 				
@@ -296,7 +311,7 @@ Function modelsDropdownManager($e : Object)
 			
 			// Update current vector
 			This:C1470.currentItem.model:=$dropDown.currentValue
-			This:C1470.saveSettings()
+			This:C1470.saveVectors()
 			
 			//______________________________________________________
 	End case 
@@ -345,12 +360,26 @@ Function newModelCallback($instance : Object) : Boolean
 			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
 		: ($data.ACCEPTED)
 			
-			var $o : Object:=$data.model
-			var $model:=cs:C1710.Model.new($o.name; $o.model; $o.apiKey; {\
-				baseURL: $o.baseURL; \
-				organization: $o.organization; \
-				project: $o.project\
+			var $new : Object:=$data.model
+			var $model:=cs:C1710.Model.new($new.name; $new.model; $new.apiKey; {\
+				baseURL: $new.baseURL; \
+				organization: $new.organization; \
+				project: $new.project\
 				})
+			
+/* #17323
+The model name shall be unique.
+*/
+			If (This:C1470.modelsDropdown.values.includes($model.name))
+				
+				This:C1470._popError(\
+					Replace string:C233(Localized string:C991("theModelNameMustBeUnique"); "{name}"; $model.name); \
+					$instance.name; \
+					"name")
+				
+				return 
+				
+			End if 
 			
 /* #17322
 For each model, the name, api Key and model are required.
@@ -360,36 +389,26 @@ For each model, the name, api Key and model are required.
 				
 				If (Length:C16(String:C10($model[$t]))=0)
 					
-					BEEP:C151
-					ALERT:C41(Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t)))
-					EXECUTE METHOD IN SUBFORM:C1085(String:C10($instance.name); Formula:C1597(GOTO OBJECT:C206(*; $t)))
+					
+					This:C1470._popError(\
+						Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t)); \
+						$instance.name; \
+						$t)
 					
 					return 
 					
 				End if 
 			End for each 
 			
-/* #17323
-The model name shall be unique.
-*/
-			If (This:C1470.modelsDropdown.values.includes($model.name))
-				
-				BEEP:C151
-				ALERT:C41(Localized string:C991("theModelNameMustBeUnique"))
-				EXECUTE METHOD IN SUBFORM:C1085(String:C10($instance.name); Formula:C1597(GOTO OBJECT:C206(*; "name")))
-				
-				return 
-				
-			End if 
-			
 			// Update the current vector
 			This:C1470.currentItem.model:=$model.name
+			This:C1470.saveVectors()
 			
 /* #17326
 The structure of the models shall be saved in a JSON file named “vectors.json” in the “settings” folder.
 */
 			This:C1470.models.push($model)
-			This:C1470.saveSettings()
+			This:C1470.saveModels()
 			
 			// Update the dropdown
 			This:C1470.modelsDropdown.values:=This:C1470._getModelDropdownValues()
@@ -404,170 +423,16 @@ The structure of the models shall be saved in a JSON file named “vectors.json�
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function modelsManagerCallback($instance : Object) : Boolean
 	
-	
+	// TODO: Models Manager
 	
 	return True:C214  // Success
 	
-	// MARK:- [SETTINGS]
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function readSettings() : Object
+	// MARK:- [PRIVATE]
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _popError($message : Text; $widget : Text; $target : Text)
 	
-	Try
-		
-		var $settings:=JSON Parse:C1218(This:C1470.settingsFile.getText())
-		
-	Catch
-		
-		return {vectors: []; models: []}
-		
-	End try
-	
-	return $settings
-	
-	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
-Function get settingsFile() : 4D:C1709.File
-	
-/* #17311
-The vector structure shall be saved in a JSON file named “vectors.json” in the “settings” folder
-*/
-	
-	// For now, we are the developer who saves in the Settings folder.
-	return Folder:C1567(fk database folder:K87:14).file("Settings/vectors.json")
-	
-/*
-For the administrator, in order to enable modification, 
-we will need to search for nearby data and copy the internal file, if necessary.
-*/
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function saveSettings()
-	
-	// Keep only defined vectors
-	This:C1470.settings.vectors:=[]
-	
-	var $vector : cs:C1710.Vector
-	For each ($vector; This:C1470.vectors)
-		
-		If ($vector.defined)
-			
-			This:C1470.settings.vectors.push($vector.definition)
-			
-		End if 
-	End for each 
-	
-	This:C1470.settings.models:=This:C1470.models
-	
-	This:C1470.settingsFile.setText(JSON Stringify:C1217(This:C1470.settings; *))
-	
-	// MARK:- [CATALOG]
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function readStructure() : Collection
-	
-/* Requirement 17301
-Get the possible vector fields in the current catalog
-The list is displayed with:
-• table/dataclass
-• vector field
-*/
-	var $vectors:=[]
-	
-	var $tableName; $fieldName : Text
-	For each ($tableName; This:C1470.catalog)
-		
-		var $dataclass : 4D:C1709.DataClass:=This:C1470.catalog[$tableName]
-		
-		For each ($fieldName; $dataclass)
-			
-			var $field : Object:=$dataclass[$fieldName]
-			
-			If (String:C10($field.classID)="4D.Vector")
-				
-				$vectors.push(cs:C1710.Vector.new($dataclass; $field))
-				
-			End if 
-		End for each 
-	End for each 
-	
-/* Enrichment with saved structure
-{
-    "vectors": [ {
-        "version": "number",
-        "dataclassName": "string",
-        "dataclassNumber": "number",
-        "vectorName": "string",
-        "vectorNumber": "number", 
-        "model": "string",
-        "phrase": "string"
-    }, { ... }
-    ]
-}
-*/
-	
-	If (This:C1470.settings.vectors#Null:C1517)
-		
-		var $o : cs:C1710.Vector
-		For each ($o; This:C1470.settings.vectors)
-			
-			// Queries are performed using internal table/field numbers, to avoid failure in the event of a name change.
-			var $v : cs:C1710.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $o.dataclassNumber; $o.vectorNumber).first()
-			
-			If ($v=Null:C1517)  // ERROR
-				
-				$v:=OB Copy:C1225($o)  // Keep the saved definition
-				
-				// Automatic name corrections, where applicable and possible
-				$v.dataclassName:=Try(Table name:C256($v.dataclassNumber)) || $v.dataclassName
-				$v.vectorName:=Try(Field name:C257($v.dataclassNumber; $v.vectorNumber)) || $v.vectorName
-				
-				Case of 
-						
-						// ______________________________________________________
-					: (This:C1470.catalog[$v.dataclassName]=Null:C1517)
-						
-						$v.error:=Replace string:C233(Localized string:C991("missingDataclass"); "{dataclass}"; $v.dataclassName)
-						
-						// ______________________________________________________
-					: (This:C1470.catalog[$v.dataclassName][$v.vectorName]=Null:C1517)
-						
-						$v.error:=Replace string:C233(Replace string:C233(Localized string:C991("missingVector"); "{attribute}"; $v.vectorName); "{dataclass}"; $v.dataclassName)
-						
-						// ______________________________________________________
-					: (String:C10(This:C1470.catalog[$v.dataclassName][$v.vectorName].classID)#"4D.Vector")
-						
-						$v.error:=Replace string:C233(Replace string:C233(Localized string:C991("attributeIsNotAVector"); "{attribute}"; $v.vectorName); "{dataclass}"; $v.dataclassName)
-						
-						// ______________________________________________________
-				End case 
-				
-				$vectors.push($v)
-				
-				continue
-				
-			End if 
-			
-			// TODO: Check if the model exists
-			
-			// Update with saved definition
-			$v.model:=String:C10($o.model)
-			$v.phrase:=$v.parsePhrase($o.phrase)
-			$v.version:=$o.version#Null:C1517 ? Num:C11($o.version) : $v.version
-			
-		End for each 
-	End if 
-	
-	return $vectors.orderBy("dataclassName asc, vectorName asc")
-	
-	// MARK:- [MODELS]
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function readModels() : Collection
-	
-	var $models:=[]
-	
-	var $o : cs:C1710.Vector
-	For each ($o; This:C1470.settings.models)
-		
-		$models.push($o)
-		
-	End for each 
-	
-	return $models.orderBy("name asc")
+	BEEP:C151
+	ALERT:C41($message)
+	var $o : Object:=OBJECT Get value:C1743($widget)
+	$o.target:=$target
+	OBJECT SET VALUE:C1742($widget; $o)

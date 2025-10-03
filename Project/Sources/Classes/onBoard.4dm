@@ -1,7 +1,8 @@
 property form : Text
 property instances : Collection
+property top : Integer  //:=0
 
-Class constructor($widget : Text; $form : Text)
+Class constructor($widget : Text; $form : Text; $options : Object)
 	
 	//FIXME:Fix for use from a component
 	
@@ -21,8 +22,23 @@ Class constructor($widget : Text; $form : Text)
 	
 	This:C1470.instances:=[{\
 		name: $widget; \
-		data: {ACCEPTED: False:C215; CANCELLED: False:C215}\
+		data: {ACCEPTED: False:C215; CANCELLED: False:C215}; \
+		visible: False:C215\
 		}]
+	
+	If ($options#Null:C1517)
+		
+/* {
+    top: integer = fixed top position
+  }
+*/
+		var $key : Text
+		For each ($key; $options)
+			
+			This:C1470[$key]:=$options[$key]
+			
+		End for each 
+	End if 
 	
 	// Make sure the widget is invisible
 	OBJECT SET VISIBLE:C603(*; $widget; False:C215)
@@ -70,6 +86,11 @@ Function get name() : Text
 		return This:C1470.instances[0].name+"_"+String:C10(FORM Get current page:C276)
 		
 	End if 
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+Function get visible : Boolean
+	
+	return Try(This:C1470.instances[FORM Get current page:C276].visible)
 	
 	// === === === === === === === === === === === === === === === === === ===
 Function get instance() : Object
@@ -157,6 +178,7 @@ Function show($data : Object) : Text
 	
 	// Show
 	OBJECT SET VISIBLE:C603(*; $widget; True:C214)
+	$instance.visible:=True:C214
 	
 	//& touch
 	GOTO OBJECT:C206(*; $widget)
@@ -169,6 +191,8 @@ Function hide($widget : Text)
 	
 	$widget:=$widget || This:C1470.name
 	OBJECT SET VISIBLE:C603(*; $widget; False:C215)
+	var $instance : Object:=This:C1470.instances.query("name = :1"; $widget).first()
+	$instance.visible:=False:C215
 	
 	// === === === === === === === === === === === === === === === === === ===
 Function close()
@@ -300,20 +324,19 @@ Function onLoad()
 	// Generic widget position management when resizing the host form
 Function onResize()
 	
-	var $hOffset; $vOffset : Real
-	var $bottom; $height; $i; $left; $right; $top : Integer
-	var $width : Integer
-	
+	var $width; $height : Integer
 	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
+	var $left; $top; $right; $bottom : Integer
 	OBJECT GET COORDINATES:C663(*; "main"; $left; $top; $right; $bottom)
 	
 	// The default constraints are: vertical centering and top at 1/4 height
-	$hOffset:=($width/2)-($left+(($right-$left)/2))
-	$vOffset:=($height/4)-$top
+	var $hOffset:=($width/2)-($left+(($right-$left)/2))
+	var $vOffset:=(This:C1470.top=Null:C1517 ? ($height/4) : This:C1470.top)-$top
 	
 	ARRAY TEXT:C222($widgets; 0)
 	FORM GET OBJECTS:C898($widgets)
 	
+	var $i : Integer
 	For ($i; 1; Size of array:C274($widgets); 1)
 		
 		If ($widgets{$i}="back@")

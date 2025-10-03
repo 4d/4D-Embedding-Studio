@@ -55,13 +55,16 @@ Class constructor($dataclass : Object; $attribute : Object; $model : Text; $phra
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function getSupportedAttributes($dataclass : 4D:C1709.DataClass)
 	
-/* https://github.com/4d/4d/issues/17306
+/* #17306
 In the embedding phrase, the supported attributes shall be:
   • Simple fields
   • Computed attributes
   • Related fields (1:1, N:1 relationship)
   • Aliases
 */
+	
+	var $table:=$dataclass.getInfo()
+	
 	var $key : Text
 	For each ($key; $dataclass)
 		
@@ -75,6 +78,19 @@ In the embedding phrase, the supported attributes shall be:
 			
 		End if 
 		
+		// TODO: Ignore start/end of a relation ?
+		If ($attribute.fieldNumber#Null:C1517)
+			
+			var $oneTable; $oneField : Integer
+			GET RELATION PROPERTIES:C686($table.tableNumber; $attribute.fieldNumber; $oneTable; $oneField)
+			
+			If ($oneField#0)
+				
+				continue
+				
+			End if 
+		End if 
+		
 		This:C1470.supportedAttributes.push($attribute)
 		
 	End for each 
@@ -85,7 +101,7 @@ In the embedding phrase, the supported attributes shall be:
 	// Parse a plain text sentence and return a formatted text with any errors highlighted.
 Function parsePhrase($phrase : Text) : Text
 	
-/* https://github.com/4d/4d/issues/17308
+/* #17308
 In the embedding phrase, if the attribute is incorrect, 
 4D shall display the attribute in red 
 and show a tooltip with an error message when the developer hovers over it.

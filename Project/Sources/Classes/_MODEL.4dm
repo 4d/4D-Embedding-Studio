@@ -1,4 +1,5 @@
 property name; model; apiKey; baseURL; organization; project : Text
+property focus:="name"
 
 Class constructor
 	
@@ -28,9 +29,20 @@ Function manager($e : Object)
 			: ($e.code=On Bound Variable Change:K2:52)
 				
 				var $data : Object:=OBJECT Get subform container value:C1785
-				This:C1470.name:=$data.name
 				
-				GOTO OBJECT:C206(*; "name")
+				OB GET PROPERTY NAMES:C1232(cs:C1710.Model.new(); $arrProperties)
+				var $c:=[]
+				ARRAY TO COLLECTION:C1563($c; $arrProperties)
+				
+				var $t
+				For each ($t; ["name"; "model"; "apiKey"; "baseURL"; "organization"; "project"])
+					
+					This:C1470[$t]:=$data[$t]
+					
+				End for each 
+				
+				GOTO OBJECT:C206(*; String:C10($data.target) || This:C1470.focus)
+				OB REMOVE:C1226($data; "target")
 				
 				// ______________________________________________________
 		End case 

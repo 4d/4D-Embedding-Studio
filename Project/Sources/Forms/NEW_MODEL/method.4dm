@@ -1,4 +1,5 @@
 var $e:=FORM Event:C1606
+var $me : Object:=Form:C1466.me.instance.data
 
 Case of 
 		
@@ -12,9 +13,21 @@ Case of
 		
 		SET TIMER:C645(0)
 		
-		var $data : Object:=Form:C1466.me.instance.data
-		var $model:={name: $data.name}
+		var $model:=cs:C1710.Model.new($me.name)
 		OBJECT SET VALUE:C1742("model"; $model)
+		
+		// ______________________________________________________
+	: ($e.code=On Bound Variable Change:K2:52)
+		
+		If ($me.target#Null:C1517)  // ERROR
+			
+			$model:=OBJECT Get value:C1743("model")
+			//%W-550.26
+			$model.target:=$me.target
+			//%W+550.26
+			OBJECT SET VALUE:C1742("model"; $model)
+			
+		End if 
 		
 		// ______________________________________________________
 	: ($e.code=On Resize:K2:27)

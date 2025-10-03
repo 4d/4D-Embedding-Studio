@@ -1,6 +1,6 @@
 Class extends Entity
 
-Alias town location.city.name
+Alias town school.city.name
 
 exposed Function get fullName($event : Object)->$fullName : Text
 	

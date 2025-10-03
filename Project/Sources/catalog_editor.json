@@ -1,5 +1,36 @@
 {
 	"tables": {
+		"No vector": {
+			"color": {
+				"red": 255,
+				"green": 153,
+				"blue": 63,
+				"alpha": 255
+			},
+			"coordinates": {
+				"left": 176.96354166667,
+				"top": 448.98697916667,
+				"width": 123.54166666667,
+				"height": 121.12890625
+			},
+			"displayable_fields_count": 3,
+			"fields_ordering": 1
+		},
+		"No Primary Key": {
+			"color": {
+				"red": 255,
+				"green": 153,
+				"blue": 63,
+				"alpha": 255
+			},
+			"coordinates": {
+				"left": 47.302083333333,
+				"top": 447.36458333333,
+				"width": 121.0859375,
+				"height": 123.80338541667
+			},
+			"displayable_fields_count": 3
+		},
 		"Cities": {
 			"color": {
 				"red": 255,
@@ -10,8 +41,8 @@
 			"coordinates": {
 				"left": 559,
 				"top": 121.63671875,
-				"width": 87,
-				"height": 104.33203125
+				"width": 117.5859375,
+				"height": 124.82942708333
 			},
 			"displayable_fields_count": 3
 		},
@@ -30,7 +61,21 @@
 			},
 			"displayable_fields_count": 7,
 			"fields": {
+				"school_vector_1": {
+					"color": {
+						"red": 0,
+						"green": 158,
+						"blue": 96,
+						"alpha": 255
+					}
+				},
 				"vector_with_error": {
+					"color": {
+						"red": 216,
+						"green": 30,
+						"blue": 5,
+						"alpha": 255
+					},
 					"position": 5
 				},
 				"city_ID": {
@@ -57,22 +102,40 @@
 			"coordinates": {
 				"left": 40,
 				"top": 40,
-				"width": 154,
-				"height": 188.33203125
+				"width": 158.734375,
+				"height": 204.44661458333
 			},
 			"displayable_fields_count": 7,
 			"fields_ordering": 2,
 			"fields": {
-				"vector_not_defined": {
+				"student_not_defined": {
+					"color": {
+						"red": 204,
+						"green": 122,
+						"blue": 2,
+						"alpha": 255
+					},
 					"position": 7
 				},
 				"school_ID": {
 					"position": 4
 				},
-				"vector_2": {
+				"student_vector_2": {
+					"color": {
+						"red": 0,
+						"green": 158,
+						"blue": 96,
+						"alpha": 255
+					},
 					"position": 6
 				},
-				"vector_1": {
+				"student_vector_1": {
+					"color": {
+						"red": 0,
+						"green": 158,
+						"blue": 96,
+						"alpha": 255
+					},
 					"position": 5
 				},
 				"lastName": {
