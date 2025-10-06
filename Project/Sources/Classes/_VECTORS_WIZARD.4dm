@@ -88,6 +88,9 @@ Function manager($e : Object)
 			
 			This:C1470.modelManager.show()
 			
+			var $instance : Object:=This:C1470.modelManager.instance
+			$instance.data.models:=This:C1470.models
+			
 			//______________________________________________________
 		: ($e.objectName="backButton")  // Background button for embedded dialog boxes
 			
@@ -166,6 +169,27 @@ Function moreManager($e : Object)
 	$e:=$e || FORM Event:C1606
 	
 	// TODO: More button
+	
+	var $menu:=cs:C1710.menu.new()
+	
+	If (This:C1470.debug)
+		
+		$menu.append("🚧 open setting file"; "openSettingFile")
+		
+	End if 
+	
+	If ($menu.popup().selected)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($menu.choice="openSettingFile")
+				
+				OPEN URL:C673(This:C1470.settingsFile.platformPath)
+				
+				//______________________________________________________
+		End case 
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function phraseManager($e : Object)
@@ -311,6 +335,7 @@ Function modelsDropdownManager($e : Object)
 			
 			// Update current vector
 			This:C1470.currentItem.model:=$dropDown.currentValue
+			This:C1470.currentItem.version+=1
 			This:C1470.saveVectors()
 			
 			//______________________________________________________

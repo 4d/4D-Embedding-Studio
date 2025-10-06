@@ -56,7 +56,6 @@
 			"VECTORS_WIZARD"
 		],
 		"classes": [
-			"_MANAGE_MODELS",
 			"_MODEL",
 			"_MODELS_WIZARD",
 			"_VECTORS_WIZARD",

@@ -55,8 +55,8 @@
           <target>"{name}" est déjà utilisé, le nom du modèle doit être unique.</target>
         </trans-unit>
         <trans-unit id="w9dR9S467ayEHGojqm+KIA" resname="theValueIsRequired.">
-          <source>The value "{value}" is required.</source>
-          <target>La valeur "{value}" est obligatoire.</target>
+          <source>A value for “{value}” is required.</source>
+          <target>Une valeur pour « {value} » est requise.</target>
         </trans-unit>
       </group>
       <group resname="Models">

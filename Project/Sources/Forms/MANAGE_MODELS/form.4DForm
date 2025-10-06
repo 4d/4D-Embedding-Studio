@@ -72,7 +72,7 @@
 					"sizingY": "move",
 					"stroke": "#808080"
 				},
-				"Subform": {
+				"manager": {
 					"type": "subform",
 					"left": 30,
 					"top": 21,
@@ -101,7 +101,7 @@
 			},
 			"entryOrder": [
 				"Input",
-				"Subform",
+				"manager",
 				"close"
 			]
 		}
@@ -114,7 +114,7 @@
 			"Guides": {}
 		}
 	},
-	"geometryStamp": 579,
+	"geometryStamp": 580,
 	"rightMargin": 0,
 	"bottomMargin": 0,
 	"method": "method.4dm"

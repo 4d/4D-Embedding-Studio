@@ -19,7 +19,7 @@ Case of
 		// ______________________________________________________
 	: ($e.code=On Bound Variable Change:K2:52)
 		
-		If ($me.target#Null:C1517)  // ERROR
+		If ($me.target#Null:C1517)  // ERROR Camllback
 			
 			$model:=OBJECT Get value:C1743("model")
 			//%W-550.26
