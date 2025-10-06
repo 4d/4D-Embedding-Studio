@@ -60,23 +60,11 @@
 						"onMouseLeave",
 						"onMouseMove"
 					],
-					"listboxType": "collection",
 					"dataSource": "Form:C1466.models",
-					"horizontalLineStroke": "transparent",
 					"selectionMode": "single",
-					"horizontalPadding": 2,
-					"scrollbarHorizontal": "hidden",
-					"verticalAlign": "middle",
-					"headerHeight": "2em",
 					"right": 212,
-					"sizingX": "fixed",
-					"sizingY": "grow",
-					"resizingMode": "legacy",
-					"currentItemSource": "Form:C1466.currentItem",
-					"currentItemPositionSource": "Form:C1466.itemPosition",
-					"selectedItemsSource": "Form:C1466.selectedItems",
-					"hideFocusRing": true,
 					"bottom": 371,
+					"sizingY": "grow",
 					"columns": [
 						{
 							"header": {
@@ -187,7 +175,7 @@
 			"Guides": {}
 		}
 	},
-	"geometryStamp": 505,
+	"geometryStamp": 507,
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"formClass": "_MODELS_WIZARD",

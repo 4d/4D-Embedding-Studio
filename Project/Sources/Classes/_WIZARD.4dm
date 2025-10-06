@@ -2,9 +2,14 @@ property settings : Object
 
 property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project datastore
 
+property OpenAI : cs:C1710.AIKit.OpenAI
+
 Class constructor
 	
-	//
+	This:C1470.OpenAI:=cs:C1710.AIKit.OpenAI.new()
+	
+	//var $result:=This.OpenAI.model.list({})
+	//var $models : Collection:=$result.models
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get settingsFile() : 4D:C1709.File
