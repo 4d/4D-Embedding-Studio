@@ -161,6 +161,55 @@
 		}
 	},
 	"_MODELS_WIZARD": {
+		"newModelCallback()": {
+			"Syntax": "**.newModelCallback**( *instance* : Object ) : Boolean",
+			"Params": [
+				[
+					"instance",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"deleteModel()": {
+			"Syntax": "**.deleteModel**( *name* : Text )",
+			"Params": [
+				[
+					"name",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"listManager()": {
+			"Syntax": "**.listManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"selectModel()": {
+			"Syntax": "**.selectModel**( *name* : Text )",
+			"Params": [
+				[
+					"name",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
 		"manager()": {
 			"Syntax": "**.manager**( *e* : Object )",
 			"Params": [
@@ -172,17 +221,23 @@
 			],
 			"Summary": ""
 		},
-		"currentItem": {
-			"Syntax": "currentItem : cs.vectorStudio.Model"
+		"debug": {
+			"Syntax": "debug : Boolean"
 		},
-		"models": {
-			"Syntax": "models : Collection"
+		"newModel": {
+			"Syntax": "newModel : cs.vectorStudio.onBoard"
 		},
 		"selectedItems": {
 			"Syntax": "selectedItems : Collection"
 		},
 		"itemPosition": {
 			"Syntax": "itemPosition : Integer"
+		},
+		"isSubform": {
+			"Syntax": "isSubform : Boolean"
+		},
+		"currentItem": {
+			"Syntax": "currentItem : cs.vectorStudio.Model"
 		},
 		"_inheritedFrom_": "_WIZARD"
 	},
@@ -263,22 +318,6 @@
 			],
 			"Summary": ""
 		},
-		"modelsManagerCallback()": {
-			"Syntax": "**.modelsManagerCallback**( *instance* : Object ) : Boolean",
-			"Params": [
-				[
-					"instance",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"moreManager()": {
 			"Syntax": "**.moreManager**( *e* : Object )",
 			"Params": [
@@ -301,35 +340,26 @@
 			],
 			"Summary": ""
 		},
-		"modelManager": {
-			"Syntax": "modelManager : cs.vectorStudio.onBoard"
-		},
-		"details": {
-			"Syntax": "details : Collection"
-		},
-		"modelsDropdown": {
-			"Syntax": "modelsDropdown : Object"
-		},
-		"vectors": {
-			"Syntax": "vectors : Collection"
-		},
-		"selectedItems": {
-			"Syntax": "selectedItems : Collection"
-		},
-		"itemPosition": {
-			"Syntax": "itemPosition : Integer"
-		},
-		"currentItem": {
-			"Syntax": "currentItem : Object"
-		},
 		"debug": {
 			"Syntax": "debug : Boolean"
 		},
 		"newModel": {
 			"Syntax": "newModel : cs.vectorStudio.onBoard"
 		},
-		"models": {
-			"Syntax": "models : Collection"
+		"selectedItems": {
+			"Syntax": "selectedItems : Collection"
+		},
+		"modelsDropdown": {
+			"Syntax": "modelsDropdown : Object"
+		},
+		"details": {
+			"Syntax": "details : Collection"
+		},
+		"itemPosition": {
+			"Syntax": "itemPosition : Integer"
+		},
+		"currentItem": {
+			"Syntax": "currentItem : Object"
 		},
 		"_inheritedFrom_": "_WIZARD"
 	},
@@ -714,6 +744,22 @@
 			],
 			"Summary": ""
 		},
+		"isModelUsed()": {
+			"Syntax": "**.isModelUsed**( *name* : Text ) : cs.vectorStudio.Vector",
+			"Params": [
+				[
+					"name",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.Vector",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"readSettings()": {
 			"Syntax": "**.readSettings**() : Object",
 			"Params": [
@@ -735,6 +781,15 @@
 				]
 			],
 			"Summary": ""
+		},
+		"OpenAI": {
+			"Syntax": "OpenAI : cs.AIKit.OpenAI"
+		},
+		"vectors": {
+			"Syntax": "vectors : Collection"
+		},
+		"models": {
+			"Syntax": "models : Collection"
 		},
 		"catalog": {
 			"Syntax": "catalog : cs.vectorStudio.DataStore"

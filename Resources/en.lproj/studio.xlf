@@ -28,6 +28,14 @@
           <source>Embed</source>
           <target>Embed</target>
         </trans-unit>
+        <trans-unit id="rQYqRhdvbtUZUs3WNLcscg" resname="vectorStudio">
+          <source>Vector Studio</source>
+          <target>Vector Studio</target>
+        </trans-unit>
+        <trans-unit id="xrGR55DbG6G4lXVsvFdNhQ" resname="modelManagement">
+          <source>Model Management</source>
+          <target>Model Management</target>
+        </trans-unit>
       </group>
       <group resname="Errors">
         <trans-unit id="suXoXY7MtyrPp3TbcwctFA" resname="theAttributeDoesn'tExistsInTheDataclass">
@@ -57,6 +65,10 @@
         <trans-unit id="w9dR9S467ayEHGojqm+KIA" resname="theValueIsRequired.">
           <source>A value for “{value}” is required.</source>
           <target>A value for “{value}” is required.</target>
+        </trans-unit>
+        <trans-unit id="7NGSbIdiB_DRw5gYjJRGow" resname="thisModelCannotBeDeletedBecauseItIsUsed">
+          <source>This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</source>
+          <target>This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</target>
         </trans-unit>
       </group>
       <group resname="Models">
@@ -121,6 +133,7 @@
           <source>ID displayed in the drop-down list</source>
           <target>ID displayed in the drop-down list</target>
         </trans-unit>
+        
       </group>
       <group resname="Common">
         <trans-unit id="1ksF1sjptpuuz2N54rsrBg" resname="cancel">
@@ -134,6 +147,9 @@
       </group>
     </body>
   </file>
+
+
+
 
 
 

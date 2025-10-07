@@ -41,6 +41,16 @@
 			"StudentsEntity"
 		]
 	},
+	"MODELS": {
+		"forms": [
+			"MODEL",
+			"MODELS_WIZARD"
+		],
+		"classes": [
+			"_MODEL",
+			"_MODELS_WIZARD"
+		]
+	},
 	"NAMESPACE": {
 		"classes": [
 			"Model",
@@ -48,18 +58,21 @@
 		]
 	},
 	"STUDIO": {
+		"groups": [
+			"MODELS",
+			"VECTORS"
+		],
+		"classes": [
+			"_WIZARD"
+		]
+	},
+	"VECTORS": {
 		"forms": [
-			"MANAGE_MODELS",
-			"MODEL",
-			"MODELS_WIZARD",
 			"NEW_MODEL",
 			"VECTORS_WIZARD"
 		],
 		"classes": [
-			"_MODEL",
-			"_MODELS_WIZARD",
-			"_VECTORS_WIZARD",
-			"_WIZARD"
+			"_VECTORS_WIZARD"
 		]
 	},
 	"trash": {

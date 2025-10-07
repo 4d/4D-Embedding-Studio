@@ -1,7 +1,5 @@
 Class extends _WIZARD
 
-property models; vectors : Collection
-
 // Vector list
 property currentItem : Object
 property itemPosition : Integer
@@ -12,17 +10,13 @@ property details:=["phrase"; "phraseLabel"; "models"; "modelsLabel"; "openModels
 property modelsDropdown : Object
 
 // Embedded dialogs
-property newModel; modelManager : cs:C1710.onBoard
+property newModel : cs:C1710.onBoard
 
 property debug:=Structure file:C489=Structure file:C489(*)
 
 Class constructor
 	
 	Super:C1705()
-	
-	This:C1470.settings:=This:C1470.readSettings()
-	This:C1470.models:=This:C1470.readModels()
-	This:C1470.vectors:=This:C1470.readVectors()
 	
 	// MARK:- [MANAGERS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -42,8 +36,10 @@ Function manager($e : Object)
 				This:C1470.newModel:=cs:C1710.onBoard.new("on-board"; "NEW_MODEL"; {top: 40})
 				This:C1470.newModel.me:=This:C1470.newModel
 				
-				This:C1470.modelManager:=cs:C1710.onBoard.new("on-board"; "MANAGE_MODELS"; {top: 40})
-				This:C1470.modelManager.me:=This:C1470.modelManager
+/*
+This.modelManager:=cs.onBoard.new("on-board"; "MANAGE_MODELS"; {top: 40})
+This.modelManager.me:=This.modelManager
+*/
 				
 				This:C1470.modelsDropdownManager($e)
 				
@@ -53,6 +49,11 @@ Function manager($e : Object)
 			: ($e.code=On Timer:K2:25)
 				
 				SET TIMER:C645(0)
+				
+				//______________________________________________________
+			: ($e.code=On Activate:K2:9)
+				
+				// TODO: Check vectors ?
 				
 				//______________________________________________________
 		End case 
@@ -86,10 +87,7 @@ Function manager($e : Object)
 			//______________________________________________________
 		: ($e.objectName="openModelsManager")
 			
-			This:C1470.modelManager.show()
-			
-			var $instance : Object:=This:C1470.modelManager.instance
-			$instance.data.models:=This:C1470.models
+			_MODELS_WIZARD(True:C214; String:C10(This:C1470.currentItem.model))
 			
 			//______________________________________________________
 		: ($e.objectName="backButton")  // Background button for embedded dialog boxes
@@ -445,19 +443,11 @@ The structure of the models shall be saved in a JSON file named â€œvectors.jsonâ
 	
 	return True:C214  // Success
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+/*
+// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function modelsManagerCallback($instance : Object) : Boolean
 	
-	// TODO: Models Manager
+// TODO: Models Manager
 	
-	return True:C214  // Success
-	
-	// MARK:- [PRIVATE]
-	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _popError($message : Text; $widget : Text; $target : Text)
-	
-	BEEP:C151
-	ALERT:C41($message)
-	var $o : Object:=OBJECT Get value:C1743($widget)
-	$o.target:=$target
-	OBJECT SET VALUE:C1742($widget; $o)
+return True  // Success
+*/

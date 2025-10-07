@@ -46,6 +46,8 @@ Class constructor($widget : Text; $form : Text; $options : Object)
 	// Make sure the widget is vertically and horizontally expandable
 	OBJECT SET RESIZING OPTIONS:C1175(*; $widget; Resize horizontal grow:K42:8; Resize vertical grow:K42:11)
 	
+	This:C1470.me:=This:C1470
+	
 	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
 Function set me($me : cs:C1710.onBoard)
 	
