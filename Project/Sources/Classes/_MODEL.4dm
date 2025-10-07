@@ -25,6 +25,8 @@ Function manager($e : Object)
 				
 				SET TIMER:C645(0)
 				
+				OBJECT SET SUBFORM CONTAINER VALUE:C1784(This:C1470)
+				
 				// ______________________________________________________
 			: ($e.code=On Bound Variable Change:K2:52)
 				
@@ -41,8 +43,12 @@ Function manager($e : Object)
 					
 				End for each 
 				
-				GOTO OBJECT:C206(*; String:C10($data.target) || This:C1470.focus)
-				OB REMOVE:C1226($data; "target")
+				If ($data.target#Null:C1517)
+					
+					GOTO OBJECT:C206(*; String:C10($data.target) || This:C1470.focus)
+					OB REMOVE:C1226($data; "target")
+					
+				End if 
 				
 				// ______________________________________________________
 		End case 

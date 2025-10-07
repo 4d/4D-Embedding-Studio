@@ -6,6 +6,7 @@
 	"events": [
 		"onLoad",
 		"onClick",
+		"onActivate",
 		"onDoubleClick",
 		"onLosingFocus",
 		"onGettingFocus",
@@ -17,7 +18,7 @@
 		"onAfterEdit",
 		"onPageChange"
 	],
-	"windowTitle": "4D Vector Sudio",
+	"windowTitle": ":xliff:vectorStudio",
 	"destination": "detailScreen",
 	"pages": [
 		{
@@ -224,7 +225,7 @@
 			}
 		}
 	],
-	"geometryStamp": 438,
+	"geometryStamp": 441,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

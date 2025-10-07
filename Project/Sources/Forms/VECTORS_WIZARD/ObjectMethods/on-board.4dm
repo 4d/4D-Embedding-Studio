@@ -15,9 +15,9 @@ If ($e.code<0)
 			var $success:=Form:C1466.newModelCallback($instance)
 			
 			// ________________________________________________________________________________
-		: ($instance.form="MODELS_MANAGER")
+			//: ($instance.form="MODELS_MANAGER")
 			
-			$success:=Form:C1466.modelsManagerCallback($instance)
+			//$success:=Form.modelsManagerCallback($instance)
 			
 			// ________________________________________________________________________________
 	End case 

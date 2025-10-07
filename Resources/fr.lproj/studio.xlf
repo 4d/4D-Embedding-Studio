@@ -10,7 +10,7 @@
       <group resname="Studio">
         <trans-unit id="JqIF_AVmMEIaEFmXDPJsNw" resname="dataclass">
           <source>Dataclass</source>
-          <target state="new">Dataclass</target>
+          <target>Dataclass</target>
         </trans-unit>
         <trans-unit id="dIxUIuEAJHHpAIkWpGtuuQ" resname="vector">
           <source>Vector</source>
@@ -27,6 +27,14 @@
         <trans-unit id="lT6Q0uzsEG77tFMLsSaq9g" resname="embed">
           <source>Embed</source>
           <target>Intégrer</target>
+        </trans-unit>
+        <trans-unit id="rQYqRhdvbtUZUs3WNLcscg" resname="vectorStudio">
+          <source>Vector Studio</source>
+          <target state="new">Vector Studio</target>
+        </trans-unit>
+        <trans-unit id="xrGR55DbG6G4lXVsvFdNhQ" resname="modelManagement">
+          <source>Model Management</source>
+          <target>Gestion des modèles</target>
         </trans-unit>
       </group>
       <group resname="Errors">
@@ -57,6 +65,10 @@
         <trans-unit id="w9dR9S467ayEHGojqm+KIA" resname="theValueIsRequired.">
           <source>A value for “{value}” is required.</source>
           <target>Une valeur pour « {value} » est requise.</target>
+        </trans-unit>
+        <trans-unit id="7NGSbIdiB_DRw5gYjJRGow" resname="thisModelCannotBeDeletedBecauseItIsUsed">
+          <source>This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</source>
+          <target>Ce modèle ne peut pas être supprimé car il est utilisé par "{vector}" de la dataclass "{dataclass}".</target>
         </trans-unit>
       </group>
       <group resname="Models">
@@ -121,6 +133,7 @@
           <source>ID displayed in the drop-down list</source>
           <target>ID affiché dans la liste déroulante</target>
         </trans-unit>
+        
       </group>
       <group resname="Common">
         <trans-unit id="1ksF1sjptpuuz2N54rsrBg" resname="cancel">
@@ -134,6 +147,9 @@
       </group>
     </body>
   </file>
+
+
+
 
 
 

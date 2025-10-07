@@ -1,11 +1,15 @@
 Class extends _WIZARD
 
-property _class : cs:C1710._MODELS_WIZARD
-
-property models : Collection
+// Model list
 property currentItem : cs:C1710.Model
 property itemPosition : Integer
 property selectedItems : Collection
+
+// Embedded dialogs
+property newModel : cs:C1710.onBoard
+
+property isSubform : Boolean
+property debug:=Structure file:C489=Structure file:C489(*)
 
 Class constructor
 	
@@ -25,50 +29,8 @@ Function manager($e : Object)
 				// ________________________________________________________________________________
 			: ($e.code=On Load:K2:1)
 				
-				If (Form:C1466.context=Null:C1517)
-					
-					SET TIMER:C645(-1)
-					
-					return 
-					
-				End if 
-				
-				Form:C1466.modelsBackUp:=Form:C1466.models.copy()
-				
-				Case of 
-						
-						// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
-					: (Form:C1466.context="add")
-						
-						Form:C1466.name:=Localized string:C991("model")
-						var $i : Integer:=1
-						
-						Repeat 
-							
-							If (Form:C1466.models.query("name = :1"; Form:C1466.name).first()=Null:C1517)
-								
-								break
-								
-							End if 
-							
-							$i+=1
-							Form:C1466.name:=[Localized string:C991("model"); String:C10($i)].join(" ")
-							
-						Until (False:C215)
-						
-						var $model:=cs:C1710.Model.new(Form:C1466.name)
-						
-						Form:C1466.models.push($model)
-						Form:C1466.models.orderBy("name")
-						Form:C1466.currentItem:=$model
-						
-						OBJECT SET TITLE:C194(*; "title"; Localized string:C991("newModel"))
-						LISTBOX SET PROPERTY:C1440(*; "list"; lk selection mode:K53:35; lk none:K53:57)
-						LISTBOX SELECT ROW:C912(*; "list"; Form:C1466.models.indexOf($model)+1)
-						GOTO OBJECT:C206(*; "model")
-						
-						// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
-				End case 
+				This:C1470.newModel:=cs:C1710.onBoard.new("on-board"; "NEW_MODEL"; {top: 40})
+				//This.newModel.me:=This.newModel
 				
 				SET TIMER:C645(-1)
 				
@@ -77,8 +39,9 @@ Function manager($e : Object)
 				
 				SET TIMER:C645(0)
 				
-				Form:C1466.isSubform:=OBJECT Get subform container value:C1785#Null:C1517
-				OBJECT SET VISIBLE:C603(*; "close"; Form:C1466.isSubform)
+				This:C1470.isSubform:=OBJECT Get subform container value:C1785#Null:C1517
+				
+				This:C1470.listManager()
 				
 				// ________________________________________________________________________________
 			: ($e.code=On Bound Variable Change:K2:52)
@@ -88,15 +51,7 @@ Function manager($e : Object)
 				// ______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
-				If (Form:C1466.context=Null:C1517)
-					
-					GOTO OBJECT:C206(*; "list")
-					
-				Else 
-					
-					GOTO OBJECT:C206(*; "model")
-					
-				End if 
+				GOTO OBJECT:C206(*; "list")
 				
 				// ________________________________________________________________________________
 		End case 
@@ -108,31 +63,175 @@ Function manager($e : Object)
 	// MARK:- Widget methods
 	Case of 
 			
-			// ________________________________________________________________________________
-		: ($e.objectName="close")
+			//______________________________________________________
+		: ($e.objectName="list")
 			
-			If ($e.code#On Clicked:K2:4)
+			This:C1470.listManager($e)
+			
+			//______________________________________________________
+		: ($e.objectName="add")
+			
+			This:C1470.newModel.show()
+			
+			var $instance : Object:=This:C1470.newModel.instance
+			$instance.data.name:=This:C1470.uniqueNewModelName(This:C1470.models.extract("name"))
+			$instance.data.models:=This:C1470.models
+			
+			//______________________________________________________
+		: ($e.objectName="delete")
+			
+/* #17324
+If the user tries to delete a model used by a vector, 
+an error message shall warn them that this model is used by xxx and 4D shall not delete the model.
+*/
+			
+			var $user:=This:C1470.isModelUsed(This:C1470.currentItem.name)
+			
+			If ($user#Null:C1517)
+				
+				This:C1470._popError(Replace string:C233(Replace string:C233(Localized string:C991("thisModelCannotBeDeletedBecauseItIsUsed"); "{vector}"; $user.vectorName); "{dataclass}"; $user.dataclassName))
 				
 				return 
 				
 			End if 
 			
-			If (Form:C1466.isSubform)
-				
-				If (Form:C1466.context="add")
-					
-					// ???????????????????
-					
-				End if 
-				
-				CALL SUBFORM CONTAINER:C1086(-1)
-				FORM GOTO PAGE:C247(1)
-				
-			Else 
-				
-				CANCEL:C270
-				
-			End if 
+			This:C1470.deleteModel(This:C1470.currentItem.name)
 			
-			// ________________________________________________________________________________
+			// Update UI
+			LISTBOX SELECT ROW:C912(*; "list"; 0; lk remove from selection:K53:3)  // unselect all
+			This:C1470.listManager($e)
+			
+			//______________________________________________________
 	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function listManager($e : Object)
+	
+	$e:=$e || FORM Event:C1606
+	
+	If (This:C1470.currentItem=Null:C1517)
+		
+		OBJECT SET VISIBLE:C603(*; "model"; False:C215)
+		OBJECT SET ENABLED:C1123(*; "delete"; False:C215)
+		
+		return 
+		
+	End if 
+	
+	var $o : Object:=OBJECT Get value:C1743("model")
+	var $key : Text
+	For each ($key; ["name"; "model"; "apiKey"; "baseURL"; "organization"; "project"])
+		
+		$o[$key]:=This:C1470.currentItem[$key]  // Null if any
+		
+	End for each 
+	
+	OBJECT SET VALUE:C1742("model"; $o)
+	OBJECT SET VISIBLE:C603(*; "model"; True:C214)
+	OBJECT SET ENABLED:C1123(*; "delete"; True:C214)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function selectModel($name : Text)
+	
+	This:C1470.currentItem:=This:C1470.models.query("name = :1"; $name).first()
+	
+	If (This:C1470.currentItem#Null:C1517)
+		
+		// Update UI
+		var $index:=This:C1470.models.indexOf(This:C1470.currentItem)
+		LISTBOX SELECT ROW:C912(*; "list"; $index+1; lk replace selection:K53:1)
+		
+	End if 
+	
+	SET TIMER:C645(-1)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function deleteModel($name : Text)
+	
+	var $c:=This:C1470.models.indices("name = :1"; $name)
+	
+	If ($c.length>0)
+		
+		This:C1470.models.remove($c[0])
+		This:C1470.saveModels()
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function newModelCallback($instance : Object) : Boolean
+	
+	var $data : Object:=$instance.data
+	
+	Case of 
+			
+			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
+		: ($data.CANCELLED)
+			
+			// <NOTHING MORE TO DO>
+			
+			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
+		: ($data.ACCEPTED)
+			
+/*
+var $new : Object:=$data.model
+var $model:=cs.Model.new($new.name; $new.model; $new.apiKey; {\
+baseURL: $new.baseURL; \
+organization: $new.organization; \
+project: $new.project\
+})
+			
+/* #17323
+The model name shall be unique.
+*/
+If (This.modelsDropdown.values.includes($model.name))
+			
+This._popError(\
+Replace string(Localized string("theModelNameMustBeUnique"); "{name}"; $model.name); \
+$instance.name; \
+"name")
+			
+return 
+			
+End if 
+			
+/* #17322
+For each model, the name, api Key and model are required.
+*/
+var $t : Text
+For each ($t; ["name"; "model"; "apiKey"])
+			
+If (Length(String($model[$t]))=0)
+			
+			
+This._popError(\
+Replace string(Localized string("theValueIsRequired."); "{value}"; Localized string($t)); \
+$instance.name; \
+$t)
+			
+return 
+			
+End if 
+End for each 
+			
+// Update the current vector
+This.currentItem.model:=$model.name
+This.saveVectors()
+			
+/* #17326
+The structure of the models shall be saved in a JSON file named “vectors.json” in the “settings” folder.
+*/
+This.models.push($model)
+This.saveModels()
+			
+// Update the dropdown
+This.modelsDropdown.values:=This._getModelDropdownValues()
+			
+This.modelsDropdownUpdate()
+*/
+			
+			
+			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
+	End case 
+	
+	return True:C214  // Success
+	

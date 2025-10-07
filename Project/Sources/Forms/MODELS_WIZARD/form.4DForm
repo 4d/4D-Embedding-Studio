@@ -10,12 +10,22 @@
 		"onGettingFocus",
 		"onTimer",
 		"onResize",
+		"onSelectionChange",
 		"onBoundVariableChange"
 	],
 	"destination": "detailScreen",
 	"pages": [
 		{
-			"objects": {}
+			"objects": {
+				"on-board": {
+					"type": "subform",
+					"left": 0,
+					"top": 0,
+					"width": 16,
+					"height": 16,
+					"method": "ObjectMethods/on-board.4dm"
+				}
+			}
 		},
 		{
 			"objects": {
@@ -120,7 +130,7 @@
 					"visibility": "hidden",
 					"startPoint": "topLeft"
 				},
-				"Button": {
+				"add": {
 					"type": "button",
 					"text": "+",
 					"top": 378,
@@ -133,7 +143,7 @@
 					"style": "bevel",
 					"sizingY": "move"
 				},
-				"Button1": {
+				"delete": {
 					"type": "button",
 					"text": "-",
 					"top": 378,
@@ -156,14 +166,15 @@
 					"events": [
 						"onGettingFocus"
 					],
-					"dataSourceTypeHint": "undefined"
+					"dataSourceTypeHint": "undefined",
+					"visibility": "hidden"
 				}
 			},
 			"entryOrder": [
 				"list",
 				"model",
-				"Button",
-				"Button1"
+				"add",
+				"delete"
 			]
 		}
 	],
@@ -175,9 +186,12 @@
 			"Guides": {}
 		}
 	},
-	"geometryStamp": 507,
+	"geometryStamp": 519,
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"formClass": "_MODELS_WIZARD",
-	"method": "FORM_MANAGER"
+	"method": "FORM_MANAGER",
+	"windowTitle": ":xliff:modelManagement",
+	"windowMinWidth": 700,
+	"windowMinHeight": 420
 }

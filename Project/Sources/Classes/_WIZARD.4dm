@@ -2,9 +2,15 @@ property settings : Object
 
 property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project datastore
 
+property models; vectors : Collection
+
 property OpenAI : cs:C1710.AIKit.OpenAI
 
 Class constructor
+	
+	This:C1470.settings:=This:C1470.readSettings()
+	This:C1470.models:=This:C1470.readModels()
+	This:C1470.vectors:=This:C1470.readVectors()
 	
 	This:C1470.OpenAI:=cs:C1710.AIKit.OpenAI.new()
 	
@@ -208,3 +214,24 @@ Function uniqueNewModelName($names : Collection) : Text
 			
 		End if 
 	Until (False:C215)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function isModelUsed($name : Text) : cs:C1710.Vector
+	
+	return This:C1470.vectors.query("model = :1"; $name).first()
+	
+	// MARK:- [PRIVATE]
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _popError($message : Text; $widget : Text; $target : Text)
+	
+	BEEP:C151
+	ALERT:C41($message)
+	
+	If (Length:C16($target)>0)
+		
+		var $o : Object:=OBJECT Get value:C1743($widget)
+		$o.target:=$target
+		OBJECT SET VALUE:C1742($widget; $o)
+		
+	End if 
+	
