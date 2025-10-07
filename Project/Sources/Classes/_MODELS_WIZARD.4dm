@@ -172,63 +172,50 @@ Function newModelCallback($instance : Object) : Boolean
 			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
 		: ($data.ACCEPTED)
 			
-/*
-var $new : Object:=$data.model
-var $model:=cs.Model.new($new.name; $new.model; $new.apiKey; {\
-baseURL: $new.baseURL; \
-organization: $new.organization; \
-project: $new.project\
-})
+			var $new : Object:=$data.model
+			var $model:=cs:C1710.Model.new($new.name; $new.model; $new.apiKey; {\
+				baseURL: $new.baseURL; \
+				organization: $new.organization; \
+				project: $new.project\
+				})
 			
 /* #17323
 The model name shall be unique.
 */
-If (This.modelsDropdown.values.includes($model.name))
-			
-This._popError(\
-Replace string(Localized string("theModelNameMustBeUnique"); "{name}"; $model.name); \
-$instance.name; \
-"name")
-			
-return 
-			
-End if 
+			If (This:C1470.models.extract("name").includes($model.name))
+				
+				This:C1470._popError(\
+					Replace string:C233(Localized string:C991("theModelNameMustBeUnique"); "{name}"; $model.name); \
+					$instance.name; \
+					"name")
+				
+				return 
+				
+			End if 
 			
 /* #17322
 For each model, the name, api Key and model are required.
 */
-var $t : Text
-For each ($t; ["name"; "model"; "apiKey"])
+			var $t : Text
+			For each ($t; ["name"; "model"; "apiKey"])
+				
+				If (Length:C16(String:C10($model[$t]))=0)
+					
+					This:C1470._popError(\
+						Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t)); \
+						$instance.name; \
+						$t)
+					
+					return 
+					
+				End if 
+			End for each 
 			
-If (Length(String($model[$t]))=0)
+			This:C1470.models.push($model)
+			This:C1470.saveModels()
 			
-			
-This._popError(\
-Replace string(Localized string("theValueIsRequired."); "{value}"; Localized string($t)); \
-$instance.name; \
-$t)
-			
-return 
-			
-End if 
-End for each 
-			
-// Update the current vector
-This.currentItem.model:=$model.name
-This.saveVectors()
-			
-/* #17326
-The structure of the models shall be saved in a JSON file named “vectors.json” in the “settings” folder.
-*/
-This.models.push($model)
-This.saveModels()
-			
-// Update the dropdown
-This.modelsDropdown.values:=This._getModelDropdownValues()
-			
-This.modelsDropdownUpdate()
-*/
-			
+			This:C1470.models:=This:C1470.models.orderBy("name asc")
+			This:C1470.selectModel($model.name)
 			
 			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
 	End case 

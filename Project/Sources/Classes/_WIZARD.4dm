@@ -183,6 +183,10 @@ Function readModels() : Collection
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function saveModels($models : Collection)
 	
+/* #17326
+The structure of the models shall be saved in a JSON file named “vectors.json” in the “settings” folder.
+*/
+	
 	//%W-550.26
 	This:C1470.settings.models:=$models || This:C1470.models
 	//%W+550.26

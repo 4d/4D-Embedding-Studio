@@ -2,7 +2,7 @@ var $e:=FORM Event:C1606
 
 If ($e.code<0)
 	
-	// MARK: Callback from the subform 
+	// MARK: Return from subforms 
 	var $instance : Object:=OBJECT Get value:C1743(OBJECT Get name:C1087).me.instance
 	var $data : Object:=$instance.data
 	
@@ -12,13 +12,13 @@ If ($e.code<0)
 			// ________________________________________________________________________________
 		: ($instance.form="NEW_MODEL")
 			
-			var $success:=Form:C1466.newModelCallback($instance)
+			var $continue:=Form:C1466.newModelCallback($instance)
 			
 			// ________________________________________________________________________________
 	End case 
 	
 	// MARK:- Standard actions
-	If ($success)
+	If ($continue)
 		
 		$data.me.hide()
 		
