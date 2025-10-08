@@ -24,6 +24,7 @@ Case of
 			$model:=OBJECT Get value:C1743("model")
 			//%W-550.26
 			$model.target:=$me.target
+			$model.isNew:=True:C214
 			//%W+550.26
 			OBJECT SET VALUE:C1742("model"; $model)
 			

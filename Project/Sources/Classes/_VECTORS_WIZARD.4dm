@@ -95,10 +95,10 @@ This.modelManager.me:=This.modelManager
 			If (This:C1470.debug && Macintosh option down:C545)
 				
 				var $new:=This:C1470.newModel.visible
-				var $manager:=This:C1470.modelManager.visible
+				//var $manager:=This.modelManager.visible
 				
-				var $widget : Object:=This:C1470.newModel.instances.query("visible = true").first()\
-					 || This:C1470.modelManager.instances.query("visible = true").first()
+				var $widget : Object:=This:C1470.newModel.instances.query("visible = true").first()
+				// || This.modelManager.instances.query("visible = true").first()
 				
 				If ($widget#Null:C1517)
 					
@@ -170,6 +170,8 @@ Function moreManager($e : Object)
 	
 	var $menu:=cs:C1710.menu.new()
 	
+	$menu.append("🚧 Edit API key"; "editApiKey")
+	
 	If (This:C1470.debug)
 		
 		$menu.append("🚧 open setting file"; "openSettingFile")
@@ -179,6 +181,11 @@ Function moreManager($e : Object)
 	If ($menu.popup().selected)
 		
 		Case of 
+				
+				//______________________________________________________
+			: ($menu.choice="editApiKey")
+				
+				
 				
 				//______________________________________________________
 			: ($menu.choice="openSettingFile")

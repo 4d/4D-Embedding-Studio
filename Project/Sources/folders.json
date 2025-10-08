@@ -62,13 +62,15 @@
 			"MODELS",
 			"VECTORS"
 		],
+		"forms": [
+			"NEW_MODEL"
+		],
 		"classes": [
 			"_WIZARD"
 		]
 	},
 	"VECTORS": {
 		"forms": [
-			"NEW_MODEL",
 			"VECTORS_WIZARD"
 		],
 		"classes": [

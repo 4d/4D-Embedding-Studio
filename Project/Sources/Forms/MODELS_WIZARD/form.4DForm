@@ -167,7 +167,8 @@
 						"onGettingFocus"
 					],
 					"dataSourceTypeHint": "undefined",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"method": "ObjectMethods/model.4dm"
 				}
 			},
 			"entryOrder": [
