@@ -188,6 +188,17 @@
 			],
 			"Summary": ""
 		},
+		"modelContainerManager()": {
+			"Syntax": "**.modelContainerManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
 		"listManager()": {
 			"Syntax": "**.listManager**( *e* : Object )",
 			"Params": [
@@ -695,6 +706,22 @@
 			],
 			"Summary": ""
 		},
+		"getAvailableModels()": {
+			"Syntax": "**.getAvailableModels**( *value* : Text ) : Collection",
+			"Params": [
+				[
+					"value",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"saveVectors()": {
 			"Syntax": "**.saveVectors**( *vectors* : Collection )",
 			"Params": [
@@ -744,6 +771,17 @@
 			],
 			"Summary": ""
 		},
+		"get apikey()": {
+			"Syntax": "**.get apikey**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"isModelUsed()": {
 			"Syntax": "**.isModelUsed**( *name* : Text ) : cs.vectorStudio.Vector",
 			"Params": [
@@ -782,14 +820,14 @@
 			],
 			"Summary": ""
 		},
-		"OpenAI": {
-			"Syntax": "OpenAI : cs.AIKit.OpenAI"
-		},
 		"vectors": {
 			"Syntax": "vectors : Collection"
 		},
 		"models": {
 			"Syntax": "models : Collection"
+		},
+		"provider": {
+			"Syntax": "provider : cs.AIKit.OpenAI"
 		},
 		"catalog": {
 			"Syntax": "catalog : cs.vectorStudio.DataStore"
@@ -2273,6 +2311,9 @@
 			],
 			"Summary": ""
 		},
+		"tool": {
+			"Syntax": "tool : cs.vectorStudio._WIZARD"
+		},
 		"focus": {
 			"Syntax": "focus : Text"
 		},
@@ -2290,6 +2331,9 @@
 		},
 		"model": {
 			"Syntax": "model : Text"
+		},
+		"data": {
+			"Syntax": "data : Object"
 		},
 		"name": {
 			"Syntax": "name : Text"

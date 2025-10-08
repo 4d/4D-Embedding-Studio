@@ -4,7 +4,9 @@ property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project 
 
 property models; vectors : Collection
 
-property OpenAI : cs:C1710.AIKit.OpenAI
+property provider : cs:C1710.AIKit.OpenAI
+property _key : Text
+property _models : Collection
 
 Class constructor
 	
@@ -12,10 +14,11 @@ Class constructor
 	This:C1470.models:=This:C1470.readModels()
 	This:C1470.vectors:=This:C1470.readVectors()
 	
-	This:C1470.OpenAI:=cs:C1710.AIKit.OpenAI.new()
-	
-	//var $result:=This.OpenAI.model.list({})
-	//var $models : Collection:=$result.models
+	If (Length:C16(This:C1470.apikey)>0)
+		
+		This:C1470.provider:=cs:C1710.AIKit.OpenAI.new(This:C1470.apikey)
+		
+	End if 
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get settingsFile() : 4D:C1709.File
@@ -46,6 +49,33 @@ Function readSettings() : Object
 	End try
 	
 	return $settings
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+Function get apikey() : Text
+	
+	If (This:C1470._key#Null:C1517)
+		
+		return This:C1470._key
+		
+	End if 
+	
+	var $file : 4D:C1709.File:=Folder:C1567(fk user preferences folder:K87:10).file("openAI.json")
+	
+	If ($file.exists)
+		
+		Try
+			
+			var $apikey : Text:=JSON Parse:C1218($file.getText()).apikey
+			This:C1470._key:=$apikey
+			
+			return $apikey
+			
+		Catch
+			
+			// ERROR
+			
+		End try
+	End if 
 	
 	// MARK:- [VECTORS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -165,7 +195,33 @@ Function saveVectors($vectors : Collection)
 	
 	This:C1470.writeSettings()
 	
-	// MARK:- [MODELS]
+	// MARK:- [MODELS
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function getAvailableModels($value : Text) : Collection
+	
+	If (This:C1470.provider=Null:C1517)
+		
+		return 
+		
+	End if 
+	
+	If (This:C1470._models=Null:C1517)
+		
+		BEEP:C151
+		This:C1470._models:=This:C1470.provider.models.list().models
+		
+	End if 
+	
+	If (Count parameters:C259=0)
+		
+		return This:C1470._models
+		
+	Else 
+		
+		return This:C1470._models.extract($value)
+		
+	End if 
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function readModels() : Collection
 	
@@ -186,9 +242,22 @@ Function saveModels($models : Collection)
 /* #17326
 The structure of the models shall be saved in a JSON file named “vectors.json” in the “settings” folder.
 */
+	This:C1470.settings.models:=[]
 	
 	//%W-550.26
-	This:C1470.settings.models:=$models || This:C1470.models
+	var $model : cs:C1710.Model
+	For each ($model; $models || This:C1470.models)
+		
+		This:C1470.settings.models.push({\
+			name: $model.name; \
+			model: $model.model; \
+			apiKey: $model.apiKey; \
+			baseURL: $model.baseURL; \
+			organization: $model.organization; \
+			project: $model.project\
+			})
+		
+	End for each 
 	//%W+550.26
 	
 	This:C1470.writeSettings()

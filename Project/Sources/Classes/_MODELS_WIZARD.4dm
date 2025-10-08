@@ -60,6 +60,8 @@ Function manager($e : Object)
 		
 	End if 
 	
+	
+	
 	// MARK:- Widget methods
 	Case of 
 			
@@ -67,6 +69,16 @@ Function manager($e : Object)
 		: ($e.objectName="list")
 			
 			This:C1470.listManager($e)
+			
+			//______________________________________________________
+		: ($e.objectName="model")
+			
+			If ($e.code<0)
+				
+				
+				
+			End if 
+			
 			
 			//______________________________________________________
 		: ($e.objectName="add")
@@ -109,26 +121,54 @@ Function listManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	If (This:C1470.currentItem=Null:C1517)
+	If ($e.code=On Selection Change:K2:29)
 		
-		OBJECT SET VISIBLE:C603(*; "model"; False:C215)
-		OBJECT SET ENABLED:C1123(*; "delete"; False:C215)
+		var $o : Object:=OBJECT Get value:C1743("model")
+		$o._model:=This:C1470.currentItem
+		OBJECT SET VALUE:C1742("model"; $o)
 		
-		return 
+		If (This:C1470.currentItem=Null:C1517)
+			
+			OBJECT SET VISIBLE:C603(*; "model"; False:C215)
+			OBJECT SET ENABLED:C1123(*; "delete"; False:C215)
+			
+			return 
+			
+		End if 
+		
+		//var $key : Text
+		//For each ($key; ["name"; "model"; "apiKey"; "baseURL"; "organization"; "project"])
+		//$o[$key]:=This.currentItem[$key]  // Null if any
+		//End for each 
+		
+		OBJECT SET VISIBLE:C603(*; "model"; True:C214)
+		OBJECT SET ENABLED:C1123(*; "delete"; True:C214)
 		
 	End if 
 	
-	var $o : Object:=OBJECT Get value:C1743("model")
-	var $key : Text
-	For each ($key; ["name"; "model"; "apiKey"; "baseURL"; "organization"; "project"])
-		
-		$o[$key]:=This:C1470.currentItem[$key]  // Null if any
-		
-	End for each 
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function modelContainerManager($e : Object)
 	
-	OBJECT SET VALUE:C1742("model"; $o)
-	OBJECT SET VISIBLE:C603(*; "model"; True:C214)
-	OBJECT SET ENABLED:C1123(*; "delete"; True:C214)
+	$e:=$e || FORM Event:C1606
+	
+	If ($e.code=-1)  // Update model
+		
+		var $pos:=This:C1470.itemPosition
+		var $o:=OBJECT Get value:C1743("model")
+		This:C1470.models[$pos-1]:=$o
+		This:C1470.saveModels()
+		
+		// Update UI
+		var $key : Text
+		For each ($key; ["name"; "model"; "apiKey"; "baseURL"; "organization"; "project"])
+			
+			This:C1470.currentItem[$key]:=$o[$key]  // Null if any
+			
+		End for each 
+		
+		This:C1470.models:=This:C1470.models
+		
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function selectModel($name : Text)

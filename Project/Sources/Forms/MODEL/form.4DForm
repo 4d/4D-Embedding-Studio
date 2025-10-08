@@ -13,6 +13,7 @@
 	"bottomMargin": 20,
 	"events": [
 		"onLoad",
+		"onClick",
 		"onDataChange",
 		"onUnload",
 		"onTimer",
@@ -88,7 +89,7 @@
 					"height": 17,
 					"sizingX": "grow",
 					"right": 459,
-					"dataSource": "Form:C1466.name",
+					"dataSource": "Form:C1466._model.name",
 					"events": [
 						"onDataChange"
 					],
@@ -99,11 +100,11 @@
 					"type": "input",
 					"left": 135,
 					"top": 53,
-					"width": 324,
+					"width": 304,
 					"height": 17,
 					"sizingX": "grow",
-					"right": 459,
-					"dataSource": "Form:C1466.model",
+					"right": 439,
+					"dataSource": "Form:C1466._model.model",
 					"events": [
 						"onDataChange"
 					],
@@ -117,7 +118,7 @@
 					"height": 49,
 					"sizingX": "grow",
 					"right": 459,
-					"dataSource": "Form:C1466.apiKey",
+					"dataSource": "Form:C1466._model.apiKey",
 					"events": [
 						"onDataChange"
 					],
@@ -131,7 +132,7 @@
 					"height": 16,
 					"sizingX": "grow",
 					"right": 459,
-					"dataSource": "Form:C1466.baseURL",
+					"dataSource": "Form:C1466._model.baseURL",
 					"events": [
 						"onDataChange"
 					],
@@ -145,7 +146,7 @@
 					"height": 17,
 					"sizingX": "grow",
 					"right": 459,
-					"dataSource": "Form:C1466.organization",
+					"dataSource": "Form:C1466._model.organization",
 					"events": [
 						"onDataChange"
 					],
@@ -159,16 +160,28 @@
 					"height": 17,
 					"sizingX": "grow",
 					"right": 459,
-					"dataSource": "Form:C1466.project",
+					"dataSource": "Form:C1466._model.project",
 					"events": [
 						"onDataChange"
 					],
 					"placeholder": ":xliff:yourOpenaiProjectId"
+				},
+				"modelMenu": {
+					"type": "button",
+					"text": "Button",
+					"top": 53,
+					"left": 442,
+					"width": 17,
+					"height": 17,
+					"events": [
+						"onClick"
+					],
+					"style": "bevel"
 				}
 			}
 		}
 	],
-	"geometryStamp": 30,
+	"geometryStamp": 37,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
