@@ -24,8 +24,8 @@ Function get settingsFile() : 4D:C1709.File
 The vector structure shall be saved in a JSON file named “vectors.json” in the “settings” folder
 */
 	
-	// For now, we are the developer who saves in the Settings folder.
-	return Folder:C1567(fk database folder:K87:14).file("Settings/vectors.json")
+	// For now, we are the developer who saves in the Settings folder of the host project.
+	return Folder:C1567(fk database folder:K87:14; *).file("Settings/vectors.json")
 	
 /*
 For the administrator, in order to enable modification, 
