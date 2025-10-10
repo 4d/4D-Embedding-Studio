@@ -7,25 +7,14 @@
 		"onLoad",
 		"onClick",
 		"onActivate",
-		"onGettingFocus",
 		"onTimer",
 		"onResize",
-		"onSelectionChange",
-		"onBoundVariableChange"
+		"onSelectionChange"
 	],
 	"destination": "detailScreen",
 	"pages": [
 		{
-			"objects": {
-				"on-board": {
-					"type": "subform",
-					"left": 0,
-					"top": 0,
-					"width": 16,
-					"height": 16,
-					"method": "ObjectMethods/on-board.4dm"
-				}
-			}
+			"objects": {}
 		},
 		{
 			"objects": {
@@ -132,7 +121,6 @@
 				},
 				"add": {
 					"type": "button",
-					"text": "+",
 					"top": 378,
 					"left": 20,
 					"width": 22,
@@ -141,11 +129,12 @@
 						"onClick"
 					],
 					"style": "bevel",
-					"sizingY": "move"
+					"sizingY": "move",
+					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/plus.png",
+					"iconFrames": 4
 				},
 				"delete": {
 					"type": "button",
-					"text": "-",
 					"top": 378,
 					"left": 49,
 					"width": 22,
@@ -154,7 +143,9 @@
 						"onClick"
 					],
 					"style": "bevel",
-					"sizingY": "move"
+					"sizingY": "move",
+					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/minus.png",
+					"iconFrames": 4
 				},
 				"model": {
 					"type": "subform",
@@ -166,9 +157,9 @@
 					"events": [
 						"onGettingFocus"
 					],
-					"dataSourceTypeHint": "undefined",
 					"visibility": "hidden",
-					"method": "ObjectMethods/model.4dm"
+					"method": "ObjectMethods/model.4dm",
+					"dataSource": "Form:C1466"
 				}
 			},
 			"entryOrder": [
@@ -187,12 +178,12 @@
 			"Guides": {}
 		}
 	},
-	"geometryStamp": 519,
+	"geometryStamp": 523,
 	"rightMargin": 20,
 	"bottomMargin": 20,
-	"formClass": "_MODELS_WIZARD",
 	"method": "FORM_MANAGER",
 	"windowTitle": ":xliff:modelManagement",
 	"windowMinWidth": 700,
-	"windowMinHeight": 420
+	"windowMinHeight": 420,
+	"formClass": "_MODELS_WIZARD"
 }

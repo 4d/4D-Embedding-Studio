@@ -205,9 +205,9 @@ Function getAvailableModels($value : Text) : Collection
 		
 	End if 
 	
-	If (This:C1470._models=Null:C1517)
+	If (This:C1470._models=Null:C1517)\
+		 || (This:C1470._models.length=0)
 		
-		BEEP:C151
 		This:C1470._models:=This:C1470.provider.models.list().models
 		
 	End if 
@@ -263,30 +263,15 @@ The structure of the models shall be saved in a JSON file named â€œvectors.jsonâ
 	This:C1470.writeSettings()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function addModel($model : cs:C1710.Model)
+	
+	This:C1470.models.push($model)
+	This:C1470.saveModels()
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function writeSettings()
 	
 	This:C1470.settingsFile.setText(JSON Stringify:C1217(This:C1470.settings; *))
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a model name that has not yet been used.
-Function uniqueNewModelName($names : Collection) : Text
-	
-	var $name:=Localized string:C991("newModel")
-	var $i; $indx : Integer
-	
-	Repeat 
-		
-		If ($names.includes($name))
-			
-			$i+=1
-			$name:=Localized string:C991("newModel")+String:C10($i; " ##")
-			
-		Else 
-			
-			return $name
-			
-		End if 
-	Until (False:C215)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isModelUsed($name : Text) : cs:C1710.Vector

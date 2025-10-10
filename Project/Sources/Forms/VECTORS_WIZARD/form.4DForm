@@ -78,14 +78,6 @@
 						2,
 						2
 					]
-				},
-				"on-board": {
-					"type": "subform",
-					"left": 0,
-					"top": 0,
-					"width": 16,
-					"height": 16,
-					"method": "ObjectMethods/on-board.4dm"
 				}
 			}
 		},
@@ -225,7 +217,7 @@
 			}
 		}
 	],
-	"geometryStamp": 441,
+	"geometryStamp": 442,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
