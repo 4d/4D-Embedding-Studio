@@ -83,13 +83,13 @@
 				},
 				"name": {
 					"type": "input",
-					"left": 135,
+					"left": 136,
 					"top": 16,
 					"width": 324,
 					"height": 17,
 					"sizingX": "grow",
-					"right": 459,
-					"dataSource": "Form:C1466._model.name",
+					"right": 460,
+					"dataSource": "Form:C1466.model.name",
 					"events": [
 						"onDataChange"
 					],
@@ -104,7 +104,7 @@
 					"height": 17,
 					"sizingX": "grow",
 					"right": 439,
-					"dataSource": "Form:C1466._model.model",
+					"dataSource": "Form:C1466.model.model",
 					"events": [
 						"onDataChange"
 					],
@@ -112,13 +112,13 @@
 				},
 				"apiKey": {
 					"type": "input",
-					"left": 135,
+					"left": 136,
 					"top": 90,
 					"width": 324,
 					"height": 49,
 					"sizingX": "grow",
-					"right": 459,
-					"dataSource": "Form:C1466._model.apiKey",
+					"right": 460,
+					"dataSource": "Form:C1466.model.apiKey",
 					"events": [
 						"onDataChange"
 					],
@@ -126,13 +126,13 @@
 				},
 				"baseURL": {
 					"type": "input",
-					"left": 135,
+					"left": 136,
 					"top": 159,
 					"width": 324,
 					"height": 16,
 					"sizingX": "grow",
-					"right": 459,
-					"dataSource": "Form:C1466._model.baseURL",
+					"right": 460,
+					"dataSource": "Form:C1466.model.baseURL",
 					"events": [
 						"onDataChange"
 					],
@@ -140,13 +140,13 @@
 				},
 				"organization": {
 					"type": "input",
-					"left": 135,
+					"left": 136,
 					"top": 195,
 					"width": 324,
 					"height": 17,
 					"sizingX": "grow",
-					"right": 459,
-					"dataSource": "Form:C1466._model.organization",
+					"right": 460,
+					"dataSource": "Form:C1466.model.organization",
 					"events": [
 						"onDataChange"
 					],
@@ -154,13 +154,13 @@
 				},
 				"project": {
 					"type": "input",
-					"left": 135,
+					"left": 136,
 					"top": 232,
 					"width": 324,
 					"height": 17,
 					"sizingX": "grow",
-					"right": 459,
-					"dataSource": "Form:C1466._model.project",
+					"right": 460,
+					"dataSource": "Form:C1466.model.project",
 					"events": [
 						"onDataChange"
 					],
@@ -168,20 +168,62 @@
 				},
 				"modelMenu": {
 					"type": "button",
-					"text": "Button",
-					"top": 53,
-					"left": 442,
-					"width": 17,
-					"height": 17,
+					"top": 52,
+					"left": 441,
+					"width": 19,
+					"height": 19,
 					"events": [
 						"onClick"
 					],
-					"style": "bevel"
+					"style": "bevel",
+					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/down.png",
+					"iconFrames": 4
+				},
+				"done": {
+					"type": "button",
+					"text": ":xliff:done",
+					"top": 276,
+					"left": 367,
+					"width": 93,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"sizingX": "move",
+					"sizingY": "move",
+					"right": 460,
+					"defaultButton": true,
+					"action": ""
+				},
+				"cancel": {
+					"type": "button",
+					"text": ":xliff:cancel",
+					"top": 276,
+					"left": 254,
+					"width": 93,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"sizingX": "move",
+					"sizingY": "move",
+					"right": 347
 				}
-			}
+			},
+			"entryOrder": [
+				"name",
+				"model",
+				"modelMenu",
+				"apiKey",
+				"baseURL",
+				"organization",
+				"project",
+				"done",
+				"cancel"
+			]
 		}
 	],
-	"geometryStamp": 37,
+	"geometryStamp": 60,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -189,6 +231,5 @@
 			"View 1": {}
 		}
 	},
-	"formClass": "_MODEL",
-	"method": "FORM_MANAGER"
+	"method": "method.4dm"
 }

@@ -30,87 +30,19 @@
 	],
 	"models": [
 		{
-			"name": "aaa",
-			"model": "qqq"
-		},
-		{
 			"name": "first model",
-			"model": "",
-			"apiKey": ""
-		},
-		{
-			"name": "Model",
-			"model": "qqq"
-		},
-		{
-			"name": "Model 1",
-			"model": "aaa"
-		},
-		{
-			"name": "Model 10",
-			"model": "vsqsv",
-			"apiKey": "vqvqv"
-		},
-		{
-			"name": "Model 2",
-			"model": "qqq"
-		},
-		{
-			"name": "Model 3",
-			"model": "qqq"
-		},
-		{
-			"name": "Model 4",
-			"model": "qqq"
-		},
-		{
-			"name": "Model 5",
-			"model": "text-embedding-3-large"
-		},
-		{
-			"name": "Model 6",
-			"model": "aaa",
-			"apiKey": "uuu"
-		},
-		{
-			"name": "Model 7",
-			"model": "zzz",
-			"apiKey": "fff"
-		},
-		{
-			"name": "Model 8",
-			"model": "sqegqesqegs",
-			"apiKey": "qsfsqse"
-		},
-		{
-			"name": "Model 9",
-			"model": "dvsq",
-			"apiKey": "sqvqs"
-		},
-		{
-			"name": "Model zzz",
-			"model": "qqq"
-		},
-		{
-			"name": "mon model",
-			"model": "aaaaaa"
-		},
-		{
-			"name": "my model",
-			"model": "text-embedding-3-large",
-			"apiKey": "",
-			"baseURL": "",
-			"organization": "myOrg",
-			"project": "myProj"
-		},
-		{
-			"name": "zzz",
-			"model": "text-embedding-3-large"
+			"model": "gpt-4-turbo-2024-04-09",
+			"apiKey": "a"
 		},
 		{
 			"name": "hello",
-			"model": "world",
+			"model": "gpt-5-mini",
 			"apiKey": "1234"
+		},
+		{
+			"name": "Model 10",
+			"model": "gpt-4o-mini",
+			"apiKey": "vqvqvazaaaq"
 		}
 	]
 }

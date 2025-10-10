@@ -4,11 +4,8 @@ Class extends _WIZARD
 property currentItem : cs:C1710.Model
 property itemPosition : Integer
 property selectedItems : Collection
+property previousItem : cs:C1710.Model
 
-// Embedded dialogs
-property newModel : cs:C1710.onBoard
-
-property isSubform : Boolean
 property debug:=Structure file:C489=Structure file:C489(*)
 
 Class constructor
@@ -29,9 +26,6 @@ Function manager($e : Object)
 				// ________________________________________________________________________________
 			: ($e.code=On Load:K2:1)
 				
-				This:C1470.newModel:=cs:C1710.onBoard.new("on-board"; "NEW_MODEL"; {top: 40})
-				//This.newModel.me:=This.newModel
-				
 				SET TIMER:C645(-1)
 				
 				// ______________________________________________________
@@ -39,14 +33,7 @@ Function manager($e : Object)
 				
 				SET TIMER:C645(0)
 				
-				This:C1470.isSubform:=OBJECT Get subform container value:C1785#Null:C1517
-				
-				This:C1470.listManager()
-				
-				// ________________________________________________________________________________
-			: ($e.code=On Bound Variable Change:K2:52)
-				
-				// ???????????????????
+				This:C1470.listManager({code: On Selection Change:K2:29})
 				
 				// ______________________________________________________
 			: ($e.code=On Activate:K2:9)
@@ -60,43 +47,40 @@ Function manager($e : Object)
 		
 	End if 
 	
-	
-	
 	// MARK:- Widget methods
 	Case of 
 			
-			//______________________________________________________
+			// ______________________________________________________
 		: ($e.objectName="list")
 			
 			This:C1470.listManager($e)
 			
-			//______________________________________________________
+			// ______________________________________________________
 		: ($e.objectName="model")
 			
 			If ($e.code<0)
 				
+			End if 
+			
+			// ______________________________________________________
+		: ($e.objectName="add")
+			
+			var $model:=New_Model(This:C1470)
+			
+			If ($model#Null:C1517)
 				
+				This:C1470.models:=This:C1470.models.orderBy("name asc")
+				This:C1470.selectModel($model.name)
 				
 			End if 
 			
-			
-			//______________________________________________________
-		: ($e.objectName="add")
-			
-			This:C1470.newModel.show()
-			
-			var $instance : Object:=This:C1470.newModel.instance
-			$instance.data.name:=This:C1470.uniqueNewModelName(This:C1470.models.extract("name"))
-			$instance.data.models:=This:C1470.models
-			
-			//______________________________________________________
+			// ______________________________________________________
 		: ($e.objectName="delete")
 			
 /* #17324
 If the user tries to delete a model used by a vector, 
 an error message shall warn them that this model is used by xxx and 4D shall not delete the model.
 */
-			
 			var $user:=This:C1470.isModelUsed(This:C1470.currentItem.name)
 			
 			If ($user#Null:C1517)
@@ -110,10 +94,10 @@ an error message shall warn them that this model is used by xxx and 4D shall not
 			This:C1470.deleteModel(This:C1470.currentItem.name)
 			
 			// Update UI
-			LISTBOX SELECT ROW:C912(*; "list"; 0; lk remove from selection:K53:3)  // unselect all
+			LISTBOX SELECT ROW:C912(*; "list"; 0; lk remove from selection:K53:3)  // Unselect all
 			This:C1470.listManager($e)
 			
-			//______________________________________________________
+			// ______________________________________________________
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -121,11 +105,14 @@ Function listManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	If ($e.code=On Selection Change:K2:29)
+	If ($e.code=On Selection Change:K2:29)  // ⚠️ This event must be enabled for both the list box AND the form.
 		
-		var $o : Object:=OBJECT Get value:C1743("model")
-		$o._model:=This:C1470.currentItem
-		OBJECT SET VALUE:C1742("model"; $o)
+		If (This:C1470.previousItem#Null:C1517)
+			
+			
+		End if 
+		
+		This:C1470.previousItem:=This:C1470.currentItem  // keep a copy of the item
 		
 		If (This:C1470.currentItem=Null:C1517)
 			
@@ -136,10 +123,11 @@ Function listManager($e : Object)
 			
 		End if 
 		
-		//var $key : Text
-		//For each ($key; ["name"; "model"; "apiKey"; "baseURL"; "organization"; "project"])
-		//$o[$key]:=This.currentItem[$key]  // Null if any
-		//End for each 
+		var $o : Object:=OBJECT Get value:C1743("model")
+		$o.model:=This:C1470.currentItem
+		OBJECT SET VALUE:C1742("model"; $o)
+		
+		//EXECUTE METHOD IN SUBFORM("model"; Formula(SET TIMER(-1)))
 		
 		OBJECT SET VISIBLE:C603(*; "model"; True:C214)
 		OBJECT SET ENABLED:C1123(*; "delete"; True:C214)
@@ -153,18 +141,7 @@ Function modelContainerManager($e : Object)
 	
 	If ($e.code=-1)  // Update model
 		
-		var $pos:=This:C1470.itemPosition
-		var $o:=OBJECT Get value:C1743("model")
-		This:C1470.models[$pos-1]:=$o
 		This:C1470.saveModels()
-		
-		// Update UI
-		var $key : Text
-		For each ($key; ["name"; "model"; "apiKey"; "baseURL"; "organization"; "project"])
-			
-			This:C1470.currentItem[$key]:=$o[$key]  // Null if any
-			
-		End for each 
 		
 		This:C1470.models:=This:C1470.models
 		
@@ -196,69 +173,4 @@ Function deleteModel($name : Text)
 		This:C1470.saveModels()
 		
 	End if 
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function newModelCallback($instance : Object) : Boolean
-	
-	var $data : Object:=$instance.data
-	
-	Case of 
-			
-			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
-		: ($data.CANCELLED)
-			
-			// <NOTHING MORE TO DO>
-			
-			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
-		: ($data.ACCEPTED)
-			
-			var $new : Object:=$data.model
-			var $model:=cs:C1710.Model.new($new.name; $new.model; $new.apiKey; {\
-				baseURL: $new.baseURL; \
-				organization: $new.organization; \
-				project: $new.project\
-				})
-			
-/* #17323
-The model name shall be unique.
-*/
-			If (This:C1470.models.extract("name").includes($model.name))
-				
-				This:C1470._popError(\
-					Replace string:C233(Localized string:C991("theModelNameMustBeUnique"); "{name}"; $model.name); \
-					$instance.name; \
-					"name")
-				
-				return 
-				
-			End if 
-			
-/* #17322
-For each model, the name, api Key and model are required.
-*/
-			var $t : Text
-			For each ($t; ["name"; "model"; "apiKey"])
-				
-				If (Length:C16(String:C10($model[$t]))=0)
-					
-					This:C1470._popError(\
-						Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t)); \
-						$instance.name; \
-						$t)
-					
-					return 
-					
-				End if 
-			End for each 
-			
-			This:C1470.models.push($model)
-			This:C1470.saveModels()
-			
-			This:C1470.models:=This:C1470.models.orderBy("name asc")
-			This:C1470.selectModel($model.name)
-			
-			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
-	End case 
-	
-	return True:C214  // Success
 	

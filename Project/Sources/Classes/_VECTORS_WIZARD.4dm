@@ -9,9 +9,6 @@ property selectedItems : Collection
 property details:=["phrase"; "phraseLabel"; "models"; "modelsLabel"; "openModelsManager"; "more"]
 property modelsDropdown : Object
 
-// Embedded dialogs
-property newModel : cs:C1710.onBoard
-
 property debug:=Structure file:C489=Structure file:C489(*)
 
 Class constructor
@@ -32,15 +29,6 @@ Function manager($e : Object)
 			: ($e.code=On Load:K2:1)
 				
 				This:C1470.listManager($e)
-				
-				This:C1470.newModel:=cs:C1710.onBoard.new("on-board"; "NEW_MODEL"; {top: 40})
-				This:C1470.newModel.me:=This:C1470.newModel
-				
-/*
-This.modelManager:=cs.onBoard.new("on-board"; "MANAGE_MODELS"; {top: 40})
-This.modelManager.me:=This.modelManager
-*/
-				
 				This:C1470.modelsDropdownManager($e)
 				
 				SET TIMER:C645(-1)
@@ -88,29 +76,6 @@ This.modelManager.me:=This.modelManager
 		: ($e.objectName="openModelsManager")
 			
 			_MODELS_WIZARD(True:C214; String:C10(This:C1470.currentItem.model))
-			
-			//______________________________________________________
-		: ($e.objectName="backButton")  // Background button for embedded dialog boxes
-			
-			If (This:C1470.debug && Macintosh option down:C545)
-				
-				var $new:=This:C1470.newModel.visible
-				//var $manager:=This.modelManager.visible
-				
-				var $widget : Object:=This:C1470.newModel.instances.query("visible = true").first()
-				// || This.modelManager.instances.query("visible = true").first()
-				
-				If ($widget#Null:C1517)
-					
-					OBJECT SET VISIBLE:C603(*; $widget.name; False:C215)
-					
-				End if 
-				
-			Else 
-				
-				BEEP:C151
-				
-			End if 
 			
 			//______________________________________________________
 		: ($e.objectName="save")
@@ -328,11 +293,21 @@ Function modelsDropdownManager($e : Object)
 			
 			If ($dropDown.currentValue=Localized string:C991("newModelItem"))  // Create a new model
 				
-				This:C1470.newModel.show()
+				var $model:=New_Model(This:C1470)
 				
-				var $instance : Object:=This:C1470.newModel.instance
-				$instance.data.name:=This:C1470.uniqueNewModelName($dropDown.values)
-				$instance.data.models:=This:C1470.models
+				If ($model#Null:C1517)
+					
+					// Update the current vector
+					This:C1470.currentItem.model:=$model.name
+					This:C1470.saveVectors()
+					
+					// Update the dropdown
+					This:C1470.modelsDropdown.values:=This:C1470._getModelDropdownValues()
+					
+				End if 
+				
+				// Update UI
+				This:C1470.modelsDropdownUpdate()
 				
 				return 
 				
@@ -374,87 +349,3 @@ Function modelsDropdownUpdate($vector : cs:C1710.Vector)
 Function _getModelDropdownValues() : Collection
 	
 	return This:C1470.models.extract("name").orderBy().combine(["-"; Localized string:C991("newModelItem")])
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function newModelCallback($instance : Object) : Boolean
-	
-	var $data : Object:=$instance.data
-	
-	Case of 
-			
-			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
-		: ($data.CANCELLED)
-			
-			// Restore dropdown
-			This:C1470.modelsDropdownUpdate()
-			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
-		: ($data.ACCEPTED)
-			
-			var $new : Object:=$data.model
-			var $model:=cs:C1710.Model.new($new.name; $new.model; $new.apiKey; {\
-				baseURL: $new.baseURL; \
-				organization: $new.organization; \
-				project: $new.project\
-				})
-			
-/* #17323
-The model name shall be unique.
-*/
-			If (This:C1470.modelsDropdown.values.includes($model.name))
-				
-				This:C1470._popError(\
-					Replace string:C233(Localized string:C991("theModelNameMustBeUnique"); "{name}"; $model.name); \
-					$instance.name; \
-					"name")
-				
-				return 
-				
-			End if 
-			
-/* #17322
-For each model, the name, api Key and model are required.
-*/
-			var $t : Text
-			For each ($t; ["name"; "model"; "apiKey"])
-				
-				If (Length:C16(String:C10($model[$t]))=0)
-					
-					
-					This:C1470._popError(\
-						Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t)); \
-						$instance.name; \
-						$t)
-					
-					return 
-					
-				End if 
-			End for each 
-			
-			// Update the current vector
-			This:C1470.currentItem.model:=$model.name
-			This:C1470.saveVectors()
-			
-/* #17326
-The structure of the models shall be saved in a JSON file named “vectors.json” in the “settings” folder.
-*/
-			This:C1470.models.push($model)
-			This:C1470.saveModels()
-			
-			// Update the dropdown
-			This:C1470.modelsDropdown.values:=This:C1470._getModelDropdownValues()
-			
-			This:C1470.modelsDropdownUpdate()
-			
-			// ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
-	End case 
-	
-	return True:C214  // Success
-	
-/*
-// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function modelsManagerCallback($instance : Object) : Boolean
-	
-// TODO: Models Manager
-	
-return True  // Success
-*/
