@@ -1,4 +1,5 @@
 property settings : Object
+property file : 4D:C1709.File
 
 property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project datastore
 
@@ -49,6 +50,11 @@ Function readSettings() : Object
 	End try
 	
 	return $settings
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function writeSettings()
+	
+	This:C1470.settingsFile.setText(JSON Stringify:C1217(This:C1470.settings; *))
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get apikey() : Text
@@ -267,11 +273,6 @@ Function addModel($model : cs:C1710.Model)
 	
 	This:C1470.models.push($model)
 	This:C1470.saveModels()
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function writeSettings()
-	
-	This:C1470.settingsFile.setText(JSON Stringify:C1217(This:C1470.settings; *))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isModelUsed($name : Text) : cs:C1710.Vector

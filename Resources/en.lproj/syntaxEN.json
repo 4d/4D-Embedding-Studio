@@ -1,13 +1,6 @@
 {
 	"_method_": {},
 	"cs.vectorStudio": {
-		"_MODELS_WIZARD": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
 		"_VECTORS_WIZARD": {
 			"new()": {
 				"Syntax": "**.new**()",
@@ -43,7 +36,7 @@
 				"Summary": ""
 			}
 		},
-		"_MANAGE_MODELS": {
+		"_MODELS_WIZARD": {
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
@@ -85,19 +78,6 @@
 				"Summary": ""
 			}
 		},
-		"menu": {
-			"new()": {
-				"Syntax": "**.new**( *data* : Variant )",
-				"Params": [
-					[
-						"data",
-						"Variant",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
 		"menuBar": {
 			"new()": {
 				"Syntax": "**.new**( *menus* : Collection )",
@@ -111,10 +91,16 @@
 				"Summary": ""
 			}
 		},
-		"_MODEL": {
+		"menu": {
 			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
+				"Syntax": "**.new**( *data* : Variant )",
+				"Params": [
+					[
+						"data",
+						"Variant",
+						"->"
+					]
+				],
 				"Summary": ""
 			}
 		},
@@ -136,79 +122,6 @@
 				"Summary": ""
 			}
 		}
-	},
-	"_MODELS_WIZARD": {
-		"deleteModel()": {
-			"Syntax": "**.deleteModel**( *name* : Text )",
-			"Params": [
-				[
-					"name",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"modelContainerManager()": {
-			"Syntax": "**.modelContainerManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"listManager()": {
-			"Syntax": "**.listManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"selectModel()": {
-			"Syntax": "**.selectModel**( *name* : Text )",
-			"Params": [
-				[
-					"name",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"manager()": {
-			"Syntax": "**.manager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"selectedItems": {
-			"Syntax": "selectedItems : Collection"
-		},
-		"itemPosition": {
-			"Syntax": "itemPosition : Integer"
-		},
-		"debug": {
-			"Syntax": "debug : Boolean"
-		},
-		"previousItem": {
-			"Syntax": "previousItem : cs.vectorStudio.Model"
-		},
-		"currentItem": {
-			"Syntax": "currentItem : cs.vectorStudio.Model"
-		},
-		"_inheritedFrom_": "_WIZARD"
 	},
 	"_VECTORS_WIZARD": {
 		"modelsDropdownUpdate()": {
@@ -336,7 +249,51 @@
 			"Syntax": "name : Text"
 		}
 	},
-	"_MANAGE_MODELS": {
+	"_MODELS_WIZARD": {
+		"deleteModel()": {
+			"Syntax": "**.deleteModel**( *name* : Text )",
+			"Params": [
+				[
+					"name",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"modelContainerManager()": {
+			"Syntax": "**.modelContainerManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"listManager()": {
+			"Syntax": "**.listManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"selectModel()": {
+			"Syntax": "**.selectModel**( *name* : Text )",
+			"Params": [
+				[
+					"name",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
 		"manager()": {
 			"Syntax": "**.manager**( *e* : Object )",
 			"Params": [
@@ -348,18 +305,22 @@
 			],
 			"Summary": ""
 		},
-		"currentItem": {
-			"Syntax": "currentItem : cs.vectorStudio.Model"
-		},
-		"models": {
-			"Syntax": "models : Collection"
-		},
 		"selectedItems": {
 			"Syntax": "selectedItems : Collection"
 		},
 		"itemPosition": {
 			"Syntax": "itemPosition : Integer"
-		}
+		},
+		"debug": {
+			"Syntax": "debug : Boolean"
+		},
+		"previousItem": {
+			"Syntax": "previousItem : cs.vectorStudio.Model"
+		},
+		"currentItem": {
+			"Syntax": "currentItem : cs.vectorStudio.Model"
+		},
+		"_inheritedFrom_": "_WIZARD"
 	},
 	"Vector": {
 		"set error()": {
@@ -462,11 +423,6 @@
 		}
 	},
 	"_WIZARD": {
-		"writeSettings()": {
-			"Syntax": "**.writeSettings**()",
-			"Params": [],
-			"Summary": ""
-		},
 		"addModel()": {
 			"Syntax": "**.addModel**( *model* : cs.vectorStudio.Model )",
 			"Params": [
@@ -549,6 +505,11 @@
 			],
 			"Summary": ""
 		},
+		"writeSettings()": {
+			"Syntax": "**.writeSettings**()",
+			"Params": [],
+			"Summary": ""
+		},
 		"isModelUsed()": {
 			"Syntax": "**.isModelUsed**( *name* : Text ) : cs.vectorStudio.Vector",
 			"Params": [
@@ -587,14 +548,17 @@
 			],
 			"Summary": ""
 		},
+		"provider": {
+			"Syntax": "provider : cs.AIKit.OpenAI"
+		},
 		"vectors": {
 			"Syntax": "vectors : Collection"
 		},
 		"models": {
 			"Syntax": "models : Collection"
 		},
-		"provider": {
-			"Syntax": "provider : cs.AIKit.OpenAI"
+		"file": {
+			"Syntax": "file : 4D.File"
 		},
 		"catalog": {
 			"Syntax": "catalog : cs.vectorStudio.DataStore"
@@ -602,6 +566,180 @@
 		"settings": {
 			"Syntax": "settings : Object"
 		}
+	},
+	"menuBar": {
+		"defaultMinimalMenuBar()": {
+			"Syntax": "**.defaultMinimalMenuBar**() : cs.vectorStudio.menuBar",
+			"Params": [
+				[
+					"",
+					"cs.vectorStudio.menuBar",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"getMenuItemParameter()": {
+			"Syntax": "**.getMenuItemParameter**( *type* : Integer ) : Variant",
+			"Params": [
+				[
+					"type",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Variant",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"menuSelected()": {
+			"Syntax": "**.menuSelected**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"setMenuBar()": {
+			"Syntax": "**.setMenuBar**( *menu* : Variant; *retain* : Boolean )",
+			"Params": [
+				[
+					"menu",
+					"Variant",
+					"->"
+				],
+				[
+					"retain",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"hide()": {
+			"Syntax": "**.hide**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"setHelpMenu()": {
+			"Syntax": "**.setHelpMenu**( *items* : Collection )",
+			"Params": [
+				[
+					"items",
+					"Collection",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"enableItem()": {
+			"Syntax": "**.enableItem**( *item* : Text; *enabled* : Boolean )",
+			"Params": [
+				[
+					"item",
+					"Text",
+					"->"
+				],
+				[
+					"enabled",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"disableItem()": {
+			"Syntax": "**.disableItem**( *item* : Text )",
+			"Params": [
+				[
+					"item",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"update()": {
+			"Syntax": "**.update**( *index* : Integer; *menu* : cs.vectorStudio.menu ) : cs.vectorStudio.menuBar",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"menu",
+					"cs.vectorStudio.menu",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menuBar",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"show()": {
+			"Syntax": "**.show**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"resetsAbout()": {
+			"Syntax": "**.resetsAbout**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"setAbout()": {
+			"Syntax": "**.setAbout**( *label* : Text; *method* : Text )",
+			"Params": [
+				[
+					"label",
+					"Text",
+					"->"
+				],
+				[
+					"method",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"set()": {
+			"Syntax": "**.set**() : cs.vectorStudio.menuBar",
+			"Params": [
+				[
+					"",
+					"cs.vectorStudio.menuBar",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"populate()": {
+			"Syntax": "**.populate**( *menus* : Collection ) : cs.vectorStudio.menuBar",
+			"Params": [
+				[
+					"menus",
+					"Collection",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menuBar",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"_inheritedFrom_": "menu"
 	},
 	"menu": {
 		"fonts()": {
@@ -1198,209 +1336,6 @@
 		},
 		"data": {
 			"Syntax": "data : Collection"
-		}
-	},
-	"menuBar": {
-		"defaultMinimalMenuBar()": {
-			"Syntax": "**.defaultMinimalMenuBar**() : cs.vectorStudio.menuBar",
-			"Params": [
-				[
-					"",
-					"cs.vectorStudio.menuBar",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"getMenuItemParameter()": {
-			"Syntax": "**.getMenuItemParameter**( *type* : Integer ) : Variant",
-			"Params": [
-				[
-					"type",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Variant",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"menuSelected()": {
-			"Syntax": "**.menuSelected**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setMenuBar()": {
-			"Syntax": "**.setMenuBar**( *menu* : Variant; *retain* : Boolean )",
-			"Params": [
-				[
-					"menu",
-					"Variant",
-					"->"
-				],
-				[
-					"retain",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"hide()": {
-			"Syntax": "**.hide**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"setHelpMenu()": {
-			"Syntax": "**.setHelpMenu**( *items* : Collection )",
-			"Params": [
-				[
-					"items",
-					"Collection",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"enableItem()": {
-			"Syntax": "**.enableItem**( *item* : Text; *enabled* : Boolean )",
-			"Params": [
-				[
-					"item",
-					"Text",
-					"->"
-				],
-				[
-					"enabled",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"disableItem()": {
-			"Syntax": "**.disableItem**( *item* : Text )",
-			"Params": [
-				[
-					"item",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"update()": {
-			"Syntax": "**.update**( *index* : Integer; *menu* : cs.vectorStudio.menu ) : cs.vectorStudio.menuBar",
-			"Params": [
-				[
-					"index",
-					"Integer",
-					"->"
-				],
-				[
-					"menu",
-					"cs.vectorStudio.menu",
-					"->"
-				],
-				[
-					"",
-					"cs.vectorStudio.menuBar",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"show()": {
-			"Syntax": "**.show**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"resetsAbout()": {
-			"Syntax": "**.resetsAbout**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"setAbout()": {
-			"Syntax": "**.setAbout**( *label* : Text; *method* : Text )",
-			"Params": [
-				[
-					"label",
-					"Text",
-					"->"
-				],
-				[
-					"method",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"set()": {
-			"Syntax": "**.set**() : cs.vectorStudio.menuBar",
-			"Params": [
-				[
-					"",
-					"cs.vectorStudio.menuBar",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"populate()": {
-			"Syntax": "**.populate**( *menus* : Collection ) : cs.vectorStudio.menuBar",
-			"Params": [
-				[
-					"menus",
-					"Collection",
-					"->"
-				],
-				[
-					"",
-					"cs.vectorStudio.menuBar",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"_inheritedFrom_": "menu"
-	},
-	"_MODEL": {
-		"updateUI()": {
-			"Syntax": "**.updateUI**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"goUpToParentContainer()": {
-			"Syntax": "**.goUpToParentContainer**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"manager()": {
-			"Syntax": "**.manager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"parent": {
-			"Syntax": "parent : Object"
-		},
-		"defaultFocus": {
-			"Syntax": "defaultFocus : Text"
 		}
 	},
 	"regex": {

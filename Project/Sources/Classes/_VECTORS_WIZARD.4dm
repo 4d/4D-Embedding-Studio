@@ -239,6 +239,8 @@ Function phraseManager($e : Object)
 			// Highlight any errors, if any
 			$vector.phrase:=$vector.parsePhrase(ST Get plain text:C1092($newValue))
 			
+			This:C1470.saveVectors()
+			
 			// ______________________________________________________
 		: ($e.code=On Before Keystroke:K2:6)
 			
@@ -264,6 +266,8 @@ Function phraseManager($e : Object)
 			
 			// Highlight any errors, if any
 			ST SET TEXT:C1115(*; $me; $vector.parsePhrase($plainText); ST Start text:K78:15; ST End text:K78:16)
+			
+			This:C1470.saveVectors()
 			
 			// ______________________________________________________
 	End case 
