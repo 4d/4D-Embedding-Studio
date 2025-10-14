@@ -37,7 +37,8 @@
 		{
 			"name": "hello",
 			"model": "gpt-5-mini",
-			"apiKey": "1234"
+			"apiKey": "1234",
+			"baseURL": ""
 		},
 		{
 			"name": "Model 10",

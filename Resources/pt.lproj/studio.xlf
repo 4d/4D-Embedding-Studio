@@ -3,7 +3,7 @@
   <file datatype="x-STR#" original="Undefined" source-language="en" target-language="pt">
     <header>
       <prop-group name="4DPop XLIFF Pro">
-        <prop prop-type="version">3.1</prop>
+        <prop prop-type="version">3.0</prop>
       </prop-group>
     </header>
     <body>
@@ -118,8 +118,8 @@
           <target state="new">Your OpenAI API Key.</target>
         </trans-unit>
         <trans-unit id="i9KHZUKWAfNNo09pAbOjdQ" resname="baseUrlForOpenaiApiRequests">
-          <source>Base URL for OpenAI API requests.</source>
-          <target state="new">Base URL for OpenAI API requests.</target>
+          <source>The openAI endpoint will be used by default</source>
+          <target state="new">The openAI endpoint will be used by default</target>
         </trans-unit>
         <trans-unit id="E4BLvZeMHn7J_X3ta364aQ" resname="yourOpenaiOrganizationId">
           <source>Your OpenAI Organization ID.</source>
