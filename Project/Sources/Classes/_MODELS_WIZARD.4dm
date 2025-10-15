@@ -143,7 +143,7 @@ Function modelContainerManager($e : Object)
 		
 		This:C1470.saveModels()
 		
-		This:C1470.models:=This:C1470.models
+		This:C1470.models:=This:C1470.models  // Touch collection to force redrawing
 		
 	End if 
 	

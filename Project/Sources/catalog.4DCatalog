@@ -46,6 +46,25 @@
 		<field name="ID" uuid="0423E0CE302743B3B897B005D1F88AAD" type="4" unique="true" autosequence="true" not_null="true" id="1"/>
 		<primary_key field_name="ID" field_uuid="0423E0CE302743B3B897B005D1F88AAD"/>
 	</table>
+	<table name="AllTypes" uuid="8F0D4456D04F41DDA594E5CEE698F98B" id="6">
+		<field name="ID" uuid="DD4062D240124F0B9D4F72DBBED86700" type="4" unique="true" autosequence="true" not_null="true" id="1"/>
+		<field name="Alpha" uuid="F56DE43D648D42FCA60871FEB405BA5A" type="10" limiting_length="255" id="2"/>
+		<field name="Text" uuid="5F4214D9888F4F788DA3FDBB4B572578" type="10" id="3"/>
+		<field name="Date" uuid="4216CB9AC942443EA2D45C61CF3A0746" type="8" id="4"/>
+		<field name="Time" uuid="9048E41846294ECD9AB2D6EB7222297B" type="9" id="5"/>
+		<field name="Boolean" uuid="06C277317EDE4CF0812487B5BA917A60" type="1" id="6"/>
+		<field name="Integer" uuid="A13A490097F7420EA40CF2B990E3D323" type="3" id="7"/>
+		<field name="LongInteger" uuid="C51873D1F0304D9C8BE552577DD7037A" type="4" id="8"/>
+		<field name="Integer64" uuid="A5790B62C68C429E8FC092842ECD09F1" type="5" id="9"/>
+		<field name="Real" uuid="9E12872847EF41CB99729ADF91F087A8" type="6" id="10"/>
+		<field name="Blob" uuid="0982A6D44DD541BC828B57EB0A59B9BA" type="18" id="11"/>
+		<field name="Picture" uuid="723395593AA943BDA4DCE5CD0187AAEA" type="12" id="12"/>
+		<field name="Object" uuid="73162ED1D993480CA3944B3A0966429B" type="21" blob_switch_size="2147483647" id="13"/>
+		<field name="Vector" uuid="2835901C1BC8410EBE17063C60E27ECE" type="21" blob_switch_size="2147483647" id="14">
+			<field_extra class_id="4D.Vector"/>
+		</field>
+		<primary_key field_name="ID" field_uuid="DD4062D240124F0B9D4F72DBBED86700"/>
+	</table>
 	<relation uuid="E1051A6110B84E558DFE7C41F2DDDB0A" name_Nto1="school" name_1toN="strudents" state="1">
 		<related_field kind="source">
 			<field_ref uuid="DFD80A6D16704C70BE334E7C411D2177" name="school_ID">
@@ -93,6 +112,11 @@
 	<index kind="regular" unique_keys="true" uuid="E5283EE1FB3E4FA0AB44439A77909859" type="7">
 		<field_ref uuid="0423E0CE302743B3B897B005D1F88AAD" name="ID">
 			<table_ref uuid="4C27347710FA4CABBFD742806991D05C" name="No vector"/>
+		</field_ref>
+	</index>
+	<index kind="regular" unique_keys="true" uuid="FD946BF49C16460F96E9479B3D428E68" type="7">
+		<field_ref uuid="DD4062D240124F0B9D4F72DBBED86700" name="ID">
+			<table_ref uuid="8F0D4456D04F41DDA594E5CEE698F98B" name="AllTypes"/>
 		</field_ref>
 	</index>
 </base>
