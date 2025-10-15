@@ -2,6 +2,15 @@
 	"vectors": [
 		{
 			"version": -1,
+			"dataclassName": "AllTypes",
+			"dataclassNumber": 6,
+			"vectorName": "Vector",
+			"vectorNumber": 14,
+			"model": "",
+			"phrase": ""
+		},
+		{
+			"version": -1,
 			"dataclassName": "School",
 			"dataclassNumber": 2,
 			"vectorName": "vector_with_error",

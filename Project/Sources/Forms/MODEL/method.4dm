@@ -7,6 +7,10 @@ If ($e.objectName=Null:C1517)
 			// ______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
+			//title;picture;background;titlePos;titleVisible;iconVisible;style;horMargin;vertMargin; iconOffset;popupMenu ; hyperlink;numStates;imageHugsTitle
+			//
+			OBJECT SET FORMAT:C236(*; "modelMenu"; ";path:/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/down.png;;;;;;;")
+			
 			SET TIMER:C645(-1)
 			
 			// ______________________________________________________
@@ -63,7 +67,7 @@ For each model, the name, api Key and model are required.
 		var $t:=String:C10($model["baseURL"])
 		var $isOpenAI : Boolean:=(Length:C16($t)=0) || ($t="https://api.openai.com/@")
 		
-		For each ($t; $isOpenAI ? ["name"; "model"; "apiKey"] : ["name"; "model"])
+		For each ($t; $isOpenAI ? ["name"; "apiKey"; "model"] : ["name"; "model"])
 			
 			If (Length:C16(String:C10($model[$t]))=0)
 				
@@ -109,11 +113,6 @@ For each model, the name, api Key and model are required.
 				
 				
 			End if 
-			
-			//______________________________________________________
-		Else 
-			
-			// A "Case of" statement should never omit "Else"
 			
 			//______________________________________________________
 	End case 

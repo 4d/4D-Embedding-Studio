@@ -1,19 +1,7 @@
 {
 	"dependencies": {
-		"4DPop Macros": {
-			"github": "vdelachaux/4DPop-Macros",
-			"version": "4d"
-		},
 		"4D AIKit": {
 			"github": "4d/4D-AIKit",
-			"version": "4d"
-		},
-		"4DPop Xliff Pro": {
-			"github": "vdelachaux/4DPop-Xliff-Pro",
-			"tag": "20.7.3"
-		},
-		"4DPop Git": {
-			"github": "vdelachaux/4DPop-Git",
 			"version": "4d"
 		}
 	}

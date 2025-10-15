@@ -175,32 +175,6 @@ Function saveVectors($vectors : Collection)
 	
 	// MARK:- [MODELS
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function getAvailableModels($value : Text) : Collection
-	
-	If (This:C1470.provider=Null:C1517)
-		
-		return 
-		
-	End if 
-	
-	If (This:C1470._models=Null:C1517)\
-		 || (This:C1470._models.length=0)
-		
-		This:C1470._models:=This:C1470.provider.models.list().models
-		
-	End if 
-	
-	If (Count parameters:C259=0)
-		
-		return This:C1470._models
-		
-	Else 
-		
-		return This:C1470._models.extract($value)
-		
-	End if 
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function readModels() : Collection
 	
 	var $models:=[]

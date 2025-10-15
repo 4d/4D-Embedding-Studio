@@ -114,20 +114,20 @@
           <target>Model</target>
         </trans-unit>
         <trans-unit id="VbgVxN3NGWRgxSbBBWpPMw" resname="yourOpenaiApiKey">
-          <source>Your OpenAI API Key.</source>
-          <target>Your OpenAI API Key.</target>
+          <source>Your API Key.</source>
+          <target>Your API Key.</target>
         </trans-unit>
         <trans-unit id="i9KHZUKWAfNNo09pAbOjdQ" resname="baseUrlForOpenaiApiRequests">
           <source>The openAI endpoint will be used by default</source>
           <target>The openAI endpoint will be used by default</target>
         </trans-unit>
         <trans-unit id="E4BLvZeMHn7J_X3ta364aQ" resname="yourOpenaiOrganizationId">
-          <source>Your OpenAI Organization ID.</source>
-          <target>Your OpenAI Organization ID.</target>
+          <source>Your Organization ID.</source>
+          <target>Your Organization ID.</target>
         </trans-unit>
         <trans-unit id="4874Vxt2DVg1LULn+kRyZQ" resname="yourOpenaiProjectId">
-          <source>Your OpenAI Project ID.</source>
-          <target>Your OpenAI Project ID.</target>
+          <source>Your Project ID.</source>
+          <target>Your Project ID.</target>
         </trans-unit>
         <trans-unit id="2WkUMnB_U4kJz0eo_kd7hQ" resname="idDisplayedInTheDropdownList">
           <source>ID displayed in the drop-down list</source>

@@ -176,8 +176,8 @@
 						"onClick"
 					],
 					"style": "bevel",
-					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/down.png",
-					"iconFrames": 4
+					"iconFrames": 4,
+					"icon": "/RESOURCES/Images/down.png"
 				},
 				"done": {
 					"type": "button",
@@ -223,7 +223,7 @@
 			]
 		}
 	],
-	"geometryStamp": 80,
+	"geometryStamp": 81,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

@@ -114,7 +114,7 @@
           <target>Modèle</target>
         </trans-unit>
         <trans-unit id="VbgVxN3NGWRgxSbBBWpPMw" resname="yourOpenaiApiKey">
-          <source>Your OpenAI API Key.</source>
+          <source>Your API Key.</source>
           <target>Votre clé API OpenAI.</target>
         </trans-unit>
         <trans-unit id="i9KHZUKWAfNNo09pAbOjdQ" resname="baseUrlForOpenaiApiRequests">
@@ -122,11 +122,11 @@
           <target>L’interface OpenAI sera utilisée par défaut</target>
         </trans-unit>
         <trans-unit id="E4BLvZeMHn7J_X3ta364aQ" resname="yourOpenaiOrganizationId">
-          <source>Your OpenAI Organization ID.</source>
+          <source>Your Organization ID.</source>
           <target>Votre identifiant d'organisation OpenAI.</target>
         </trans-unit>
         <trans-unit id="4874Vxt2DVg1LULn+kRyZQ" resname="yourOpenaiProjectId">
-          <source>Your OpenAI Project ID.</source>
+          <source>Your Project ID.</source>
           <target>Votre identifiant de projet OpenAI.</target>
         </trans-unit>
         <trans-unit id="2WkUMnB_U4kJz0eo_kd7hQ" resname="idDisplayedInTheDropdownList">
