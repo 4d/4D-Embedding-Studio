@@ -1,5 +1,20 @@
 {
 	"tables": {
+		"AllTypes": {
+			"color": {
+				"red": 255,
+				"green": 255,
+				"blue": 255,
+				"alpha": 0
+			},
+			"coordinates": {
+				"left": 358.0625,
+				"top": 453.0625,
+				"width": 187.346875,
+				"height": 369.93828125
+			},
+			"displayable_fields_count": 15
+		},
 		"No vector": {
 			"color": {
 				"red": 255,

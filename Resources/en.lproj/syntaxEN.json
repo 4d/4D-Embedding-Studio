@@ -43,6 +43,13 @@
 				"Summary": ""
 			}
 		},
+		"Env": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
 		"Vector": {
 			"new()": {
 				"Syntax": "**.new**( *dataclass* : Object; *attribute* : Object; *model* : Text; *phrase* : Text )",
@@ -121,6 +128,19 @@
 				],
 				"Summary": ""
 			}
+		},
+		"Provider": {
+			"new()": {
+				"Syntax": "**.new**( *configuration* : Variant )",
+				"Params": [
+					[
+						"configuration",
+						"Variant",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
 		}
 	},
 	"_VECTORS_WIZARD": {
@@ -158,6 +178,22 @@
 					"",
 					"Object",
 					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"insertInput()": {
+			"Syntax": "**.insertInput**( *vector* : cs.vectorStudio.Vector; *input* : Text )",
+			"Params": [
+				[
+					"vector",
+					"cs.vectorStudio.Vector",
+					"->"
+				],
+				[
+					"input",
+					"Text",
+					"->"
 				]
 			],
 			"Summary": ""
@@ -322,6 +358,7 @@
 		},
 		"_inheritedFrom_": "_WIZARD"
 	},
+	"Env": {},
 	"Vector": {
 		"set error()": {
 			"Syntax": "**.set error**( *message* : Text )",
@@ -362,6 +399,17 @@
 				[
 					"",
 					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get inputsMenu()": {
+			"Syntax": "**.get inputsMenu**() : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"",
+					"cs.vectorStudio.menu",
 					"<-"
 				]
 			],
@@ -445,22 +493,6 @@
 			],
 			"Summary": ""
 		},
-		"getAvailableModels()": {
-			"Syntax": "**.getAvailableModels**( *value* : Text ) : Collection",
-			"Params": [
-				[
-					"value",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"saveVectors()": {
 			"Syntax": "**.saveVectors**( *vectors* : Collection )",
 			"Params": [
@@ -489,17 +521,6 @@
 				[
 					"",
 					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get apikey()": {
-			"Syntax": "**.get apikey**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
 					"<-"
 				]
 			],
@@ -548,8 +569,8 @@
 			],
 			"Summary": ""
 		},
-		"provider": {
-			"Syntax": "provider : cs.AIKit.OpenAI"
+		"providers": {
+			"Syntax": "providers : Object"
 		},
 		"vectors": {
 			"Syntax": "vectors : Collection"
@@ -2028,6 +2049,58 @@
 		},
 		"success": {
 			"Syntax": "success : Boolean"
+		}
+	},
+	"Provider": {
+		"set apiKey()": {
+			"Syntax": "**.set apiKey**( *apikey* : Text )",
+			"Params": [
+				[
+					"apikey",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get apiKey()": {
+			"Syntax": "**.get apiKey**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"normalizedName()": {
+			"Syntax": "**.normalizedName**( *url* : Text ) : Text",
+			"Params": [
+				[
+					"url",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"endpoint": {
+			"Syntax": "endpoint : cs.AIKit.OpenAI"
+		},
+		"models": {
+			"Syntax": "models : Collection"
+		},
+		"success": {
+			"Syntax": "success : Boolean"
+		},
+		"name": {
+			"Syntax": "name : Text"
 		}
 	}
 }

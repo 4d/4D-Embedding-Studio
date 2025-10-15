@@ -31,33 +31,33 @@
 					"type": "text",
 					"text": ":xliff:name",
 					"top": 16,
-					"left": 33,
+					"left": 35,
 					"width": 82,
 					"height": 17,
-					"class": "label mandatory"
+					"class": "label"
 				},
 				"Text1": {
 					"type": "text",
 					"text": ":xliff:model",
-					"top": 53,
-					"left": 30,
+					"top": 157,
+					"left": 32,
 					"width": 85,
 					"height": 17,
-					"class": "label mandatory"
+					"class": "label"
 				},
-				"Text2": {
+				"apiKey.label": {
 					"type": "text",
 					"text": ":xliff:apiKey",
-					"top": 90,
-					"left": 22,
+					"top": 87,
+					"left": 24,
 					"width": 93,
 					"height": 17,
-					"class": "label mandatory"
+					"class": "label"
 				},
 				"Text3": {
 					"type": "text",
 					"text": ":xliff:baseURL",
-					"top": 159,
+					"top": 52,
 					"left": 22,
 					"width": 95,
 					"height": 16,
@@ -67,7 +67,7 @@
 					"type": "text",
 					"text": ":xliff:organization",
 					"top": 195,
-					"left": 9,
+					"left": 11,
 					"width": 106,
 					"height": 16,
 					"class": "label"
@@ -76,19 +76,19 @@
 					"type": "text",
 					"text": ":xliff:project",
 					"top": 232,
-					"left": 33,
+					"left": 35,
 					"width": 82,
 					"height": 16,
 					"class": "label"
 				},
 				"name": {
 					"type": "input",
-					"left": 136,
+					"left": 135,
 					"top": 16,
 					"width": 324,
 					"height": 17,
 					"sizingX": "grow",
-					"right": 460,
+					"right": 459,
 					"dataSource": "Form:C1466.model.name",
 					"events": [
 						"onDataChange"
@@ -99,11 +99,11 @@
 				"model": {
 					"type": "input",
 					"left": 135,
-					"top": 53,
-					"width": 304,
+					"top": 157,
+					"width": 306,
 					"height": 17,
 					"sizingX": "grow",
-					"right": 439,
+					"right": 441,
 					"dataSource": "Form:C1466.model.model",
 					"events": [
 						"onDataChange"
@@ -112,12 +112,12 @@
 				},
 				"apiKey": {
 					"type": "input",
-					"left": 136,
-					"top": 90,
+					"left": 135,
+					"top": 87,
 					"width": 324,
 					"height": 49,
 					"sizingX": "grow",
-					"right": 460,
+					"right": 459,
 					"dataSource": "Form:C1466.model.apiKey",
 					"events": [
 						"onDataChange"
@@ -126,12 +126,12 @@
 				},
 				"baseURL": {
 					"type": "input",
-					"left": 136,
-					"top": 159,
+					"left": 135,
+					"top": 52,
 					"width": 324,
 					"height": 16,
 					"sizingX": "grow",
-					"right": 460,
+					"right": 459,
 					"dataSource": "Form:C1466.model.baseURL",
 					"events": [
 						"onDataChange"
@@ -140,12 +140,12 @@
 				},
 				"organization": {
 					"type": "input",
-					"left": 136,
+					"left": 135,
 					"top": 195,
 					"width": 324,
 					"height": 17,
 					"sizingX": "grow",
-					"right": 460,
+					"right": 459,
 					"dataSource": "Form:C1466.model.organization",
 					"events": [
 						"onDataChange"
@@ -154,12 +154,12 @@
 				},
 				"project": {
 					"type": "input",
-					"left": 136,
+					"left": 135,
 					"top": 232,
 					"width": 324,
 					"height": 17,
 					"sizingX": "grow",
-					"right": 460,
+					"right": 459,
 					"dataSource": "Form:C1466.model.project",
 					"events": [
 						"onDataChange"
@@ -168,7 +168,7 @@
 				},
 				"modelMenu": {
 					"type": "button",
-					"top": 52,
+					"top": 156,
 					"left": 441,
 					"width": 19,
 					"height": 19,
@@ -176,8 +176,8 @@
 						"onClick"
 					],
 					"style": "bevel",
-					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/down.png",
-					"iconFrames": 4
+					"iconFrames": 4,
+					"icon": "/RESOURCES/Images/down.png"
 				},
 				"done": {
 					"type": "button",
@@ -212,10 +212,10 @@
 			},
 			"entryOrder": [
 				"name",
+				"baseURL",
+				"apiKey",
 				"model",
 				"modelMenu",
-				"apiKey",
-				"baseURL",
 				"organization",
 				"project",
 				"done",
@@ -223,7 +223,7 @@
 			]
 		}
 	],
-	"geometryStamp": 60,
+	"geometryStamp": 81,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

@@ -131,11 +131,22 @@ Function moreManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	// TODO: More button
-	
 	var $menu:=cs:C1710.menu.new()
 	
-	$menu.append("🚧 Edit API key"; "editApiKey")
+	var $vector : cs:C1710.Vector:=This:C1470.currentItem
+	var $embed:=$vector.inputsMenu
+	
+	If ($embed.itemCount()>0)
+		
+		$menu.append(":xliff:embed"; $embed)
+		
+	Else 
+		
+		$embed.release()
+		
+	End if 
+	
+	$menu.line().append("🚧 Edit API key"; "editApiKey")
 	
 	If (This:C1470.debug)
 		
@@ -143,23 +154,31 @@ Function moreManager($e : Object)
 		
 	End if 
 	
-	If ($menu.popup().selected)
-		
-		Case of 
-				
-				//______________________________________________________
-			: ($menu.choice="editApiKey")
-				
-				
-				
-				//______________________________________________________
-			: ($menu.choice="openSettingFile")
-				
-				OPEN URL:C673(This:C1470.settingsFile.platformPath)
-				
-				//______________________________________________________
-		End case 
-	End if 
+	Case of 
+			
+			// ______________________________________________________
+		: (Not:C34($menu.popup().selected))
+			
+			// <NOTHING MORE TO DO> 
+			
+			// ______________________________________________________
+		: (Position:C15("{"; $menu.choice)=1)  // Attribute to insert into the descriptive phrase
+			
+			This:C1470.insertInput($vector; $menu.choice)
+			This:C1470.saveVectors()
+			
+			// ______________________________________________________
+		: ($menu.choice="editApiKey")
+			
+			// TODO: Edit API key 
+			
+			// ______________________________________________________
+		: ($menu.choice="openSettingFile")
+			
+			OPEN URL:C673(This:C1470.settingsFile.platformPath)
+			
+			// ______________________________________________________
+	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function phraseManager($e : Object)
@@ -192,14 +211,7 @@ Function phraseManager($e : Object)
 			End if 
 			
 			var $menu:=cs:C1710.menu.new().edit(True:C214).line()
-			var $embed:=cs:C1710.menu.new()
-			
-			var $attribute : Object
-			For each ($attribute; $vector.supportedAttributes.orderBy("name"))
-				
-				$embed.append($attribute.name; "{"+$attribute.name+"}")
-				
-			End for each 
+			var $embed:=$vector.inputsMenu
 			
 			If ($embed.itemCount()>0)
 				
@@ -218,27 +230,7 @@ Function phraseManager($e : Object)
 			End if 
 			
 			// 📌 Ignored if an associated action (for edit items)
-			var $startSel; $endSel : Integer
-			GET HIGHLIGHT:C209(*; $me; $startSel; $endSel)
-			
-			If (Length:C16($plainText)=0)
-				
-				var $newValue:="<span>"+$menu.choice+"</span>"
-				
-			Else 
-				
-				$newValue:=Substring:C12($plainText; 1; $startSel-1)+$menu.choice+Substring:C12($plainText; $endSel)
-				
-			End if 
-			
-			OBJECT SET VALUE:C1742($me; $newValue)
-			
-			$endSel:=$startSel+Length:C16($menu.choice)
-			HIGHLIGHT TEXT:C210(*; $me; $endSel; $endSel)
-			
-			// Highlight any errors, if any
-			$vector.phrase:=$vector.parsePhrase(ST Get plain text:C1092($newValue))
-			
+			This:C1470.insertInput($vector; $menu.choice)
 			This:C1470.saveVectors()
 			
 			// ______________________________________________________
@@ -271,6 +263,33 @@ Function phraseManager($e : Object)
 			
 			// ______________________________________________________
 	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function insertInput($vector : cs:C1710.Vector; $input : Text)
+	
+	var $me:="phrase"
+	var $plainText:=ST Get plain text:C1092(*; $me)  //Get edited text
+	
+	var $startSel; $endSel : Integer
+	GET HIGHLIGHT:C209(*; $me; $startSel; $endSel)
+	
+	If (Length:C16($plainText)=0)
+		
+		var $newValue:="<span>"+$input+"</span>"
+		
+	Else 
+		
+		$newValue:=Substring:C12($plainText; 1; $startSel-1)+$input+Substring:C12($plainText; $endSel)
+		
+	End if 
+	
+	OBJECT SET VALUE:C1742($me; $newValue)
+	
+	$endSel:=$startSel+Length:C16($input)
+	HIGHLIGHT TEXT:C210(*; $me; $endSel; $endSel)
+	
+	// Highlight any errors, if any
+	$vector.phrase:=$vector.parsePhrase(ST Get plain text:C1092($newValue))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function modelsDropdownManager($e : Object)

@@ -95,7 +95,20 @@ In the embedding phrase, the supported attributes shall be:
 		
 	End for each 
 	
-	//This.supportedAttributes:=This.supportedAttributes.orderBy("name")
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+	// Gives a menu of available dataclass attributes to insert into the descriptive phrase.
+Function get inputsMenu() : cs:C1710.menu
+	
+	var $menu:=cs:C1710.menu.new()
+	
+	var $attribute : Object
+	For each ($attribute; This:C1470.supportedAttributes.orderBy("name"))
+		
+		$menu.append($attribute.name; "{"+$attribute.name+"}")
+		
+	End for each 
+	
+	return $menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Parse a plain text sentence and return a formatted text with any errors highlighted.

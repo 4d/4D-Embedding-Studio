@@ -5,21 +5,20 @@ property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project 
 
 property models; vectors : Collection
 
-property provider : cs:C1710.AIKit.OpenAI
 property _key : Text
 property _models : Collection
 
+property providers:={}
+
+// TODO: Singleton?
 Class constructor
+	
+	// Default provider
+	This:C1470.providers.openAI:=cs:C1710.Provider.new()
 	
 	This:C1470.settings:=This:C1470.readSettings()
 	This:C1470.models:=This:C1470.readModels()
 	This:C1470.vectors:=This:C1470.readVectors()
-	
-	If (Length:C16(This:C1470.apikey)>0)
-		
-		This:C1470.provider:=cs:C1710.AIKit.OpenAI.new(This:C1470.apikey)
-		
-	End if 
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get settingsFile() : 4D:C1709.File
@@ -55,33 +54,6 @@ Function readSettings() : Object
 Function writeSettings()
 	
 	This:C1470.settingsFile.setText(JSON Stringify:C1217(This:C1470.settings; *))
-	
-	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
-Function get apikey() : Text
-	
-	If (This:C1470._key#Null:C1517)
-		
-		return This:C1470._key
-		
-	End if 
-	
-	var $file : 4D:C1709.File:=Folder:C1567(fk user preferences folder:K87:10).file("openAI.json")
-	
-	If ($file.exists)
-		
-		Try
-			
-			var $apikey : Text:=JSON Parse:C1218($file.getText()).apikey
-			This:C1470._key:=$apikey
-			
-			return $apikey
-			
-		Catch
-			
-			// ERROR
-			
-		End try
-	End if 
 	
 	// MARK:- [VECTORS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -202,32 +174,6 @@ Function saveVectors($vectors : Collection)
 	This:C1470.writeSettings()
 	
 	// MARK:- [MODELS
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function getAvailableModels($value : Text) : Collection
-	
-	If (This:C1470.provider=Null:C1517)
-		
-		return 
-		
-	End if 
-	
-	If (This:C1470._models=Null:C1517)\
-		 || (This:C1470._models.length=0)
-		
-		This:C1470._models:=This:C1470.provider.models.list().models
-		
-	End if 
-	
-	If (Count parameters:C259=0)
-		
-		return This:C1470._models
-		
-	Else 
-		
-		return This:C1470._models.extract($value)
-		
-	End if 
-	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function readModels() : Collection
 	

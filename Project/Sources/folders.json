@@ -30,6 +30,7 @@
 	},
 	"DEV": {
 		"tables": [
+			"AllTypes",
 			"Cities",
 			"No Primary Key",
 			"No vector",
@@ -50,7 +51,9 @@
 	},
 	"NAMESPACE": {
 		"classes": [
+			"Env",
 			"Model",
+			"Provider",
 			"Vector"
 		]
 	},
