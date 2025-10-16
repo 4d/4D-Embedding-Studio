@@ -131,10 +131,10 @@
 		},
 		"Provider": {
 			"new()": {
-				"Syntax": "**.new**( *configuration* : Variant )",
+				"Syntax": "**.new**( *config* : Variant )",
 				"Params": [
 					[
-						"configuration",
+						"config",
 						"Variant",
 						"->"
 					]
@@ -2090,14 +2090,20 @@
 			],
 			"Summary": ""
 		},
+		"success": {
+			"Syntax": "success : Boolean"
+		},
 		"endpoint": {
 			"Syntax": "endpoint : cs.AIKit.OpenAI"
 		},
+		"baseURL": {
+			"Syntax": "baseURL : Text"
+		},
+		"token_env_key": {
+			"Syntax": "token_env_key : Text"
+		},
 		"models": {
 			"Syntax": "models : Collection"
-		},
-		"success": {
-			"Syntax": "success : Boolean"
 		},
 		"name": {
 			"Syntax": "name : Text"

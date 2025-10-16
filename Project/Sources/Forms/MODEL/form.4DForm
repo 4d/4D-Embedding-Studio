@@ -27,7 +27,7 @@
 		},
 		{
 			"objects": {
-				"Text": {
+				"name.label": {
 					"type": "text",
 					"text": ":xliff:name",
 					"top": 16,
@@ -36,7 +36,7 @@
 					"height": 17,
 					"class": "label"
 				},
-				"Text1": {
+				"model.label": {
 					"type": "text",
 					"text": ":xliff:model",
 					"top": 157,
@@ -54,7 +54,7 @@
 					"height": 17,
 					"class": "label"
 				},
-				"Text3": {
+				"baseURL.label": {
 					"type": "text",
 					"text": ":xliff:baseURL",
 					"top": 52,
@@ -63,7 +63,7 @@
 					"height": 16,
 					"class": "label"
 				},
-				"Text4": {
+				"organization.label": {
 					"type": "text",
 					"text": ":xliff:organization",
 					"top": 195,
@@ -72,7 +72,7 @@
 					"height": 16,
 					"class": "label"
 				},
-				"Text5": {
+				"project.label": {
 					"type": "text",
 					"text": ":xliff:project",
 					"top": 232,
@@ -128,10 +128,10 @@
 					"type": "input",
 					"left": 135,
 					"top": 52,
-					"width": 324,
-					"height": 16,
+					"width": 306,
+					"height": 17,
 					"sizingX": "grow",
-					"right": 459,
+					"right": 441,
 					"dataSource": "Form:C1466.model.baseURL",
 					"events": [
 						"onDataChange"
@@ -208,6 +208,19 @@
 					"sizingX": "move",
 					"sizingY": "move",
 					"right": 347
+				},
+				"baseURLMenu": {
+					"type": "button",
+					"top": 51,
+					"left": 441,
+					"width": 19,
+					"height": 19,
+					"events": [
+						"onClick"
+					],
+					"style": "bevel",
+					"iconFrames": 4,
+					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/down.png"
 				}
 			},
 			"entryOrder": [
@@ -219,11 +232,12 @@
 				"organization",
 				"project",
 				"done",
-				"cancel"
+				"cancel",
+				"baseURLMenu"
 			]
 		}
 	],
-	"geometryStamp": 81,
+	"geometryStamp": 93,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
