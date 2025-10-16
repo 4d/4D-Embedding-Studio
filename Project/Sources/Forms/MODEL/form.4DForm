@@ -177,7 +177,7 @@
 					],
 					"style": "bevel",
 					"iconFrames": 4,
-					"icon": "/RESOURCES/Images/down.png"
+					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/down.png"
 				},
 				"done": {
 					"type": "button",

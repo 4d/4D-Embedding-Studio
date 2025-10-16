@@ -7,10 +7,6 @@ If ($e.objectName=Null:C1517)
 			// ______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			//title;picture;background;titlePos;titleVisible;iconVisible;style;horMargin;vertMargin; iconOffset;popupMenu ; hyperlink;numStates;imageHugsTitle
-			//
-			OBJECT SET FORMAT:C236(*; "modelMenu"; ";path:/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/down.png;;;;;;;")
-			
 			SET TIMER:C645(-1)
 			
 			// ______________________________________________________
