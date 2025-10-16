@@ -118,32 +118,62 @@ End if
 Case of 
 		
 		// ______________________________________________________
+	: ($e.objectName="baseURLMenu")  // Menu of preconfigured providers
+		
+		var $curbBase:=String:C10(Form:C1466.model.baseURL)
+		var $menu:=cs:C1710.menu.new()
+		
+		For each ($provider; $caller._providers)
+			
+			$menu.append($provider.name; $provider.baseURL).mark($curbBase=$provider.baseURL)
+			
+		End for each 
+		
+		If ($menu.popup($curbBase).selected)\
+			 && ($menu.choice#$curbBase)
+			
+			// Set the model baseURL
+			$provider:=$caller._providers.query("baseURL = :1"; $menu.choice).first()
+			Form:C1466.model.baseURL:=$menu.choice
+			Form:C1466.model.apiKey:=$provider.endpoint.apiKey
+			
+		End if 
+		
+		// ______________________________________________________
 	: ($e.objectName="modelMenu")  // Menu of available models
 		
 		var $curModel:=String:C10($model.model)
+		$menu:=cs:C1710.menu.new()
+		
+		var $id : Text
 		
 		If (Length:C16(String:C10(Form:C1466.model.baseURL))=0)
 			
-			var $menu:=cs:C1710.menu.new()
-			
-			var $id : Text
-			For each ($id; $caller.providers.openAI.models.extract("id"))
-				
-				$menu.append($id; $id).mark($curModel=$id)
-				
-			End for each 
-			
-			If ($menu.popup($curModel).selected)\
-				 && ($menu.choice#$curModel)
-				
-				// Set the model name
-				$model.model:=$menu.choice
-				
-			End if 
+			$provider:=$caller._providers.query("name = :1"; "openAI").first()
 			
 		Else 
 			
-			// TODO: with other provider
+			$provider:=$caller._providers.query("baseURL = :1"; Form:C1466.model.baseURL).first()
+			
+		End if 
+		
+		If ($provider.models=Null:C1517)
+			
+			GOTO OBJECT:C206(*; "model")
+			return 
+			
+		End if 
+		
+		For each ($id; $provider.models.extract("id"))
+			
+			$menu.append($id; $id).mark($curModel=$id)
+			
+		End for each 
+		
+		If ($menu.popup($curModel).selected)\
+			 && ($menu.choice#$curModel)
+			
+			$model.model:=$menu.choice
 			
 		End if 
 		

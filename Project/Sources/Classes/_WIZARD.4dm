@@ -5,13 +5,28 @@ property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project 
 
 property models; vectors : Collection
 
-property _key : Text
-property _models : Collection
-
 property providers:={}
 
-// TODO: Singleton?
+property _key : Text
+property _models : Collection
+property _providers:=[]
+
+// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _loadPredefinedProviders()
+	
+	var $file:=File:C1566("/RESOURCES/providers.json")
+	
+	var $o : Object
+	For each ($o; JSON Parse:C1218($file.getText()))
+		
+		This:C1470._providers.push(cs:C1710.Provider.new($o))
+		
+	End for each 
+	
+	// TODO: Singleton?
 Class constructor
+	
+	This:C1470._loadPredefinedProviders()
 	
 	// Default provider
 	This:C1470.providers.openAI:=cs:C1710.Provider.new()
