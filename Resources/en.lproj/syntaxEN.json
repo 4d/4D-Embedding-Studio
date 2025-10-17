@@ -2074,6 +2074,38 @@
 			],
 			"Summary": ""
 		},
+		"loadModels()": {
+			"Syntax": "**.loadModels**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"get needAPIKey()": {
+			"Syntax": "**.get needAPIKey**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"menuModels()": {
+			"Syntax": "**.menuModels**( *default* : Text ) : cs.vectorStudio.menu",
+			"Params": [
+				[
+					"default",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"normalizedName()": {
 			"Syntax": "**.normalizedName**( *url* : Text ) : Text",
 			"Params": [
