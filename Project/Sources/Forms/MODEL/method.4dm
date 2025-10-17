@@ -22,14 +22,6 @@ If ($e.objectName=Null:C1517)
 				
 			End if 
 			
-			//If (Form.model.baseURL=Null)\
-				|| (Form.model.baseURL="")\
-				|| (Form.model.baseURL="https://api.openai.com/@")
-			//OBJECT SET FONT STYLE(*; "apiKey.label"; Bold)
-			//Else 
-			//OBJECT SET FONT STYLE(*; "apiKey.label"; Normal)
-			//End if
-			
 			// ______________________________________________________
 	End case 
 	
@@ -86,7 +78,7 @@ For each model, the name, api Key and model are required.
 			//______________________________________________________
 		: ($e.objectName="baseURL")
 			
-			var $provider:=cs:C1710.Provider.new({baseURL: $model.baseURL})
+			var $provider:=cs:C1710.Provider.new($model.baseURL ? {baseURL: $model.baseURL} : Null:C1517)
 			Form:C1466._provider:=$provider
 			
 			If ($caller.providers[$provider.name]=Null:C1517)
@@ -104,12 +96,6 @@ For each model, the name, api Key and model are required.
 				
 			End if 
 			
-			If (Form:C1466._provider.success)
-				
-				
-				
-			End if 
-			
 			//______________________________________________________
 	End case 
 	
@@ -119,6 +105,8 @@ Case of
 		
 		// ______________________________________________________
 	: ($e.objectName="baseURLMenu")  // Menu of preconfigured providers
+		
+		GOTO OBJECT:C206(*; "baseURL")
 		
 		var $curbBase:=String:C10(Form:C1466.model.baseURL)
 		var $menu:=cs:C1710.menu.new()
@@ -135,17 +123,23 @@ Case of
 			// Set the model baseURL
 			$provider:=$caller._providers.query("baseURL = :1"; $menu.choice).first()
 			Form:C1466.model.baseURL:=$menu.choice
-			Form:C1466.model.apiKey:=$provider.endpoint.apiKey
+			
+			If ($provider.token_env_key#Null:C1517)
+				
+				Form:C1466.model.apiKey:=$provider.endpoint.apiKey
+				
+			End if 
+			
+			$caller.saveModels()
 			
 		End if 
 		
 		// ______________________________________________________
 	: ($e.objectName="modelMenu")  // Menu of available models
 		
-		var $curModel:=String:C10($model.model)
-		$menu:=cs:C1710.menu.new()
+		GOTO OBJECT:C206(*; "model")
 		
-		var $id : Text
+		var $curModel:=String:C10($model.model)
 		
 		If (Length:C16(String:C10(Form:C1466.model.baseURL))=0)
 			
@@ -157,28 +151,24 @@ Case of
 			
 		End if 
 		
-		If ($provider.models=Null:C1517)
+		$menu:=$provider.menuModels($curModel)
+		
+		If ($menu=Null:C1517)
 			
-			GOTO OBJECT:C206(*; "model")
 			return 
 			
 		End if 
-		
-		For each ($id; $provider.models.extract("id"))
-			
-			$menu.append($id; $id).mark($curModel=$id)
-			
-		End for each 
 		
 		If ($menu.popup($curModel).selected)\
 			 && ($menu.choice#$curModel)
 			
 			$model.model:=$menu.choice
+			$caller.saveModels()
 			
 		End if 
 		
 		// ______________________________________________________
-	: ($e.objectName="done")
+	: ($e.objectName="done")  // New model
 		
 /* #17323
 The model name shall be unique.
@@ -195,9 +185,19 @@ The model name shall be unique.
 		End if 
 		
 /* #17322
-For each model, the name, api Key and model are required.
+For each model, the name, api Key (if not local) and model are required.
 */
-		For each ($t; ["name"; "model"; "apiKey"])
+		If (Length:C16(String:C10(Form:C1466.model.baseURL))=0)
+			
+			$provider:=$caller._providers.query("name = :1"; "openAI").first()
+			
+		Else 
+			
+			$provider:=$caller._providers.query("baseURL = :1"; Form:C1466.model.baseURL).first()
+			
+		End if 
+		
+		For each ($t; $provider.needAPIKey ? ["name"; "model"; "apiKey"] : ["name"; "model"])
 			
 			If (Length:C16(String:C10($model[$t]))=0)
 				

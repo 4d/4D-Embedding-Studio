@@ -100,10 +100,10 @@
 					"type": "input",
 					"left": 135,
 					"top": 157,
-					"width": 306,
+					"width": 324,
 					"height": 17,
 					"sizingX": "grow",
-					"right": 441,
+					"right": 459,
 					"dataSource": "Form:C1466.model.model",
 					"events": [
 						"onDataChange"
@@ -128,10 +128,10 @@
 					"type": "input",
 					"left": 135,
 					"top": 52,
-					"width": 306,
+					"width": 324,
 					"height": 17,
 					"sizingX": "grow",
-					"right": 441,
+					"right": 459,
 					"dataSource": "Form:C1466.model.baseURL",
 					"events": [
 						"onDataChange"
@@ -237,7 +237,7 @@
 			]
 		}
 	],
-	"geometryStamp": 93,
+	"geometryStamp": 95,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

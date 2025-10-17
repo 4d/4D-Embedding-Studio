@@ -1,7 +1,7 @@
 property name : Text
 property baseURL : Text
 property token_env_key : Text
-property success : Boolean
+property success:=True:C214
 property endpoint : cs:C1710.AIKit.OpenAI
 property models : Collection
 
@@ -37,15 +37,19 @@ Class constructor($config)
 			// ______________________________________________________
 	End case 
 	
-	This:C1470._getModels()
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function loadModels()
 	
-	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _getModels()
+	OB REMOVE:C1226(This:C1470; "models")
 	
-	//If (This.endpoint.apiKey#Null)
+	If (This:C1470.endpoint=Null:C1517)
+		
+		This:C1470.success:=False:C215
+		return 
+		
+	End if 
 	
-	var $models:=This:C1470.endpoint.models.list()
-	
+	var $models : cs:C1710.AIKit.OpenAIModelListResult:=This:C1470.endpoint.models.list()
 	This:C1470.success:=$models.success
 	
 	If (This:C1470.success)
@@ -53,7 +57,34 @@ Function _getModels()
 		This:C1470.models:=$models.models
 		
 	End if 
-	//End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Retrieves provider models, if not already done, and returns a menu filled with them
+Function menuModels($default : Text) : cs:C1710.menu
+	
+	If (This:C1470.models=Null:C1517)
+		
+		SET CURSOR:C469(4)
+		This:C1470.loadModels()
+		
+	End if 
+	
+	If (Not:C34(This:C1470.success))
+		
+		return 
+		
+	End if 
+	
+	var $menu:=cs:C1710.menu.new()
+	
+	var $o : Object
+	For each ($o; This:C1470.models)
+		
+		$menu.append($o.id; $o.id).mark($default=$o.id).setData($o.id; $o)
+		
+	End for each 
+	
+	return $menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function normalizedName($url : Text) : Text
@@ -72,8 +103,15 @@ Function normalizedName($url : Text) : Text
 	
 	return $name
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+Function get needAPIKey() : Boolean
+	
+	return This:C1470.token_env_key#Null:C1517
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get apiKey() : Text
+	
+	This:C1470.success:=True:C214  // We are optimistic 😇
 	
 	If (This:C1470.endpoint#Null:C1517)
 		
@@ -81,10 +119,9 @@ Function get apiKey() : Text
 		
 	End if 
 	
-	var $tokenEnvKey : Text:=This:C1470.token_env_key || (Uppercase:C13(This:C1470.name)+"_API_KEY")
-	
-	// First search in the environment variables
-	var $apikey:=String:C10(cs:C1710.Env.me[$tokenEnvKey])
+	// First, let's try reading an environment variable.
+	var $envKey : Text:=This:C1470.token_env_key || (Uppercase:C13(Replace string:C233(This:C1470.name; " "; "_"))+"_API_KEY")
+	var $apikey:=String:C10(cs:C1710.Env.me[$envKey])
 	
 	If (Length:C16($apikey)>0)
 		
@@ -92,22 +129,19 @@ Function get apiKey() : Text
 		
 	End if 
 	
-	// Search in user preferences folder
+	// Finally, search for a file in the user preferences folder.
 	var $file : 4D:C1709.File:=Folder:C1567(fk user preferences folder:K87:10).file(This:C1470.name+".json")
 	
-	If ($file.exists)
+	Try
 		
-		Try
-			
-			$apikey:=String:C10(JSON Parse:C1218($file.getText()).apiKey)
-			return $apikey
-			
-		Catch
-			
-			// ERROR
-			
-		End try
-	End if 
+		$apikey:=String:C10(JSON Parse:C1218($file.getText()).apiKey)
+		return $apikey
+		
+	Catch
+		
+		This:C1470.success:=False:C215  // ERROR
+		
+	End try
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function set apiKey($apikey : Text)
@@ -116,13 +150,7 @@ Function set apiKey($apikey : Text)
 		
 		This:C1470.endpoint.apiKey:=$apikey
 		
-		var $models:=This:C1470.endpoint.models.list()
+		// Reset model list
+		This:C1470.models:=[]
 		
-		This:C1470.success:=$models.success
-		
-		If (This:C1470.success)
-			
-			This:C1470.models:=$models.models
-			
-		End if 
 	End if 
