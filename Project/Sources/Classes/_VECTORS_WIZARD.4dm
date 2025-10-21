@@ -31,6 +31,9 @@ Function manager($e : Object)
 				This:C1470.listManager($e)
 				This:C1470.modelsDropdownManager($e)
 				
+				OBJECT SET FORMAT:C236(*; "Header1"; "path:/.PRODUCT_RESOURCES/Images/ObjectIcons/Icon_600.png")
+				OBJECT SET FORMAT:C236(*; "Header2"; "path:/.PRODUCT_RESOURCES/Images/StructureEditor/Field_14.png")
+				
 				SET TIMER:C645(-1)
 				
 				//______________________________________________________
@@ -131,20 +134,9 @@ Function moreManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	var $menu:=cs:C1710.menu.new()
-	
 	var $vector : cs:C1710.Vector:=This:C1470.currentItem
-	var $embed:=$vector.inputsMenu
-	
-	If ($embed.itemCount()>0)
-		
-		$menu.append(":xliff:embed"; $embed)
-		
-	Else 
-		
-		$embed.release()
-		
-	End if 
+	var $menu:=cs:C1710.menu.new()
+	This:C1470._embeddedAttributesMenu($vector; $menu)
 	
 	$menu.line().append("🚧 Edit API key"; "editApiKey")
 	
@@ -211,17 +203,7 @@ Function phraseManager($e : Object)
 			End if 
 			
 			var $menu:=cs:C1710.menu.new().edit(True:C214).line()
-			var $embed:=$vector.inputsMenu
-			
-			If ($embed.itemCount()>0)
-				
-				$menu.append(":xliff:embed"; $embed)
-				
-			Else 
-				
-				$embed.release()
-				
-			End if 
+			This:C1470._embeddedAttributesMenu($vector; $menu)
 			
 			If (Not:C34($menu.popup().selected))
 				
@@ -372,3 +354,19 @@ Function modelsDropdownUpdate($vector : cs:C1710.Vector)
 Function _getModelDropdownValues() : Collection
 	
 	return This:C1470.models.extract("name").orderBy().combine(["-"; Localized string:C991("newModelItem")])
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _embeddedAttributesMenu($vector : cs:C1710.Vector; $menu : cs:C1710.menu)
+	
+	var $embed:=$vector.inputsMenu
+	
+	If ($embed.itemCount()>0)
+		
+		$menu.append(":xliff:embed"; $embed).icon("|Images/ObjectIcons/Icon_455.png")
+		
+	Else 
+		
+		$embed.release()
+		
+	End if 
+	
