@@ -97,7 +97,7 @@ an error message shall warn them that this model is used by xxx and 4D shall not
 			
 			// Update UI
 			LISTBOX SELECT ROW:C912(*; "list"; 0; lk remove from selection:K53:3)  // Unselect all
-			This:C1470.listManager($e)
+			SET TIMER:C645(-1)
 			
 			// ______________________________________________________
 	End case 
