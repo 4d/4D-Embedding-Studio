@@ -26,6 +26,8 @@ Function manager($e : Object)
 				// ________________________________________________________________________________
 			: ($e.code=On Load:K2:1)
 				
+				OBJECT SET FORMAT:C236(*; "Header1"; "path:/.PRODUCT_RESOURCES/Images/WatchIcons/Watch_693.png")
+				
 				SET TIMER:C645(-1)
 				
 				// ______________________________________________________

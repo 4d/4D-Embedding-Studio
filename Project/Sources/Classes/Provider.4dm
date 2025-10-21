@@ -78,7 +78,7 @@ Function menuModels($default : Text) : cs:C1710.menu
 	var $menu:=cs:C1710.menu.new()
 	
 	var $o : Object
-	For each ($o; This:C1470.models)
+	For each ($o; This:C1470.models.query("id IN :1"; ["@embed@"]))  // ⚠️ Only suggest names containing “embed”
 		
 		$menu.append($o.id; $o.id).mark($default=$o.id).setData($o.id; $o)
 		

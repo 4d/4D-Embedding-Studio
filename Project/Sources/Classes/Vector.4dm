@@ -99,6 +99,21 @@ In the embedding phrase, the supported attributes shall be:
 	// Gives a menu of available dataclass attributes to insert into the descriptive phrase.
 Function get inputsMenu() : cs:C1710.menu
 	
+	var $medias:=[].resize(42)
+/*Alpha*/$medias[0]:="|Images/StructureEditor/Field_1.png"
+/*Real*/$medias[1]:="|Images/StructureEditor/Field_9.png"
+/*Text*/$medias[2]:="|Images/StructureEditor/Field_2.png"
+/*Picture*/$medias[3]:="|Images/StructureEditor/Field_12.png"
+/*Date*/$medias[4]:="|Images/StructureEditor/Field_3.png"
+/*Boolean*/$medias[6]:="|Images/StructureEditor/Field_5.png"
+/*Integer*/$medias[8]:="|Images/StructureEditor/Field_6.png"
+/*Long*/$medias[9]:="|Images/StructureEditor/Field_7.png"
+/*Time*/$medias[11]:="|Images/StructureEditor/Field_4.png"
+/*Blob*/$medias[25]:="|Images/StructureEditor/Field_8.png"
+/*Integer64*/$medias[30]:="|Images/StructureEditor/Field_11.png"
+/*Object*/$medias[38]:="|Images/StructureEditor/Field_14.png"
+/*relatedEntities*/$medias[42]:="|Images/ObjectIcons/Icon_600.png"
+	
 	var $menu:=cs:C1710.menu.new()
 	
 	var $attribute : Object
@@ -106,6 +121,11 @@ Function get inputsMenu() : cs:C1710.menu
 		
 		$menu.append($attribute.name; "{"+$attribute.name+"}")
 		
+		If ($attribute.fieldType#Null:C1517)
+			
+			Try($menu.icon($medias[Num:C11($attribute.fieldType)]))
+			
+		End if 
 	End for each 
 	
 	return $menu
