@@ -159,7 +159,8 @@
 					],
 					"visibility": "hidden",
 					"method": "ObjectMethods/model.4dm",
-					"dataSource": "Form:C1466"
+					"dataSource": "Form:C1466",
+					"sizingX": "grow"
 				}
 			},
 			"entryOrder": [
@@ -178,7 +179,7 @@
 			"Guides": {}
 		}
 	},
-	"geometryStamp": 523,
+	"geometryStamp": 524,
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"method": "FORM_MANAGER",

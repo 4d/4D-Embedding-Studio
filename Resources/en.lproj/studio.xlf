@@ -134,6 +134,10 @@
           <target>ID displayed in the drop-down list</target>
         </trans-unit>
         
+        <trans-unit id="1" resname="areYouSureYouWantToDeleteThisModel">
+          <source>Are you sure you want to delete this model?</source>
+          <target>Are you sure you want to delete this model?</target>
+        </trans-unit>
       </group>
       <group resname="Common">
         <trans-unit id="1ksF1sjptpuuz2N54rsrBg" resname="cancel">
