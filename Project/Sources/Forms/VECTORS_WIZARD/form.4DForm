@@ -15,6 +15,9 @@
 		"onTimer",
 		"onAfterKeystroke",
 		"onSelectionChange",
+		"onMouseEnter",
+		"onMouseLeave",
+		"onMouseMove",
 		"onAfterEdit",
 		"onPageChange"
 	],
