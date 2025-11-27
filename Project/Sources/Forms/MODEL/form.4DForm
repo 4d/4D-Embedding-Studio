@@ -175,9 +175,10 @@
 					"events": [
 						"onClick"
 					],
-					"style": "bevel",
+					"style": "custom",
 					"iconFrames": 4,
-					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/down.png"
+					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/miniDrop.png",
+					"sizingX": "move"
 				},
 				"done": {
 					"type": "button",
@@ -218,9 +219,10 @@
 					"events": [
 						"onClick"
 					],
-					"style": "bevel",
+					"style": "custom",
 					"iconFrames": 4,
-					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/down.png"
+					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/miniDrop.png",
+					"sizingX": "move"
 				}
 			},
 			"entryOrder": [
@@ -237,7 +239,7 @@
 			]
 		}
 	],
-	"geometryStamp": 136,
+	"geometryStamp": 140,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
