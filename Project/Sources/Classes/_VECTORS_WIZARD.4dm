@@ -189,9 +189,14 @@ Function phraseManager($e : Object)
 			return 
 			
 			// ______________________________________________________
-		: ($e.code=On Mouse Move:K2:35)
+		: ($e.code=On Mouse Enter:K2:33) || ($e.code=On Mouse Move:K2:35)
 			
 			OBJECT SET HELP TIP:C1181(*; $me; $vector[""]#Null:C1517 ? String:C10($vector.helptip) : String:C10($vector.error))
+			
+			// ______________________________________________________
+		: ($e.code=On Mouse Leave:K2:34)
+			
+			OBJECT SET HELP TIP:C1181(*; $me; "")
 			
 			// ______________________________________________________
 		: ($e.code=On Clicked:K2:4)
