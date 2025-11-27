@@ -56,6 +56,10 @@ Function loadModels()
 		
 		This:C1470.models:=$models.models
 		
+	Else 
+		
+		ALERT:C41(".Failed to retrieve the list of models")
+		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===

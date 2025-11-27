@@ -22,6 +22,9 @@ If ($e.objectName=Null:C1517)
 				
 			End if 
 			
+			$provider:=Form:C1466._providers.query("baseURL = :1"; String:C10(Form:C1466.model.baseURL) || "https://api.openai.com/@").first()
+			OBJECT SET FONT STYLE:C166(*; "apiKey.label"; $provider.needAPIKey ? Bold:K14:2 : Plain:K14:1)
+			
 			// ______________________________________________________
 	End case 
 	
@@ -29,8 +32,7 @@ If ($e.objectName=Null:C1517)
 	
 End if 
 
-var $caller:=Form:C1466
-var $model : Object:=$caller.model
+var $model : Object:=Form:C1466.model
 
 If ($e.code=On Data Change:K2:15)
 	
@@ -40,8 +42,8 @@ If ($e.code=On Data Change:K2:15)
 		///* #17323
 		//The model name shall be unique.
 		//*/
-		//If ($caller.models.extract("name").includes($model.name))
-		//$caller._popError(\
+		//If (Form.models.extract("name").includes($model.name))
+		//Form._popError(\
 			Replace string(Localized string("theModelNameMustBeUnique"); "{name}"; $model.name))
 		//GOTO OBJECT(*; "name")
 		//return 
@@ -51,15 +53,17 @@ If ($e.code=On Data Change:K2:15)
 For each model, the name, api Key and model are required.
 */
 		
-		// ⚠️ apiKey seems required only for OpenAI
-		var $t:=String:C10($model["baseURL"])
-		var $isOpenAI : Boolean:=(Length:C16($t)=0) || ($t="https://api.openai.com/@")
+		// ⚠️ apiKey is not required if local
+		$provider:=Form:C1466._providers.query("baseURL = :1"; String:C10(Form:C1466.model.baseURL) || "https://api.openai.com/@").first()
 		
-		For each ($t; $isOpenAI ? ["name"; "apiKey"; "model"] : ["name"; "model"])
+		SET TIMER:C645(-1)  // To update mandatory or not fields labels
+		
+		var $t : Text
+		For each ($t; $provider.needAPIKey ? ["name"; "apiKey"; "model"] : ["name"; "model"])
 			
 			If (Length:C16(String:C10($model[$t]))=0)
 				
-				$caller._popError(\
+				Form:C1466._popError(\
 					Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t)))
 				
 				GOTO OBJECT:C206(*; $t)
@@ -81,11 +85,13 @@ For each model, the name, api Key and model are required.
 			var $provider:=cs:C1710.Provider.new($model.baseURL ? {baseURL: $model.baseURL} : Null:C1517)
 			Form:C1466._provider:=$provider
 			
-			If ($caller.providers[$provider.name]=Null:C1517)
+			If (Form:C1466.providers[$provider.name]=Null:C1517)
 				
-				$caller.providers[$provider.name]:=$provider
+				Form:C1466.providers[$provider.name]:=$provider
 				
 			End if 
+			
+			SET TIMER:C645(-1)  // To update mandtory or not fields labels
 			
 			//______________________________________________________
 		: ($e.objectName="apiKey")
@@ -98,7 +104,6 @@ For each model, the name, api Key and model are required.
 			
 			//______________________________________________________
 	End case 
-	
 End if 
 
 Case of 
@@ -111,7 +116,7 @@ Case of
 		var $curbBase:=String:C10(Form:C1466.model.baseURL)
 		var $menu:=cs:C1710.menu.new()
 		
-		For each ($provider; $caller._providers)
+		For each ($provider; Form:C1466._providers)
 			
 			$menu.append($provider.name; $provider.baseURL).mark($curbBase=$provider.baseURL)
 			
@@ -121,7 +126,7 @@ Case of
 			 && ($menu.choice#$curbBase)
 			
 			// Set the model baseURL
-			$provider:=$caller._providers.query("baseURL = :1"; $menu.choice).first()
+			$provider:=Form:C1466._providers.query("baseURL = :1"; $menu.choice).first()
 			Form:C1466.model.baseURL:=$menu.choice
 			
 			If ($provider.token_env_key#Null:C1517)
@@ -130,7 +135,9 @@ Case of
 				
 			End if 
 			
-			$caller.saveModels()
+			Form:C1466.saveModels()
+			
+			SET TIMER:C645(-1)  // To update mandatory or not fields labels
 			
 		End if 
 		
@@ -143,11 +150,11 @@ Case of
 		
 		If (Length:C16(String:C10(Form:C1466.model.baseURL))=0)
 			
-			$provider:=$caller._providers.query("name = :1"; "openAI").first()
+			$provider:=Form:C1466._providers.query("name = :1"; "openAI").first()
 			
 		Else 
 			
-			$provider:=$caller._providers.query("baseURL = :1"; Form:C1466.model.baseURL).first()
+			$provider:=Form:C1466._providers.query("baseURL = :1"; Form:C1466.model.baseURL).first()
 			
 		End if 
 		
@@ -163,7 +170,7 @@ Case of
 			 && ($menu.choice#$curModel)
 			
 			$model.model:=$menu.choice
-			$caller.saveModels()
+			Form:C1466.saveModels()
 			
 		End if 
 		
@@ -173,9 +180,9 @@ Case of
 /* #17323
 The model name shall be unique.
 */
-		If ($caller.models.extract("name").includes($model.name))
+		If (Form:C1466.models.extract("name").includes($model.name))
 			
-			$caller._popError(\
+			Form:C1466._popError(\
 				Replace string:C233(Localized string:C991("theModelNameMustBeUnique"); "{name}"; $model.name))
 			
 			GOTO OBJECT:C206(*; "name")
@@ -189,11 +196,11 @@ For each model, the name, api Key (if not local) and model are required.
 */
 		If (Length:C16(String:C10(Form:C1466.model.baseURL))=0)
 			
-			$provider:=$caller._providers.query("name = :1"; "openAI").first()
+			$provider:=Form:C1466._providers.query("name = :1"; "openAI").first()
 			
 		Else 
 			
-			$provider:=$caller._providers.query("baseURL = :1"; Form:C1466.model.baseURL).first()
+			$provider:=Form:C1466._providers.query("baseURL = :1"; Form:C1466.model.baseURL).first()
 			
 		End if 
 		
@@ -201,7 +208,7 @@ For each model, the name, api Key (if not local) and model are required.
 			
 			If (Length:C16(String:C10($model[$t]))=0)
 				
-				$caller._popError(\
+				Form:C1466._popError(\
 					Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t)))
 				
 				GOTO OBJECT:C206(*; $t)
