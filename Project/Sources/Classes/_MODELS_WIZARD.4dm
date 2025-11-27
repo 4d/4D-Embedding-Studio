@@ -93,11 +93,17 @@ an error message shall warn them that this model is used by xxx and 4D shall not
 				
 			End if 
 			
-			This:C1470.deleteModel(This:C1470.currentItem.name)
+			CONFIRM:C162(Localized string:C991("areYouSureYouWantToDeleteThisModel"))
 			
-			// Update UI
-			LISTBOX SELECT ROW:C912(*; "list"; 0; lk remove from selection:K53:3)  // Unselect all
-			SET TIMER:C645(-1)
+			If (Bool:C1537(OK))
+				
+				This:C1470.deleteModel(This:C1470.currentItem.name)
+				
+				// Update UI
+				LISTBOX SELECT ROW:C912(*; "list"; 0; lk remove from selection:K53:3)  // Unselect all
+				SET TIMER:C645(-1)
+				
+			End if 
 			
 			// ______________________________________________________
 	End case 
