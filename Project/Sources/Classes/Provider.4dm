@@ -79,10 +79,19 @@ Function menuModels($default : Text) : cs:C1710.menu
 		
 	End if 
 	
-	var $menu:=cs:C1710.menu.new()
+	If (This:C1470.models.length=0)
+		
+		ALERT:C41(".No models found")
+		return 
+		
+	End if 
 	
+	var $c:=This:C1470.models.query("id IN :1"; ["@embed@"])  // Only suggest names containing “embed”
+	$c:=$c.length>0 ? $c : This:C1470.models  // ⚠️ Fallback on all models
+	
+	var $menu:=cs:C1710.menu.new()
 	var $o : Object
-	For each ($o; This:C1470.models.query("id IN :1"; ["@embed@"]))  // ⚠️ Only suggest names containing “embed”
+	For each ($o; $c)
 		
 		$menu.append($o.id; $o.id).mark($default=$o.id).setData($o.id; $o)
 		
@@ -99,13 +108,20 @@ Function normalizedName($url : Text) : Text
 		
 	End if 
 	
-	var $name:=Replace string:C233($url; "https://"; "")
-	$name:=Replace string:C233($name; "http://"; "")
-	$name:=Replace string:C233($name; "api."; "")
-	$name:=Replace string:C233($name; ".com"; "")
-	$name:=Replace string:C233($name; "."; "_")
+	var $t : Text
+	For each ($t; ["https://"; "http://"; "api."; ".com"])
+		
+		$url:=Replace string:C233($url; $t; "")
+		
+	End for each 
 	
-	return $name
+	For each ($t; ["."; "/"; ":"])
+		
+		$url:=Replace string:C233($url; $t; "_")
+		
+	End for each 
+	
+	return $url
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get needAPIKey() : Boolean
