@@ -62,6 +62,15 @@ Function manager($e : Object)
 			
 			If ($e.code<0)
 				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 			End if 
 			
 			// ______________________________________________________
@@ -135,7 +144,7 @@ Function listManager($e : Object)
 		$o.model:=This:C1470.currentItem
 		OBJECT SET VALUE:C1742("model"; $o)
 		
-		//EXECUTE METHOD IN SUBFORM("model"; Formula(SET TIMER(-1)))
+		EXECUTE METHOD IN SUBFORM:C1085("model"; Formula:C1597(SET TIMER:C645(-1)))
 		
 		OBJECT SET VISIBLE:C603(*; "model"; True:C214)
 		OBJECT SET ENABLED:C1123(*; "delete"; True:C214)

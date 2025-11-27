@@ -34,7 +34,8 @@
 					"left": 35,
 					"width": 82,
 					"height": 17,
-					"class": "label"
+					"class": "label",
+					"fontWeight": "bold"
 				},
 				"model.label": {
 					"type": "text",
@@ -43,7 +44,8 @@
 					"left": 32,
 					"width": 85,
 					"height": 17,
-					"class": "label"
+					"class": "label",
+					"fontWeight": "bold"
 				},
 				"apiKey.label": {
 					"type": "text",
