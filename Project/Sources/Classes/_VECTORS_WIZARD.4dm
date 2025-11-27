@@ -32,6 +32,8 @@ Function manager($e : Object)
 				This:C1470.modelsDropdownManager($e)
 				
 				OBJECT SET FORMAT:C236(*; "Header1"; "path:/.PRODUCT_RESOURCES/Images/ObjectIcons/Icon_600.png")
+				
+				// TODO: Use the new vector icon when ready
 				OBJECT SET FORMAT:C236(*; "Header2"; "path:/.PRODUCT_RESOURCES/Images/StructureEditor/Field_14.png")
 				
 				SET TIMER:C645(-1)
@@ -45,11 +47,28 @@ Function manager($e : Object)
 			: ($e.code=On Activate:K2:9)
 				
 				// TODO: Check vectors ?
+				// For the moment, there is no question of allowing the catalog to be modified when this dialog box is displayed.
 				
 				//______________________________________________________
 		End case 
 		
 		return 
+		
+	End if 
+	
+	If (($e.code=On Mouse Enter:K2:33) || ($e.code=On Mouse Move:K2:35) || ($e.code=On Mouse Leave:K2:34))
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($e.objectName="phrase")
+				
+				This:C1470.phraseManager($e)
+				
+				//______________________________________________________
+		End case 
+		
+		return   // Mouseover is only handled for the sentence.
 		
 	End if 
 	

@@ -1,6 +1,6 @@
 var $e:=FORM Event:C1606
 
-If ($e.objectName=Null:C1517)
+If ($e.objectName=Null:C1517)  // Form method
 	
 	Case of 
 			
@@ -22,8 +22,9 @@ If ($e.objectName=Null:C1517)
 				
 			End if 
 			
-			$provider:=Form:C1466._providers.query("baseURL = :1"; String:C10(Form:C1466.model.baseURL) || "https://api.openai.com/@").first()
-			OBJECT SET FONT STYLE:C166(*; "apiKey.label"; $provider.needAPIKey ? Bold:K14:2 : Plain:K14:1)
+			// Mandatory or not fields labels style
+			$provider:=Form:C1466._provider || cs:C1710.Provider.new(Form:C1466.model)
+			OBJECT SET FONT STYLE:C166(*; "apiKey.label"; Form:C1466._provider.needAPIKey ? Bold:K14:2 : Plain:K14:1)
 			
 			// ______________________________________________________
 	End case 
@@ -38,25 +39,19 @@ If ($e.code=On Data Change:K2:15)
 	
 	If (OBJECT Get subform container value:C1785#Null:C1517)
 		
-		// The name cannot be changed at this stage
-		///* #17323
-		//The model name shall be unique.
-		//*/
-		//If (Form.models.extract("name").includes($model.name))
-		//Form._popError(\
-			Replace string(Localized string("theModelNameMustBeUnique"); "{name}"; $model.name))
-		//GOTO OBJECT(*; "name")
-		//return 
-		//End if 
-		
 /* #17322
 For each model, the name, api Key and model are required.
 */
 		
-		// ⚠️ apiKey is not required if local
+/* ⚠️
+		
+* The name cannot be changed at this stage
+* apiKey is not required if local
+		
+*/
 		$provider:=Form:C1466._providers.query("baseURL = :1"; String:C10(Form:C1466.model.baseURL) || "https://api.openai.com/@").first()
 		
-		SET TIMER:C645(-1)  // To update mandatory or not fields labels
+		SET TIMER:C645(-1)  // To update mandatory or not fields labels style
 		
 		var $t : Text
 		For each ($t; $provider.needAPIKey ? ["name"; "apiKey"; "model"] : ["name"; "model"])
@@ -147,16 +142,7 @@ Case of
 		GOTO OBJECT:C206(*; "model")
 		
 		var $curModel:=String:C10($model.model)
-		
-		If (Length:C16(String:C10(Form:C1466.model.baseURL))=0)
-			
-			$provider:=Form:C1466._providers.query("name = :1"; "openAI").first()
-			
-		Else 
-			
-			$provider:=Form:C1466._providers.query("baseURL = :1"; Form:C1466.model.baseURL).first()
-			
-		End if 
+		$provider:=Form:C1466._provider || cs:C1710.Provider.new(Form:C1466.model)
 		
 		$menu:=$provider.menuModels($curModel)
 		
