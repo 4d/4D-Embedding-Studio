@@ -43,6 +43,7 @@
 	},
 	"MODELS": {
 		"forms": [
+			"MODEL",
 			"MODELS_WIZARD"
 		],
 		"classes": [
@@ -64,9 +65,6 @@
 		],
 		"methods": [
 			"New_Model"
-		],
-		"forms": [
-			"MODEL"
 		],
 		"classes": [
 			"_WIZARD"
