@@ -6,14 +6,18 @@ property itemPosition : Integer
 property selectedItems : Collection
 
 // Vector details
-property details:=["phrase"; "phraseLabel"; "models"; "modelsLabel"; "openModelsManager"; "more"]
+property details:=["phrase"; "phraseLabel"; "models"; "modelsLabel"; "more"]  // ; "openModelsManager"
 property modelsDropdown : Object
 
 property debug:=Structure file:C489=Structure file:C489(*)
 
+property _cache : Object  // Current catalog cache
+
 Class constructor
 	
 	Super:C1705()
+	
+	This:C1470._cacheCatalog()
 	
 	// MARK:- [MANAGERS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -46,8 +50,7 @@ Function manager($e : Object)
 				//______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
-				// TODO: Check vectors ?
-				// For the moment, there is no question of allowing the catalog to be modified when this dialog box is displayed.
+				CALL FORM:C1391(Current form window:C827; Formula:C1597(Form:C1466.updateList()))
 				
 				//______________________________________________________
 		End case 
@@ -94,10 +97,12 @@ Function manager($e : Object)
 			
 			This:C1470.modelsDropdownManager($e)
 			
-			//______________________________________________________
-		: ($e.objectName="openModelsManager")
+/*
+//______________________________________________________
+: ($e.objectName="openModelsManager")
 			
-			_MODELS_WIZARD(True:C214; String:C10(This:C1470.currentItem.model))
+_MODELS_WIZARD(True; String(This.currentItem.model))
+*/
 			
 			//______________________________________________________
 		: ($e.objectName="save")
@@ -373,6 +378,101 @@ Function modelsDropdownUpdate($vector : cs:C1710.Vector)
 	End if 
 	
 	$dropDown.currentValue:=$vector.model || $dropDown.placeholder
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function updateList()
+	
+	If (This:C1470._catalogModified())
+		
+		// MARK: Update lits
+		This:C1470.vectors:=This:C1470.readVectors()
+		
+		var $current:=This:C1470.currentItem
+		
+		If ($current#Null:C1517)  // Restore selection
+			
+			var $c:=This:C1470.vectors.indices("dataclassName = :1 & vectorName = :2"; $current.dataclassName; $current.vectorName)
+			
+			If ($c.length>0)
+				
+				LISTBOX SELECT ROW:C912(*; "list"; $c[0]+1)
+				This:C1470.currentItem:=This:C1470.vectors[$c[0]]
+				
+			Else 
+				
+				LISTBOX SELECT ROW:C912(*; "list"; 0; lk remove from selection:K53:3)  // Deselect
+				This:C1470.currentItem:=Null:C1517
+				
+			End if 
+			
+			This:C1470.listManager()
+			
+		End if 
+		
+		This:C1470._cacheCatalog()  // Update cache
+		
+	End if 
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _cacheCatalog()
+	
+	This:C1470._cache:={}
+	
+	var $dataclass; $attribute : Text
+	
+	For each ($dataclass; This:C1470.catalog)
+		
+		This:C1470._cache[$dataclass]:={}
+		
+		For each ($attribute; This:C1470.catalog[$dataclass])
+			
+			This:C1470._cache[$dataclass][$attribute]:=True:C214
+			
+		End for each 
+	End for each 
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _catalogModified() : Boolean
+	
+	This:C1470.catalog:=ds:C1482
+	
+	var $dataclass; $attribute : Text
+	
+	For each ($dataclass; This:C1470._cache)
+		
+		If (This:C1470.catalog[$dataclass]=Null:C1517)
+			
+			return True:C214
+			
+		End if 
+		
+		For each ($attribute; This:C1470._cache[$dataclass])
+			
+			If (This:C1470.catalog[$dataclass][$attribute]=Null:C1517)
+				
+				return True:C214
+				
+			End if 
+		End for each 
+	End for each 
+	
+	For each ($dataclass; This:C1470.catalog)
+		
+		If (This:C1470._cache[$dataclass]=Null:C1517)
+			
+			return True:C214
+			
+		End if 
+		
+		For each ($attribute; This:C1470.catalog[$dataclass])
+			
+			If (This:C1470._cache[$dataclass][$attribute]=Null:C1517)
+				
+				return True:C214
+				
+			End if 
+		End for each 
+	End for each 
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _getModelDropdownValues() : Collection

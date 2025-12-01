@@ -1,12 +1,12 @@
 {
 	"vectors": [
 		{
-			"version": -1,
+			"version": 0,
 			"dataclassName": "AllTypes",
 			"dataclassNumber": 6,
 			"vectorName": "Vector",
 			"vectorNumber": 14,
-			"model": "",
+			"model": "first model",
 			"phrase": ""
 		},
 		{
@@ -40,19 +40,20 @@
 	"models": [
 		{
 			"name": "first model",
-			"model": "gpt-4-turbo-2024-04-09",
+			"model": "text-embedding-3-small",
 			"apiKey": "a"
 		},
 		{
-			"name": "hello",
-			"model": "gpt-5-mini",
+			"name": "helloz",
+			"model": "text-embedding-ada-002",
 			"apiKey": "1234",
 			"baseURL": ""
 		},
 		{
 			"name": "Model 10",
 			"model": "gpt-4o-mini",
-			"apiKey": "vqvqvazaaaq"
+			"apiKey": "",
+			"baseURL": "http://localhost:1234/v1/"
 		}
 	]
 }

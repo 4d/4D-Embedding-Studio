@@ -19,7 +19,7 @@ Class constructor($config)
 		: (Value type:C1509($config)=Is object:K8:27)  // {apiKey: "your api key"; baseURL: "https://server.ai"}
 			
 			This:C1470.baseURL:=$config.baseURL || $config.base_url
-			ASSERT:C1129(This:C1470.baseURL#Null:C1517)
+			//ASSERT(This.baseURL#Null)
 			
 			This:C1470.name:=$config.name || This:C1470.normalizedName(This:C1470.baseURL)
 			

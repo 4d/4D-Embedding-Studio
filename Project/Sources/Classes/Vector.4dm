@@ -1,12 +1,13 @@
 property version : Integer:=-1  // -1 for a never-defined vector
 property dataclassName : Text
-property dataclassNumber : Integer
 property vectorName : Text
-property vectorNumber : Integer
 property model:=""  // Define a default model if any
 property phrase:=""  // Define a default phrase if any
 property supportedAttributes:=[]
 property embedded:=[]
+
+//property dataclassNumber : Integer
+//property vectorNumber : Integer
 
 Class constructor($dataclass : Object; $attribute : Object; $model : Text; $phrase : Text)
 	
@@ -31,11 +32,12 @@ Class constructor($dataclass : Object; $attribute : Object; $model : Text; $phra
 		var $o : Object:=$dataclass.getInfo()
 		
 		This:C1470.dataclassName:=$o.name
-		This:C1470.dataclassNumber:=$o.tableNumber
 		This:C1470.vectorName:=$attribute.name
-		This:C1470.vectorNumber:=$attribute.fieldNumber
 		This:C1470.model:=$model || This:C1470.model
 		This:C1470.phrase:=$phrase || This:C1470.phrase
+		
+		//This.dataclassNumber:=$o.tableNumber
+		//This.vectorNumber:=$attribute.fieldNumber
 		
 		This:C1470.getSupportedAttributes($dataclass)
 		
@@ -199,12 +201,21 @@ Function get definition() : cs:C1710.Vector
 	
 	var $phrase:=This:C1470.phrase
 	
+/*
+return {\
+version: This.version; \
+dataclassName: This.dataclassName; \
+dataclassNumber: This.dataclassNumber; \
+vectorName: This.vectorName; \
+vectorNumber: This.vectorNumber; \
+model: This.model; \
+phrase: ST Get plain text($phrase)\
+}
+*/
 	return {\
 		version: This:C1470.version; \
 		dataclassName: This:C1470.dataclassName; \
-		dataclassNumber: This:C1470.dataclassNumber; \
 		vectorName: This:C1470.vectorName; \
-		vectorNumber: This:C1470.vectorNumber; \
 		model: This:C1470.model; \
 		phrase: ST Get plain text:C1092($phrase)\
 		}
