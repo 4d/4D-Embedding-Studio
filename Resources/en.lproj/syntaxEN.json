@@ -231,6 +231,11 @@
 			],
 			"Summary": ""
 		},
+		"updateList()": {
+			"Syntax": "**.updateList**()",
+			"Params": [],
+			"Summary": ""
+		},
 		"manager()": {
 			"Syntax": "**.manager**( *e* : Object )",
 			"Params": [

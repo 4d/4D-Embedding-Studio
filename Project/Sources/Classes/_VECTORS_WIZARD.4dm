@@ -50,32 +50,7 @@ Function manager($e : Object)
 				//______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
-				If (This:C1470._catalogModified())
-					
-					// MARK: Update lits
-					This:C1470.vectors:=This:C1470.readVectors()
-					
-					If (This:C1470.currentItem#Null:C1517)  // Restore selection
-						
-						var $c:=This:C1470.vectors.indices("dataclassName = :1 & vectorName = :2"; This:C1470.currentItem.dataclassName; This:C1470.currentItem.vectorName)
-						
-						If ($c.length>0)
-							
-							LISTBOX SELECT ROW:C912(*; "list"; $c[0]+1)
-							
-						Else 
-							
-							LISTBOX SELECT ROW:C912(*; "list"; 0; lk remove from selection:K53:3)
-							
-						End if 
-						
-						This:C1470.listManager($e)
-						
-					End if 
-					
-					This:C1470._cacheCatalog()
-					
-				End if 
+				CALL FORM:C1391(Current form window:C827; Formula:C1597(Form:C1466.updateList()))
 				
 				//______________________________________________________
 		End case 
@@ -401,6 +376,40 @@ Function modelsDropdownUpdate($vector : cs:C1710.Vector)
 	End if 
 	
 	$dropDown.currentValue:=$vector.model || $dropDown.placeholder
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function updateList()
+	
+	If (This:C1470._catalogModified())
+		
+		// MARK: Update lits
+		This:C1470.vectors:=This:C1470.readVectors()
+		
+		var $current:=This:C1470.currentItem
+		
+		If ($current#Null:C1517)  // Restore selection
+			
+			var $c:=This:C1470.vectors.indices("dataclassName = :1 & vectorName = :2"; $current.dataclassName; $current.vectorName)
+			
+			If ($c.length>0)
+				
+				LISTBOX SELECT ROW:C912(*; "list"; $c[0]+1)
+				This:C1470.currentItem:=This:C1470.vectors[$c[0]]
+				
+			Else 
+				
+				LISTBOX SELECT ROW:C912(*; "list"; 0; lk remove from selection:K53:3)  // Deselect
+				This:C1470.currentItem:=Null:C1517
+				
+			End if 
+			
+			This:C1470.listManager()
+			
+		End if 
+		
+		This:C1470._cacheCatalog()  // Update cache
+		
+	End if 
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _cacheCatalog()
