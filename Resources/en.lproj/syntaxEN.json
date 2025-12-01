@@ -166,6 +166,17 @@
 			],
 			"Summary": ""
 		},
+		"phraseManager()": {
+			"Syntax": "**.phraseManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
 		"listMetaInfo()": {
 			"Syntax": "**.listMetaInfo**( *me* : cs.vectorStudio.Vector ) : Object",
 			"Params": [
@@ -198,17 +209,6 @@
 			],
 			"Summary": ""
 		},
-		"phraseManager()": {
-			"Syntax": "**.phraseManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
 		"listManager()": {
 			"Syntax": "**.listManager**( *e* : Object )",
 			"Params": [
@@ -229,6 +229,11 @@
 					"->"
 				]
 			],
+			"Summary": ""
+		},
+		"updateList()": {
+			"Syntax": "**.updateList**()",
+			"Params": [],
 			"Summary": ""
 		},
 		"manager()": {
@@ -445,29 +450,23 @@
 		"embedded": {
 			"Syntax": "embedded : Collection"
 		},
-		"model": {
-			"Syntax": "model : Text"
+		"vectorName": {
+			"Syntax": "vectorName : Text"
 		},
 		"phrase": {
 			"Syntax": "phrase : Text"
 		},
-		"vectorName": {
-			"Syntax": "vectorName : Text"
+		"model": {
+			"Syntax": "model : Text"
 		},
 		"supportedAttributes": {
 			"Syntax": "supportedAttributes : Collection"
 		},
-		"version": {
-			"Syntax": "version : Integer"
-		},
 		"dataclassName": {
 			"Syntax": "dataclassName : Text"
 		},
-		"vectorNumber": {
-			"Syntax": "vectorNumber : Integer"
-		},
-		"dataclassNumber": {
-			"Syntax": "dataclassNumber : Integer"
+		"version": {
+			"Syntax": "version : Integer"
 		}
 	},
 	"_WIZARD": {

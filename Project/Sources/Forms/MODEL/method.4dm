@@ -1,11 +1,22 @@
 var $e:=FORM Event:C1606
 
+If ($e.code=On Bound Variable Change:K2:52)
+	
+	Form:C1466._snapshot:=OB Copy:C1225(Form:C1466.model)
+	
+	
+End if 
+
+
+
 If ($e.objectName=Null:C1517)  // Form method
 	
 	Case of 
 			
 			// ______________________________________________________
 		: ($e.code=On Load:K2:1)
+			
+			// Keep a snapshot of the current model definition
 			
 			SET TIMER:C645(-1)
 			
@@ -14,17 +25,17 @@ If ($e.objectName=Null:C1517)  // Form method
 			
 			SET TIMER:C645(0)
 			
-			If (OBJECT Get subform container value:C1785#Null:C1517)  // Edition
-				
-				// The name cannot be changed at this stage
-				OBJECT SET ENABLED:C1123(*; "name"; False:C215)
-				OBJECT SET RGB COLORS:C628(*; "name"; -1; "transparent")
-				
-			End if 
+			Form:C1466._snapshot:=Form:C1466._snapshot || Form:C1466.model=Null:C1517 ? Null:C1517 : OB Copy:C1225(Form:C1466.model)
+			
 			
 			// Mandatory or not fields labels style
 			$provider:=Form:C1466._provider || cs:C1710.Provider.new(Form:C1466.model)
 			OBJECT SET FONT STYLE:C166(*; "apiKey.label"; Form:C1466._provider.needAPIKey ? Bold:K14:2 : Plain:K14:1)
+			
+			// ______________________________________________________
+		: ($e.code=On Bound Variable Change:K2:52)
+			
+			Form:C1466._snapshot:=OB Copy:C1225(Form:C1466.model)
 			
 			// ______________________________________________________
 	End case 
@@ -36,6 +47,9 @@ End if
 var $model : Object:=Form:C1466.model
 
 If ($e.code=On Data Change:K2:15)
+	
+	// attention, si c'est le nom qui est modifié cela peut mettre en péril les vecteurs qui sont associés
+	
 	
 	If (OBJECT Get subform container value:C1785#Null:C1517)
 		
@@ -73,6 +87,18 @@ For each model, the name, api Key and model are required.
 	End if 
 	
 	Case of 
+			
+			
+		: ($e.objectName="name")
+			
+			var $c : Collection:=Form:C1466.vectors.query("model = :1"; Form:C1466._snapshot.name)
+			
+			If ($c.length>0)
+				
+				
+				
+				
+			End if 
 			
 			//______________________________________________________
 		: ($e.objectName="baseURL")
