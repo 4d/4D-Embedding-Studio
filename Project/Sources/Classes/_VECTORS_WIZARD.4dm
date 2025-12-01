@@ -11,9 +11,13 @@ property modelsDropdown : Object
 
 property debug:=Structure file:C489=Structure file:C489(*)
 
+property _cache : Object  // Current catalog cache
+
 Class constructor
 	
 	Super:C1705()
+	
+	This:C1470._cacheCatalog()
 	
 	// MARK:- [MANAGERS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -46,8 +50,32 @@ Function manager($e : Object)
 				//______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
-				// TODO: Check vectors ?
-				// For the moment, there is no question of allowing the catalog to be modified when this dialog box is displayed.
+				If (This:C1470._catalogModified())
+					
+					// MARK: Update lits
+					This:C1470.vectors:=This:C1470.readVectors()
+					
+					If (This:C1470.currentItem#Null:C1517)  // Restore selection
+						
+						var $c:=This:C1470.vectors.indices("dataclassName = :1 & vectorName = :2"; This:C1470.currentItem.dataclassName; This:C1470.currentItem.vectorName)
+						
+						If ($c.length>0)
+							
+							LISTBOX SELECT ROW:C912(*; "list"; $c[0]+1)
+							
+						Else 
+							
+							LISTBOX SELECT ROW:C912(*; "list"; 0; lk remove from selection:K53:3)
+							
+						End if 
+						
+						This:C1470.listManager($e)
+						
+					End if 
+					
+					This:C1470._cacheCatalog()
+					
+				End if 
 				
 				//______________________________________________________
 		End case 
@@ -373,6 +401,67 @@ Function modelsDropdownUpdate($vector : cs:C1710.Vector)
 	End if 
 	
 	$dropDown.currentValue:=$vector.model || $dropDown.placeholder
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _cacheCatalog()
+	
+	This:C1470._cache:={}
+	
+	var $dataclass; $attribute : Text
+	
+	For each ($dataclass; This:C1470.catalog)
+		
+		This:C1470._cache[$dataclass]:={}
+		
+		For each ($attribute; This:C1470.catalog[$dataclass])
+			
+			This:C1470._cache[$dataclass][$attribute]:=True:C214
+			
+		End for each 
+	End for each 
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _catalogModified() : Boolean
+	
+	This:C1470.catalog:=ds:C1482
+	
+	var $dataclass; $attribute : Text
+	
+	For each ($dataclass; This:C1470._cache)
+		
+		If (This:C1470.catalog[$dataclass]=Null:C1517)
+			
+			return True:C214
+			
+		End if 
+		
+		For each ($attribute; This:C1470._cache[$dataclass])
+			
+			If (This:C1470.catalog[$dataclass][$attribute]=Null:C1517)
+				
+				return True:C214
+				
+			End if 
+		End for each 
+	End for each 
+	
+	For each ($dataclass; This:C1470.catalog)
+		
+		If (This:C1470._cache[$dataclass]=Null:C1517)
+			
+			return True:C214
+			
+		End if 
+		
+		For each ($attribute; This:C1470.catalog[$dataclass])
+			
+			If (This:C1470._cache[$dataclass][$attribute]=Null:C1517)
+				
+				return True:C214
+				
+			End if 
+		End for each 
+	End for each 
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _getModelDropdownValues() : Collection

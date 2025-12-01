@@ -119,8 +119,9 @@ The list is displayed with:
 		var $vector : cs:C1710.Vector
 		For each ($vector; This:C1470.settings.vectors)
 			
-			// Queries are performed using internal table/field numbers, to avoid failure in the event of a name change.
-/*var $v : cs.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $vector.dataclassNumber; $vector.vectorNumber).first()*/
+/* Queries are performed using internal table/field numbers, to avoid failure in the event of a name change.
+var $v : cs.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $vector.dataclassNumber; $vector.vectorNumber).first()*/
+			
 			var $v : cs:C1710.Vector:=$vectors.query("dataclassName = :1 & vectorName"; $vector.dataclassName; $vector.vectorName).first()
 			
 			If ($v=Null:C1517)  // ERROR
