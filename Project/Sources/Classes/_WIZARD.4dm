@@ -120,15 +120,16 @@ The list is displayed with:
 		For each ($vector; This:C1470.settings.vectors)
 			
 			// Queries are performed using internal table/field numbers, to avoid failure in the event of a name change.
-			var $v : cs:C1710.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $vector.dataclassNumber; $vector.vectorNumber).first()
+/*var $v : cs.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $vector.dataclassNumber; $vector.vectorNumber).first()*/
+			var $v : cs:C1710.Vector:=$vectors.query("dataclassName = :1 & vectorName"; $vector.dataclassName; $vector.vectorName).first()
 			
 			If ($v=Null:C1517)  // ERROR
 				
 				$v:=OB Copy:C1225($vector)  // Keep the saved definition
 				
-				// Automatic name corrections, where applicable and possible
-				$v.dataclassName:=Try(Table name:C256($v.dataclassNumber)) || $v.dataclassName
-				$v.vectorName:=Try(Field name:C257($v.dataclassNumber; $v.vectorNumber)) || $v.vectorName
+				//// Automatic name corrections, where applicable and possible
+				//$v.dataclassName:=Try(Table name($v.dataclassNumber)) || $v.dataclassName
+				//$v.vectorName:=Try(Field name($v.dataclassNumber; $v.vectorNumber)) || $v.vectorName
 				
 				Case of 
 						
