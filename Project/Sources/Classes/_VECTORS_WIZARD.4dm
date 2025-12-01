@@ -6,7 +6,7 @@ property itemPosition : Integer
 property selectedItems : Collection
 
 // Vector details
-property details:=["phrase"; "phraseLabel"; "models"; "modelsLabel"; "openModelsManager"; "more"]
+property details:=["phrase"; "phraseLabel"; "models"; "modelsLabel"; "more"]  // ; "openModelsManager"
 property modelsDropdown : Object
 
 property debug:=Structure file:C489=Structure file:C489(*)
@@ -97,10 +97,12 @@ Function manager($e : Object)
 			
 			This:C1470.modelsDropdownManager($e)
 			
-			//______________________________________________________
-		: ($e.objectName="openModelsManager")
+/*
+//______________________________________________________
+: ($e.objectName="openModelsManager")
 			
-			_MODELS_WIZARD(True:C214; String:C10(This:C1470.currentItem.model))
+_MODELS_WIZARD(True; String(This.currentItem.model))
+*/
 			
 			//______________________________________________________
 		: ($e.objectName="save")

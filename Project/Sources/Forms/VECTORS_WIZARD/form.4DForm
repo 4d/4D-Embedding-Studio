@@ -180,26 +180,14 @@
 					"type": "dropdown",
 					"left": 419,
 					"top": 201,
-					"width": 344,
+					"width": 381,
 					"height": 22,
 					"events": [
 						"onDataChange"
 					],
 					"dataSourceTypeHint": "object",
 					"dataSource": "Form:C1466.modelsDropdown",
-					"right": 763,
-					"visibility": "hidden"
-				},
-				"openModelsManager": {
-					"type": "button",
-					"text": "...",
-					"top": 201,
-					"left": 773,
-					"width": 27,
-					"height": 22,
-					"events": [
-						"onClick"
-					],
+					"right": 800,
 					"visibility": "hidden"
 				},
 				"more": {
@@ -220,7 +208,7 @@
 			}
 		}
 	],
-	"geometryStamp": 442,
+	"geometryStamp": 452,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
