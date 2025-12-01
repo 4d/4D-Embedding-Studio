@@ -1,22 +1,7 @@
 //%attributes = {"shared":true}
-#DECLARE($fromVS : Boolean; $name : Text)
+#DECLARE($name : Text)
 
-// Display the main UI
-
-If ($fromVS)
-	
-	var $bottom; $left; $right; $top : Integer
-	
-	var $winref:=Frontmost window:C447
-	GET WINDOW RECT:C443($left; $top; $right; $bottom; $winref)
-	var $offset : Integer:=40
-	$winRef:=Open form window:C675("MODELS_WIZARD"; Movable form dialog box:K39:8; $left+$offset; $top+$offset)
-	
-Else 
-	
-	$winRef:=Open form window:C675("MODELS_WIZARD"; Structure file:C489=Structure file:C489(*) ? Plain form window:K39:10 : Movable form dialog box:K39:8; Horizontally centered:K39:1; At the top:K39:5; *)
-	
-End if 
+var $winRef:=Open form window:C675("MODELS_WIZARD"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)
 
 If (Length:C16($name)>0)
 	
