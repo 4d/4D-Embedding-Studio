@@ -63,26 +63,28 @@ For each model, the name, api Key and model are required.
 * apiKey is not required if local
 		
 */
-		$provider:=Form:C1466._providers.query("baseURL = :1"; String:C10(Form:C1466.model.baseURL) || "https://api.openai.com/@").first()
+/*
+$provider:=Form._providers.query("baseURL = :1"; String(Form.model.baseURL) || "https://api.openai.com/@").first()
 		
-		SET TIMER:C645(-1)  // To update mandatory or not fields labels style
+SET TIMER(-1)  // To update mandatory or not fields labels style
 		
-		var $t : Text
-		For each ($t; $provider.needAPIKey ? ["name"; "apiKey"; "model"] : ["name"; "model"])
-			
-			If (Length:C16(String:C10($model[$t]))=0)
-				
-				Form:C1466._popError(\
-					Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t)))
-				
-				GOTO OBJECT:C206(*; $t)
-				
-				return 
-				
-			End if 
-		End for each 
+var $t : Text
+For each ($t; $provider.needAPIKey ? ["name"; "apiKey"; "model"] : ["name"; "model"])
 		
-		CALL SUBFORM CONTAINER:C1086(-1)
+If (Length(String($model[$t]))=0)
+		
+Form._popError(\
+Replace string(Localized string("theValueIsRequired."); "{value}"; Localized string($t)))
+		
+GOTO OBJECT(*; $t)
+		
+return 
+		
+End if 
+End for each 
+		
+CALL SUBFORM CONTAINER(-1)
+*/
 		
 	End if 
 	
@@ -216,6 +218,7 @@ For each model, the name, api Key (if not local) and model are required.
 			
 		End if 
 		
+		var $t : Text
 		For each ($t; $provider.needAPIKey ? ["name"; "model"; "apiKey"] : ["name"; "model"])
 			
 			If (Length:C16(String:C10($model[$t]))=0)

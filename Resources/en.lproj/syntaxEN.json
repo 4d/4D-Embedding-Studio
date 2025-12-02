@@ -268,8 +268,14 @@
 		"_inheritedFrom_": "_WIZARD"
 	},
 	"Model": {
+		"errors": {
+			"Syntax": "errors : Collection"
+		},
 		"valid": {
 			"Syntax": "valid : Boolean"
+		},
+		"needAPIKey": {
+			"Syntax": "needAPIKey : Boolean"
 		},
 		"apiKey": {
 			"Syntax": "apiKey : Text"
@@ -302,19 +308,13 @@
 			],
 			"Summary": ""
 		},
-		"modelContainerManager()": {
-			"Syntax": "**.modelContainerManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
+		"newModel()": {
+			"Syntax": "**.newModel**()",
+			"Params": [],
 			"Summary": ""
 		},
-		"listManager()": {
-			"Syntax": "**.listManager**( *e* : Object )",
+		"modelContainerManager()": {
+			"Syntax": "**.modelContainerManager**( *e* : Object )",
 			"Params": [
 				[
 					"e",
@@ -330,6 +330,33 @@
 				[
 					"name",
 					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"validate()": {
+			"Syntax": "**.validate**( *model* : cs.vectorStudio.Model ) : Boolean",
+			"Params": [
+				[
+					"model",
+					"cs.vectorStudio.Model",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"listManager()": {
+			"Syntax": "**.listManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
 					"->"
 				]
 			],
