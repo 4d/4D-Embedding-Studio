@@ -28,6 +28,8 @@ Function manager($e : Object)
 				
 				OBJECT SET FORMAT:C236(*; "Header1"; "path:/.PRODUCT_RESOURCES/Images/WatchIcons/Watch_693.png")
 				
+				OBJECT SET VISIBLE:C603(*; "noModel"; Form:C1466.models.length=0)
+				
 				SET TIMER:C645(-1)
 				
 				// ______________________________________________________

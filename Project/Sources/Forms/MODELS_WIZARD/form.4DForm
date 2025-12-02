@@ -14,7 +14,19 @@
 	"destination": "detailScreen",
 	"pages": [
 		{
-			"objects": {}
+			"objects": {
+				"noModel": {
+					"type": "text",
+					"text": ":xliff:anEmbeddingModelIsRequired",
+					"top": 19,
+					"left": 267,
+					"width": 363,
+					"height": 31,
+					"fontTheme": "main",
+					"sizingX": "move",
+					"visibility": "hidden"
+				}
+			}
 		},
 		{
 			"objects": {
@@ -191,10 +203,16 @@
 		"defaultView": "View 1",
 		"views": {
 			"View 1": {},
-			"Guides": {}
+			"Guides": {},
+			"noModel": {
+				"visible": false,
+				"objects": [
+					"noModel"
+				]
+			}
 		}
 	},
-	"geometryStamp": 526,
+	"geometryStamp": 542,
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"method": "FORM_MANAGER",
