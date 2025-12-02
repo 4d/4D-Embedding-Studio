@@ -8,145 +8,151 @@
     </header>
     <body>
       <group resname="Studio">
-        <trans-unit id="29" resname="dataclass">
+        <trans-unit id="45" resname="dataclass">
           <source>Dataclass</source>
           <target>Dataclass</target>
         </trans-unit>
-        <trans-unit id="36" resname="vector">
+        <trans-unit id="55" resname="vector">
           <source>Vector</source>
           <target>Vecteur</target>
         </trans-unit>
-        <trans-unit id="33" resname="explanatoryPhrase">
+        <trans-unit id="50" resname="explanatoryPhrase">
           <source>Descriptive Phrase</source>
           <target>Phrase descriptive</target>
         </trans-unit>
-        <trans-unit id="34" resname="model">
+        <trans-unit id="52" resname="model">
           <source>Model</source>
           <target>Modèle</target>
         </trans-unit>
-        <trans-unit id="32" resname="embed">
+        <trans-unit id="48" resname="embed">
           <source>Insert</source>
           <target>Insérer</target>
         </trans-unit>
-        <trans-unit id="37" resname="vectorStudio">
+        <trans-unit id="57" resname="vectorStudio">
           <source>Vector Studio</source>
           <target state="new">Vector Studio</target>
         </trans-unit>
-        <trans-unit id="35" resname="modelManagement">
+        <trans-unit id="53" resname="modelManagement">
           <source>Model Management</source>
           <target>Gestion des modèles</target>
         </trans-unit>
-        <trans-unit id="31" resname="editModel">
+        <trans-unit id="47" resname="editModel">
           <source>Edit the model…</source>
           <target>Modifier le modèle…</target>
         </trans-unit>
       </group>
       <group resname="Errors">
-        <trans-unit id="6" resname="theAttributeDoesn'tExistsInTheDataclass">
+        <trans-unit id="10" resname="theAttributeDoesn'tExistsInTheDataclass">
           <source>The attribute "{attribute}" doesn't exists in the dataclass "{dataclass}".</source>
           <target>L'attribut "{attribute}" n'existe pas dans la dataclasse "{dataclass}".</target>
         </trans-unit>
-        <trans-unit id="4" resname="missingDataclass">
+        <trans-unit id="7" resname="missingDataclass">
           <source>Missing dataclass "{dataclass}".</source>
           <target>Dataclasse manquante "{dataclass}".</target>
         </trans-unit>
-        <trans-unit id="5" resname="missingVector">
+        <trans-unit id="9" resname="missingVector">
           <source>Missing vector "{attribute}" of dataclass "{dataclass}".</source>
           <target>Vecteur "{attribute}" manquant dans la dataclasse "{dataclass}".</target>
         </trans-unit>
-        <trans-unit id="3" resname="attributeIsNotAVector">
+        <trans-unit id="5" resname="attributeIsNotAVector">
           <source>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</source>
           <target>L'attribut "{attribute}" de la dataclasse "{dataclass}" n'est pas un vecteur.</target>
         </trans-unit>
-        <trans-unit id="7" resname="theAttributeIsAVector">
+        <trans-unit id="12" resname="theAttributeIsAVector">
           <source>The "{attribute}" attribute is a vector and cannot be used in this context.</source>
           <target>L'attribut "{attribute}" est un vecteur et ne peut pas être utilisé dans ce contexte.</target>
         </trans-unit>
-        <trans-unit id="8" resname="theModelNameMustBeUnique">
+        <trans-unit id="13" resname="theModelNameMustBeUnique">
           <source>The model name "{name}" is already in use and must be unique.</source>
           <target>Le nom du modèle "{name}" est déjà utilisé et doit être unique.</target>
         </trans-unit>
-        <trans-unit id="9" resname="theValueIsRequired.">
+        <trans-unit id="15" resname="theValueIsRequired.">
           <source>A value for “{value}” is required.</source>
           <target>Une valeur pour « {value} » est requise.</target>
         </trans-unit>
-        <trans-unit id="10" resname="thisModelCannotBeDeletedBecauseItIsUsed">
+        <trans-unit id="17" resname="thisModelCannotBeDeletedBecauseItIsUsed">
           <source>This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</source>
           <target>Ce modèle ne peut pas être supprimé car il est utilisé par "{vector}" de la dataclass "{dataclass}".</target>
         </trans-unit>
       </group>
       <group resname="Models">
-        <trans-unit id="20" resname="name">
+        <trans-unit id="29" resname="name">
           <source>Name</source>
           <target>Nom</target>
         </trans-unit>
-        <trans-unit id="19" resname="models">
+        <trans-unit id="28" resname="models">
           <source>Models</source>
           <target>Modèles</target>
         </trans-unit>
-        <trans-unit id="11" resname="apiKey">
+        <trans-unit id="18" resname="apiKey">
           <source>API Key</source>
           <target>Clé API</target>
         </trans-unit>
-        <trans-unit id="15" resname="baseURL">
+        <trans-unit id="21" resname="baseURL">
           <source>Base URL</source>
           <target>URL de base</target>
         </trans-unit>
-        <trans-unit id="23" resname="organization">
+        <trans-unit id="34" resname="organization">
           <source>Organization</source>
           <target>Organisation</target>
         </trans-unit>
-        <trans-unit id="24" resname="project">
+        <trans-unit id="36" resname="project">
           <source>Project</source>
           <target>Projet</target>
-        </trans-unit>        
-        <trans-unit id="22" resname="newModelItem">
+        </trans-unit>
+        <trans-unit id="33" resname="newModelItem">
           <source>New model…</source>
           <target>Nouveau modèle…</target>
         </trans-unit>
-        <trans-unit id="25" resname="selectAModel">
+        <trans-unit id="37" resname="selectAModel">
           <source>Select a model</source>
           <target>Sélectionnez un modèle</target>
         </trans-unit>
-        <trans-unit id="18" resname="informations">
+        <trans-unit id="26" resname="informations">
           <source>Informations</source>
           <target>Informations</target>
         </trans-unit>
-        <trans-unit id="21" resname="newModel">
+        <trans-unit id="31" resname="newModel">
           <source>Model</source>
           <target>Modèle</target>
         </trans-unit>
-        <trans-unit id="26" resname="yourOpenaiApiKey">
+        <trans-unit id="39" resname="yourOpenaiApiKey">
           <source>Your API Key.</source>
           <target>Votre clé API OpenAI.</target>
         </trans-unit>
-        <trans-unit id="16" resname="baseUrlForOpenaiApiRequests">
+        <trans-unit id="22" resname="baseUrlForOpenaiApiRequests">
           <source>The openAI endpoint will be used by default</source>
           <target>L’interface OpenAI sera utilisée par défaut</target>
         </trans-unit>
-        <trans-unit id="27" resname="yourOpenaiOrganizationId">
+        <trans-unit id="40" resname="yourOpenaiOrganizationId">
           <source>Your Organization ID.</source>
           <target>Votre identifiant d'organisation OpenAI.</target>
         </trans-unit>
-        <trans-unit id="28" resname="yourOpenaiProjectId">
+        <trans-unit id="42" resname="yourOpenaiProjectId">
           <source>Your Project ID.</source>
           <target>Votre identifiant de projet OpenAI.</target>
         </trans-unit>
-        <trans-unit id="17" resname="idDisplayedInTheDropdownList">
+        <trans-unit id="24" resname="idDisplayedInTheDropdownList">
           <source>ID displayed in the drop-down list</source>
           <target>ID affiché dans la liste déroulante</target>
-        </trans-unit>        
-        <trans-unit id="14" resname="areYouSureYouWantToDeleteThisModel">
+        </trans-unit>
+        <trans-unit id="19" resname="areYouSureYouWantToDeleteThisModel">
           <source>Are you sure you want to delete this model?</source>
           <target>Voulez vous vraiment supprimer ce modèle ?</target>
         </trans-unit>
+        <trans-unit id="43" resname="anEmbeddingModelIsRequired">
+          <source>An embedding model is required to create vectors.
+Click + to add your first model.</source>
+          <target>Un modèle d’embedding est nécessaire pour créer des vecteurs.
+Cliquez sur + pour ajouter votre premier modèle.</target>
+        </trans-unit>
       </group>
       <group resname="Common">
-        <trans-unit id="1" resname="cancel">
+        <trans-unit id="2" resname="cancel">
           <source>Cancel</source>
           <target>Annuler</target>
         </trans-unit>
-        <trans-unit id="2" resname="done">
+        <trans-unit id="4" resname="done">
           <source>Done</source>
           <target>Fermer</target>
         </trans-unit>
