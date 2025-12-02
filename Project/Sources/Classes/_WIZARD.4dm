@@ -23,7 +23,6 @@ Function _loadPredefinedProviders()
 		
 	End for each 
 	
-	// TODO: Singleton?
 Class constructor
 	
 	This:C1470._loadPredefinedProviders()

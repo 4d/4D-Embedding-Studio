@@ -3,36 +3,21 @@
 		{
 			"version": 0,
 			"dataclassName": "AllTypes",
-			"dataclassNumber": 6,
 			"vectorName": "Vector",
-			"vectorNumber": 14,
 			"model": "first model",
 			"phrase": ""
 		},
 		{
 			"version": -1,
 			"dataclassName": "School",
-			"dataclassNumber": 2,
 			"vectorName": "vector_with_error",
-			"vectorNumber": 5,
 			"model": "",
 			"phrase": "Non existing attribute {toto}"
 		},
 		{
-			"version": -1,
+			"version": 1,
 			"dataclassName": "Students",
-			"dataclassNumber": 1,
 			"vectorName": "student_vector_1",
-			"vectorNumber": 4,
-			"model": "Model 10",
-			"phrase": ""
-		},
-		{
-			"version": -1,
-			"dataclassName": "Students",
-			"dataclassNumber": 1,
-			"vectorName": "student_vector_2",
-			"vectorNumber": 5,
 			"model": "hello",
 			"phrase": "was Table_1 Field_5"
 		}
@@ -44,7 +29,7 @@
 			"apiKey": "a"
 		},
 		{
-			"name": "helloz",
+			"name": "hello",
 			"model": "text-embedding-ada-002",
 			"apiKey": "1234",
 			"baseURL": ""

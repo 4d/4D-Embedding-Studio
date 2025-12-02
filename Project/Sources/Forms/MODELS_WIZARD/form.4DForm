@@ -161,13 +161,28 @@
 					"method": "ObjectMethods/model.4dm",
 					"dataSource": "Form:C1466",
 					"sizingX": "grow"
+				},
+				"help": {
+					"type": "button",
+					"text": "Button",
+					"top": 374,
+					"left": 654,
+					"width": 26,
+					"height": 26,
+					"events": [
+						"onClick"
+					],
+					"style": "help",
+					"sizingX": "move",
+					"sizingY": "move"
 				}
 			},
 			"entryOrder": [
 				"list",
 				"model",
 				"add",
-				"delete"
+				"delete",
+				"help"
 			]
 		}
 	],
@@ -179,7 +194,7 @@
 			"Guides": {}
 		}
 	},
-	"geometryStamp": 524,
+	"geometryStamp": 526,
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"method": "FORM_MANAGER",

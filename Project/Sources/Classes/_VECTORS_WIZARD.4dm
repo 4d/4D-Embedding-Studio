@@ -12,6 +12,7 @@ property modelsDropdown : Object
 property debug:=Structure file:C489=Structure file:C489(*)
 
 property _cache : Object  // Current catalog cache
+property _newItemWording:=Localized string:C991("newModelItem")
 
 Class constructor
 	
@@ -50,6 +51,7 @@ Function manager($e : Object)
 				//______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
+				// TODO: Visual indicator
 				CALL FORM:C1391(Current form window:C827; Formula:C1597(Form:C1466.updateList()))
 				
 				//______________________________________________________
@@ -67,6 +69,25 @@ Function manager($e : Object)
 			: ($e.objectName="phrase")
 				
 				This:C1470.phraseManager($e)
+				
+				//______________________________________________________
+			: ($e.objectName="list")
+				
+				var $me:="list"
+				var $x; $y; $button; $column; $row : Integer
+				MOUSE POSITION:C468($x; $y; $button)
+				LISTBOX GET CELL POSITION:C971(*; $me; $x; $y; $column; $row)
+				
+				If ($row>0)
+					
+					var $vector : cs:C1710.Vector:=Form:C1466.vectors[$row-1]
+					OBJECT SET HELP TIP:C1181(*; $me; $vector[""]#Null:C1517 ? String:C10($vector.helptip) : String:C10($vector.error))
+					
+				Else 
+					
+					OBJECT SET HELP TIP:C1181(*; $me; "")
+					
+				End if 
 				
 				//______________________________________________________
 		End case 
@@ -96,13 +117,6 @@ Function manager($e : Object)
 		: ($e.objectName="models")
 			
 			This:C1470.modelsDropdownManager($e)
-			
-/*
-//______________________________________________________
-: ($e.objectName="openModelsManager")
-			
-_MODELS_WIZARD(True; String(This.currentItem.model))
-*/
 			
 			//______________________________________________________
 		: ($e.objectName="save")
@@ -160,7 +174,23 @@ Function moreManager($e : Object)
 	
 	var $vector : cs:C1710.Vector:=This:C1470.currentItem
 	var $menu:=cs:C1710.menu.new()
-	This:C1470._embeddedAttributesMenu($vector; $menu)
+	
+	If (OBJECT Get name:C1087(Object with focus:K67:3)="phrase")
+		
+		$menu.edit(True:C214).line()
+		This:C1470._embeddedAttributesMenu($vector; $menu)
+		
+	End if 
+	
+	If (Length:C16(String:C10($vector.model))>0)
+		
+		$menu.append(":xliff:editModel"; "editModel")
+		
+	Else 
+		
+		$menu.append(This:C1470._newItemWording; "editModel")
+		
+	End if 
 	
 	$menu.line().append("🚧 Edit API key"; "editApiKey")
 	
@@ -182,6 +212,11 @@ Function moreManager($e : Object)
 			
 			This:C1470.insertInput($vector; $menu.choice)
 			This:C1470.saveVectors()
+			
+			// ______________________________________________________
+		: ($menu.choice="editModel")
+			
+			_MODELS_WIZARD($vector.model)
 			
 			// ______________________________________________________
 		: ($menu.choice="editApiKey")
@@ -325,23 +360,9 @@ Function modelsDropdownManager($e : Object)
 			
 			$dropDown:=This:C1470.modelsDropdown
 			
-			If ($dropDown.currentValue=Localized string:C991("newModelItem"))  // Create a new model
+			If ($dropDown.currentValue=This:C1470._newItemWording)  // Create a new model
 				
-				var $model:=New_Model(This:C1470)
-				
-				If ($model#Null:C1517)
-					
-					// Update the current vector
-					This:C1470.currentItem.model:=$model.name
-					This:C1470.saveVectors()
-					
-					// Update the dropdown
-					This:C1470.modelsDropdown.values:=This:C1470._getModelDropdownValues()
-					
-				End if 
-				
-				// Update UI
-				This:C1470.modelsDropdownUpdate()
+				_MODELS_WIZARD("new")
 				
 				return 
 				
@@ -413,6 +434,9 @@ Function updateList()
 		
 	End if 
 	
+	This:C1470.readModels()
+	This:C1470.modelsDropdownUpdate(This:C1470.currentItem)
+	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _cacheCatalog()
 	
@@ -477,7 +501,7 @@ Function _catalogModified() : Boolean
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _getModelDropdownValues() : Collection
 	
-	return This:C1470.models.extract("name").orderBy().combine(["-"; Localized string:C991("newModelItem")])
+	return This:C1470.models.extract("name").orderBy().combine(["-"; This:C1470._newItemWording])
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _embeddedAttributesMenu($vector : cs:C1710.Vector; $menu : cs:C1710.menu)
