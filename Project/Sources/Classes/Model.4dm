@@ -6,7 +6,9 @@ property baseURL : Text  // Base URL for OpenAI API requests. (optional)
 property organization : Text  // OpenAI Organization ID. (optional)
 property project : Text  // OpenAI Project ID. (optional)
 
+property needAPIKey : Boolean
 property valid : Boolean
+property errors:=[]
 
 Class constructor(\
 $name : Text; \
@@ -28,3 +30,29 @@ $optionals : Object)
 			
 		End for each 
 	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+/*
+Function get valid() : Boolean
+	
+var $t : Text
+For each ($t; This.needAPIKey ? ["name"; "apiKey"; "model"] : ["name"; "model"])
+	
+If (Length(String(This[$t]))=0)
+	
+var $error:=Replace string(Localized string("theValueIsRequired."); "{value}"; Localized string($t))
+	
+If (Not(This.errors.includes($error)))
+	
+This.errors.push($error)
+	
+End if 
+	
+return 
+	
+End if 
+End for each 
+*/
+	
+	
+	

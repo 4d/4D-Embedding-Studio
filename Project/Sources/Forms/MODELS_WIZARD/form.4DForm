@@ -18,12 +18,11 @@
 				"noModel": {
 					"type": "text",
 					"text": ":xliff:anEmbeddingModelIsRequired",
-					"top": 19,
-					"left": 267,
+					"top": 185,
+					"left": 268,
 					"width": 363,
 					"height": 31,
 					"fontTheme": "main",
-					"sizingX": "move",
 					"visibility": "hidden"
 				}
 			}
@@ -164,7 +163,7 @@
 					"left": 217,
 					"top": 30,
 					"width": 464,
-					"height": 269,
+					"height": 314,
 					"detailForm": "MODEL",
 					"events": [
 						"onGettingFocus"
@@ -212,7 +211,7 @@
 			}
 		}
 	},
-	"geometryStamp": 542,
+	"geometryStamp": 550,
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"method": "FORM_MANAGER",

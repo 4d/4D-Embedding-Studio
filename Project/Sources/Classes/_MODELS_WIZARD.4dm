@@ -128,10 +128,19 @@ Function listManager($e : Object)
 		
 		If (This:C1470.previousItem#Null:C1517)
 			
-			
+			If (Not:C34(This:C1470.validate(This:C1470.previousItem)))
+				
+				ALERT:C41(This:C1470.previousItem.errors.join("\r"))
+				
+				var $index:=This:C1470.models.indexOf(This:C1470.previousItem)
+				LISTBOX SELECT ROW:C912(*; "list"; $index+1; lk replace selection:K53:1)
+				
+				return 
+				
+			End if 
 		End if 
 		
-		This:C1470.previousItem:=This:C1470.currentItem  // keep a copy of the item
+		This:C1470.previousItem:=This:C1470.currentItem
 		
 		If (This:C1470.currentItem=Null:C1517)
 			
@@ -152,6 +161,40 @@ Function listManager($e : Object)
 		OBJECT SET ENABLED:C1123(*; "delete"; True:C214)
 		
 	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function validate($model : cs:C1710.Model) : Boolean
+	
+	$model.errors:=$model.errors || []
+	
+	var $provider : cs:C1710.Provider:=Form:C1466._providers.query("baseURL = :1"; String:C10(Form:C1466.model.baseURL) || "https://api.openai.com/@").first()
+	
+	var $t : Text
+	For each ($t; $provider.needAPIKey ? ["name"; "apiKey"; "model"] : ["name"; "model"])
+		
+		var $error:=Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t))
+		
+		If (Length:C16(String:C10($model[$t]))=0)
+			
+			If (Not:C34($model.errors.includes($error)))
+				
+				$model.errors.push($error)
+				
+			End if 
+			
+		Else 
+			
+			var $index:=$model.errors.indexOf($error)
+			
+			If ($index#-1)
+				
+				$model.errors.remove($index)
+				
+			End if 
+		End if 
+	End for each 
+	
+	return $model.errors.length=0
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function modelContainerManager($e : Object)
@@ -180,6 +223,33 @@ Function selectModel($name : Text)
 	End if 
 	
 	SET TIMER:C645(-1)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function newModel()
+	
+	var $name:=Localized string:C991("newModel")
+	var $i : Integer
+	
+	var $c : Collection:=Form:C1466.models.extract("name")
+	
+	Repeat 
+		
+		If ($c.includes($name))
+			
+			$i+=1
+			$name:=Localized string:C991("newModel")+String:C10($i; " ##")
+			
+		Else 
+			
+			break
+			
+		End if 
+	Until (False:C215)
+	
+	var $model:=cs:C1710.Model.new($name)
+	Form:C1466.models.push($model)
+	
+	This:C1470.selectModel($name)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function deleteModel($name : Text)

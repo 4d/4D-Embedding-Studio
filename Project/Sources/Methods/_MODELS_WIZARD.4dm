@@ -13,7 +13,7 @@ Case of
 		// ______________________________________________________
 	: ($name="new")
 		
-		CALL FORM:C1391($winref; Formula:C1597(Form:C1466.new()))
+		CALL FORM:C1391($winref; Formula:C1597(Form:C1466.newModel()))
 		
 		// ______________________________________________________
 	Else 

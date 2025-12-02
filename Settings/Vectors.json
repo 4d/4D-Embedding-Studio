@@ -20,6 +20,13 @@
 			"vectorName": "student_vector_1",
 			"model": "hello",
 			"phrase": "was Table_1 Field_5"
+		},
+		{
+			"version": 0,
+			"dataclassName": "Students",
+			"vectorName": "student_vector_2",
+			"model": "Model",
+			"phrase": ""
 		}
 	],
 	"models": [
@@ -33,6 +40,17 @@
 			"model": "text-embedding-ada-002",
 			"apiKey": "1234",
 			"baseURL": ""
+		},
+		{
+			"name": "Model",
+			"model": "text-embedding-3-large",
+			"apiKey": "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",
+			"baseURL": "https://api.openai.com/v1/"
+		},
+		{
+			"name": "Model 1",
+			"model": "text-embedding-3-large",
+			"apiKey": "zzz"
 		},
 		{
 			"name": "Model 10",
