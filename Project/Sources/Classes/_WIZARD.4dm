@@ -164,6 +164,15 @@ var $v : cs.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $
 			$v.phrase:=$v.parsePhrase($vector.phrase)
 			$v.version:=$vector.version#Null:C1517 ? Num:C11($vector.version) : $v.version
 			
+			Case of 
+					
+					// ______________________________________________________
+				: ($v.model="")
+					
+					$v.error:=Localized string:C991("theModelIsNotDefined")
+					
+			End case 
+			
 		End for each 
 	End if 
 	

@@ -160,12 +160,27 @@ Function listManager($e : Object)
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function listMetaInfo($me : cs:C1710.Vector) : Object
 	
-	If ($me#This:C1470.currentItem)\
-		 && (($me[""].errors.length>0) || (Length:C16(String:C10($me.error))>0))
+	var $meta:={}
+	
+	If ($me.defined)
 		
-		return {cell: {dataclass: {stroke: "red"}; vector: {stroke: "red"}}}
+		$meta.fontWeight:="bold"
+		
+		If ($me#This:C1470.currentItem)
+			
+			If (($me[""].errors.length>0) || (Length:C16(String:C10($me.error))>0))\
+				 || ($me.model="")
+				
+				$meta.stroke:="red"
+				
+			End if 
+			
+			
+		End if 
 		
 	End if 
+	
+	return $meta
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function moreManager($e : Object)
@@ -299,16 +314,25 @@ Function phraseManager($e : Object)
 			// Highlight any errors, if any
 			$vector.phrase:=$vector.parsePhrase($plainText)
 			
+			Form:C1466.vectors:=Form:C1466.vectors  // update UI
+			
 			// ______________________________________________________
 		: ($e.code=On Data Change:K2:15)
 			
 			// Highlight any errors, if any
 			ST SET TEXT:C1115(*; $me; $vector.parsePhrase($plainText); ST Start text:K78:15; ST End text:K78:16)
 			
+			This:C1470.currentItem.version+=1
 			This:C1470.saveVectors()
+			
+			Form:C1466.vectors:=Form:C1466.vectors  // update UI
 			
 			// ______________________________________________________
 	End case 
+	
+Function increaseVersion($version : Integer) : Integer
+	
+	
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function insertInput($vector : cs:C1710.Vector; $input : Text)
@@ -362,6 +386,9 @@ Function modelsDropdownManager($e : Object)
 			
 			If ($dropDown.currentValue=This:C1470._newItemWording)  // Create a new model
 				
+				This:C1470.modelsDropdown.index:=-1
+				This:C1470.modelsDropdown.currentValue:=This:C1470.modelsDropdown.placeholder
+				
 				_MODELS_WIZARD("new")
 				
 				return 
@@ -372,6 +399,8 @@ Function modelsDropdownManager($e : Object)
 			This:C1470.currentItem.model:=$dropDown.currentValue
 			This:C1470.currentItem.version+=1
 			This:C1470.saveVectors()
+			
+			Form:C1466.vectors:=Form:C1466.vectors  // update UI
 			
 			//______________________________________________________
 	End case 
