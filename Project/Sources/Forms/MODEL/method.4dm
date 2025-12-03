@@ -27,7 +27,6 @@ If ($e.objectName=Null:C1517)  // Form method
 			
 			Form:C1466._snapshot:=Form:C1466._snapshot || Form:C1466.model=Null:C1517 ? Null:C1517 : OB Copy:C1225(Form:C1466.model)
 			
-			
 			// Mandatory or not fields labels style
 			$provider:=Form:C1466._provider || cs:C1710.Provider.new(Form:C1466.model)
 			OBJECT SET FONT STYLE:C166(*; "apiKey.label"; Form:C1466._provider.needAPIKey ? Bold:K14:2 : Plain:K14:1)
@@ -97,9 +96,17 @@ CALL SUBFORM CONTAINER(-1)
 			
 			If ($c.length>0)
 				
+				CONFIRM:C162(".Would you like to update the vectors using this model?"; ".Update")
 				
-				
-				
+				If (Bool:C1537(OK))
+					
+					var $vector : cs:C1710.Vector
+					For each ($vector; $c)
+						
+						//$vector.model:=
+						
+					End for each 
+				End if 
 			End if 
 			
 			//______________________________________________________

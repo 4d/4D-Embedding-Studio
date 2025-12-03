@@ -3,7 +3,7 @@
   <file datatype="x-STR#" original="Undefined" source-language="en" target-language="ja">
     <header>
       <prop-group name="4DPop XLIFF Pro">
-        <prop prop-type="version">3.0</prop>
+        <prop prop-type="version">3.1</prop>
       </prop-group>
     </header>
     <body>
@@ -73,6 +73,10 @@
         <trans-unit id="17" resname="thisModelCannotBeDeletedBecauseItIsUsed">
           <source>This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</source>
           <target state="new">This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</target>
+        </trans-unit>
+        <trans-unit id="tqepk+C7nSjsmFD87VD0gA" resname="theModelIsNotDefined">
+          <source>The model is not defined</source>
+          <target state="new">The model is not defined</target>
         </trans-unit>
       </group>
       <group resname="Models">

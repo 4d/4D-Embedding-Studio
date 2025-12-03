@@ -194,7 +194,7 @@ Function _localizedErrorMessage($resname : Text; $attribute : Text; $dataclass :
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get defined() : Boolean
 	
-	return (This:C1470.version#-1) || (Length:C16(This:C1470.phrase)>0)
+	return This:C1470.version>=0  //(Length(This.model)>0) || (Length(This.phrase)>0)
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get definition() : cs:C1710.Vector
