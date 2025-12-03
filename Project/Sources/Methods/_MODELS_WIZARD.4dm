@@ -1,12 +1,12 @@
 //%attributes = {"shared":true}
-#DECLARE($name : Text)
+#DECLARE($name : Text) : Integer
 
 var $winRef:=Open form window:C675("MODELS_WIZARD"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)
 
 Case of 
 		
 		// ______________________________________________________
-	: (Count parameters:C259=0)
+	: (Count parameters:C259=0)  // C++ call
 		
 		// <NOTHING MORE TO DO>
 		
@@ -23,5 +23,15 @@ Case of
 		// ______________________________________________________
 End case 
 
-DIALOG:C40("MODELS_WIZARD")
-CLOSE WINDOW:C154($winRef)
+If (Structure file:C489=Structure file:C489(*))  // DEV TESTS
+	
+	DIALOG:C40("MODELS_WIZARD")
+	CLOSE WINDOW:C154($winRef)
+	
+Else 
+	
+	DIALOG:C40("MODELS_WIZARD"; *)
+	
+	return $winRef
+	
+End if 
