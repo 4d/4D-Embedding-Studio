@@ -209,6 +209,22 @@
 			],
 			"Summary": ""
 		},
+		"increaseVersion()": {
+			"Syntax": "**.increaseVersion**( *version* : Integer ) : Integer",
+			"Params": [
+				[
+					"version",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"listManager()": {
 			"Syntax": "**.listManager**( *e* : Object )",
 			"Params": [
