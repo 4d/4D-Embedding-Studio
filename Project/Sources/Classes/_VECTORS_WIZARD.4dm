@@ -1,18 +1,13 @@
 Class extends _WIZARD
 
-// Vector list
-property currentItem : Object
-property itemPosition : Integer
-property selectedItems : Collection
+property _detailFields:=[\
+"phrase"; \
+"models"; \
+"more"]
 
-// Vector details
-property details:=["phrase"; "phraseLabel"; "models"; "modelsLabel"; "more"]  // ; "openModelsManager"
 property modelsDropdown : Object
-
-property debug:=Structure file:C489=Structure file:C489(*)
-
 property _cache : Object  // Current catalog cache
-property _newItemWording:=Localized string:C991("newModelItem")
+property _newItemWording:=Localized string:C991("newModelItem")  // Label of the menu item “new model”
 
 Class constructor
 	
@@ -28,33 +23,31 @@ Function manager($e : Object)
 	
 	If ($e.objectName=Null:C1517)
 		
+		Super:C1706.manager($e)
+		
 		Case of 
 				
-				//______________________________________________________
+				// ________________________________________________________________________________
 			: ($e.code=On Load:K2:1)
 				
-				This:C1470.listManager($e)
 				This:C1470.modelsDropdownManager($e)
 				
 				OBJECT SET FORMAT:C236(*; "Header1"; "path:/.PRODUCT_RESOURCES/Images/ObjectIcons/Icon_600.png")
-				
 				// TODO: Use the new vector icon when ready
 				OBJECT SET FORMAT:C236(*; "Header2"; "path:/.PRODUCT_RESOURCES/Images/StructureEditor/Field_14.png")
 				
-				SET TIMER:C645(-1)
-				
-				//______________________________________________________
+				// ______________________________________________________
 			: ($e.code=On Timer:K2:25)
 				
-				SET TIMER:C645(0)
+				//
 				
-				//______________________________________________________
+				// ______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
 				// TODO: Visual indicator
 				CALL FORM:C1391(Current form window:C827; Formula:C1597(Form:C1466.updateList()))
 				
-				//______________________________________________________
+				// ________________________________________________________________________________
 		End case 
 		
 		return 
@@ -66,14 +59,9 @@ Function manager($e : Object)
 		Case of 
 				
 				//______________________________________________________
-			: ($e.objectName="phrase")
+			: ($e.objectName=This:C1470.list)
 				
-				This:C1470.phraseManager($e)
-				
-				//______________________________________________________
-			: ($e.objectName="list")
-				
-				var $me:="list"
+				var $me:=This:C1470.list
 				var $x; $y; $button; $column; $row : Integer
 				MOUSE POSITION:C468($x; $y; $button)
 				LISTBOX GET CELL POSITION:C971(*; $me; $x; $y; $column; $row)
@@ -90,16 +78,21 @@ Function manager($e : Object)
 				End if 
 				
 				//______________________________________________________
+			: ($e.objectName="phrase")
+				
+				This:C1470.phraseManager($e)
+				
+				//______________________________________________________
 		End case 
 		
-		return   // Mouseover is only handled for the sentence.
+		return 
 		
 	End if 
 	
 	Case of 
 			
 			//______________________________________________________
-		: ($e.objectName="list")
+		: ($e.objectName=This:C1470.list)
 			
 			This:C1470.listManager($e)
 			
@@ -132,26 +125,7 @@ Function listManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	// TODO: Error help tips based on the line hovered
-	
-	If (This:C1470.currentItem=Null:C1517)
-		
-		var $t : Text
-		For each ($t; This:C1470.details)
-			
-			OBJECT SET VISIBLE:C603(*; $t; False:C215)
-			
-		End for each 
-		
-		return 
-		
-	Else 
-		
-		For each ($t; This:C1470.details)
-			
-			OBJECT SET VISIBLE:C603(*; $t; True:C214)
-			
-		End for each 
+	If (This:C1470.updateUI())
 		
 		This:C1470.modelsDropdownUpdate(This:C1470.currentItem)
 		
@@ -209,7 +183,7 @@ Function moreManager($e : Object)
 	
 	$menu.line().append("🚧 Edit API key"; "editApiKey")
 	
-	If (This:C1470.debug)
+	If (This:C1470._DEBUG)
 		
 		$menu.append("🚧 open setting file"; "openSettingFile")
 		
@@ -330,10 +304,6 @@ Function phraseManager($e : Object)
 			// ______________________________________________________
 	End case 
 	
-Function increaseVersion($version : Integer) : Integer
-	
-	
-	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function insertInput($vector : cs:C1710.Vector; $input : Text)
 	
@@ -445,12 +415,12 @@ Function updateList()
 			
 			If ($c.length>0)
 				
-				LISTBOX SELECT ROW:C912(*; "list"; $c[0]+1)
+				LISTBOX SELECT ROW:C912(*; This:C1470.list; $c[0]+1)
 				This:C1470.currentItem:=This:C1470.vectors[$c[0]]
 				
 			Else 
 				
-				LISTBOX SELECT ROW:C912(*; "list"; 0; lk remove from selection:K53:3)  // Deselect
+				LISTBOX SELECT ROW:C912(*; This:C1470.list; 0; lk remove from selection:K53:3)  // Deselect
 				This:C1470.currentItem:=Null:C1517
 				
 			End if 
@@ -546,4 +516,3 @@ Function _embeddedAttributesMenu($vector : cs:C1710.Vector; $menu : cs:C1710.men
 		$embed.release()
 		
 	End if 
-	

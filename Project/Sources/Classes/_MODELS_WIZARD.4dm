@@ -1,12 +1,16 @@
 Class extends _WIZARD
 
-// Model list
-property currentItem : cs:C1710.Model
-property itemPosition : Integer
-property selectedItems : Collection
-property previousItem : cs:C1710.Model
+property _detailFields:=[\
+"name"; \
+"baseURL"; \
+"baseURLMenu"; \
+"apiKey"; \
+"model"; \
+"modelMenu"; \
+"organization"; \
+"project"]
 
-property debug:=Structure file:C489=Structure file:C489(*)
+property previousItem : Object
 
 Class constructor
 	
@@ -21,28 +25,25 @@ Function manager($e : Object)
 	// MARK:- Form method
 	If ($e.objectName=Null:C1517)
 		
+		Super:C1706.manager($e)
+		
 		Case of 
 				
 				// ________________________________________________________________________________
 			: ($e.code=On Load:K2:1)
 				
 				OBJECT SET FORMAT:C236(*; "Header1"; "path:/.PRODUCT_RESOURCES/Images/WatchIcons/Watch_693.png")
-				
-				OBJECT SET VISIBLE:C603(*; "noModel"; Form:C1466.models.length=0)
-				
-				SET TIMER:C645(-1)
+				OBJECT SET VISIBLE:C603(*; "noModel"; This:C1470.models.length=0)
 				
 				// ______________________________________________________
 			: ($e.code=On Timer:K2:25)
 				
-				SET TIMER:C645(0)
-				
-				This:C1470.listManager({code: On Selection Change:K2:29})
+				//
 				
 				// ______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
-				GOTO OBJECT:C206(*; "list")
+				//
 				
 				// ________________________________________________________________________________
 		End case 
@@ -55,37 +56,14 @@ Function manager($e : Object)
 	Case of 
 			
 			// ______________________________________________________
-		: ($e.objectName="list")
+		: ($e.objectName=This:C1470.list)
 			
 			This:C1470.listManager($e)
 			
 			// ______________________________________________________
-		: ($e.objectName="model")
-			
-			If ($e.code<0)
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-			End if 
-			
-			// ______________________________________________________
 		: ($e.objectName="add")
 			
-			var $model:=New_Model(This:C1470)
-			
-			If ($model#Null:C1517)
-				
-				This:C1470.models:=This:C1470.models.orderBy("name asc")
-				This:C1470.selectModel($model.name)
-				
-			End if 
+			This:C1470.newModel()
 			
 			// ______________________________________________________
 		: ($e.objectName="delete")
@@ -111,7 +89,7 @@ an error message shall warn them that this model is used by xxx and 4D shall not
 				This:C1470.deleteModel(This:C1470.currentItem.name)
 				
 				// Update UI
-				LISTBOX SELECT ROW:C912(*; "list"; 0; lk remove from selection:K53:3)  // Unselect all
+				LISTBOX SELECT ROW:C912(*; This:C1470.list; 0; lk remove from selection:K53:3)  // Unselect all
 				SET TIMER:C645(-1)
 				
 			End if 
@@ -126,51 +104,59 @@ Function listManager($e : Object)
 	
 	If ($e.code=On Selection Change:K2:29)  // ⚠️ This event must be enabled for both the list box AND the form.
 		
-		If (This:C1470.previousItem#Null:C1517)
+		var $previous : cs:C1710.Model:=This:C1470.previousItem
+		
+		If ($previous#Null:C1517)
 			
-			If (Not:C34(This:C1470.validate(This:C1470.previousItem)))
+			If (Not:C34($previous.validate()))
 				
-				ALERT:C41(This:C1470.previousItem.errors.join("\r"))
+				ALERT:C41($previous.errors.join("\r"))
 				
-				var $index:=This:C1470.models.indexOf(This:C1470.previousItem)
-				LISTBOX SELECT ROW:C912(*; "list"; $index+1; lk replace selection:K53:1)
+				var $index:=This:C1470.models.indexOf($previous)
+				LISTBOX SELECT ROW:C912(*; This:C1470.list; $index+1; lk replace selection:K53:1)
 				
 				return 
 				
 			End if 
 		End if 
 		
-		This:C1470.previousItem:=This:C1470.currentItem
-		
-		If (This:C1470.currentItem=Null:C1517)
+		If (This:C1470.currentItem#Null:C1517)
 			
-			OBJECT SET VISIBLE:C603(*; "model"; False:C215)
-			OBJECT SET ENABLED:C1123(*; "delete"; False:C215)
-			
-			return 
+			This:C1470.currentItem._provider:=This:C1470.modelProvider
 			
 		End if 
 		
-		var $o : Object:=OBJECT Get value:C1743("model")
-		$o.model:=This:C1470.currentItem
-		OBJECT SET VALUE:C1742("model"; $o)
+		This:C1470.previousItem:=This:C1470.currentItem
 		
-		EXECUTE METHOD IN SUBFORM:C1085("model"; Formula:C1597(SET TIMER:C645(-1)))
+		If (This:C1470.updateUI())
+			
+/*
+var $provider:=This.modelProvider
+OBJECT SET FONT STYLE(*; "apiKey.label"; Bool($provider.needToken) ? Bold : Plain)
+*/
+			OBJECT SET FONT STYLE:C166(*; "apiKey.label"; This:C1470.currentItem._provider.needToken ? Bold:K14:2 : Plain:K14:1)
+			
+		End if 
+	End if 
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+Function get modelProvider() : cs:C1710.Provider
+	
+	If (This:C1470.currentItem=Null:C1517)
 		
-		OBJECT SET VISIBLE:C603(*; "model"; True:C214)
-		OBJECT SET ENABLED:C1123(*; "delete"; True:C214)
+		return 
 		
 	End if 
+	
+	return This:C1470._providers.query("baseURL = :1"; String:C10(This:C1470.currentItem.baseURL) || This:C1470._OPENAI).first()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function validate($model : cs:C1710.Model) : Boolean
 	
 	$model.errors:=$model.errors || []
 	
-	var $provider : cs:C1710.Provider:=Form:C1466._providers.query("baseURL = :1"; String:C10(Form:C1466.model.baseURL) || "https://api.openai.com/@").first()
-	
 	var $t : Text
-	For each ($t; $provider.needAPIKey ? ["name"; "apiKey"; "model"] : ["name"; "model"])
+	For each ($t; $model._provider.needToken ? ["name"; "apiKey"; "model"] : ["name"; "model"])
 		
 		var $error:=Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t))
 		
@@ -218,7 +204,7 @@ Function selectModel($name : Text)
 		
 		// Update UI
 		var $index:=This:C1470.models.indexOf(This:C1470.currentItem)
-		LISTBOX SELECT ROW:C912(*; "list"; $index+1; lk replace selection:K53:1)
+		LISTBOX SELECT ROW:C912(*; This:C1470.list; $index+1; lk replace selection:K53:1)
 		
 	End if 
 	
@@ -248,7 +234,7 @@ Function newModel()
 	
 	var $model:=cs:C1710.Model.new($name)
 	Form:C1466.models.push($model)
-	
+	This:C1470.models:=This:C1470.models.orderBy("name asc")
 	This:C1470.selectModel($name)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===

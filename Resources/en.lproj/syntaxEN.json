@@ -10,11 +10,11 @@
 		},
 		"Model": {
 			"new()": {
-				"Syntax": "**.new**( *name* : Text; *model* : Text; *apiKey* : Text; *optionals* : Object )",
+				"Syntax": "**.new**( *name* : Variant; *model* : Text; *apiKey* : Text; *optionals* : Object )",
 				"Params": [
 					[
 						"name",
-						"Text",
+						"Variant",
 						"->"
 					],
 					[
@@ -209,22 +209,6 @@
 			],
 			"Summary": ""
 		},
-		"increaseVersion()": {
-			"Syntax": "**.increaseVersion**( *version* : Integer ) : Integer",
-			"Params": [
-				[
-					"version",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"listManager()": {
 			"Syntax": "**.listManager**( *e* : Object )",
 			"Params": [
@@ -263,27 +247,23 @@
 			],
 			"Summary": ""
 		},
-		"debug": {
-			"Syntax": "debug : Boolean"
-		},
-		"selectedItems": {
-			"Syntax": "selectedItems : Collection"
-		},
 		"modelsDropdown": {
 			"Syntax": "modelsDropdown : Object"
-		},
-		"details": {
-			"Syntax": "details : Collection"
-		},
-		"itemPosition": {
-			"Syntax": "itemPosition : Integer"
-		},
-		"currentItem": {
-			"Syntax": "currentItem : Object"
 		},
 		"_inheritedFrom_": "_WIZARD"
 	},
 	"Model": {
+		"validate()": {
+			"Syntax": "**.validate**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"errors": {
 			"Syntax": "errors : Collection"
 		},
@@ -324,11 +304,6 @@
 			],
 			"Summary": ""
 		},
-		"newModel()": {
-			"Syntax": "**.newModel**()",
-			"Params": [],
-			"Summary": ""
-		},
 		"modelContainerManager()": {
 			"Syntax": "**.modelContainerManager**( *e* : Object )",
 			"Params": [
@@ -367,6 +342,22 @@
 			],
 			"Summary": ""
 		},
+		"newModel()": {
+			"Syntax": "**.newModel**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"get modelProvider()": {
+			"Syntax": "**.get modelProvider**() : cs.vectorStudio.Provider",
+			"Params": [
+				[
+					"",
+					"cs.vectorStudio.Provider",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"listManager()": {
 			"Syntax": "**.listManager**( *e* : Object )",
 			"Params": [
@@ -389,20 +380,8 @@
 			],
 			"Summary": ""
 		},
-		"selectedItems": {
-			"Syntax": "selectedItems : Collection"
-		},
-		"itemPosition": {
-			"Syntax": "itemPosition : Integer"
-		},
-		"debug": {
-			"Syntax": "debug : Boolean"
-		},
 		"previousItem": {
-			"Syntax": "previousItem : cs.vectorStudio.Model"
-		},
-		"currentItem": {
-			"Syntax": "currentItem : cs.vectorStudio.Model"
+			"Syntax": "previousItem : Object"
 		},
 		"_inheritedFrom_": "_WIZARD"
 	},
@@ -513,6 +492,22 @@
 		}
 	},
 	"_WIZARD": {
+		"isModelUsed()": {
+			"Syntax": "**.isModelUsed**( *name* : Text ) : cs.vectorStudio.Vector",
+			"Params": [
+				[
+					"name",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.vectorStudio.Vector",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"addModel()": {
 			"Syntax": "**.addModel**( *model* : cs.vectorStudio.Model )",
 			"Params": [
@@ -535,13 +530,13 @@
 			],
 			"Summary": ""
 		},
-		"saveVectors()": {
-			"Syntax": "**.saveVectors**( *vectors* : Collection )",
+		"updateUI()": {
+			"Syntax": "**.updateUI**() : Boolean",
 			"Params": [
 				[
-					"vectors",
-					"Collection",
-					"->"
+					"",
+					"Boolean",
+					"<-"
 				]
 			],
 			"Summary": ""
@@ -557,33 +552,23 @@
 			],
 			"Summary": ""
 		},
+		"manager()": {
+			"Syntax": "**.manager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
 		"readVectors()": {
 			"Syntax": "**.readVectors**() : Collection",
 			"Params": [
 				[
 					"",
 					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"writeSettings()": {
-			"Syntax": "**.writeSettings**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"isModelUsed()": {
-			"Syntax": "**.isModelUsed**( *name* : Text ) : cs.vectorStudio.Vector",
-			"Params": [
-				[
-					"name",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.vectorStudio.Vector",
 					"<-"
 				]
 			],
@@ -611,20 +596,48 @@
 			],
 			"Summary": ""
 		},
+		"writeSettings()": {
+			"Syntax": "**.writeSettings**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"saveVectors()": {
+			"Syntax": "**.saveVectors**( *vectors* : Collection )",
+			"Params": [
+				[
+					"vectors",
+					"Collection",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"selectedItems": {
+			"Syntax": "selectedItems : Collection"
+		},
+		"currentItem": {
+			"Syntax": "currentItem : Object"
+		},
+		"models": {
+			"Syntax": "models : Collection"
+		},
+		"list": {
+			"Syntax": "list : Text"
+		},
 		"providers": {
 			"Syntax": "providers : Object"
 		},
 		"vectors": {
 			"Syntax": "vectors : Collection"
 		},
-		"models": {
-			"Syntax": "models : Collection"
-		},
 		"file": {
 			"Syntax": "file : 4D.File"
 		},
 		"catalog": {
 			"Syntax": "catalog : cs.vectorStudio.DataStore"
+		},
+		"itemPosition": {
+			"Syntax": "itemPosition : Integer"
 		},
 		"settings": {
 			"Syntax": "settings : Object"
@@ -2116,22 +2129,6 @@
 			],
 			"Summary": ""
 		},
-		"loadModels()": {
-			"Syntax": "**.loadModels**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"get needAPIKey()": {
-			"Syntax": "**.get needAPIKey**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"menuModels()": {
 			"Syntax": "**.menuModels**( *default* : Text ) : cs.vectorStudio.menu",
 			"Params": [
@@ -2164,17 +2161,22 @@
 			],
 			"Summary": ""
 		},
+		"loadModels()": {
+			"Syntax": "**.loadModels**()",
+			"Params": [],
+			"Summary": ""
+		},
 		"success": {
 			"Syntax": "success : Boolean"
 		},
 		"endpoint": {
 			"Syntax": "endpoint : cs.AIKit.OpenAI"
 		},
+		"needToken": {
+			"Syntax": "needToken : Boolean"
+		},
 		"baseURL": {
 			"Syntax": "baseURL : Text"
-		},
-		"token_env_key": {
-			"Syntax": "token_env_key : Text"
 		},
 		"models": {
 			"Syntax": "models : Collection"

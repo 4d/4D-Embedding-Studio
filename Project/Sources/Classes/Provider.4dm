@@ -1,9 +1,11 @@
 property name : Text
 property baseURL : Text
-property token_env_key : Text
+property needToken : Boolean
 property success:=True:C214
 property endpoint : cs:C1710.AIKit.OpenAI
 property models : Collection
+
+property _OPENAI:="https://Api.openai.com/@"
 
 Class constructor($config)
 	
@@ -19,13 +21,12 @@ Class constructor($config)
 		: (Value type:C1509($config)=Is object:K8:27)  // {apiKey: "your api key"; baseURL: "https://server.ai"}
 			
 			This:C1470.baseURL:=$config.baseURL || $config.base_url
-			//ASSERT(This.baseURL#Null)
-			
 			This:C1470.name:=$config.name || This:C1470.normalizedName(This:C1470.baseURL)
 			
-			If (Length:C16(String:C10($config.token_env_key))>0)
+			This:C1470.needToken:=Bool:C1537($config.needToken)
+			
+			If (This:C1470.needToken)
 				
-				This:C1470.token_env_key:=$config.token_env_key
 				This:C1470.endpoint:=cs:C1710.AIKit.OpenAI.new({baseURL: This:C1470.baseURL; apiKey: This:C1470.apiKey})
 				
 			Else 
@@ -102,7 +103,7 @@ Function menuModels($default : Text) : cs:C1710.menu
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function normalizedName($url : Text) : Text
 	
-	If ($url="https://api.openai.com/@")
+	If ($url=This:C1470._OPENAI)
 		
 		return "openAI"
 		
@@ -124,11 +125,6 @@ Function normalizedName($url : Text) : Text
 	return $url
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
-Function get needAPIKey() : Boolean
-	
-	return This:C1470.token_env_key#Null:C1517
-	
-	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get apiKey() : Text
 	
 	This:C1470.success:=True:C214  // We are optimistic 😇
@@ -140,7 +136,7 @@ Function get apiKey() : Text
 	End if 
 	
 	// First, let's try reading an environment variable.
-	var $envKey : Text:=This:C1470.token_env_key || (Uppercase:C13(Replace string:C233(This:C1470.name; " "; "_"))+"_API_KEY")
+	var $envKey:=(Uppercase:C13(Replace string:C233(This:C1470.name; " "; "_"))+"_API_KEY")
 	var $apikey:=String:C10(cs:C1710.Env.me[$envKey])
 	
 	If (Length:C16($apikey)>0)
