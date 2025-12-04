@@ -156,7 +156,7 @@
 					"right": 800,
 					"visibility": "hidden"
 				},
-				"phraseLabel": {
+				"phrase.label": {
 					"type": "text",
 					"text": ":xliff:explanatoryPhrase",
 					"top": 27,
@@ -166,7 +166,7 @@
 					"class": "title",
 					"visibility": "hidden"
 				},
-				"modelsLabel": {
+				"models.label": {
 					"type": "text",
 					"text": ":xliff:model",
 					"top": 177,
@@ -222,7 +222,7 @@
 			}
 		}
 	],
-	"geometryStamp": 487,
+	"geometryStamp": 489,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

@@ -2,56 +2,56 @@
   {
     "name": "OpenAI",
     "base_url": "https://api.openai.com/v1/",
-    "token_env_key": "OPENAI_API_KEY"
+    "needToken": true
   },
   {
     "name": "Azure OpenAI",
     "base_url": "https://<your-resource-name>.openai.azure.com/openai/deployments/<deployment-id>/",
-    "token_env_key": "AZURE_OPENAI_KEY"
+    "needToken": true
   },
   {
     "name": "Google Gemini",
     "base_url": "https://generativelanguage.googleapis.com/v1beta/",
-    "token_env_key": "GOOGLE_API_KEY"
+    "needToken": true
   },
   {
     "name": "Mistral AI",
     "base_url": "https://api.mistral.ai/v1/",
-    "token_env_key": "MISTRAL_API_KEY"
+    "needToken": true
   },
   {
     "name": "Cohere",
     "base_url": "https://api.cohere.ai/v1/",
-    "token_env_key": "COHERE_API_KEY"
+    "needToken": true
   },
   {
     "name": "Ollama",
     "base_url": "http://localhost:11434/v1/",
-    "token_env_key": ""
+    "needToken": false
   },
   {
     "name": "Replicate",
     "base_url": "https://api.replicate.com/v1/",
-    "token_env_key": "REPLICATE_API_TOKEN"
+    "needToken": true
   },
   {
     "name": "Hugging Face",
     "base_url": "https://api-inference.huggingface.co/models/",
-    "token_env_key": "HUGGINGFACEHUB_API_TOKEN"
+    "needToken": true
   },
   {
     "name": "Amazon Bedrock",
     "base_url": "https://bedrock-runtime.<region>.amazonaws.com/",
-    "token_env_key": "AWS_BEDROCK_API_KEY"
+    "needToken": true
   },
   {
     "name": "DeepInfra",
     "base_url": "https://api.deepinfra.com/v1/openai/",
-    "token_env_key": "DEEPINFRA_API_TOKEN"
+    "needToken": true
   },
   {
     "name": "LM Studio",
     "base_url": "http://localhost:1234/v1/",
-    "token_env_key": ""
+    "needToken": false
   }
 ]

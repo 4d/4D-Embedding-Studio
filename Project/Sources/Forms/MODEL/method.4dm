@@ -7,37 +7,38 @@ If ($e.code=On Bound Variable Change:K2:52)
 	
 End if 
 
-
-
 If ($e.objectName=Null:C1517)  // Form method
 	
-	Case of 
-			
-			// ______________________________________________________
-		: ($e.code=On Load:K2:1)
-			
-			// Keep a snapshot of the current model definition
-			
-			SET TIMER:C645(-1)
-			
-			// ______________________________________________________
-		: ($e.code=On Timer:K2:25)
-			
-			SET TIMER:C645(0)
-			
-			Form:C1466._snapshot:=Form:C1466._snapshot || Form:C1466.model=Null:C1517 ? Null:C1517 : OB Copy:C1225(Form:C1466.model)
-			
-			// Mandatory or not fields labels style
-			$provider:=Form:C1466._provider || cs:C1710.Provider.new(Form:C1466.model)
-			OBJECT SET FONT STYLE:C166(*; "apiKey.label"; Form:C1466._provider.needAPIKey ? Bold:K14:2 : Plain:K14:1)
-			
-			// ______________________________________________________
-		: ($e.code=On Bound Variable Change:K2:52)
-			
-			Form:C1466._snapshot:=OB Copy:C1225(Form:C1466.model)
-			
-			// ______________________________________________________
-	End case 
+/*
+Case of 
+	
+// ______________________________________________________
+: ($e.code=On Load)
+	
+// Keep a snapshot of the current model definition
+	
+SET TIMER(-1)
+	
+// ______________________________________________________
+: ($e.code=On Timer)
+	
+SET TIMER(0)
+	
+Form._snapshot:=Form._snapshot || Form.model=Null ? Null : OB Copy(Form.model)
+	
+// Mandatory or not fields labels style
+$provider:=Form._provider || cs.Provider.new(Form.model)
+OBJECT SET FONT STYLE(*; "apiKey.label"; Form._provider.needAPIKey ? Bold : Plain)
+	
+// ______________________________________________________
+: ($e.code=On Bound Variable Change)
+	
+Form._snapshot:=OB Copy(Form.model)
+	
+// ______________________________________________________
+End case 
+*/
+	
 	
 	return 
 	
@@ -225,20 +226,22 @@ For each model, the name, api Key (if not local) and model are required.
 			
 		End if 
 		
-		var $t : Text
-		For each ($t; $provider.needAPIKey ? ["name"; "model"; "apiKey"] : ["name"; "model"])
-			
-			If (Length:C16(String:C10($model[$t]))=0)
-				
-				Form:C1466._popError(\
-					Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t)))
-				
-				GOTO OBJECT:C206(*; $t)
-				
-				return 
-				
-			End if 
-		End for each 
+/*
+var $t : Text
+For each ($t; $provider.needAPIKey ? ["name"; "model"; "apiKey"] : ["name"; "model"])
+		
+If (Length(String($model[$t]))=0)
+		
+Form._popError(\
+Replace string(Localized string("theValueIsRequired."); "{value}"; Localized string($t)))
+		
+GOTO OBJECT(*; $t)
+		
+return 
+		
+End if 
+End for each 
+*/
 		
 		ACCEPT:C269
 		

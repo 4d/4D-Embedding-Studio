@@ -5,24 +5,25 @@ property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project 
 
 property models; vectors : Collection
 
-property providers:={}
+property providers:={}  // ??????????????????????????????????????????????????????????????????
 
 property _key : Text
 property _models : Collection
 property _providers:=[]
 
-// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _loadPredefinedProviders()
-	
-	var $file:=File:C1566("/RESOURCES/providers.json")
-	
-	var $o : Object
-	For each ($o; JSON Parse:C1218($file.getText()))
-		
-		This:C1470._providers.push(cs:C1710.Provider.new($o))
-		
-	End for each 
-	
+property _DEBUG:=Structure file:C489=Structure file:C489(*)
+property _OPENAI:="https://Api.openai.com/@"
+
+
+// Main list
+property list:="list"
+property currentItem : Object
+property itemPosition : Integer
+property selectedItems : Collection
+
+// Details panel
+property _detailFields : Collection
+
 Class constructor
 	
 	This:C1470._loadPredefinedProviders()
@@ -33,6 +34,73 @@ Class constructor
 	This:C1470.settings:=This:C1470.readSettings()
 	This:C1470.models:=This:C1470.readModels()
 	This:C1470.vectors:=This:C1470.readVectors()
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// common 
+Function manager($e : Object)
+	
+	Case of 
+			
+			// ________________________________________________________________________________
+		: ($e.code=On Load:K2:1)
+			
+			SET TIMER:C645(-1)
+			
+			// ______________________________________________________
+		: ($e.code=On Timer:K2:25)
+			
+			SET TIMER:C645(0)
+			
+			// ______________________________________________________
+		: ($e.code=On Activate:K2:9)
+			
+			If (Length:C16(OBJECT Get name:C1087(Object with focus:K67:3))=0)
+				
+				GOTO OBJECT:C206(*; "list")
+				
+			End if 
+			
+			// ________________________________________________________________________________
+	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function updateUI() : Boolean
+	
+	var $t : Text
+	
+	If (This:C1470.currentItem=Null:C1517)
+		
+		For each ($t; This:C1470._detailFields)
+			
+			OBJECT SET VISIBLE:C603(*; $t; False:C215)
+			OBJECT SET VISIBLE:C603(*; $t+".label"; False:C215)
+			
+		End for each 
+		
+		return 
+		
+	End if 
+	
+	For each ($t; This:C1470._detailFields)
+		
+		OBJECT SET VISIBLE:C603(*; $t; True:C214)
+		OBJECT SET VISIBLE:C603(*; $t+".label"; True:C214)
+		
+	End for each 
+	
+	return True:C214
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _loadPredefinedProviders()
+	
+	var $file:=File:C1566("/RESOURCES/providers.json")
+	
+	var $o : Object
+	For each ($o; JSON Parse:C1218($file.getText()))
+		
+		This:C1470._providers.push(cs:C1710.Provider.new($o))
+		
+	End for each 
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get settingsFile() : 4D:C1709.File
@@ -207,7 +275,7 @@ Function readModels() : Collection
 	var $model : cs:C1710.Model
 	For each ($model; This:C1470.settings.models)
 		
-		$models.push($model)
+		$models.push(cs:C1710.Model.new($model))
 		
 	End for each 
 	

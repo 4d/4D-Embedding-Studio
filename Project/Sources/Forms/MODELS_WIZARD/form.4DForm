@@ -31,8 +31,8 @@
 			"objects": {
 				"Line3": {
 					"type": "line",
-					"top": 0,
-					"left": 680,
+					"top": -27,
+					"left": 667,
 					"width": 0,
 					"height": 400,
 					"startPoint": "bottomLeft",
@@ -92,16 +92,6 @@
 						}
 					]
 				},
-				"title": {
-					"type": "text",
-					"text": ":xliff:informations",
-					"top": 19,
-					"left": 226,
-					"width": 381,
-					"height": 16,
-					"class": "title",
-					"visibility": "hidden"
-				},
 				"Line": {
 					"type": "line",
 					"top": 33,
@@ -158,21 +148,6 @@
 					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/minus.png",
 					"iconFrames": 4
 				},
-				"model": {
-					"type": "subform",
-					"left": 217,
-					"top": 30,
-					"width": 464,
-					"height": 314,
-					"detailForm": "MODEL",
-					"events": [
-						"onGettingFocus"
-					],
-					"visibility": "hidden",
-					"method": "ObjectMethods/model.4dm",
-					"dataSource": "Form:C1466",
-					"sizingX": "grow"
-				},
 				"help": {
 					"type": "button",
 					"text": "Button",
@@ -186,14 +161,204 @@
 					"style": "help",
 					"sizingX": "move",
 					"sizingY": "move"
+				},
+				"name.label": {
+					"type": "text",
+					"text": ":xliff:name",
+					"top": 19,
+					"left": 239,
+					"width": 82,
+					"height": 17,
+					"class": "label",
+					"fontWeight": "bold",
+					"visibility": "hidden"
+				},
+				"model.label": {
+					"type": "text",
+					"text": ":xliff:model",
+					"top": 160,
+					"left": 236,
+					"width": 85,
+					"height": 17,
+					"class": "label",
+					"fontWeight": "bold",
+					"visibility": "hidden"
+				},
+				"apiKey.label": {
+					"type": "text",
+					"text": ":xliff:apiKey",
+					"top": 90,
+					"left": 228,
+					"width": 93,
+					"height": 17,
+					"class": "label",
+					"visibility": "hidden"
+				},
+				"baseURL.label": {
+					"type": "text",
+					"text": ":xliff:baseURL",
+					"top": 55,
+					"left": 226,
+					"width": 95,
+					"height": 16,
+					"class": "label",
+					"visibility": "hidden"
+				},
+				"organization.label": {
+					"type": "text",
+					"text": ":xliff:organization",
+					"top": 198,
+					"left": 215,
+					"width": 106,
+					"height": 16,
+					"class": "label",
+					"visibility": "hidden"
+				},
+				"project.label": {
+					"type": "text",
+					"text": ":xliff:project",
+					"top": 235,
+					"left": 239,
+					"width": 82,
+					"height": 16,
+					"class": "label",
+					"visibility": "hidden"
+				},
+				"name": {
+					"type": "input",
+					"left": 339,
+					"top": 19,
+					"width": 328,
+					"height": 17,
+					"sizingX": "grow",
+					"right": 667,
+					"dataSource": "Form:C1466.currentItem.name",
+					"events": [
+						"onDataChange"
+					],
+					"placeholder": ":xliff:idDisplayedInTheDropdownList",
+					"tooltip": ":xliff:idDisplayedInTheDropdownList",
+					"visibility": "hidden"
+				},
+				"model": {
+					"type": "input",
+					"left": 339,
+					"top": 160,
+					"width": 304,
+					"height": 17,
+					"sizingX": "grow",
+					"right": 643,
+					"dataSource": "Form:C1466.currentItem.model",
+					"events": [
+						"onDataChange"
+					],
+					"placeholder": "e.g., “text-embedding-3-large”",
+					"visibility": "hidden"
+				},
+				"apiKey": {
+					"type": "input",
+					"left": 339,
+					"top": 90,
+					"width": 328,
+					"height": 49,
+					"sizingX": "grow",
+					"right": 667,
+					"dataSource": "Form:C1466.currentItem.apiKey",
+					"events": [
+						"onDataChange"
+					],
+					"placeholder": ":xliff:yourOpenaiApiKey",
+					"visibility": "hidden"
+				},
+				"baseURL": {
+					"type": "input",
+					"left": 339,
+					"top": 55,
+					"width": 304,
+					"height": 17,
+					"sizingX": "grow",
+					"right": 643,
+					"dataSource": "Form:C1466.currentItem.baseURL",
+					"events": [
+						"onDataChange"
+					],
+					"placeholder": ":xliff:baseUrlForOpenaiApiRequests",
+					"visibility": "hidden"
+				},
+				"organization": {
+					"type": "input",
+					"left": 339,
+					"top": 198,
+					"width": 328,
+					"height": 17,
+					"sizingX": "grow",
+					"right": 667,
+					"dataSource": "Form:C1466.currentItem.organization",
+					"events": [
+						"onDataChange"
+					],
+					"placeholder": ":xliff:yourOpenaiOrganizationId",
+					"visibility": "hidden"
+				},
+				"project": {
+					"type": "input",
+					"left": 339,
+					"top": 235,
+					"width": 328,
+					"height": 17,
+					"sizingX": "grow",
+					"right": 667,
+					"dataSource": "Form:C1466.currentItem.project",
+					"events": [
+						"onDataChange"
+					],
+					"placeholder": ":xliff:yourOpenaiProjectId",
+					"visibility": "hidden"
+				},
+				"modelMenu": {
+					"type": "button",
+					"top": 159,
+					"left": 649,
+					"width": 19,
+					"height": 19,
+					"events": [
+						"onClick"
+					],
+					"style": "custom",
+					"iconFrames": 4,
+					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/miniDrop.png",
+					"sizingX": "move",
+					"visibility": "hidden"
+				},
+				"baseURLMenu": {
+					"type": "button",
+					"top": 54,
+					"left": 649,
+					"width": 19,
+					"height": 19,
+					"events": [
+						"onClick"
+					],
+					"style": "custom",
+					"iconFrames": 4,
+					"icon": "/.PRODUCT_RESOURCES/Internal Components/runtime.4dbase/Contents/Resources/images/common/miniDrop.png",
+					"sizingX": "move",
+					"visibility": "hidden"
 				}
 			},
 			"entryOrder": [
 				"list",
-				"model",
 				"add",
 				"delete",
-				"help"
+				"help",
+				"name",
+				"model",
+				"apiKey",
+				"baseURL",
+				"organization",
+				"project",
+				"modelMenu",
+				"baseURLMenu"
 			]
 		}
 	],
@@ -211,7 +376,7 @@
 			}
 		}
 	},
-	"geometryStamp": 550,
+	"geometryStamp": 635,
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"method": "FORM_MANAGER",

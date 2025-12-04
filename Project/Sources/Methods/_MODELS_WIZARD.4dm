@@ -23,7 +23,7 @@ Case of
 		// ______________________________________________________
 End case 
 
-If (Structure file:C489=Structure file:C489(*))  // DEV TESTS
+If (Structure file:C489=Structure file:C489(*)) || (Macintosh command down:C546 && Macintosh option down:C545)  // DEV TESTS
 	
 	DIALOG:C40("MODELS_WIZARD")
 	CLOSE WINDOW:C154($winRef)
