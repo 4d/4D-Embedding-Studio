@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE base SYSTEM "http://www.4d.com/dtd/2007/base.dtd" >
-<base name="4D Vector Studio" uuid="ACC63E6DF97A4977B66A16020642C600" collation_locale="en">
+<base name="4D Embedding Studio" uuid="ACC63E6DF97A4977B66A16020642C600" collation_locale="en">
 	<schema name="DEFAULT_SCHEMA"/>
 	<table name="Students" uuid="32D85E6A49EF4EB5A51A993D95FD4E3B" id="1">
 		<field name="ID" uuid="8C8244E61CBA42229EE02B9CE64EE77C" type="4" unique="true" autosequence="true" not_null="true" id="1"/>
