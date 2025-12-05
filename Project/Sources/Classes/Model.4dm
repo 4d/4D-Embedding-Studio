@@ -10,6 +10,7 @@ property needAPIKey : Boolean
 property valid : Boolean
 property errors:=[]
 
+property _uid:=Generate UUID:C1066
 property _provider : cs:C1710.Provider
 
 Class constructor(\
@@ -46,6 +47,10 @@ $optionals : Object)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function validate() : Boolean
+	
+/* #17322
+For each model, the name, api Key (if not local) and model are required.
+*/
 	
 	var $t : Text
 	

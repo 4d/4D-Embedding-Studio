@@ -1,7 +1,29 @@
 //%attributes = {"shared":true}
-#DECLARE($name : Text) : Integer
+#DECLARE($action : Text) : Integer
 
-var $winRef:=Open form window:C675("MODELS_WIZARD"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)
+/*#17320
+In project mode, if the “4D Vector Studio” component is loaded, in the “Design > Vector” menu, 
+a “Manage Vector Models” item shall allow you to open the Vectorization Model Management window.
+*/
+
+var $form:="MODELS"
+var $openDial : Boolean
+
+If (Num:C11(Storage:C1525.studio[$form])=0)
+	
+	// Create the window
+	var $winRef:=Open form window:C675($form; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)
+	$openDial:=True:C214
+	
+Else 
+	
+	// Select the window
+	$winRef:=Num:C11(Storage:C1525.studio[$form])
+	var $left; $top; $right; $bottom : Integer
+	GET WINDOW RECT:C443($left; $top; $right; $bottom; $winRef)
+	SET WINDOW RECT:C444($left; $top; $right; $bottom; $winRef)
+	
+End if 
 
 Case of 
 		
@@ -11,27 +33,31 @@ Case of
 		// <NOTHING MORE TO DO>
 		
 		// ______________________________________________________
-	: ($name="new")
+	: ($action="new")
 		
 		CALL FORM:C1391($winref; Formula:C1597(Form:C1466.newModel()))
 		
 		// ______________________________________________________
-	Else 
+	Else   // the name od a model to select
 		
-		CALL FORM:C1391($winref; Formula:C1597(Form:C1466.selectModel($name)))
+		CALL FORM:C1391($winref; Formula:C1597(Form:C1466.selectModel($action)))
 		
 		// ______________________________________________________
 End case 
 
-If (Structure file:C489=Structure file:C489(*)) || (Macintosh command down:C546 && Macintosh option down:C545)  // DEV TESTS
+If ($openDial)
 	
-	DIALOG:C40("MODELS_WIZARD")
-	CLOSE WINDOW:C154($winRef)
-	
-Else 
-	
-	DIALOG:C40("MODELS_WIZARD"; *)
-	
-	return $winRef
-	
+	If (Structure file:C489=Structure file:C489(*))\
+		 && (Num:C11(Storage:C1525.studio.EMBEDDINGS)=0)  // DEV TESTS
+		
+		DIALOG:C40($form)
+		CLOSE WINDOW:C154($winRef)
+		
+	Else 
+		
+		DIALOG:C40($form; *)
+		
+	End if 
 End if 
+
+return $winRef

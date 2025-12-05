@@ -1,4 +1,4 @@
-Class extends _WIZARD
+Class extends _COMMON
 
 property _detailFields:=[\
 "name"; \
@@ -21,11 +21,12 @@ Class constructor
 Function manager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
+	var $cur:=This:C1470.currentItem
 	
 	// MARK:- Form method
 	If ($e.objectName=Null:C1517)
 		
-		Super:C1706.manager($e)
+		Super:C1706.manager($e; "MODELS")
 		
 		Case of 
 				
@@ -38,10 +39,15 @@ Function manager($e : Object)
 				// ______________________________________________________
 			: ($e.code=On Timer:K2:25)
 				
-				//
+				This:C1470.listManager({code: On Selection Change:K2:29})
 				
 				// ______________________________________________________
 			: ($e.code=On Activate:K2:9)
+				
+				//
+				
+				// ______________________________________________________
+			: ($e.code=On Unload:K2:2)
 				
 				//
 				
@@ -72,11 +78,11 @@ Function manager($e : Object)
 If the user tries to delete a model used by a vector, 
 an error message shall warn them that this model is used by xxx and 4D shall not delete the model.
 */
-			var $user:=This:C1470.isModelUsed(This:C1470.currentItem.name)
+			var $using:=This:C1470.vectorsUsingTheModel($cur.name)
 			
-			If ($user#Null:C1517)
+			If ($using.length>0)
 				
-				This:C1470._popError(Replace string:C233(Replace string:C233(Localized string:C991("thisModelCannotBeDeletedBecauseItIsUsed"); "{vector}"; $user.vectorName); "{dataclass}"; $user.dataclassName))
+				This:C1470._popError(Replace string:C233(Replace string:C233(Localized string:C991("thisModelCannotBeDeletedBecauseItIsUsed"); "{vector}"; $using[0].vectorName); "{dataclass}"; $using[0].dataclassName))
 				
 				return 
 				
@@ -86,12 +92,58 @@ an error message shall warn them that this model is used by xxx and 4D shall not
 			
 			If (Bool:C1537(OK))
 				
-				This:C1470.deleteModel(This:C1470.currentItem.name)
+				This:C1470.deleteModel($cur.name)
 				
 				// Update UI
 				LISTBOX SELECT ROW:C912(*; This:C1470.list; 0; lk remove from selection:K53:3)  // Unselect all
 				SET TIMER:C645(-1)
 				
+			End if 
+			
+			// ______________________________________________________
+		: ($e.objectName="name")
+			
+			This:C1470.nameManager($e)
+			
+			// ______________________________________________________
+		: ($e.objectName="baseURLMenu")  // Menu of preconfigured providers
+			
+			GOTO OBJECT:C206(*; "baseURL")
+			
+			var $curbBase:=String:C10($cur.baseURL)
+			var $menu:=cs:C1710.menu.new()
+			
+/*For each ($provider; Form._providers)*/
+			var $provider : cs:C1710.Provider
+			For each ($provider; This:C1470.PROVIDERS)
+				
+				$menu.append($provider.name; $provider.baseURL).mark($curbBase=$provider.baseURL)
+				
+			End for each 
+			
+			If ($menu.popup($curbBase).selected)\
+				 && ($menu.choice#$curbBase)
+				
+				// Set the model baseURL
+				$provider:=Form:C1466.PROVIDERS.query("baseURL = :1"; $menu.choice).first()
+				
+				$cur._provider:=$provider
+				$cur.baseURL:=$menu.choice
+				
+				If ($provider.needToken#Null:C1517)
+					
+					$cur.apiKey:=$provider.endpoint.apiKey
+					
+				End if 
+				
+				Form:C1466.saveModels()
+				
+				If (This:C1470.updateUI())
+					
+					// Update mandatory or not fields labels
+					OBJECT SET FONT STYLE:C166(*; "apiKey.label"; $cur._provider.needToken ? Bold:K14:2 : Plain:K14:1)
+					
+				End if 
 			End if 
 			
 			// ______________________________________________________
@@ -101,6 +153,7 @@ an error message shall warn them that this model is used by xxx and 4D shall not
 Function listManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
+	var $cur:=This:C1470.currentItem
 	
 	If ($e.code=On Selection Change:K2:29)  // ⚠️ This event must be enabled for both the list box AND the form.
 		
@@ -120,79 +173,77 @@ Function listManager($e : Object)
 			End if 
 		End if 
 		
-		If (This:C1470.currentItem#Null:C1517)
+		If ($cur#Null:C1517)
 			
-			This:C1470.currentItem._provider:=This:C1470.modelProvider
+			$cur._provider:=This:C1470.PROVIDERS.query("baseURL = :1"; String:C10($cur.baseURL) || This:C1470.OPENAI).first()
 			
 		End if 
 		
-		This:C1470.previousItem:=This:C1470.currentItem
+		This:C1470.previousItem:=OB Copy:C1225($cur)
 		
 		If (This:C1470.updateUI())
 			
-/*
-var $provider:=This.modelProvider
-OBJECT SET FONT STYLE(*; "apiKey.label"; Bool($provider.needToken) ? Bold : Plain)
-*/
-			OBJECT SET FONT STYLE:C166(*; "apiKey.label"; This:C1470.currentItem._provider.needToken ? Bold:K14:2 : Plain:K14:1)
+			OBJECT SET FONT STYLE:C166(*; "apiKey.label"; $cur._provider.needToken ? Bold:K14:2 : Plain:K14:1)
 			
 		End if 
 	End if 
 	
-	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
-Function get modelProvider() : cs:C1710.Provider
-	
-	If (This:C1470.currentItem=Null:C1517)
-		
-		return 
-		
-	End if 
-	
-	return This:C1470._providers.query("baseURL = :1"; String:C10(This:C1470.currentItem.baseURL) || This:C1470._OPENAI).first()
-	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function validate($model : cs:C1710.Model) : Boolean
+Function nameManager($e : Object)
 	
-	$model.errors:=$model.errors || []
+	$e:=$e || FORM Event:C1606
+	var $cur:=This:C1470.currentItem
 	
-	var $t : Text
-	For each ($t; $model._provider.needToken ? ["name"; "apiKey"; "model"] : ["name"; "model"])
+	If ($e.code=On Data Change:K2:15)
 		
-		var $error:=Replace string:C233(Localized string:C991("theValueIsRequired."); "{value}"; Localized string:C991($t))
+/* #17323
+The model name shall be unique.
+*/
 		
-		If (Length:C16(String:C10($model[$t]))=0)
+		If (This:C1470.models.query("name = :1 & _uid != :2"; $cur.name; $cur._uid).length>0)
 			
-			If (Not:C34($model.errors.includes($error)))
-				
-				$model.errors.push($error)
-				
-			End if 
+			Form:C1466._popError(\
+				Replace string:C233(Localized string:C991("theModelNameMustBeUnique"); "{name}"; $cur.name))
+			
+			$cur.name:=This:C1470.previousItem.name
+/* TOUCH */This:C1470.models:=This:C1470.models
+			
+			GOTO OBJECT:C206(*; "name")
+			
+			return 
 			
 		Else 
 			
-			var $index:=$model.errors.indexOf($error)
+			var $c:=This:C1470.vectorsUsingTheModel(This:C1470.previousItem.name)
 			
-			If ($index#-1)
+			If ($c.length>0)
 				
-				$model.errors.remove($index)
+				CONFIRM:C162(Replace string:C233(Localized string:C991("theModelIsUsedByOneOrMoreVectors"); "{name}"; This:C1470.previousItem.name))
+				
+				If (Bool:C1537(OK))
+					
+					var $vector : cs:C1710.Vector
+					For each ($vector; $c)
+						
+						$vector.model:=$cur.name
+						
+					End for each 
+					
+					This:C1470.saveVectors()
+					
+					// TODO: Touch for update the vectors' window if opened
+					
+					If (Num:C11(Storage:C1525.studio.embeddingsWindow)#0)
+						
+						CALL FORM:C1391(Storage:C1525.studio.embeddingsWindow; Formula:C1597(Form:C1466.refresh()))
+						
+					End if 
+				End if 
+				
+				This:C1470.previousItem.name:=$cur.name
 				
 			End if 
 		End if 
-	End for each 
-	
-	return $model.errors.length=0
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function modelContainerManager($e : Object)
-	
-	$e:=$e || FORM Event:C1606
-	
-	If ($e.code=-1)  // Update model
-		
-		This:C1470.saveModels()
-		
-		This:C1470.models:=This:C1470.models  // Touch collection to force redrawing
-		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -208,11 +259,19 @@ Function selectModel($name : Text)
 		
 	End if 
 	
-	SET TIMER:C645(-1)
+	//SET TIMER(-1)
+	If (This:C1470.updateUI())
+		
+		OBJECT SET FONT STYLE:C166(*; "apiKey.label"; Bool:C1537(This:C1470.currentItem._provider.needToken) ? Bold:K14:2 : Plain:K14:1)
+		
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function newModel()
 	
+/* #17323
+The model name shall be unique.
+*/
 	var $name:=Localized string:C991("newModel")
 	var $i : Integer
 	
@@ -236,6 +295,12 @@ Function newModel()
 	Form:C1466.models.push($model)
 	This:C1470.models:=This:C1470.models.orderBy("name asc")
 	This:C1470.selectModel($name)
+	
+	//If (This.updateUI())
+	
+	//OBJECT SET FONT STYLE(*; "apiKey.label"; Bool($model._provider.needToken) ? Bold : Plain)
+	
+	//End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function deleteModel($name : Text)

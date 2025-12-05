@@ -1,4 +1,4 @@
-Class extends _WIZARD
+Class extends _COMMON
 
 property _detailFields:=[\
 "phrase"; \
@@ -23,7 +23,7 @@ Function manager($e : Object)
 	
 	If ($e.objectName=Null:C1517)
 		
-		Super:C1706.manager($e)
+		Super:C1706.manager($e; "EMBEDDINGS")
 		
 		Case of 
 				
@@ -45,7 +45,7 @@ Function manager($e : Object)
 			: ($e.code=On Activate:K2:9)
 				
 				// TODO: Visual indicator
-				CALL FORM:C1391(Current form window:C827; Formula:C1597(Form:C1466.updateList()))
+				CALL FORM:C1391(Current form window:C827; Formula:C1597(Form:C1466.refresh()))
 				
 				// ________________________________________________________________________________
 		End case 
@@ -183,7 +183,7 @@ Function moreManager($e : Object)
 	
 	$menu.line().append("🚧 Edit API key"; "editApiKey")
 	
-	If (This:C1470._DEBUG)
+	If (This:C1470.DEBUG)
 		
 		$menu.append("🚧 open setting file"; "openSettingFile")
 		
@@ -400,13 +400,13 @@ Function modelsDropdownUpdate($vector : cs:C1710.Vector)
 	$dropDown.currentValue:=$vector.model || $dropDown.placeholder
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function updateList()
+Function refresh()
+	
+	This:C1470.vectors:=This:C1470.readVectors()
 	
 	If (This:C1470._catalogModified())
 		
 		// MARK: Update lits
-		This:C1470.vectors:=This:C1470.readVectors()
-		
 		var $current:=This:C1470.currentItem
 		
 		If ($current#Null:C1517)  // Restore selection
@@ -433,8 +433,10 @@ Function updateList()
 		
 	End if 
 	
-	This:C1470.readModels()
+	This:C1470.models:=This:C1470.readModels()
 	This:C1470.modelsDropdownUpdate(This:C1470.currentItem)
+	
+	
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _cacheCatalog()

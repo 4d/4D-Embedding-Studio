@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><preferences stamp="5">
+<?xml version="1.0" encoding="UTF-8"?><preferences stamp="6">
 	<com.4d>
 		<interface>
 			<shortcuts>
@@ -7,7 +7,7 @@
 				<add_subform alt="false" command="false" ctrl="false" key_code="0" shift="false"/>
 			</shortcuts>
 		</interface>
-		<general component_classStore_name="vectorStudio" execute_host_database_event="true"/>
+		<general component_classStore_name="embed" execute_host_database_event="true"/>
 		<compiler>
 			<options symbol_file="true" syntax_file="true" target="all"/>
 		</compiler>

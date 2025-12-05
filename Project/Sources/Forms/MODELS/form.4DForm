@@ -7,6 +7,8 @@
 		"onLoad",
 		"onClick",
 		"onActivate",
+		"onDataChange",
+		"onUnload",
 		"onTimer",
 		"onResize",
 		"onSelectionChange"
@@ -383,5 +385,5 @@
 	"windowTitle": ":xliff:modelManagement",
 	"windowMinWidth": 700,
 	"windowMinHeight": 420,
-	"formClass": "_MODELS_WIZARD"
+	"formClass": "_MODELS"
 }

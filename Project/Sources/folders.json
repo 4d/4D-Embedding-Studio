@@ -1,4 +1,5 @@
 {
+	"(COMMON)": {},
 	"(Default Classes)": {},
 	"(Default Folder)": {
 		"groups": [
@@ -11,21 +12,13 @@
 	"(Default Forms)": {},
 	"(Default Project Methods)": {},
 	"(Default Tables)": {},
+	"(MODELS)": {},
 	"(VECTOR_STUDIO)": {},
+	"(VECTORS)": {},
 	"API": {
 		"methods": [
 			"_MODELS_WIZARD",
 			"_VECTORS_WIZARD"
-		]
-	},
-	"COMMON": {
-		"methods": [
-			"FORM_MANAGER"
-		],
-		"classes": [
-			"menu",
-			"menuBar",
-			"regex"
 		]
 	},
 	"DEV": {
@@ -41,47 +34,38 @@
 			"StudentsEntity"
 		]
 	},
-	"MODELS": {
-		"forms": [
-			"MODEL",
-			"MODELS_WIZARD"
-		],
-		"classes": [
-			"_MODELS_WIZARD"
-		]
-	},
 	"NAMESPACE": {
 		"classes": [
 			"Env",
+			"menu",
+			"menuBar",
 			"Model",
 			"Provider",
+			"regex",
 			"Vector"
 		]
 	},
 	"STUDIO": {
-		"groups": [
-			"MODELS",
-			"VECTORS"
-		],
 		"methods": [
-			"New_Model"
+			"FORM_MANAGER"
 		],
-		"classes": [
-			"_WIZARD"
-		]
-	},
-	"VECTORS": {
 		"forms": [
-			"VECTORS_WIZARD"
+			"EMBEDDINGS",
+			"MODELS"
 		],
 		"classes": [
-			"_VECTORS_WIZARD"
+			"_COMMON",
+			"_EMBEDDINGS",
+			"_MODELS"
 		]
 	},
 	"trash": {
 		"groups": [
+			"(COMMON)",
 			"(Default Folder)",
-			"(VECTOR_STUDIO)"
+			"(MODELS)",
+			"(VECTOR_STUDIO)",
+			"(VECTORS)"
 		]
 	}
 }
