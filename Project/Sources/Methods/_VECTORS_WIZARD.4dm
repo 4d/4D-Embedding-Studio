@@ -2,20 +2,41 @@
 #DECLARE() : Integer
 
 /*#17300
-In project mode, if the “4D Vector Studio” component is loaded, in the “Design > Vector” menu, a “Vector Studio” item allows you to open the wizard window.
+In project mode, if the “4D Vector Studio” component is loaded, in the “Design > Vector” menu, 
+a “Vector Studio” item allows you to open the wizard window.
 */
-// Var $winRef:=Open form window("VECTORS_WIZARD"; Structure file=Structure file(*) ? Plain form window : Movable form dialog box; Horizontally centered; At the top; *)
-var $winRef:=Open form window:C675("VECTORS_WIZARD"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)
 
-If (Structure file:C489=Structure file:C489(*)) || (Macintosh command down:C546 && Macintosh option down:C545)  // DEV TESTS
+var $form:="EMBEDDINGS"
+var $openDial : Boolean
+
+If (Num:C11(Storage:C1525.studio[$form])=0)
 	
-	DIALOG:C40("VECTORS_WIZARD")
-	CLOSE WINDOW:C154($winRef)
+	// Create the window
+	var $winRef:=Open form window:C675($form; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)
+	$openDial:=True:C214
 	
 Else 
 	
-	DIALOG:C40("VECTORS_WIZARD"; *)
-	
-	return $winRef
+	// Select the window
+	$winRef:=Num:C11(Storage:C1525.studio[$form])
+	var $left; $top; $right; $bottom : Integer
+	GET WINDOW RECT:C443($left; $top; $right; $bottom; $winRef)
+	SET WINDOW RECT:C444($left; $top; $right; $bottom; $winRef)
 	
 End if 
+
+If ($openDial)
+	
+	If (Structure file:C489=Structure file:C489(*))  // DEV TESTS
+		
+		DIALOG:C40($form)
+		CLOSE WINDOW:C154($winRef)
+		
+	Else 
+		
+		DIALOG:C40($form; *)
+		
+	End if 
+End if 
+
+return $winRef

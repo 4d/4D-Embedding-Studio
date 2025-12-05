@@ -1,11 +1,10 @@
 var $e:=FORM Event:C1606
 
-If ($e.code=On Bound Variable Change:K2:52)
-	
-	Form:C1466._snapshot:=OB Copy:C1225(Form:C1466.model)
-	
-	
-End if 
+//If ($e.code=On Bound Variable Change)
+
+//Form._snapshot:=OB Copy(Form.model)
+
+//End if 
 
 If ($e.objectName=Null:C1517)  // Form method
 	
@@ -91,24 +90,24 @@ CALL SUBFORM CONTAINER(-1)
 	Case of 
 			
 			
-		: ($e.objectName="name")
+			//: ($e.objectName="name")
 			
-			var $c : Collection:=Form:C1466.vectors.query("model = :1"; Form:C1466._snapshot.name)
+			//var $c : Collection:=Form.vectors.query("model = :1"; Form._snapshot.name)
 			
-			If ($c.length>0)
-				
-				CONFIRM:C162(".Would you like to update the vectors using this model?"; ".Update")
-				
-				If (Bool:C1537(OK))
-					
-					var $vector : cs:C1710.Vector
-					For each ($vector; $c)
-						
-						//$vector.model:=
-						
-					End for each 
-				End if 
-			End if 
+			//If ($c.length>0)
+			
+			//CONFIRM(".Would you like to update the vectors using this model?"; ".Update")
+			
+			//If (Bool(OK))
+			
+			//var $vector : cs.Vector
+			//For each ($vector; $c)
+			
+			////$vector.model:=
+			
+			//End for each 
+			//End if 
+			//End if 
 			
 			//______________________________________________________
 		: ($e.objectName="baseURL")
@@ -139,38 +138,38 @@ End if
 
 Case of 
 		
-		// ______________________________________________________
-	: ($e.objectName="baseURLMenu")  // Menu of preconfigured providers
+		//// ______________________________________________________
+		//: ($e.objectName="baseURLMenu")  // Menu of preconfigured providers
 		
-		GOTO OBJECT:C206(*; "baseURL")
+		//GOTO OBJECT(*; "baseURL")
 		
-		var $curbBase:=String:C10(Form:C1466.model.baseURL)
-		var $menu:=cs:C1710.menu.new()
+		//var $curbBase:=String(Form.model.baseURL)
+		//var $menu:=cs.menu.new()
 		
-		For each ($provider; Form:C1466._providers)
-			
-			$menu.append($provider.name; $provider.baseURL).mark($curbBase=$provider.baseURL)
-			
-		End for each 
+		//For each ($provider; Form._providers)
 		
-		If ($menu.popup($curbBase).selected)\
-			 && ($menu.choice#$curbBase)
-			
-			// Set the model baseURL
-			$provider:=Form:C1466._providers.query("baseURL = :1"; $menu.choice).first()
-			Form:C1466.model.baseURL:=$menu.choice
-			
-			If ($provider.token_env_key#Null:C1517)
-				
-				Form:C1466.model.apiKey:=$provider.endpoint.apiKey
-				
-			End if 
-			
-			Form:C1466.saveModels()
-			
-			SET TIMER:C645(-1)  // To update mandatory or not fields labels
-			
-		End if 
+		//$menu.append($provider.name; $provider.baseURL).mark($curbBase=$provider.baseURL)
+		
+		//End for each 
+		
+		//If ($menu.popup($curbBase).selected)\
+			&& ($menu.choice#$curbBase)
+		
+		//// Set the model baseURL
+		//$provider:=Form._providers.query("baseURL = :1"; $menu.choice).first()
+		//Form.model.baseURL:=$menu.choice
+		
+		//If ($provider.needToken#Null)
+		
+		//Form.model.apiKey:=$provider.endpoint.apiKey
+		
+		//End if 
+		
+		//Form.saveModels()
+		
+		//SET TIMER(-1)  // To update mandatory or not fields labels
+		
+		//End if 
 		
 		// ______________________________________________________
 	: ($e.objectName="modelMenu")  // Menu of available models
@@ -180,7 +179,7 @@ Case of
 		var $curModel:=String:C10($model.model)
 		$provider:=Form:C1466._provider || cs:C1710.Provider.new(Form:C1466.model)
 		
-		$menu:=$provider.menuModels($curModel)
+		var $menu:=$provider.menuModels($curModel)
 		
 		If ($menu=Null:C1517)
 			
@@ -196,35 +195,35 @@ Case of
 			
 		End if 
 		
-		// ______________________________________________________
-	: ($e.objectName="done")  // New model
+		//// ______________________________________________________
+		//: ($e.objectName="done")  // New model
 		
-/* #17323
-The model name shall be unique.
-*/
-		If (Form:C1466.models.extract("name").includes($model.name))
-			
-			Form:C1466._popError(\
-				Replace string:C233(Localized string:C991("theModelNameMustBeUnique"); "{name}"; $model.name))
-			
-			GOTO OBJECT:C206(*; "name")
-			
-			return 
-			
-		End if 
+		///* #17323
+		//The model name shall be unique.
+		//*/
+		//If (Form.models.extract("name").includes($model.name))
+		
+		//Form._popError(\
+			Replace string(Localized string("theModelNameMustBeUnique"); "{name}"; $model.name))
+		
+		//GOTO OBJECT(*; "name")
+		
+		//return 
+		
+		//End if 
 		
 /* #17322
 For each model, the name, api Key (if not local) and model are required.
 */
-		If (Length:C16(String:C10(Form:C1466.model.baseURL))=0)
-			
-			$provider:=Form:C1466._providers.query("name = :1"; "openAI").first()
-			
-		Else 
-			
-			$provider:=Form:C1466._providers.query("baseURL = :1"; Form:C1466.model.baseURL).first()
-			
-		End if 
+		//If (Length(String(Form.model.baseURL))=0)
+		
+		//$provider:=Form._providers.query("name = :1"; "openAI").first()
+		
+		//Else 
+		
+		//$provider:=Form._providers.query("baseURL = :1"; Form.model.baseURL).first()
+		
+		//End if 
 		
 /*
 var $t : Text

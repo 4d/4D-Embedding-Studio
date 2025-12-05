@@ -1,19 +1,11 @@
 property settings : Object
-property file : 4D:C1709.File
-
 property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project datastore
-
 property models; vectors : Collection
 
 property providers:={}  // ??????????????????????????????????????????????????????????????????
 
-property _key : Text
-property _models : Collection
-property _providers:=[]
-
-property _DEBUG:=Structure file:C489=Structure file:C489(*)
-property _OPENAI:="https://Api.openai.com/@"
-
+property PROVIDERS:=[]
+property OPENAI:="https://Api.openai.com/@"
 
 // Main list
 property list:="list"
@@ -24,25 +16,52 @@ property selectedItems : Collection
 // Details panel
 property _detailFields : Collection
 
+property DEBUG:=Structure file:C489=Structure file:C489(*)
+
 Class constructor
 	
-	This:C1470._loadPredefinedProviders()
+	// Mark: Load predefined providers
+	var $file:=File:C1566("/RESOURCES/providers.json")
 	
-	// Default provider
+	var $o : Object
+	For each ($o; JSON Parse:C1218($file.getText()))
+		
+		This:C1470.PROVIDERS.push(cs:C1710.Provider.new($o))
+		
+	End for each 
+	
+	// Mark: Default provider
 	This:C1470.providers.openAI:=cs:C1710.Provider.new()
 	
 	This:C1470.settings:=This:C1470.readSettings()
 	This:C1470.models:=This:C1470.readModels()
 	This:C1470.vectors:=This:C1470.readVectors()
 	
+	If (Storage:C1525.studio=Null:C1517)
+		
+		Use (Storage:C1525)
+			
+			Storage:C1525.studio:=New shared object:C1526(\
+				"EMBEDDINGS"; 0; \
+				"MODELS"; 0)
+			
+		End use 
+	End if 
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// common 
-Function manager($e : Object)
+Function manager($e : Object; $context : Text)
 	
 	Case of 
 			
 			// ________________________________________________________________________________
 		: ($e.code=On Load:K2:1)
+			
+			Use (Storage:C1525.studio)
+				
+				Storage:C1525.studio[$context]:=Current form window:C827
+				
+			End use 
 			
 			SET TIMER:C645(-1)
 			
@@ -59,6 +78,15 @@ Function manager($e : Object)
 				GOTO OBJECT:C206(*; "list")
 				
 			End if 
+			
+			// ______________________________________________________
+		: ($e.code=On Unload:K2:2)
+			
+			Use (Storage:C1525.studio)
+				
+				Storage:C1525.studio[$context]:=0
+				
+			End use 
 			
 			// ________________________________________________________________________________
 	End case 
@@ -89,18 +117,6 @@ Function updateUI() : Boolean
 	End for each 
 	
 	return True:C214
-	
-	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _loadPredefinedProviders()
-	
-	var $file:=File:C1566("/RESOURCES/providers.json")
-	
-	var $o : Object
-	For each ($o; JSON Parse:C1218($file.getText()))
-		
-		This:C1470._providers.push(cs:C1710.Provider.new($o))
-		
-	End for each 
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get settingsFile() : 4D:C1709.File
@@ -314,9 +330,14 @@ Function addModel($model : cs:C1710.Model)
 	This:C1470.saveModels()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isModelUsed($name : Text) : cs:C1710.Vector
+Function vectorsUsingTheModel($name : Text) : Collection
 	
-	return This:C1470.vectors.query("model = :1"; $name).first()
+	return This:C1470.vectors.query("model = :1"; $name)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function isModelUsed($name : Text) : Boolean
+	
+	return This:C1470.vectors.query("model = :1"; $name).length>0
 	
 	// MARK:- [PRIVATE]
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***

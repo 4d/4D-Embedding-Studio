@@ -12,6 +12,7 @@
 		"onGettingFocus",
 		"onBeforeKeystroke",
 		"onDataChange",
+		"onUnload",
 		"onTimer",
 		"onAfterKeystroke",
 		"onSelectionChange",
@@ -230,7 +231,7 @@
 			"View 1": {}
 		}
 	},
-	"formClass": "_VECTORS_WIZARD",
+	"formClass": "_EMBEDDINGS",
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"windowMinHeight": 600,

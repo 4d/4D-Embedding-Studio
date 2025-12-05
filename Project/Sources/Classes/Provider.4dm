@@ -1,11 +1,11 @@
 property name : Text
 property baseURL : Text
 property needToken : Boolean
-property success:=True:C214
 property endpoint : cs:C1710.AIKit.OpenAI
 property models : Collection
+property success:=True:C214
 
-property _OPENAI:="https://Api.openai.com/@"
+property OPENAI:="https://Api.openai.com/@"
 
 Class constructor($config)
 	
@@ -22,7 +22,6 @@ Class constructor($config)
 			
 			This:C1470.baseURL:=$config.baseURL || $config.base_url
 			This:C1470.name:=$config.name || This:C1470.normalizedName(This:C1470.baseURL)
-			
 			This:C1470.needToken:=Bool:C1537($config.needToken)
 			
 			If (This:C1470.needToken)
@@ -34,6 +33,11 @@ Class constructor($config)
 				This:C1470.endpoint:=cs:C1710.AIKit.OpenAI.new({baseURL: This:C1470.baseURL})
 				
 			End if 
+			
+			// ______________________________________________________
+		Else 
+			
+			// ERROR
 			
 			// ______________________________________________________
 	End case 
@@ -103,7 +107,7 @@ Function menuModels($default : Text) : cs:C1710.menu
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function normalizedName($url : Text) : Text
 	
-	If ($url=This:C1470._OPENAI)
+	If ($url=This:C1470.OPENAI)
 		
 		return "openAI"
 		

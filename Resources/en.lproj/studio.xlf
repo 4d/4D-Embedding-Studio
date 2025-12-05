@@ -29,8 +29,8 @@
           <target>Insert</target>
         </trans-unit>
         <trans-unit id="57" resname="vectorStudio">
-          <source>Vector Studio</source>
-          <target>Vector Studio</target>
+          <source>Embedding Studio</source>
+          <target>Embedding Studio</target>
         </trans-unit>
         <trans-unit id="53" resname="modelManagement">
           <source>Model Management</source>
@@ -149,6 +149,12 @@
 Click + to add your first model.</source>
           <target>An embedding model is required to create vectors.
 Click + to add your first model.</target>
+        </trans-unit>
+        <trans-unit id="WrP015w+QTmuBtuYxl+9xw" resname="theModelIsUsedByOneOrMoreVectors">
+          <source>The model “{name}” is used by one or more vectors. 
+Would you like to update them?</source>
+          <target>The model “{name}” is used by one or more vectors. 
+Would you like to update them?</target>
         </trans-unit>
       </group>
       <group resname="Common">
