@@ -112,12 +112,6 @@ Function manager($e : Object)
 			This:C1470.modelsDropdownManager($e)
 			
 			//______________________________________________________
-		: ($e.objectName="save")
-			
-			This:C1470.saveVectors()
-			This:C1470.saveModels()
-			
-			//______________________________________________________
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -127,7 +121,11 @@ Function listManager($e : Object)
 	
 	If (This:C1470.updateUI())
 		
-		This:C1470.modelsDropdownUpdate(This:C1470.currentItem)
+		This:C1470.modelUpdateDropdown(This:C1470.currentItem)
+		
+	Else 
+		
+		This:C1470.vectors:=This:C1470.vectors  // ‼️ If no item is selected, we must force a refresh for listMetaInfo to apply 
 		
 	End if 
 	
@@ -142,16 +140,14 @@ Function listMetaInfo($me : cs:C1710.Vector) : Object
 		
 		If ($me#This:C1470.currentItem)
 			
-			If (($me[""].errors.length>0) || (Length:C16(String:C10($me.error))>0))\
+			If (($me[""].errors.length>0)\
+				 || (Length:C16(String:C10($me.error))>0))\
 				 || ($me.model="")
 				
 				$meta.stroke:="red"
 				
 			End if 
-			
-			
 		End if 
-		
 	End if 
 	
 	return $meta
@@ -305,33 +301,6 @@ Function phraseManager($e : Object)
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function insertInput($vector : cs:C1710.Vector; $input : Text)
-	
-	var $me:="phrase"
-	var $plainText:=ST Get plain text:C1092(*; $me)  //Get edited text
-	
-	var $startSel; $endSel : Integer
-	GET HIGHLIGHT:C209(*; $me; $startSel; $endSel)
-	
-	If (Length:C16($plainText)=0)
-		
-		var $newValue:="<span>"+$input+"</span>"
-		
-	Else 
-		
-		$newValue:=Substring:C12($plainText; 1; $startSel-1)+$input+Substring:C12($plainText; $endSel)
-		
-	End if 
-	
-	OBJECT SET VALUE:C1742($me; $newValue)
-	
-	$endSel:=$startSel+Length:C16($input)
-	HIGHLIGHT TEXT:C210(*; $me; $endSel; $endSel)
-	
-	// Highlight any errors, if any
-	$vector.phrase:=$vector.parsePhrase(ST Get plain text:C1092($newValue))
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function modelsDropdownManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
@@ -375,49 +344,36 @@ Function modelsDropdownManager($e : Object)
 			//______________________________________________________
 	End case 
 	
-Function updateModelName($old : Text; $new : Text)
+	// MARK: -
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function insertInput($vector : cs:C1710.Vector; $input : Text)
 	
-	//var $current:=This.currentItem+
+	var $me:="phrase"
+	var $plainText:=ST Get plain text:C1092(*; $me)  //Get edited text
 	
-	//var $dropDown:={\
-		values: This._getModelDropdownValues(); \
-		index: -1; \
-		placeholder: Localized string("selectAModel")}
+	var $startSel; $endSel : Integer
+	GET HIGHLIGHT:C209(*; $me; $startSel; $endSel)
 	
-	This:C1470.models:=This:C1470.readModels()
-	This:C1470.modelsDropdown.values:=This:C1470._getModelDropdownValues()
-	
-	If (This:C1470.updateUI())
+	If (Length:C16($plainText)=0)
 		
-		This:C1470.modelsDropdownUpdate(This:C1470.currentItem)
+		var $newValue:="<span>"+$input+"</span>"
 		
-	End if 
-	
-	
-	//If ($current.model=$old)
-	
-	//$current.model:=$new
-	//$dropDown.values:=This._getModelDropdownValues()
-	//$dropDown.currentValue:=$new
-	
-	////Form.vectors:=Form.vectors  // update UI
-	
-	//End if 
-	
-	
-	
-Function updateModel($model : Text)
-	
-	$dropDown:=This:C1470.modelsDropdown
-	
-	If ($dropDown.currentValue=This:C1470._newItemWording) || ($dropDown.currentValue=$dropDown.placeholder)
+	Else 
 		
-		This:C1470.currentItem.model:=$name
+		$newValue:=Substring:C12($plainText; 1; $startSel-1)+$input+Substring:C12($plainText; $endSel)
 		
 	End if 
+	
+	OBJECT SET VALUE:C1742($me; $newValue)
+	
+	$endSel:=$startSel+Length:C16($input)
+	HIGHLIGHT TEXT:C210(*; $me; $endSel; $endSel)
+	
+	// Highlight any errors, if any
+	$vector.phrase:=$vector.parsePhrase(ST Get plain text:C1092($newValue))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function modelsDropdownUpdate($vector : cs:C1710.Vector)
+Function modelUpdateDropdown($vector : cs:C1710.Vector)
 	
 	$vector:=$vector || This:C1470.currentItem
 	
@@ -444,9 +400,7 @@ Function modelsDropdownUpdate($vector : cs:C1710.Vector)
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function refresh()  //($force : Boolean)
 	
-	ASSERT:C1129(Not:C34(Shift down:C543))
-	
-	This:C1470.vectors:=This:C1470.readVectors()
+	This:C1470.readVectors()
 	
 	If (This:C1470._catalogModified())
 		
@@ -454,7 +408,7 @@ Function refresh()  //($force : Boolean)
 		
 	End if 
 	
-	// MARK: Update lits
+	// MARK: Update list
 	var $current:=This:C1470.currentItem
 	
 	If ($current#Null:C1517)  // Restore selection
@@ -477,9 +431,24 @@ Function refresh()  //($force : Boolean)
 		
 	End if 
 	
-	This:C1470.models:=This:C1470.readModels()
-	This:C1470.modelsDropdownUpdate(This:C1470.currentItem)
+	This:C1470.readModels()
+	This:C1470.modelUpdateDropdown(This:C1470.currentItem)
 	
+	// MARK: -[CALLBACKS]
+	// --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+	// Calls from templates
+Function modelUpdateName($old : Text; $new : Text)
+	
+	This:C1470.readModels()
+	This:C1470.modelsDropdown.values:=This:C1470._getModelDropdownValues()
+	
+	If (This:C1470.updateUI())
+		
+		This:C1470.modelUpdateDropdown(This:C1470.currentItem)
+		
+	End if 
+	
+	// MARK: -[PRIVATE]
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _cacheCatalog()
 	

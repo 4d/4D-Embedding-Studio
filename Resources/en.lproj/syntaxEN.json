@@ -1,7 +1,14 @@
 {
 	"_method_": {},
-	"cs.vectorStudio": {
-		"_VECTORS_WIZARD": {
+	"cs.embed": {
+		"Env": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_EMBEDDINGS": {
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
@@ -36,20 +43,6 @@
 				"Summary": ""
 			}
 		},
-		"_MODELS_WIZARD": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
-		"Env": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
 		"Vector": {
 			"new()": {
 				"Syntax": "**.new**( *dataclass* : Object; *attribute* : Object; *model* : Text; *phrase* : Text )",
@@ -78,7 +71,7 @@
 				"Summary": ""
 			}
 		},
-		"_WIZARD": {
+		"_COMMON": {
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
@@ -108,6 +101,13 @@
 						"->"
 					]
 				],
+				"Summary": ""
+			}
+		},
+		"_MODELS": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
 				"Summary": ""
 			}
 		},
@@ -143,18 +143,8 @@
 			}
 		}
 	},
-	"_VECTORS_WIZARD": {
-		"modelsDropdownUpdate()": {
-			"Syntax": "**.modelsDropdownUpdate**( *vector* : cs.vectorStudio.Vector )",
-			"Params": [
-				[
-					"vector",
-					"cs.vectorStudio.Vector",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
+	"Env": {},
+	"_EMBEDDINGS": {
 		"modelsDropdownManager()": {
 			"Syntax": "**.modelsDropdownManager**( *e* : Object )",
 			"Params": [
@@ -178,11 +168,11 @@
 			"Summary": ""
 		},
 		"listMetaInfo()": {
-			"Syntax": "**.listMetaInfo**( *me* : cs.vectorStudio.Vector ) : Object",
+			"Syntax": "**.listMetaInfo**( *me* : cs.embed.Vector ) : Object",
 			"Params": [
 				[
 					"me",
-					"cs.vectorStudio.Vector",
+					"cs.embed.Vector",
 					"->"
 				],
 				[
@@ -193,12 +183,17 @@
 			],
 			"Summary": ""
 		},
+		"refresh()": {
+			"Syntax": "**.refresh**()",
+			"Params": [],
+			"Summary": ""
+		},
 		"insertInput()": {
-			"Syntax": "**.insertInput**( *vector* : cs.vectorStudio.Vector; *input* : Text )",
+			"Syntax": "**.insertInput**( *vector* : cs.embed.Vector; *input* : Text )",
 			"Params": [
 				[
 					"vector",
-					"cs.vectorStudio.Vector",
+					"cs.embed.Vector",
 					"->"
 				],
 				[
@@ -231,9 +226,31 @@
 			],
 			"Summary": ""
 		},
-		"updateList()": {
-			"Syntax": "**.updateList**()",
-			"Params": [],
+		"modelUpdateName()": {
+			"Syntax": "**.modelUpdateName**( *old* : Text; *new* : Text )",
+			"Params": [
+				[
+					"old",
+					"Text",
+					"->"
+				],
+				[
+					"new",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"modelUpdateDropdown()": {
+			"Syntax": "**.modelUpdateDropdown**( *vector* : cs.embed.Vector )",
+			"Params": [
+				[
+					"vector",
+					"cs.embed.Vector",
+					"->"
+				]
+			],
 			"Summary": ""
 		},
 		"manager()": {
@@ -250,7 +267,7 @@
 		"modelsDropdown": {
 			"Syntax": "modelsDropdown : Object"
 		},
-		"_inheritedFrom_": "_WIZARD"
+		"_inheritedFrom_": "_COMMON"
 	},
 	"Model": {
 		"validate()": {
@@ -292,100 +309,6 @@
 			"Syntax": "name : Text"
 		}
 	},
-	"_MODELS_WIZARD": {
-		"deleteModel()": {
-			"Syntax": "**.deleteModel**( *name* : Text )",
-			"Params": [
-				[
-					"name",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"modelContainerManager()": {
-			"Syntax": "**.modelContainerManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"selectModel()": {
-			"Syntax": "**.selectModel**( *name* : Text )",
-			"Params": [
-				[
-					"name",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"validate()": {
-			"Syntax": "**.validate**( *model* : cs.vectorStudio.Model ) : Boolean",
-			"Params": [
-				[
-					"model",
-					"cs.vectorStudio.Model",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"newModel()": {
-			"Syntax": "**.newModel**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"get modelProvider()": {
-			"Syntax": "**.get modelProvider**() : cs.vectorStudio.Provider",
-			"Params": [
-				[
-					"",
-					"cs.vectorStudio.Provider",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"listManager()": {
-			"Syntax": "**.listManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"manager()": {
-			"Syntax": "**.manager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"previousItem": {
-			"Syntax": "previousItem : Object"
-		},
-		"_inheritedFrom_": "_WIZARD"
-	},
-	"Env": {},
 	"Vector": {
 		"set error()": {
 			"Syntax": "**.set error**( *message* : Text )",
@@ -410,11 +333,11 @@
 			"Summary": ""
 		},
 		"get definition()": {
-			"Syntax": "**.get definition**() : cs.vectorStudio.Vector",
+			"Syntax": "**.get definition**() : cs.embed.Vector",
 			"Params": [
 				[
 					"",
-					"cs.vectorStudio.Vector",
+					"cs.embed.Vector",
 					"<-"
 				]
 			],
@@ -432,11 +355,11 @@
 			"Summary": ""
 		},
 		"get inputsMenu()": {
-			"Syntax": "**.get inputsMenu**() : cs.vectorStudio.menu",
+			"Syntax": "**.get inputsMenu**() : cs.embed.menu",
 			"Params": [
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
@@ -491,9 +414,9 @@
 			"Syntax": "version : Integer"
 		}
 	},
-	"_WIZARD": {
+	"_COMMON": {
 		"isModelUsed()": {
-			"Syntax": "**.isModelUsed**( *name* : Text ) : cs.vectorStudio.Vector",
+			"Syntax": "**.isModelUsed**( *name* : Text ) : Boolean",
 			"Params": [
 				[
 					"name",
@@ -502,32 +425,47 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.Vector",
+					"Boolean",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"addModel()": {
-			"Syntax": "**.addModel**( *model* : cs.vectorStudio.Model )",
+		"vectorsUsingTheModel()": {
+			"Syntax": "**.vectorsUsingTheModel**( *name* : Text ) : Collection",
 			"Params": [
 				[
-					"model",
-					"cs.vectorStudio.Model",
+					"name",
+					"Text",
 					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"readModels()": {
-			"Syntax": "**.readModels**() : Collection",
-			"Params": [
+				],
 				[
 					"",
 					"Collection",
 					"<-"
 				]
 			],
+			"Summary": ""
+		},
+		"readModels()": {
+			"Syntax": "**.readModels**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"get settingsFile()": {
+			"Syntax": "**.get settingsFile**() : 4D.File",
+			"Params": [
+				[
+					"",
+					"4D.File",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"writeVectors()": {
+			"Syntax": "**.writeVectors**()",
+			"Params": [],
 			"Summary": ""
 		},
 		"updateUI()": {
@@ -553,11 +491,16 @@
 			"Summary": ""
 		},
 		"manager()": {
-			"Syntax": "**.manager**( *e* : Object )",
+			"Syntax": "**.manager**( *e* : Object; *from* : Text )",
 			"Params": [
 				[
 					"e",
 					"Object",
+					"->"
+				],
+				[
+					"from",
+					"Text",
 					"->"
 				]
 			],
@@ -575,29 +518,7 @@
 			"Summary": ""
 		},
 		"readSettings()": {
-			"Syntax": "**.readSettings**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get settingsFile()": {
-			"Syntax": "**.get settingsFile**() : 4D.File",
-			"Params": [
-				[
-					"",
-					"4D.File",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"writeSettings()": {
-			"Syntax": "**.writeSettings**()",
+			"Syntax": "**.readSettings**()",
 			"Params": [],
 			"Summary": ""
 		},
@@ -612,44 +533,65 @@
 			],
 			"Summary": ""
 		},
-		"selectedItems": {
-			"Syntax": "selectedItems : Collection"
+		"writeModels()": {
+			"Syntax": "**.writeModels**()",
+			"Params": [],
+			"Summary": ""
 		},
-		"currentItem": {
-			"Syntax": "currentItem : Object"
+		"writeSettings()": {
+			"Syntax": "**.writeSettings**()",
+			"Params": [],
+			"Summary": ""
 		},
-		"models": {
-			"Syntax": "models : Collection"
+		"read()": {
+			"Syntax": "**.read**()",
+			"Params": [],
+			"Summary": ""
 		},
-		"list": {
-			"Syntax": "list : Text"
-		},
-		"providers": {
-			"Syntax": "providers : Object"
-		},
-		"vectors": {
-			"Syntax": "vectors : Collection"
-		},
-		"file": {
-			"Syntax": "file : 4D.File"
-		},
-		"catalog": {
-			"Syntax": "catalog : cs.vectorStudio.DataStore"
+		"settings": {
+			"Syntax": "settings : Object"
 		},
 		"itemPosition": {
 			"Syntax": "itemPosition : Integer"
 		},
-		"settings": {
-			"Syntax": "settings : Object"
+		"currentItem": {
+			"Syntax": "currentItem : Object"
+		},
+		"OPENAI": {
+			"Syntax": "OPENAI : Text"
+		},
+		"selectedItems": {
+			"Syntax": "selectedItems : Collection"
+		},
+		"vectors": {
+			"Syntax": "vectors : Collection"
+		},
+		"DEBUG": {
+			"Syntax": "DEBUG : Boolean"
+		},
+		"list": {
+			"Syntax": "list : Text"
+		},
+		"PROVIDERS": {
+			"Syntax": "PROVIDERS : Collection"
+		},
+		"models": {
+			"Syntax": "models : Collection"
+		},
+		"providers": {
+			"Syntax": "providers : Object"
+		},
+		"catalog": {
+			"Syntax": "catalog : cs.embed.DataStore"
 		}
 	},
 	"menuBar": {
 		"defaultMinimalMenuBar()": {
-			"Syntax": "**.defaultMinimalMenuBar**() : cs.vectorStudio.menuBar",
+			"Syntax": "**.defaultMinimalMenuBar**() : cs.embed.menuBar",
 			"Params": [
 				[
 					"",
-					"cs.vectorStudio.menuBar",
+					"cs.embed.menuBar",
 					"<-"
 				]
 			],
@@ -742,7 +684,7 @@
 			"Summary": ""
 		},
 		"update()": {
-			"Syntax": "**.update**( *index* : Integer; *menu* : cs.vectorStudio.menu ) : cs.vectorStudio.menuBar",
+			"Syntax": "**.update**( *index* : Integer; *menu* : cs.embed.menu ) : cs.embed.menuBar",
 			"Params": [
 				[
 					"index",
@@ -751,12 +693,12 @@
 				],
 				[
 					"menu",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"->"
 				],
 				[
 					"",
-					"cs.vectorStudio.menuBar",
+					"cs.embed.menuBar",
 					"<-"
 				]
 			],
@@ -789,18 +731,18 @@
 			"Summary": ""
 		},
 		"set()": {
-			"Syntax": "**.set**() : cs.vectorStudio.menuBar",
+			"Syntax": "**.set**() : cs.embed.menuBar",
 			"Params": [
 				[
 					"",
-					"cs.vectorStudio.menuBar",
+					"cs.embed.menuBar",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"populate()": {
-			"Syntax": "**.populate**( *menus* : Collection ) : cs.vectorStudio.menuBar",
+			"Syntax": "**.populate**( *menus* : Collection ) : cs.embed.menuBar",
 			"Params": [
 				[
 					"menus",
@@ -809,7 +751,7 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menuBar",
+					"cs.embed.menuBar",
 					"<-"
 				]
 			],
@@ -819,7 +761,7 @@
 	},
 	"menu": {
 		"fonts()": {
-			"Syntax": "**.fonts**( *withStyle* : Variant; *callback* : Text ) : cs.vectorStudio.menu",
+			"Syntax": "**.fonts**( *withStyle* : Variant; *callback* : Text ) : cs.embed.menu",
 			"Params": [
 				[
 					"withStyle",
@@ -833,14 +775,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"edit()": {
-			"Syntax": "**.edit**( *contextual* : Boolean ) : cs.vectorStudio.menu",
+			"Syntax": "**.edit**( *contextual* : Boolean ) : cs.embed.menu",
 			"Params": [
 				[
 					"contextual",
@@ -849,14 +791,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"windows()": {
-			"Syntax": "**.windows**( *callback* : Text ) : cs.vectorStudio.menu",
+			"Syntax": "**.windows**( *callback* : Text ) : cs.embed.menu",
 			"Params": [
 				[
 					"callback",
@@ -865,14 +807,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"popup()": {
-			"Syntax": "**.popup**( *where* : Variant; *x* : Variant; *y* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.popup**( *where* : Variant; *x* : Variant; *y* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"where",
@@ -891,7 +833,7 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
@@ -919,7 +861,7 @@
 			"Summary": ""
 		},
 		"icon()": {
-			"Syntax": "**.icon**( *proxy* : Text; *index* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.icon**( *proxy* : Text; *index* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"proxy",
@@ -933,14 +875,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"disable()": {
-			"Syntax": "**.disable**( *index* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.disable**( *index* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"index",
@@ -949,7 +891,7 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
@@ -1004,7 +946,7 @@
 			"Summary": ""
 		},
 		"setData()": {
-			"Syntax": "**.setData**( *name* : Text; *value* : Variant; *index* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.setData**( *name* : Text; *value* : Variant; *index* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"name",
@@ -1023,14 +965,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"enable()": {
-			"Syntax": "**.enable**( *enabled* : Boolean; *index* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.enable**( *enabled* : Boolean; *index* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"enabled",
@@ -1044,7 +986,7 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
@@ -1072,7 +1014,7 @@
 			"Summary": ""
 		},
 		"property()": {
-			"Syntax": "**.property**( *property* : Text; *value* : Variant; *index* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.property**( *property* : Text; *value* : Variant; *index* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"property",
@@ -1091,14 +1033,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"indent()": {
-			"Syntax": "**.indent**( *index* : Integer; *number* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.indent**( *index* : Integer; *number* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"index",
@@ -1112,14 +1054,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"parameter()": {
-			"Syntax": "**.parameter**( *param* : Text; *index* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.parameter**( *param* : Text; *index* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"param",
@@ -1133,14 +1075,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"mark()": {
-			"Syntax": "**.mark**( *checked* : Boolean; *index* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.mark**( *checked* : Boolean; *index* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"checked",
@@ -1154,14 +1096,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"method()": {
-			"Syntax": "**.method**( *method* : Text; *index* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.method**( *method* : Text; *index* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"method",
@@ -1175,7 +1117,7 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
@@ -1214,7 +1156,7 @@
 			"Summary": ""
 		},
 		"setStyle()": {
-			"Syntax": "**.setStyle**( *tyle* : Integer; *index* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.setStyle**( *tyle* : Integer; *index* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"tyle",
@@ -1228,14 +1170,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"delete()": {
-			"Syntax": "**.delete**( *index* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.delete**( *index* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"index",
@@ -1244,25 +1186,25 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"file()": {
-			"Syntax": "**.file**() : cs.vectorStudio.menu",
+			"Syntax": "**.file**() : cs.embed.menu",
 			"Params": [
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"shortcut()": {
-			"Syntax": "**.shortcut**( *key* : Variant; *modifier* : Integer; *index* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.shortcut**( *key* : Variant; *modifier* : Integer; *index* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"key",
@@ -1281,7 +1223,7 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
@@ -1319,7 +1261,7 @@
 			"Summary": ""
 		},
 		"action()": {
-			"Syntax": "**.action**( *action* : Variant; *index* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.action**( *action* : Variant; *index* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"action",
@@ -1333,14 +1275,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"line()": {
-			"Syntax": "**.line**( *afterItem* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.line**( *afterItem* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"afterItem",
@@ -1349,14 +1291,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"append()": {
-			"Syntax": "**.append**( *item* : Variant; *param* : Variant; *mark* : Variant; *afterItem* : Integer ) : cs.vectorStudio.menu",
+			"Syntax": "**.append**( *item* : Variant; *param* : Variant; *mark* : Variant; *afterItem* : Integer ) : cs.embed.menu",
 			"Params": [
 				[
 					"item",
@@ -1380,7 +1322,7 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
@@ -1413,6 +1355,88 @@
 		"data": {
 			"Syntax": "data : Collection"
 		}
+	},
+	"_MODELS": {
+		"deleteModel()": {
+			"Syntax": "**.deleteModel**( *name* : Text )",
+			"Params": [
+				[
+					"name",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"newModel()": {
+			"Syntax": "**.newModel**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"nameManager()": {
+			"Syntax": "**.nameManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"selectModel()": {
+			"Syntax": "**.selectModel**( *name* : Text )",
+			"Params": [
+				[
+					"name",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"listMetaInfo()": {
+			"Syntax": "**.listMetaInfo**( *me* : cs.embed.Model ) : Object",
+			"Params": [
+				[
+					"me",
+					"cs.embed.Model",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"listManager()": {
+			"Syntax": "**.listManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"manager()": {
+			"Syntax": "**.manager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"previousItem": {
+			"Syntax": "previousItem : Object"
+		},
+		"_inheritedFrom_": "_COMMON"
 	},
 	"regex": {
 		"countWords()": {
@@ -1518,7 +1542,7 @@
 			"Summary": ""
 		},
 		"setOptions()": {
-			"Syntax": "**.setOptions**( *options* : Integer ) : cs.vectorStudio.regex",
+			"Syntax": "**.setOptions**( *options* : Integer ) : cs.embed.regex",
 			"Params": [
 				[
 					"options",
@@ -1527,7 +1551,7 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.regex",
+					"cs.embed.regex",
 					"<-"
 				]
 			],
@@ -1950,7 +1974,7 @@
 			"Summary": ""
 		},
 		"setPattern()": {
-			"Syntax": "**.setPattern**( *pattern* : Text ) : cs.vectorStudio.regex",
+			"Syntax": "**.setPattern**( *pattern* : Text ) : cs.embed.regex",
 			"Params": [
 				[
 					"pattern",
@@ -1959,7 +1983,7 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.regex",
+					"cs.embed.regex",
 					"<-"
 				]
 			],
@@ -1999,7 +2023,7 @@
 			"Summary": ""
 		},
 		"setTarget()": {
-			"Syntax": "**.setTarget**( *target* : Variant ) : cs.vectorStudio.regex",
+			"Syntax": "**.setTarget**( *target* : Variant ) : cs.embed.regex",
 			"Params": [
 				[
 					"target",
@@ -2008,14 +2032,14 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.regex",
+					"cs.embed.regex",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"loadPattern()": {
-			"Syntax": "**.loadPattern**( *ID* : Text; *file* : 4D.File ) : cs.vectorStudio.regex",
+			"Syntax": "**.loadPattern**( *ID* : Text; *file* : 4D.File ) : cs.embed.regex",
 			"Params": [
 				[
 					"ID",
@@ -2029,7 +2053,7 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.regex",
+					"cs.embed.regex",
 					"<-"
 				]
 			],
@@ -2130,7 +2154,7 @@
 			"Summary": ""
 		},
 		"menuModels()": {
-			"Syntax": "**.menuModels**( *default* : Text ) : cs.vectorStudio.menu",
+			"Syntax": "**.menuModels**( *default* : Text ) : cs.embed.menu",
 			"Params": [
 				[
 					"default",
@@ -2139,7 +2163,7 @@
 				],
 				[
 					"",
-					"cs.vectorStudio.menu",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
@@ -2165,6 +2189,9 @@
 			"Syntax": "**.loadModels**()",
 			"Params": [],
 			"Summary": ""
+		},
+		"OPENAI": {
+			"Syntax": "OPENAI : Text"
 		},
 		"success": {
 			"Syntax": "success : Boolean"

@@ -189,6 +189,19 @@ Function listManager($e : Object)
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function listMetaInfo($me : cs:C1710.Model) : Object
+	
+	var $meta:={}
+	
+	If (This:C1470.isModelUsed($me.name))
+		
+		$meta.fontWeight:="bold"
+		
+	End if 
+	
+	return $meta
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function nameManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
@@ -241,7 +254,7 @@ The model name shall be unique.
 						
 						var $old : Text:=This:C1470.previousItem.name
 						var $new : Text:=$cur.name
-						CALL FORM:C1391(Storage:C1525.studio.EMBEDDINGS; Formula:C1597(Form:C1466.updateModelName($old; $new)))
+						CALL FORM:C1391(Storage:C1525.studio.EMBEDDINGS; Formula:C1597(Form:C1466.modelUpdateName($old; $new)))
 						
 					End if 
 				End if 
