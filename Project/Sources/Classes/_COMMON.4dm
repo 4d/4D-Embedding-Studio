@@ -18,14 +18,7 @@ property _detailFields : Collection
 
 property DEBUG:=Structure file:C489=Structure file:C489(*)
 
-// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function read()
-	
-	This:C1470.settings:=This:C1470.readSettings()
-	This:C1470.models:=This:C1470.readModels()
-	This:C1470.vectors:=This:C1470.readVectors()
-	
-	// §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ 
+// ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___
 Class constructor
 	
 	// Mark: Load predefined providers
@@ -53,9 +46,17 @@ Class constructor
 			
 		End use 
 	End if 
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// common 
-Function manager($e : Object; $context : Text)
+Function read()
+	
+	This:C1470.readSettings()
+	This:C1470.readModels()
+	This:C1470.readVectors()
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Shared actions
+Function manager($e : Object; $from : Text)
 	
 	Case of 
 			
@@ -64,7 +65,7 @@ Function manager($e : Object; $context : Text)
 			
 			Use (Storage:C1525.studio)
 				
-				Storage:C1525.studio[$context]:=Current form window:C827
+				Storage:C1525.studio[$from]:=Current form window:C827
 				
 			End use 
 			
@@ -80,7 +81,7 @@ Function manager($e : Object; $context : Text)
 			
 			If (Length:C16(OBJECT Get name:C1087(Object with focus:K67:3))=0)
 				
-				GOTO OBJECT:C206(*; "list")
+				GOTO OBJECT:C206(*; This:C1470.list)
 				
 			End if 
 			
@@ -89,7 +90,7 @@ Function manager($e : Object; $context : Text)
 			
 			Use (Storage:C1525.studio)
 				
-				Storage:C1525.studio[$context]:=0
+				Storage:C1525.studio[$from]:=0
 				
 			End use 
 			
@@ -97,6 +98,7 @@ Function manager($e : Object; $context : Text)
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Hide/show details based on selection
 Function updateUI() : Boolean
 	
 	var $t : Text
@@ -140,21 +142,18 @@ we will need to search for nearby data and copy the internal file, if necessary.
 */
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function readSettings() : Object
+Function readSettings()
 	
 	// 📌 For now, vectors and models are saved in the same file
-	
 	Try
 		
-		var $settings:=JSON Parse:C1218(This:C1470.settingsFile.getText())
+		This:C1470.settings:=JSON Parse:C1218(This:C1470.settingsFile.getText())
 		
 	Catch
 		
-		return {vectors: []; models: []}
+		This:C1470.settings:={vectors: []; models: []}
 		
 	End try
-	
-	return $settings
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function writeSettings()
@@ -204,6 +203,7 @@ The list is displayed with:
     ]
 }
 */
+	This:C1470.readSettings()
 	
 	If (This:C1470.settings.vectors#Null:C1517)
 		
@@ -213,7 +213,7 @@ The list is displayed with:
 /* Queries are performed using internal table/field numbers, to avoid failure in the event of a name change.
 var $v : cs.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $vector.dataclassNumber; $vector.vectorNumber).first()*/
 			
-			var $v : cs:C1710.Vector:=$vectors.query("dataclassName = :1 & vectorName"; $vector.dataclassName; $vector.vectorName).first()
+			var $v : cs:C1710.Vector:=$vectors.query("dataclassName = :1 & vectorName = :2"; $vector.dataclassName; $vector.vectorName).first()
 			
 			If ($v=Null:C1517)  // ERROR
 				
@@ -268,7 +268,7 @@ var $v : cs.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $
 		End for each 
 	End if 
 	
-	return $vectors.orderBy("dataclassName asc, vectorName asc")
+	This:C1470.vectors:=$vectors.orderBy("dataclassName asc, vectorName asc")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function saveVectors($vectors : Collection)
@@ -293,13 +293,15 @@ Function saveVectors($vectors : Collection)
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function writeVectors()
 	
+	// 📌 For now, vectors and models are saved in the same file
 	This:C1470.writeSettings()
 	
 	// MARK:- [MODELS
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function readModels() : Collection
+Function readModels()
 	
 	// 📌 For now, vectors and models are saved in the same file
+	This:C1470.readSettings()
 	
 	var $models:=[]
 	
@@ -310,7 +312,7 @@ Function readModels() : Collection
 		
 	End for each 
 	
-	return $models.orderBy("name asc")
+	This:C1470.models:=$models.orderBy("name asc")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function saveModels($models : Collection)
@@ -345,12 +347,6 @@ Function writeModels()
 	This:C1470.writeSettings()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function addModel($model : cs:C1710.Model)
-	
-	This:C1470.models.push($model)
-	This:C1470.saveModels()
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function vectorsUsingTheModel($name : Text) : Collection
 	
 	return This:C1470.vectors.query("model = :1"; $name)
@@ -358,7 +354,7 @@ Function vectorsUsingTheModel($name : Text) : Collection
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isModelUsed($name : Text) : Boolean
 	
-	return This:C1470.vectors.query("model = :1"; $name).length>0
+	return This:C1470.vectorsUsingTheModel($name).length>0
 	
 	// MARK:- [PRIVATE]
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***

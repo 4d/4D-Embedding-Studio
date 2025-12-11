@@ -77,6 +77,7 @@
 					"right": 212,
 					"bottom": 371,
 					"sizingY": "grow",
+					"metaSource": "Form:C1466.listMetaInfo(This:C1470)",
 					"columns": [
 						{
 							"header": {
