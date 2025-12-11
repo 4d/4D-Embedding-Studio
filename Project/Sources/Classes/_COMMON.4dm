@@ -18,6 +18,14 @@ property _detailFields : Collection
 
 property DEBUG:=Structure file:C489=Structure file:C489(*)
 
+// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function read()
+	
+	This:C1470.settings:=This:C1470.readSettings()
+	This:C1470.models:=This:C1470.readModels()
+	This:C1470.vectors:=This:C1470.readVectors()
+	
+	// §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ §§§ 
 Class constructor
 	
 	// Mark: Load predefined providers
@@ -33,9 +41,7 @@ Class constructor
 	// Mark: Default provider
 	This:C1470.providers.openAI:=cs:C1710.Provider.new()
 	
-	This:C1470.settings:=This:C1470.readSettings()
-	This:C1470.models:=This:C1470.readModels()
-	This:C1470.vectors:=This:C1470.readVectors()
+	This:C1470.read()
 	
 	If (Storage:C1525.studio=Null:C1517)
 		
@@ -47,7 +53,6 @@ Class constructor
 			
 		End use 
 	End if 
-	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// common 
 Function manager($e : Object; $context : Text)
@@ -118,6 +123,7 @@ Function updateUI() : Boolean
 	
 	return True:C214
 	
+	// MARK:- [SETTINGS]
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get settingsFile() : 4D:C1709.File
 	
@@ -135,6 +141,8 @@ we will need to search for nearby data and copy the internal file, if necessary.
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function readSettings() : Object
+	
+	// 📌 For now, vectors and models are saved in the same file
 	
 	Try
 		
@@ -280,11 +288,18 @@ Function saveVectors($vectors : Collection)
 	End for each 
 	//%W+550.26
 	
+	This:C1470.writeVectors()
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function writeVectors()
+	
 	This:C1470.writeSettings()
 	
 	// MARK:- [MODELS
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function readModels() : Collection
+	
+	// 📌 For now, vectors and models are saved in the same file
 	
 	var $models:=[]
 	
@@ -321,6 +336,12 @@ The structure of the models shall be saved in a JSON file named “vectors.json�
 	End for each 
 	//%W+550.26
 	
+	This:C1470.writeModels()
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function writeModels()
+	
+	// 📌 For now, vectors and models are saved in the same file
 	This:C1470.writeSettings()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===

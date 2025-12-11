@@ -350,17 +350,17 @@
 			},
 			"entryOrder": [
 				"list",
-				"add",
-				"delete",
-				"help",
 				"name",
-				"model",
-				"apiKey",
 				"baseURL",
+				"apiKey",
+				"model",
 				"organization",
 				"project",
+				"baseURLMenu",
 				"modelMenu",
-				"baseURLMenu"
+				"help",
+				"add",
+				"delete"
 			]
 		}
 	],
