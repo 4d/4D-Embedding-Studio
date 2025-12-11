@@ -356,8 +356,8 @@ Function modelsDropdownManager($e : Object)
 			
 			If ($dropDown.currentValue=This:C1470._newItemWording)  // Create a new model
 				
-				This:C1470.modelsDropdown.index:=-1
-				This:C1470.modelsDropdown.currentValue:=This:C1470.modelsDropdown.placeholder
+				$dropDown.index:=-1
+				$dropDown.currentValue:=$dropDown.placeholder
 				
 				_MODELS_WIZARD("new")
 				
@@ -375,6 +375,47 @@ Function modelsDropdownManager($e : Object)
 			//______________________________________________________
 	End case 
 	
+Function updateModelName($old : Text; $new : Text)
+	
+	//var $current:=This.currentItem+
+	
+	//var $dropDown:={\
+		values: This._getModelDropdownValues(); \
+		index: -1; \
+		placeholder: Localized string("selectAModel")}
+	
+	This:C1470.models:=This:C1470.readModels()
+	This:C1470.modelsDropdown.values:=This:C1470._getModelDropdownValues()
+	
+	If (This:C1470.updateUI())
+		
+		This:C1470.modelsDropdownUpdate(This:C1470.currentItem)
+		
+	End if 
+	
+	
+	//If ($current.model=$old)
+	
+	//$current.model:=$new
+	//$dropDown.values:=This._getModelDropdownValues()
+	//$dropDown.currentValue:=$new
+	
+	////Form.vectors:=Form.vectors  // update UI
+	
+	//End if 
+	
+	
+	
+Function updateModel($model : Text)
+	
+	$dropDown:=This:C1470.modelsDropdown
+	
+	If ($dropDown.currentValue=This:C1470._newItemWording) || ($dropDown.currentValue=$dropDown.placeholder)
+		
+		This:C1470.currentItem.model:=$name
+		
+	End if 
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function modelsDropdownUpdate($vector : cs:C1710.Vector)
 	
@@ -385,6 +426,7 @@ Function modelsDropdownUpdate($vector : cs:C1710.Vector)
 		return 
 		
 	End if 
+	
 	var $dropDown : Object:=This:C1470.modelsDropdown
 	
 	If ($dropDown.values.includes($vector.model))
@@ -400,43 +442,43 @@ Function modelsDropdownUpdate($vector : cs:C1710.Vector)
 	$dropDown.currentValue:=$vector.model || $dropDown.placeholder
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function refresh()
+Function refresh()  //($force : Boolean)
+	
+	ASSERT:C1129(Not:C34(Shift down:C543))
 	
 	This:C1470.vectors:=This:C1470.readVectors()
 	
 	If (This:C1470._catalogModified())
 		
-		// MARK: Update lits
-		var $current:=This:C1470.currentItem
+		This:C1470._cacheCatalog()  // Update cache
 		
-		If ($current#Null:C1517)  // Restore selection
+	End if 
+	
+	// MARK: Update lits
+	var $current:=This:C1470.currentItem
+	
+	If ($current#Null:C1517)  // Restore selection
+		
+		var $c:=This:C1470.vectors.indices("dataclassName = :1 & vectorName = :2"; $current.dataclassName; $current.vectorName)
+		
+		If ($c.length>0)
 			
-			var $c:=This:C1470.vectors.indices("dataclassName = :1 & vectorName = :2"; $current.dataclassName; $current.vectorName)
+			LISTBOX SELECT ROW:C912(*; This:C1470.list; $c[0]+1)
+			This:C1470.currentItem:=This:C1470.vectors[$c[0]]
 			
-			If ($c.length>0)
-				
-				LISTBOX SELECT ROW:C912(*; This:C1470.list; $c[0]+1)
-				This:C1470.currentItem:=This:C1470.vectors[$c[0]]
-				
-			Else 
-				
-				LISTBOX SELECT ROW:C912(*; This:C1470.list; 0; lk remove from selection:K53:3)  // Deselect
-				This:C1470.currentItem:=Null:C1517
-				
-			End if 
+		Else 
 			
-			This:C1470.listManager()
+			LISTBOX SELECT ROW:C912(*; This:C1470.list; 0; lk remove from selection:K53:3)  // Deselect
+			This:C1470.currentItem:=Null:C1517
 			
 		End if 
 		
-		This:C1470._cacheCatalog()  // Update cache
+		This:C1470.listManager()
 		
 	End if 
 	
 	This:C1470.models:=This:C1470.readModels()
 	This:C1470.modelsDropdownUpdate(This:C1470.currentItem)
-	
-	
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _cacheCatalog()

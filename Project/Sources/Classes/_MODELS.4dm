@@ -214,6 +214,10 @@ The model name shall be unique.
 			
 		Else 
 			
+			var $model:=This:C1470.models.query("name= :1"; This:C1470.previousItem.name)
+			
+			This:C1470.saveModels()
+			
 			var $c:=This:C1470.vectorsUsingTheModel(This:C1470.previousItem.name)
 			
 			If ($c.length>0)
@@ -233,9 +237,11 @@ The model name shall be unique.
 					
 					// TODO: Touch for update the vectors' window if opened
 					
-					If (Num:C11(Storage:C1525.studio.embeddingsWindow)#0)
+					If (Num:C11(Storage:C1525.studio.EMBEDDINGS)#0)
 						
-						CALL FORM:C1391(Storage:C1525.studio.embeddingsWindow; Formula:C1597(Form:C1466.refresh()))
+						var $old : Text:=This:C1470.previousItem.name
+						var $new : Text:=$cur.name
+						CALL FORM:C1391(Storage:C1525.studio.EMBEDDINGS; Formula:C1597(Form:C1466.updateModelName($old; $new)))
 						
 					End if 
 				End if 
@@ -296,11 +302,11 @@ The model name shall be unique.
 	This:C1470.models:=This:C1470.models.orderBy("name asc")
 	This:C1470.selectModel($name)
 	
-	//If (This.updateUI())
-	
-	//OBJECT SET FONT STYLE(*; "apiKey.label"; Bool($model._provider.needToken) ? Bold : Plain)
-	
-	//End if 
+	If (Num:C11(Storage:C1525.studio.EMBEDDINGS)#0)
+		
+		//CALL FORM(Storage.studio.EMBEDDINGS; Formula(Form.updateModel($name)))
+		
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function deleteModel($name : Text)
