@@ -177,10 +177,9 @@ Function moreManager($e : Object)
 		
 	End if 
 	
-	$menu.line().append("🚧 Edit API key"; "editApiKey")
-	
 	If (This:C1470.DEBUG)
 		
+		$menu.line().append("🚧 Edit API key"; "editApiKey")
 		$menu.append("🚧 open setting file"; "openSettingFile")
 		
 	End if 
