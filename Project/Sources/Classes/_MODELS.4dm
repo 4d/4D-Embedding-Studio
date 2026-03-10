@@ -113,7 +113,6 @@ an error message shall warn them that this model is used by xxx and 4D shall not
 			var $curbBase:=String:C10($cur.baseURL)
 			var $menu:=cs:C1710.menu.new()
 			
-/*For each ($provider; Form._providers)*/
 			var $provider : cs:C1710.Provider
 			For each ($provider; This:C1470.PROVIDERS)
 				
@@ -121,8 +120,25 @@ an error message shall warn them that this model is used by xxx and 4D shall not
 				
 			End for each 
 			
-			If ($menu.popup($curbBase).selected)\
-				 && ($menu.choice#$curbBase)
+			$menu.line()\
+				.append(Localized string:C991("manageProviders"); "_manage")
+			
+			If (Not:C34($menu.popup($curbBase).selected))
+				
+				return 
+				
+			End if 
+			
+			If ($menu.choice="_manage")
+				
+				OPEN SETTINGS WINDOW:C903("Database/AI")
+				This:C1470.PROVIDERS:=This:C1470.getSettings()
+				
+				return 
+				
+			End if 
+			
+			If ($menu.choice#$curbBase)
 				
 				// Set the model baseURL
 				$provider:=Form:C1466.PROVIDERS.query("baseURL = :1"; $menu.choice).first()

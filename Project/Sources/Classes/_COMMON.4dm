@@ -21,18 +21,8 @@ property DEBUG:=Structure file:C489=Structure file:C489(*)
 // ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___
 Class constructor
 	
-	// Mark: Load predefined providers
-	var $file:=File:C1566("/RESOURCES/providers.json")
-	
-	var $o : Object
-	For each ($o; JSON Parse:C1218($file.getText()))
-		
-		This:C1470.PROVIDERS.push(cs:C1710.Provider.new($o))
-		
-	End for each 
-	
-	// Mark: Default provider
-	This:C1470.providers.openAI:=cs:C1710.Provider.new()
+	// Mark: AI settings providers
+	This:C1470.PROVIDERS:=This:C1470.getSettings()
 	
 	This:C1470.read()
 	
@@ -46,6 +36,25 @@ Class constructor
 			
 		End use 
 	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function getSettings() : Collection
+	
+	var $o : Object
+	var $key : Text
+	var $c:=[]
+	var $settings : Object:=AIProviders.providers
+	
+	For each ($key; $settings)
+		
+		$o:=$settings[$key]
+		$o.name:=$key
+		
+		$c.push(cs:C1710.Provider.new($o))
+		
+	End for each 
+	
+	return $c.orderBy("name")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function read()

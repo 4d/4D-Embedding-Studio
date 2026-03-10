@@ -3,7 +3,7 @@
   <file datatype="x-STR#" original="Undefined" source-language="en" target-language="cs">
     <header>
       <prop-group name="4DPop XLIFF Pro">
-        <prop prop-type="version">3.1</prop>
+        <prop prop-type="version">3.0</prop>
       </prop-group>
     </header>
     <body>
@@ -155,6 +155,10 @@ Click + to add your first model.</target>
 Would you like to update them?</source>
           <target state="new">The model “{name}” is used by one or more vectors. 
 Would you like to update them?</target>
+        </trans-unit>
+        <trans-unit id="1" resname="manageProviders">
+          <source>Manage Providers</source>
+          <target state="new">Manage Providers</target>
         </trans-unit>
       </group>
       <group resname="Common">
