@@ -366,13 +366,12 @@
 		}
 	],
 	"editor": {
-		"activeView": "View 1",
+		"activeView": "noModel",
 		"defaultView": "View 1",
 		"views": {
 			"View 1": {},
 			"Guides": {},
 			"noModel": {
-				"visible": false,
 				"objects": [
 					"noModel"
 				]
