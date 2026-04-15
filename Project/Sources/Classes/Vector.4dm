@@ -141,10 +141,9 @@ In the embedding phrase, if the attribute is incorrect,
 4D shall display the attribute in red 
 and show a tooltip with an error message when the developer hovers over it.
 */
-	var $pattern:="(?i-ms)\\{([^\\}]*)\\}"
-	var $rgx:=cs:C1710.regex.new($phrase; $pattern)
-	var $inputs:=$rgx.extract(1)
+	var $tpl:=cs:C1710.Phrase.new($phrase)
 	var $dataclass : 4D:C1709.DataClass:=ds:C1482[This:C1470.dataclassName]
+	var $validation:=$tpl.validate($dataclass)
 	
 	$phrase:=Replace string:C233($phrase; "&"; "&amp;")
 	$phrase:=Replace string:C233($phrase; "<"; "&lt;")
@@ -152,44 +151,18 @@ and show a tooltip with an error message when the developer hovers over it.
 	
 	This:C1470[""].errors:=[]
 	
-	var $t : Text
-	For each ($t; $inputs)
+	var $err : Object
+	For each ($err; $validation.errors)
 		
-		Case of 
-				//______________________________________________________
-			: ($dataclass[$t]=Null:C1517)  // Not available
-				
-				This:C1470.error:=This:C1470._localizedErrorMessage("theAttributeDoesn'tExistsInTheDataclass"; $t)
-				
-				//______________________________________________________
-			: (String:C10($dataclass[$t].classID)="4D.Vector")  // Vector
-				
-				This:C1470.error:=This:C1470._localizedErrorMessage("theAttributeIsAVector"; $t)
-				
-				//______________________________________________________
-			Else 
-				
-				continue
-				
-				//______________________________________________________
-		End case 
+		This:C1470.error:=$err.message
 		
-		var $old:=$t
-		ST SET ATTRIBUTES:C1093($t; ST Start text:K78:15; ST End text:K78:16; Attribute text color:K65:7; "red")
-		$phrase:=Replace string:C233($phrase; "{"+$old+"}"; "{"+$t+"}")
+		var $styled : Text:=$err.key
+		ST SET ATTRIBUTES:C1093($styled; ST Start text:K78:15; ST End text:K78:16; Attribute text color:K65:7; "red")
+		$phrase:=Replace string:C233($phrase; "{"+$err.key+"}"; "{"+$styled+"}")
 		
 	End for each 
 	
 	return "<span>"+$phrase+"</span>"  // In multistyle text format
-	
-	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _localizedErrorMessage($resname : Text; $attribute : Text; $dataclass : Text) : Text
-	
-	var $message:=Localized string:C991($resname)
-	$message:=Replace string:C233($message; "{attribute}"; $attribute || This:C1470.vectorName)
-	$message:=Replace string:C233($message; "{dataclass}"; $dataclass || This:C1470.dataclassName)
-	
-	return $message
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get defined() : Boolean

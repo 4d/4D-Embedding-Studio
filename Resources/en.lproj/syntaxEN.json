@@ -141,6 +141,19 @@
 				],
 				"Summary": ""
 			}
+		},
+		"Phrase": {
+			"new()": {
+				"Syntax": "**.new**( *template* : Text )",
+				"Params": [
+					[
+						"template",
+						"Text",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
 		}
 	},
 	"Env": {},
@@ -2221,6 +2234,62 @@
 		},
 		"name": {
 			"Syntax": "name : Text"
+		}
+	},
+	"Phrase": {
+		"render()": {
+			"Syntax": "**.render**( *data* : Object ) : Text",
+			"Params": [
+				[
+					"data",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"validate()": {
+			"Syntax": "**.validate**( *dataclass* : 4D.DataClass ) : Object",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get keys()": {
+			"Syntax": "**.get keys**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get template()": {
+			"Syntax": "**.get template**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
 		}
 	}
 }

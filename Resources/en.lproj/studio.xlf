@@ -78,6 +78,14 @@
           <source>The model is not defined</source>
           <target>The model is not defined</target>
         </trans-unit>
+        <trans-unit id="19" resname="theAttributeIsNotARelation">
+          <source>The "{attribute}" attribute is not a N:1 relation.</source>
+          <target>The "{attribute}" attribute is not a N:1 relation.</target>
+        </trans-unit>
+        <trans-unit id="20" resname="theAttributeIsA1NRelation">
+          <source>The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</source>
+          <target>The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</target>
+        </trans-unit>
       </group>
       <group resname="Models">
         <trans-unit id="29" resname="name">
