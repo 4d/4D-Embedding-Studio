@@ -1,11 +1,6 @@
 property settings : Object
 property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project datastore
-property models; vectors : Collection
-
-property providers:={}  // ??????????????????????????????????????????????????????????????????
-
-property PROVIDERS:=[]
-property OPENAI:="https://Api.openai.com/@"
+property vectors : Collection
 
 // Main list
 property list:="list"
@@ -21,9 +16,6 @@ property DEBUG:=Structure file:C489=Structure file:C489(*)
 // ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___
 Class constructor
 	
-	// Mark: AI settings providers
-	This:C1470.PROVIDERS:=This:C1470.getSettings()
-	
 	This:C1470.read()
 	
 	If (Storage:C1525.studio=Null:C1517)
@@ -38,29 +30,9 @@ Class constructor
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function getSettings() : Collection
-	
-	var $o : Object
-	var $key : Text
-	var $c:=[]
-	var $settings : Object:=AIProviders.providers
-	
-	For each ($key; $settings)
-		
-		$o:=$settings[$key]
-		$o.name:=$key
-		
-		$c.push(cs:C1710.Provider.new($o))
-		
-	End for each 
-	
-	return $c.orderBy("name")
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function read()
 	
 	This:C1470.readSettings()
-	This:C1470.readModels()
 	This:C1470.readVectors()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -304,66 +276,6 @@ Function writeVectors()
 	
 	// 📌 For now, vectors and models are saved in the same file
 	This:C1470.writeSettings()
-	
-	// MARK:- [MODELS
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function readModels()
-	
-	// 📌 For now, vectors and models are saved in the same file
-	This:C1470.readSettings()
-	
-	var $models:=[]
-	
-	var $model : cs:C1710.Model
-	For each ($model; This:C1470.settings.models)
-		
-		$models.push(cs:C1710.Model.new($model))
-		
-	End for each 
-	
-	This:C1470.models:=$models.orderBy("name asc")
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function saveModels($models : Collection)
-	
-/* #17326
-The structure of the models shall be saved in a JSON file named “vectors.json” in the “settings” folder.
-*/
-	This:C1470.settings.models:=[]
-	
-	//%W-550.26
-	var $model : cs:C1710.Model
-	For each ($model; $models || This:C1470.models)
-		
-		This:C1470.settings.models.push({\
-			name: $model.name; \
-			model: $model.model; \
-			apiKey: $model.apiKey; \
-			baseURL: $model.baseURL; \
-			organization: $model.organization; \
-			project: $model.project\
-			})
-		
-	End for each 
-	//%W+550.26
-	
-	This:C1470.writeModels()
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function writeModels()
-	
-	// 📌 For now, vectors and models are saved in the same file
-	This:C1470.writeSettings()
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function vectorsUsingTheModel($name : Text) : Collection
-	
-	return This:C1470.vectors.query("model = :1"; $name)
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isModelUsed($name : Text) : Boolean
-	
-	return This:C1470.vectorsUsingTheModel($name).length>0
 	
 	// MARK:- [PRIVATE]
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***

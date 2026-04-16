@@ -7,7 +7,6 @@ property _detailFields:=[\
 
 property modelsDropdown : Object
 property _cache : Object  // Current catalog cache
-property _newItemWording:=Localized string:C991("newModelItem")  // Label of the menu item “new model”
 
 Class constructor
 	
@@ -167,16 +166,6 @@ Function moreManager($e : Object)
 		
 	End if 
 	
-	If (Length:C16(String:C10($vector.model))>0)
-		
-		$menu.append(":xliff:editModel"; "editModel")
-		
-	Else 
-		
-		$menu.append(This:C1470._newItemWording; "editModel")
-		
-	End if 
-	
 	If (This:C1470.DEBUG)
 		
 		$menu.line().append("🚧 Edit API key"; "editApiKey")
@@ -189,7 +178,7 @@ Function moreManager($e : Object)
 			// ______________________________________________________
 		: (Not:C34($menu.popup().selected))
 			
-			// <NOTHING MORE TO DO> 
+			// <NOTHING MORE TO DO>
 			
 			// ______________________________________________________
 		: (Position:C15("{"; $menu.choice)=1)  // Attribute to insert into the descriptive phrase
@@ -198,14 +187,9 @@ Function moreManager($e : Object)
 			This:C1470.saveVectors()
 			
 			// ______________________________________________________
-		: ($menu.choice="editModel")
-			
-			_MODELS_WIZARD($vector.model)
-			
-			// ______________________________________________________
 		: ($menu.choice="editApiKey")
 			
-			// TODO: Edit API key 
+			// TODO: Edit API key
 			
 			// ______________________________________________________
 		: ($menu.choice="openSettingFile")
@@ -322,17 +306,6 @@ Function modelsDropdownManager($e : Object)
 			
 			$dropDown:=This:C1470.modelsDropdown
 			
-			If ($dropDown.currentValue=This:C1470._newItemWording)  // Create a new model
-				
-				$dropDown.index:=-1
-				$dropDown.currentValue:=$dropDown.placeholder
-				
-				_MODELS_WIZARD("new")
-				
-				return 
-				
-			End if 
-			
 			// Update current vector
 			This:C1470.currentItem.model:=$dropDown.currentValue
 			This:C1470.currentItem.version+=1
@@ -430,22 +403,8 @@ Function refresh()  //($force : Boolean)
 		
 	End if 
 	
-	This:C1470.readModels()
-	This:C1470.modelUpdateDropdown(This:C1470.currentItem)
-	
-	// MARK: -[CALLBACKS]
-	// --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-	// Calls from templates
-Function modelUpdateName($old : Text; $new : Text)
-	
-	This:C1470.readModels()
 	This:C1470.modelsDropdown.values:=This:C1470._getModelDropdownValues()
-	
-	If (This:C1470.updateUI())
-		
-		This:C1470.modelUpdateDropdown(This:C1470.currentItem)
-		
-	End if 
+	This:C1470.modelUpdateDropdown(This:C1470.currentItem)
 	
 	// MARK: -[PRIVATE]
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
@@ -512,7 +471,7 @@ Function _catalogModified() : Boolean
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _getModelDropdownValues() : Collection
 	
-	return This:C1470.models.extract("name").orderBy().combine(["-"; This:C1470._newItemWording])
+	return cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name")
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _embeddedAttributesMenu($vector : cs:C1710.Vector; $menu : cs:C1710.menu)
