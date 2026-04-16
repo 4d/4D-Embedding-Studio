@@ -17,7 +17,6 @@
 	"(VECTORS)": {},
 	"API": {
 		"methods": [
-			"_MODELS_WIZARD",
 			"_VECTORS_WIZARD"
 		]
 	},
@@ -36,11 +35,8 @@
 	},
 	"NAMESPACE": {
 		"classes": [
-			"Env",
 			"menu",
 			"menuBar",
-			"Model",
-			"Provider",
 			"regex",
 			"Vector"
 		]
@@ -50,13 +46,11 @@
 			"FORM_MANAGER"
 		],
 		"forms": [
-			"EMBEDDINGS",
-			"MODELS"
+			"EMBEDDINGS"
 		],
 		"classes": [
 			"_COMMON",
-			"_EMBEDDINGS",
-			"_MODELS"
+			"_EMBEDDINGS"
 		]
 	},
 	"trash": {
