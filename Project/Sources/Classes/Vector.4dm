@@ -99,7 +99,7 @@ In the embedding phrase, the supported attributes shall be:
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 	// Gives a menu of available dataclass attributes to insert into the descriptive phrase.
-Function get inputsMenu() : cs:C1710.menu
+Function get inputsMenu() : cs:C1710._menu
 	
 	var $medias:=[].resize(42)
 /*Alpha*/$medias[0]:="|Images/StructureEditor/Field_1.png"
@@ -116,7 +116,7 @@ Function get inputsMenu() : cs:C1710.menu
 /*Object*/$medias[38]:="|Images/StructureEditor/Field_14.png"
 /*relatedEntities*/$medias[42]:="|Images/ObjectIcons/Icon_600.png"
 	
-	var $menu:=cs:C1710.menu.new()
+	var $menu:=cs:C1710._menu.new()
 	
 	var $attribute : Object
 	For each ($attribute; This:C1470.supportedAttributes.orderBy("name"))
@@ -152,12 +152,13 @@ and show a tooltip with an error message when the developer hovers over it.
 	This:C1470[""].errors:=[]
 	
 	var $err : Object
+	var $errorColor:=FORM Get color scheme:C1761="dark" ? "#ea7979" : "red"
 	For each ($err; $validation.errors)
 		
 		This:C1470.error:=$err.message
 		
 		var $styled : Text:=$err.key
-		ST SET ATTRIBUTES:C1093($styled; ST Start text:K78:15; ST End text:K78:16; Attribute text color:K65:7; "red")
+		ST SET ATTRIBUTES:C1093($styled; ST Start text:K78:15; ST End text:K78:16; Attribute text color:K65:7; $errorColor)
 		$phrase:=Replace string:C233($phrase; "{"+$err.key+"}"; "{"+$styled+"}")
 		
 	End for each 

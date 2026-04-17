@@ -157,7 +157,7 @@ Function moreManager($e : Object)
 	$e:=$e || FORM Event:C1606
 	
 	var $vector : cs:C1710.Vector:=This:C1470.currentItem
-	var $menu:=cs:C1710.menu.new()
+	var $menu:=cs:C1710._menu.new()
 	
 	If (OBJECT Get name:C1087(Object with focus:K67:3)="phrase")
 		
@@ -234,7 +234,7 @@ Function phraseManager($e : Object)
 				
 			End if 
 			
-			var $menu:=cs:C1710.menu.new().edit(True:C214).line()
+			var $menu:=cs:C1710._menu.new().edit(True:C214).line()
 			This:C1470._embeddedAttributesMenu($vector; $menu)
 			
 			If (Not:C34($menu.popup().selected))
@@ -474,7 +474,7 @@ Function _getModelDropdownValues() : Collection
 	return cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name")
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _embeddedAttributesMenu($vector : cs:C1710.Vector; $menu : cs:C1710.menu)
+Function _embeddedAttributesMenu($vector : cs:C1710.Vector; $menu : cs:C1710._menu)
 	
 	var $embed:=$vector.inputsMenu
 	

@@ -56,44 +56,13 @@
 				"Summary": ""
 			}
 		},
-		"menuBar": {
-			"new()": {
-				"Syntax": "**.new**( *menus* : Collection )",
-				"Params": [
-					[
-						"menus",
-						"Collection",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"menu": {
+		"_menu": {
 			"new()": {
 				"Syntax": "**.new**( *data* : Variant )",
 				"Params": [
 					[
 						"data",
 						"Variant",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"regex": {
-			"new()": {
-				"Syntax": "**.new**( *target* : Variant; *pattern* : Text )",
-				"Params": [
-					[
-						"target",
-						"Variant",
-						"->"
-					],
-					[
-						"pattern",
-						"Text",
 						"->"
 					]
 				],
@@ -328,11 +297,11 @@
 			"Summary": ""
 		},
 		"get inputsMenu()": {
-			"Syntax": "**.get inputsMenu**() : cs.embed.menu",
+			"Syntax": "**.get inputsMenu**() : cs.embed._menu",
 			"Params": [
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -477,183 +446,9 @@
 			"Syntax": "settings : Object"
 		}
 	},
-	"menuBar": {
-		"defaultMinimalMenuBar()": {
-			"Syntax": "**.defaultMinimalMenuBar**() : cs.embed.menuBar",
-			"Params": [
-				[
-					"",
-					"cs.embed.menuBar",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"getMenuItemParameter()": {
-			"Syntax": "**.getMenuItemParameter**( *type* : Integer ) : Variant",
-			"Params": [
-				[
-					"type",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Variant",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"menuSelected()": {
-			"Syntax": "**.menuSelected**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setMenuBar()": {
-			"Syntax": "**.setMenuBar**( *menu* : Variant; *retain* : Boolean )",
-			"Params": [
-				[
-					"menu",
-					"Variant",
-					"->"
-				],
-				[
-					"retain",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"hide()": {
-			"Syntax": "**.hide**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"setHelpMenu()": {
-			"Syntax": "**.setHelpMenu**( *items* : Collection )",
-			"Params": [
-				[
-					"items",
-					"Collection",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"enableItem()": {
-			"Syntax": "**.enableItem**( *item* : Text; *enabled* : Boolean )",
-			"Params": [
-				[
-					"item",
-					"Text",
-					"->"
-				],
-				[
-					"enabled",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"disableItem()": {
-			"Syntax": "**.disableItem**( *item* : Text )",
-			"Params": [
-				[
-					"item",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"update()": {
-			"Syntax": "**.update**( *index* : Integer; *menu* : cs.embed.menu ) : cs.embed.menuBar",
-			"Params": [
-				[
-					"index",
-					"Integer",
-					"->"
-				],
-				[
-					"menu",
-					"cs.embed.menu",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.menuBar",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"show()": {
-			"Syntax": "**.show**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"resetsAbout()": {
-			"Syntax": "**.resetsAbout**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"setAbout()": {
-			"Syntax": "**.setAbout**( *label* : Text; *method* : Text )",
-			"Params": [
-				[
-					"label",
-					"Text",
-					"->"
-				],
-				[
-					"method",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"set()": {
-			"Syntax": "**.set**() : cs.embed.menuBar",
-			"Params": [
-				[
-					"",
-					"cs.embed.menuBar",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"populate()": {
-			"Syntax": "**.populate**( *menus* : Collection ) : cs.embed.menuBar",
-			"Params": [
-				[
-					"menus",
-					"Collection",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.menuBar",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"_inheritedFrom_": "menu"
-	},
-	"menu": {
+	"_menu": {
 		"fonts()": {
-			"Syntax": "**.fonts**( *withStyle* : Variant; *callback* : Text ) : cs.embed.menu",
+			"Syntax": "**.fonts**( *withStyle* : Variant; *callback* : Text ) : cs.embed._menu",
 			"Params": [
 				[
 					"withStyle",
@@ -667,14 +462,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"edit()": {
-			"Syntax": "**.edit**( *contextual* : Boolean ) : cs.embed.menu",
+			"Syntax": "**.edit**( *contextual* : Boolean ) : cs.embed._menu",
 			"Params": [
 				[
 					"contextual",
@@ -683,14 +478,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"windows()": {
-			"Syntax": "**.windows**( *callback* : Text ) : cs.embed.menu",
+			"Syntax": "**.windows**( *callback* : Text ) : cs.embed._menu",
 			"Params": [
 				[
 					"callback",
@@ -699,14 +494,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"popup()": {
-			"Syntax": "**.popup**( *where* : Variant; *x* : Variant; *y* : Integer ) : cs.embed.menu",
+			"Syntax": "**.popup**( *where* : Variant; *x* : Variant; *y* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"where",
@@ -725,7 +520,7 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -753,7 +548,7 @@
 			"Summary": ""
 		},
 		"icon()": {
-			"Syntax": "**.icon**( *proxy* : Text; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.icon**( *proxy* : Text; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"proxy",
@@ -767,14 +562,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"disable()": {
-			"Syntax": "**.disable**( *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.disable**( *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"index",
@@ -783,7 +578,7 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -838,7 +633,7 @@
 			"Summary": ""
 		},
 		"setData()": {
-			"Syntax": "**.setData**( *name* : Text; *value* : Variant; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.setData**( *name* : Text; *value* : Variant; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"name",
@@ -857,14 +652,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"enable()": {
-			"Syntax": "**.enable**( *enabled* : Boolean; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.enable**( *enabled* : Boolean; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"enabled",
@@ -878,7 +673,7 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -906,7 +701,7 @@
 			"Summary": ""
 		},
 		"property()": {
-			"Syntax": "**.property**( *property* : Text; *value* : Variant; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.property**( *property* : Text; *value* : Variant; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"property",
@@ -925,14 +720,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"indent()": {
-			"Syntax": "**.indent**( *index* : Integer; *number* : Integer ) : cs.embed.menu",
+			"Syntax": "**.indent**( *index* : Integer; *number* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"index",
@@ -946,14 +741,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"parameter()": {
-			"Syntax": "**.parameter**( *param* : Text; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.parameter**( *param* : Text; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"param",
@@ -967,14 +762,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"mark()": {
-			"Syntax": "**.mark**( *checked* : Boolean; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.mark**( *checked* : Boolean; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"checked",
@@ -988,14 +783,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"method()": {
-			"Syntax": "**.method**( *method* : Text; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.method**( *method* : Text; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"method",
@@ -1009,7 +804,7 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -1048,7 +843,7 @@
 			"Summary": ""
 		},
 		"setStyle()": {
-			"Syntax": "**.setStyle**( *tyle* : Integer; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.setStyle**( *tyle* : Integer; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"tyle",
@@ -1062,14 +857,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"delete()": {
-			"Syntax": "**.delete**( *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.delete**( *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"index",
@@ -1078,25 +873,25 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"file()": {
-			"Syntax": "**.file**() : cs.embed.menu",
+			"Syntax": "**.file**() : cs.embed._menu",
 			"Params": [
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"shortcut()": {
-			"Syntax": "**.shortcut**( *key* : Variant; *modifier* : Integer; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.shortcut**( *key* : Variant; *modifier* : Integer; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"key",
@@ -1115,7 +910,7 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -1153,7 +948,7 @@
 			"Summary": ""
 		},
 		"action()": {
-			"Syntax": "**.action**( *action* : Variant; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.action**( *action* : Variant; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"action",
@@ -1167,14 +962,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"line()": {
-			"Syntax": "**.line**( *afterItem* : Integer ) : cs.embed.menu",
+			"Syntax": "**.line**( *afterItem* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"afterItem",
@@ -1183,14 +978,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"append()": {
-			"Syntax": "**.append**( *item* : Variant; *param* : Variant; *mark* : Variant; *afterItem* : Integer ) : cs.embed.menu",
+			"Syntax": "**.append**( *item* : Variant; *param* : Variant; *mark* : Variant; *afterItem* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"item",
@@ -1214,7 +1009,7 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -1246,698 +1041,6 @@
 		},
 		"data": {
 			"Syntax": "data : Collection"
-		}
-	},
-	"regex": {
-		"countWords()": {
-			"Syntax": "**.countWords**( *target* : Text ) : Integer",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"split()": {
-			"Syntax": "**.split**() : Collection",
-			"Params": [
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"Trim()": {
-			"Syntax": "**.Trim**( *char* : Text ) : Text",
-			"Params": [
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"trim()": {
-			"Syntax": "**.trim**( *target* : Text; *char* : Text ) : Text",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set pattern()": {
-			"Syntax": "**.set pattern**( *pattern* : Text )",
-			"Params": [
-				[
-					"pattern",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"TrimTrailing()": {
-			"Syntax": "**.TrimTrailing**( *char* : Text ) : Text",
-			"Params": [
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set target()": {
-			"Syntax": "**.set target**( *target* : Variant )",
-			"Params": [
-				[
-					"target",
-					"Variant",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"setOptions()": {
-			"Syntax": "**.setOptions**( *options* : Integer ) : cs.embed.regex",
-			"Params": [
-				[
-					"options",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.regex",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"TrimLeading()": {
-			"Syntax": "**.TrimLeading**( *char* : Text ) : Text",
-			"Params": [
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"group()": {
-			"Syntax": "**.group**( *index* : Integer ) : Text",
-			"Params": [
-				[
-					"index",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"trimLeading()": {
-			"Syntax": "**.trimLeading**( *target* : Text; *char* : Text ) : Text",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"extractMailsAdresses()": {
-			"Syntax": "**.extractMailsAdresses**( *target* : Variant; *domains* : Collection ) : Collection",
-			"Params": [
-				[
-					"target",
-					"Variant",
-					"->"
-				],
-				[
-					"domains",
-					"Collection",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"extractDates()": {
-			"Syntax": "**.extractDates**( *target* : Variant; *pivotYear* : Integer ) : Collection",
-			"Params": [
-				[
-					"target",
-					"Variant",
-					"->"
-				],
-				[
-					"pivotYear",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"start()": {
-			"Syntax": "**.start**( *index* : Integer ) : Integer",
-			"Params": [
-				[
-					"index",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"stripTags()": {
-			"Syntax": "**.stripTags**( *target* : Text; *allow* : Variant ) : Text",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"allow",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"addslashes()": {
-			"Syntax": "**.addslashes**( *in* : Text ) : Text",
-			"Params": [
-				[
-					"in",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"LookingAt()": {
-			"Syntax": "**.LookingAt**( *pattern* : Text ) : Boolean",
-			"Params": [
-				[
-					"pattern",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"StripTags()": {
-			"Syntax": "**.StripTags**( *allow* : Variant ) : Text",
-			"Params": [
-				[
-					"allow",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"lookingAt()": {
-			"Syntax": "**.lookingAt**( *target* : Text; *pattern* : Text ) : Boolean",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"pattern",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"replace()": {
-			"Syntax": "**.replace**( *replacement* : Text; *count* : Integer; *position* : Integer ) : Text",
-			"Params": [
-				[
-					"replacement",
-					"Text",
-					"->"
-				],
-				[
-					"count",
-					"Integer",
-					"->"
-				],
-				[
-					"position",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"end()": {
-			"Syntax": "**.end**( *index* : Integer ) : Integer",
-			"Params": [
-				[
-					"index",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get count()": {
-			"Syntax": "**.get count**() : Integer",
-			"Params": [
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get allowSpaceAndComments()": {
-			"Syntax": "**.get allowSpaceAndComments**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"extract()": {
-			"Syntax": "**.extract**( *groups* : Variant ) : Collection",
-			"Params": [
-				[
-					"groups",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set allowSpaceAndComments()": {
-			"Syntax": "**.set allowSpaceAndComments**( *on* : Boolean )",
-			"Params": [
-				[
-					"on",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"escape()": {
-			"Syntax": "**.escape**( *in* : Text ) : Text",
-			"Params": [
-				[
-					"in",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get pattern()": {
-			"Syntax": "**.get pattern**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"length()": {
-			"Syntax": "**.length**( *index* : Integer ) : Integer",
-			"Params": [
-				[
-					"index",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set treatTargetAsOneLine()": {
-			"Syntax": "**.set treatTargetAsOneLine**( *on* : Boolean )",
-			"Params": [
-				[
-					"on",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get treatTargetAsOneLine()": {
-			"Syntax": "**.get treatTargetAsOneLine**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set caseSensitve()": {
-			"Syntax": "**.set caseSensitve**( *on* : Boolean )",
-			"Params": [
-				[
-					"on",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"trimTrailing()": {
-			"Syntax": "**.trimTrailing**( *target* : Text; *char* : Text ) : Text",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"validateMail()": {
-			"Syntax": "**.validateMail**( *target* : Text ) : Boolean",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get target()": {
-			"Syntax": "**.get target**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setPattern()": {
-			"Syntax": "**.setPattern**( *pattern* : Text ) : cs.embed.regex",
-			"Params": [
-				[
-					"pattern",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.regex",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set dotMatchNewLine()": {
-			"Syntax": "**.set dotMatchNewLine**( *on* : Boolean )",
-			"Params": [
-				[
-					"on",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get dotMatchNewLine()": {
-			"Syntax": "**.get dotMatchNewLine**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get caseSensitve()": {
-			"Syntax": "**.get caseSensitve**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setTarget()": {
-			"Syntax": "**.setTarget**( *target* : Variant ) : cs.embed.regex",
-			"Params": [
-				[
-					"target",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.regex",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"loadPattern()": {
-			"Syntax": "**.loadPattern**( *ID* : Text; *file* : 4D.File ) : cs.embed.regex",
-			"Params": [
-				[
-					"ID",
-					"Text",
-					"->"
-				],
-				[
-					"file",
-					"4D.File",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.regex",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"substitute()": {
-			"Syntax": "**.substitute**( *replacement* : Text; *count* : Integer; *position* : Integer ) : Text",
-			"Params": [
-				[
-					"replacement",
-					"Text",
-					"->"
-				],
-				[
-					"count",
-					"Integer",
-					"->"
-				],
-				[
-					"position",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"match()": {
-			"Syntax": "**.match**( *start* : Variant; *all* : Boolean ) : Boolean",
-			"Params": [
-				[
-					"start",
-					"Variant",
-					"->"
-				],
-				[
-					"all",
-					"Boolean",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get lastError()": {
-			"Syntax": "**.get lastError**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"errors": {
-			"Syntax": "errors : Collection"
-		},
-		"searchTime": {
-			"Syntax": "searchTime : Integer"
-		},
-		"matches": {
-			"Syntax": "matches : Collection"
-		},
-		"success": {
-			"Syntax": "success : Boolean"
 		}
 	}
 }

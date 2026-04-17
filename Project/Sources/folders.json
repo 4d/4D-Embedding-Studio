@@ -19,10 +19,7 @@
 	},
 	"NAMESPACE": {
 		"classes": [
-			"menu",
-			"menuBar",
 			"Phrase",
-			"regex",
 			"Vector"
 		]
 	},
@@ -41,6 +38,11 @@
 	"TESTS": {
 		"methods": [
 			"test_phrase"
+		]
+	},
+	"UTILS": {
+		"classes": [
+			"_menu"
 		]
 	},
 	"trash": {}

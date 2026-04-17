@@ -125,16 +125,10 @@ we will need to search for nearby data and copy the internal file, if necessary.
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function readSettings()
 	
-	// 📌 For now, vectors and models are saved in the same file
-	Try
-		
-		This:C1470.settings:=JSON Parse:C1218(This:C1470.settingsFile.getText())
-		
-	Catch
-		
-		This:C1470.settings:={vectors: []; models: []}
-		
-	End try
+	This:C1470.settings:={vectors: []}
+	If (This:C1470.settingsFile.exists)
+		This:C1470.settings:=Try(JSON Parse:C1218(This:C1470.settingsFile.getText()))
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function writeSettings()
@@ -274,7 +268,6 @@ Function saveVectors($vectors : Collection)
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function writeVectors()
 	
-	// 📌 For now, vectors and models are saved in the same file
 	This:C1470.writeSettings()
 	
 	// MARK:- [PRIVATE]
