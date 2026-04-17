@@ -141,7 +141,7 @@ Function listMetaInfo($me : cs:C1710.Vector) : Object
 			
 			If (($me[""].errors.length>0)\
 				 || (Length:C16(String:C10($me.error))>0))\
-				 || ($me.model="")
+				 || ($me.definition.model="")
 				
 				$meta.stroke:=FORM Get color scheme:C1761="dark" ? "#ea7979" : "red"
 				
@@ -265,17 +265,19 @@ Function phraseManager($e : Object)
 		: ($e.code=On After Edit:K2:43)
 			
 			// Highlight any errors, if any
-			$vector.phrase:=$vector.parsePhrase($plainText)
+			$vector.phrase:=$vector.parsePhrase(cs:C1710.Phrase.new($plainText))
 			
 			Form:C1466.vectors:=Form:C1466.vectors  // update UI
 			
 			// ______________________________________________________
 		: ($e.code=On Data Change:K2:15)
 			
-			// Highlight any errors, if any
-			ST SET TEXT:C1115(*; $me; $vector.parsePhrase($plainText); ST Start text:K78:15; ST End text:K78:16)
+			$vector.definition.phrase:=cs:C1710.Phrase.new($plainText)
+			$vector.definition.version+=1
 			
-			This:C1470.currentItem.version+=1
+			// Highlight any errors, if any
+			ST SET TEXT:C1115(*; $me; $vector.parsePhrase($vector.definition.phrase); ST Start text:K78:15; ST End text:K78:16)
+			
 			This:C1470.saveVectors()
 			
 			Form:C1466.vectors:=Form:C1466.vectors  // update UI
@@ -307,8 +309,8 @@ Function modelsDropdownManager($e : Object)
 			$dropDown:=This:C1470.modelsDropdown
 			
 			// Update current vector
-			This:C1470.currentItem.model:=$dropDown.currentValue
-			This:C1470.currentItem.version+=1
+			This:C1470.currentItem.definition.model:=$dropDown.currentValue
+			This:C1470.currentItem.definition.version+=1
 			This:C1470.saveVectors()
 			
 			Form:C1466.vectors:=Form:C1466.vectors  // update UI
@@ -342,7 +344,8 @@ Function insertInput($vector : cs:C1710.Vector; $input : Text)
 	HIGHLIGHT TEXT:C210(*; $me; $endSel; $endSel)
 	
 	// Highlight any errors, if any
-	$vector.phrase:=$vector.parsePhrase(ST Get plain text:C1092($newValue))
+	$vector.definition.phrase:=cs:C1710.Phrase.new(ST Get plain text:C1092($newValue))
+	$vector.phrase:=$vector.parsePhrase($vector.definition.phrase)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function modelUpdateDropdown($vector : cs:C1710.Vector)
@@ -357,9 +360,9 @@ Function modelUpdateDropdown($vector : cs:C1710.Vector)
 	
 	var $dropDown : Object:=This:C1470.modelsDropdown
 	
-	If ($dropDown.values.includes($vector.model))
+	If ($dropDown.values.includes($vector.definition.model))
 		
-		$dropDown.index:=$dropDown.values.indexOf($vector.model)
+		$dropDown.index:=$dropDown.values.indexOf($vector.definition.model)
 		
 	Else 
 		
@@ -367,7 +370,7 @@ Function modelUpdateDropdown($vector : cs:C1710.Vector)
 		
 	End if 
 	
-	$dropDown.currentValue:=$vector.model || $dropDown.placeholder
+	$dropDown.currentValue:=$vector.definition.model || $dropDown.placeholder
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function refresh()  //($force : Boolean)
@@ -385,7 +388,7 @@ Function refresh()  //($force : Boolean)
 	
 	If ($current#Null:C1517)  // Restore selection
 		
-		var $c:=This:C1470.vectors.indices("dataclassName = :1 & vectorName = :2"; $current.dataclassName; $current.vectorName)
+		var $c:=This:C1470.vectors.indices("definition.dataclassName = :1 & definition.vectorName = :2"; $current.definition.dataclassName; $current.definition.vectorName)
 		
 		If ($c.length>0)
 			

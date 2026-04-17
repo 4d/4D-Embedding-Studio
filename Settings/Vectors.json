@@ -15,11 +15,11 @@
 			"phrase": "Non existing attribute {toto}"
 		},
 		{
-			"version": 3,
+			"version": 5,
 			"dataclassName": "Students",
 			"vectorName": "student_vector_1",
-			"model": "hello",
-			"phrase": "was Table_1 Field_5"
+			"model": "ModelAlias",
+			"phrase": "was Table_1 {fullName}"
 		},
 		{
 			"version": 0,

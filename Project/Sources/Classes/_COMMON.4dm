@@ -182,43 +182,46 @@ The list is displayed with:
 	
 	If (This:C1470.settings.vectors#Null:C1517)
 		
-		var $vector : cs:C1710.Vector
-		For each ($vector; This:C1470.settings.vectors)
+		var $saved : Object
+		For each ($saved; This:C1470.settings.vectors)
 			
 /* Queries are performed using internal table/field numbers, to avoid failure in the event of a name change.
-var $v : cs.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $vector.dataclassNumber; $vector.vectorNumber).first()*/
+var $v : cs.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $saved.dataclassNumber; $saved.vectorNumber).first()*/
 			
-			var $v : cs:C1710.Vector:=$vectors.query("dataclassName = :1 & vectorName = :2"; $vector.dataclassName; $vector.vectorName).first()
+			var $v : cs:C1710.Vector:=$vectors.query("definition.dataclassName = :1 & definition.vectorName = :2"; $saved.dataclassName; $saved.vectorName).first()
 			
 			If ($v=Null:C1517)  // ERROR
 				
-				$v:=OB Copy:C1225($vector)  // Keep the saved definition
-				
-				//// Automatic name corrections, where applicable and possible
-				//$v.dataclassName:=Try(Table name($v.dataclassNumber)) || $v.dataclassName
-				//$v.vectorName:=Try(Field name($v.dataclassNumber; $v.vectorNumber)) || $v.vectorName
+				// Build a ghost entry that preserves the saved definition
+				var $ghostDef : cs:C1710.EmbeddingDefinition:=cs:C1710.EmbeddingDefinition.new(\
+					String:C10($saved.dataclassName); \
+					String:C10($saved.vectorName); \
+					String:C10($saved.model); \
+					String:C10($saved.phrase))
+				$ghostDef.version:=$saved.version#Null:C1517 ? Num:C11($saved.version) : $ghostDef.version
+				var $ghost : Object:={definition: $ghostDef; error: ""}
 				
 				Case of 
 						
 						// ______________________________________________________
-					: (This:C1470.catalog[$v.dataclassName]=Null:C1517)
+					: (This:C1470.catalog[$ghostDef.dataclassName]=Null:C1517)
 						
-						$v.error:=Replace string:C233(Localized string:C991("missingDataclass"); "{dataclass}"; $v.dataclassName)
-						
-						// ______________________________________________________
-					: (This:C1470.catalog[$v.dataclassName][$v.vectorName]=Null:C1517)
-						
-						$v.error:=Replace string:C233(Replace string:C233(Localized string:C991("missingVector"); "{attribute}"; $v.vectorName); "{dataclass}"; $v.dataclassName)
+						$ghost.error:=Replace string:C233(Localized string:C991("missingDataclass"); "{dataclass}"; $ghostDef.dataclassName)
 						
 						// ______________________________________________________
-					: (String:C10(This:C1470.catalog[$v.dataclassName][$v.vectorName].classID)#"4D.Vector")
+					: (This:C1470.catalog[$ghostDef.dataclassName][$ghostDef.vectorName]=Null:C1517)
 						
-						$v.error:=Replace string:C233(Replace string:C233(Localized string:C991("attributeIsNotAVector"); "{attribute}"; $v.vectorName); "{dataclass}"; $v.dataclassName)
+						$ghost.error:=Replace string:C233(Replace string:C233(Localized string:C991("missingVector"); "{attribute}"; $ghostDef.vectorName); "{dataclass}"; $ghostDef.dataclassName)
+						
+						// ______________________________________________________
+					: (String:C10(This:C1470.catalog[$ghostDef.dataclassName][$ghostDef.vectorName].classID)#"4D.Vector")
+						
+						$ghost.error:=Replace string:C233(Replace string:C233(Localized string:C991("attributeIsNotAVector"); "{attribute}"; $ghostDef.vectorName); "{dataclass}"; $ghostDef.dataclassName)
 						
 						// ______________________________________________________
 				End case 
 				
-				$vectors.push($v)
+				$vectors.push($ghost)
 				
 				continue
 				
@@ -227,14 +230,15 @@ var $v : cs.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $
 			// TODO: Check if the model exists
 			
 			// Update with saved definition
-			$v.model:=String:C10($vector.model)
-			$v.phrase:=$v.parsePhrase($vector.phrase)
-			$v.version:=$vector.version#Null:C1517 ? Num:C11($vector.version) : $v.version
+			$v.definition.model:=String:C10($saved.model)
+			$v.definition.phrase:=cs:C1710.Phrase.new(String:C10($saved.phrase))
+			$v.definition.version:=$saved.version#Null:C1517 ? Num:C11($saved.version) : $v.definition.version
+			$v.phrase:=$v.parsePhrase($v.definition.phrase)
 			
 			Case of 
 					
 					// ______________________________________________________
-				: ($v.model="")
+				: ($v.definition.model="")
 					
 					$v.error:=Localized string:C991("theModelIsNotDefined")
 					
@@ -243,7 +247,7 @@ var $v : cs.Vector:=$vectors.query("dataclassNumber = :1 & vectorNumber = :2"; $
 		End for each 
 	End if 
 	
-	This:C1470.vectors:=$vectors.orderBy("dataclassName asc, vectorName asc")
+	This:C1470.vectors:=$vectors.orderBy("definition.dataclassName asc, definition.vectorName asc")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function saveVectors($vectors : Collection)
@@ -257,7 +261,7 @@ Function saveVectors($vectors : Collection)
 		
 		If ($vector.defined)
 			
-			This:C1470.settings.vectors.push($vector.definition)
+			This:C1470.settings.vectors.push($vector.definition.toObject())
 			
 		End if 
 	End for each 

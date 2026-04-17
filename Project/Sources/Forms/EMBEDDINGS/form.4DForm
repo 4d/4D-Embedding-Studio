@@ -114,7 +114,7 @@
 							"footer": {
 								"name": "Footer1"
 							},
-							"dataSource": "This:C1470.dataclassName",
+							"dataSource": "This:C1470.definition.dataclassName",
 							"width": 141,
 							"enterable": false
 						},
@@ -128,7 +128,7 @@
 							"footer": {
 								"name": "Footer2"
 							},
-							"dataSource": "This:C1470.vectorName",
+							"dataSource": "This:C1470.definition.vectorName",
 							"enterable": false
 						}
 					]

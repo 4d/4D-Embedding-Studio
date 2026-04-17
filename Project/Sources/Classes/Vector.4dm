@@ -1,13 +1,7 @@
-property version : Integer:=-1  // -1 for a never-defined vector
-property dataclassName : Text
-property vectorName : Text
-property model:=""  // Define a default model if any
-property phrase:=""  // Define a default phrase if any
+property definition : cs:C1710.EmbeddingDefinition
+property phrase:=""  // Styled text for the UI editor (highlighted errors, etc.)
 property supportedAttributes:=[]
 property embedded:=[]
-
-//property dataclassNumber : Integer
-//property vectorNumber : Integer
 
 Class constructor($dataclass : Object; $attribute : Object; $model : Text; $phrase : Text)
 	
@@ -31,15 +25,9 @@ Class constructor($dataclass : Object; $attribute : Object; $model : Text; $phra
 		
 		var $o : Object:=$dataclass.getInfo()
 		
-		This:C1470.dataclassName:=$o.name
-		This:C1470.vectorName:=$attribute.name
-		This:C1470.model:=$model || This:C1470.model
-		This:C1470.phrase:=$phrase || This:C1470.phrase
+		This:C1470.definition:=cs:C1710.EmbeddingDefinition.new($o.name; $attribute.name; $model || ""; $phrase || "")
 		
-		//This.dataclassNumber:=$o.tableNumber
-		//This.vectorNumber:=$attribute.fieldNumber
-		
-		This:C1470.getSupportedAttributes($dataclass)
+		This:C1470.supportedAttributes:=cs:C1710._dataclassAttributes.me.forDataclass($dataclass)
 		
 	Else 
 		
@@ -52,70 +40,13 @@ Class constructor($dataclass : Object; $attribute : Object; $model : Text; $phra
 	This:C1470[""]:={\
 		touched: False:C215; \
 		errors: []; \
-		original: This:C1470.definition}
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function getSupportedAttributes($dataclass : 4D:C1709.DataClass)
-	
-/* #17306
-In the embedding phrase, the supported attributes shall be:
-  • Simple fields
-  • Computed attributes
-  • Related fields (1:1, N:1 relationship)
-  • Aliases
-*/
-	
-	var $table:=$dataclass.getInfo()
-	
-	var $key : Text
-	For each ($key; $dataclass)
-		
-		var $attribute : Object:=$dataclass[$key]
-		
-		// TODO: Ignore 1:N relationships ?
-		
-		If (String:C10($attribute.classID)="4D.Vector")
-			
-			continue
-			
-		End if 
-		
-		// TODO: Ignore start/end of a relation ?
-		If ($attribute.fieldNumber#Null:C1517)
-			
-			var $oneTable; $oneField : Integer
-			GET RELATION PROPERTIES:C686($table.tableNumber; $attribute.fieldNumber; $oneTable; $oneField)
-			
-			If ($oneField#0)
-				
-				continue
-				
-			End if 
-		End if 
-		
-		This:C1470.supportedAttributes.push($attribute)
-		
-	End for each 
+		original: This:C1470.definition.toObject()}
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 	// Gives a menu of available dataclass attributes to insert into the descriptive phrase.
 Function get inputsMenu() : cs:C1710._menu
 	
-	var $medias:=[].resize(42)
-/*Alpha*/$medias[0]:="|Images/StructureEditor/Field_1.png"
-/*Real*/$medias[1]:="|Images/StructureEditor/Field_9.png"
-/*Text*/$medias[2]:="|Images/StructureEditor/Field_2.png"
-/*Picture*/$medias[3]:="|Images/StructureEditor/Field_12.png"
-/*Date*/$medias[4]:="|Images/StructureEditor/Field_3.png"
-/*Boolean*/$medias[6]:="|Images/StructureEditor/Field_5.png"
-/*Integer*/$medias[8]:="|Images/StructureEditor/Field_6.png"
-/*Long*/$medias[9]:="|Images/StructureEditor/Field_7.png"
-/*Time*/$medias[11]:="|Images/StructureEditor/Field_4.png"
-/*Blob*/$medias[25]:="|Images/StructureEditor/Field_8.png"
-/*Integer64*/$medias[30]:="|Images/StructureEditor/Field_11.png"
-/*Object*/$medias[38]:="|Images/StructureEditor/Field_14.png"
-/*relatedEntities*/$medias[42]:="|Images/ObjectIcons/Icon_600.png"
-	
+	var $medias:=cs:C1710._typeMedia.me.medias
 	var $menu:=cs:C1710._menu.new()
 	
 	var $attribute : Object
@@ -133,21 +64,22 @@ Function get inputsMenu() : cs:C1710._menu
 	return $menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Parse a plain text sentence and return a formatted text with any errors highlighted.
-Function parsePhrase($phrase : Text) : Text
+	// Validate a compiled Phrase against this vector's dataclass and return styled
+	// text (multistyle) with any attribute errors highlighted.
+Function parsePhrase($phrase : cs:C1710.Phrase) : Text
 	
 /* #17308
-In the embedding phrase, if the attribute is incorrect, 
-4D shall display the attribute in red 
+In the embedding phrase, if the attribute is incorrect,
+4D shall display the attribute in red
 and show a tooltip with an error message when the developer hovers over it.
 */
-	var $tpl:=cs:C1710.Phrase.new($phrase)
-	var $dataclass : 4D:C1709.DataClass:=ds:C1482[This:C1470.dataclassName]
-	var $validation:=$tpl.validate($dataclass)
+	var $dataclass : 4D:C1709.DataClass:=ds:C1482[This:C1470.definition.dataclassName]
+	var $validation:=$phrase.validate($dataclass)
 	
-	$phrase:=Replace string:C233($phrase; "&"; "&amp;")
-	$phrase:=Replace string:C233($phrase; "<"; "&lt;")
-	$phrase:=Replace string:C233($phrase; ">"; "&gt;")
+	var $text : Text:=$phrase.template
+	$text:=Replace string:C233($text; "&"; "&amp;")
+	$text:=Replace string:C233($text; "<"; "&lt;")
+	$text:=Replace string:C233($text; ">"; "&gt;")
 	
 	This:C1470[""].errors:=[]
 	
@@ -159,40 +91,16 @@ and show a tooltip with an error message when the developer hovers over it.
 		
 		var $styled : Text:=$err.key
 		ST SET ATTRIBUTES:C1093($styled; ST Start text:K78:15; ST End text:K78:16; Attribute text color:K65:7; $errorColor)
-		$phrase:=Replace string:C233($phrase; "{"+$err.key+"}"; "{"+$styled+"}")
+		$text:=Replace string:C233($text; "{"+$err.key+"}"; "{"+$styled+"}")
 		
 	End for each 
 	
-	return "<span>"+$phrase+"</span>"  // In multistyle text format
+	return "<span>"+$text+"</span>"  // In multistyle text format
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get defined() : Boolean
 	
-	return This:C1470.version>=0  //(Length(This.model)>0) || (Length(This.phrase)>0)
-	
-	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
-Function get definition() : cs:C1710.Vector
-	
-	var $phrase:=This:C1470.phrase
-	
-/*
-return {\
-version: This.version; \
-dataclassName: This.dataclassName; \
-dataclassNumber: This.dataclassNumber; \
-vectorName: This.vectorName; \
-vectorNumber: This.vectorNumber; \
-model: This.model; \
-phrase: ST Get plain text($phrase)\
-}
-*/
-	return {\
-		version: This:C1470.version; \
-		dataclassName: This:C1470.dataclassName; \
-		vectorName: This:C1470.vectorName; \
-		model: This:C1470.model; \
-		phrase: ST Get plain text:C1092($phrase)\
-		}
+	return (This:C1470.definition#Null:C1517) && (This:C1470.definition.version>=0)
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get helptip() : Text
@@ -205,6 +113,6 @@ Function set error($message : Text)
 	This:C1470[""]:=This:C1470[""] || {\
 		touched: False:C215; \
 		errors: []; \
-		original: This:C1470.definition}
+		original: This:C1470.definition.toObject()}
 	
 	This:C1470[""].errors.push($message)

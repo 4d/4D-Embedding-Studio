@@ -8,6 +8,34 @@
 				"Summary": ""
 			}
 		},
+		"EmbeddingDefinition": {
+			"new()": {
+				"Syntax": "**.new**( *dataclassName* : Text; *vectorName* : Text; *model* : Text; *phraseTemplate* : Text )",
+				"Params": [
+					[
+						"dataclassName",
+						"Text",
+						"->"
+					],
+					[
+						"vectorName",
+						"Text",
+						"->"
+					],
+					[
+						"model",
+						"Text",
+						"->"
+					],
+					[
+						"phraseTemplate",
+						"Text",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
 		"Phrase": {
 			"new()": {
 				"Syntax": "**.new**( *template* : Text )",
@@ -18,6 +46,33 @@
 						"->"
 					]
 				],
+				"Summary": ""
+			}
+		},
+		"_menu": {
+			"new()": {
+				"Syntax": "**.new**( *data* : Variant )",
+				"Params": [
+					[
+						"data",
+						"Variant",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_typeMedia": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_COMMON": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
 				"Summary": ""
 			}
 		},
@@ -49,23 +104,10 @@
 				"Summary": ""
 			}
 		},
-		"_COMMON": {
+		"_dataclassAttributes": {
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
-				"Summary": ""
-			}
-		},
-		"_menu": {
-			"new()": {
-				"Syntax": "**.new**( *data* : Variant )",
-				"Params": [
-					[
-						"data",
-						"Variant",
-						"->"
-					]
-				],
 				"Summary": ""
 			}
 		}
@@ -179,6 +221,34 @@
 		},
 		"_inheritedFrom_": "_COMMON"
 	},
+	"EmbeddingDefinition": {
+		"toObject()": {
+			"Syntax": "**.toObject**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"phrase": {
+			"Syntax": "phrase : cs.embed.Phrase"
+		},
+		"model": {
+			"Syntax": "model : Text"
+		},
+		"vectorName": {
+			"Syntax": "vectorName : Text"
+		},
+		"dataclassName": {
+			"Syntax": "dataclassName : Text"
+		},
+		"version": {
+			"Syntax": "version : Integer"
+		}
+	},
 	"Phrase": {
 		"render()": {
 			"Syntax": "**.render**( *data* : Object ) : Text",
@@ -233,217 +303,6 @@
 				]
 			],
 			"Summary": ""
-		}
-	},
-	"Vector": {
-		"set error()": {
-			"Syntax": "**.set error**( *message* : Text )",
-			"Params": [
-				[
-					"message",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get helptip()": {
-			"Syntax": "**.get helptip**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get definition()": {
-			"Syntax": "**.get definition**() : cs.embed.Vector",
-			"Params": [
-				[
-					"",
-					"cs.embed.Vector",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get defined()": {
-			"Syntax": "**.get defined**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"parsePhrase()": {
-			"Syntax": "**.parsePhrase**( *phrase* : Text ) : Text",
-			"Params": [
-				[
-					"phrase",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get inputsMenu()": {
-			"Syntax": "**.get inputsMenu**() : cs.embed._menu",
-			"Params": [
-				[
-					"",
-					"cs.embed._menu",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"getSupportedAttributes()": {
-			"Syntax": "**.getSupportedAttributes**( *dataclass* : 4D.DataClass )",
-			"Params": [
-				[
-					"dataclass",
-					"4D.DataClass",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"embedded": {
-			"Syntax": "embedded : Collection"
-		},
-		"vectorName": {
-			"Syntax": "vectorName : Text"
-		},
-		"phrase": {
-			"Syntax": "phrase : Text"
-		},
-		"model": {
-			"Syntax": "model : Text"
-		},
-		"supportedAttributes": {
-			"Syntax": "supportedAttributes : Collection"
-		},
-		"dataclassName": {
-			"Syntax": "dataclassName : Text"
-		},
-		"version": {
-			"Syntax": "version : Integer"
-		}
-	},
-	"_COMMON": {
-		"writeVectors()": {
-			"Syntax": "**.writeVectors**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"readVectors()": {
-			"Syntax": "**.readVectors**() : Collection",
-			"Params": [
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"readSettings()": {
-			"Syntax": "**.readSettings**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"get settingsFile()": {
-			"Syntax": "**.get settingsFile**() : 4D.File",
-			"Params": [
-				[
-					"",
-					"4D.File",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"saveVectors()": {
-			"Syntax": "**.saveVectors**( *vectors* : Collection )",
-			"Params": [
-				[
-					"vectors",
-					"Collection",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"manager()": {
-			"Syntax": "**.manager**( *e* : Object; *from* : Text )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				],
-				[
-					"from",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"writeSettings()": {
-			"Syntax": "**.writeSettings**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"updateUI()": {
-			"Syntax": "**.updateUI**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"read()": {
-			"Syntax": "**.read**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"DEBUG": {
-			"Syntax": "DEBUG : Boolean"
-		},
-		"itemPosition": {
-			"Syntax": "itemPosition : Integer"
-		},
-		"currentItem": {
-			"Syntax": "currentItem : Object"
-		},
-		"selectedItems": {
-			"Syntax": "selectedItems : Collection"
-		},
-		"vectors": {
-			"Syntax": "vectors : Collection"
-		},
-		"list": {
-			"Syntax": "list : Text"
-		},
-		"catalog": {
-			"Syntax": "catalog : cs.embed.DataStore"
-		},
-		"settings": {
-			"Syntax": "settings : Object"
 		}
 	},
 	"_menu": {
@@ -1041,6 +900,220 @@
 		},
 		"data": {
 			"Syntax": "data : Collection"
+		}
+	},
+	"_typeMedia": {
+		"medias": {
+			"Syntax": "medias : Collection"
+		}
+	},
+	"_COMMON": {
+		"writeVectors()": {
+			"Syntax": "**.writeVectors**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"readVectors()": {
+			"Syntax": "**.readVectors**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"readSettings()": {
+			"Syntax": "**.readSettings**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"get settingsFile()": {
+			"Syntax": "**.get settingsFile**() : 4D.File",
+			"Params": [
+				[
+					"",
+					"4D.File",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"saveVectors()": {
+			"Syntax": "**.saveVectors**( *vectors* : Collection )",
+			"Params": [
+				[
+					"vectors",
+					"Collection",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"manager()": {
+			"Syntax": "**.manager**( *e* : Object; *from* : Text )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				],
+				[
+					"from",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"writeSettings()": {
+			"Syntax": "**.writeSettings**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"updateUI()": {
+			"Syntax": "**.updateUI**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"read()": {
+			"Syntax": "**.read**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"DEBUG": {
+			"Syntax": "DEBUG : Boolean"
+		},
+		"itemPosition": {
+			"Syntax": "itemPosition : Integer"
+		},
+		"currentItem": {
+			"Syntax": "currentItem : Object"
+		},
+		"selectedItems": {
+			"Syntax": "selectedItems : Collection"
+		},
+		"vectors": {
+			"Syntax": "vectors : Collection"
+		},
+		"list": {
+			"Syntax": "list : Text"
+		},
+		"catalog": {
+			"Syntax": "catalog : cs.embed.DataStore"
+		},
+		"settings": {
+			"Syntax": "settings : Object"
+		}
+	},
+	"Vector": {
+		"set error()": {
+			"Syntax": "**.set error**( *message* : Text )",
+			"Params": [
+				[
+					"message",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get defined()": {
+			"Syntax": "**.get defined**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get helptip()": {
+			"Syntax": "**.get helptip**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"parsePhrase()": {
+			"Syntax": "**.parsePhrase**( *phrase* : cs.embed.Phrase ) : Text",
+			"Params": [
+				[
+					"phrase",
+					"cs.embed.Phrase",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get inputsMenu()": {
+			"Syntax": "**.get inputsMenu**() : cs.embed._menu",
+			"Params": [
+				[
+					"",
+					"cs.embed._menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"embedded": {
+			"Syntax": "embedded : Collection"
+		},
+		"supportedAttributes": {
+			"Syntax": "supportedAttributes : Collection"
+		},
+		"phrase": {
+			"Syntax": "phrase : Text"
+		},
+		"definition": {
+			"Syntax": "definition : cs.embed.EmbeddingDefinition"
+		}
+	},
+	"_dataclassAttributes": {
+		"reset()": {
+			"Syntax": "**.reset**( *dataclassName* : Text )",
+			"Params": [
+				[
+					"dataclassName",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"forDataclass()": {
+			"Syntax": "**.forDataclass**( *dataclass* : 4D.DataClass ) : Collection",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
 		}
 	}
 }

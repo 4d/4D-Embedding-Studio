@@ -19,6 +19,7 @@
 	},
 	"NAMESPACE": {
 		"classes": [
+			"EmbeddingDefinition",
 			"Phrase",
 			"Vector"
 		]
@@ -42,7 +43,9 @@
 	},
 	"UTILS": {
 		"classes": [
-			"_menu"
+			"_dataclassAttributes",
+			"_menu",
+			"_typeMedia"
 		]
 	},
 	"trash": {}
