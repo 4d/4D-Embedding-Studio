@@ -1,13 +1,6 @@
 {
 	"_method_": {},
 	"cs.embed": {
-		"Env": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
 		"_EMBEDDINGS": {
 			"new()": {
 				"Syntax": "**.new**()",
@@ -15,28 +8,13 @@
 				"Summary": ""
 			}
 		},
-		"Model": {
+		"Phrase": {
 			"new()": {
-				"Syntax": "**.new**( *name* : Variant; *model* : Text; *apiKey* : Text; *optionals* : Object )",
+				"Syntax": "**.new**( *template* : Text )",
 				"Params": [
 					[
-						"name",
-						"Variant",
-						"->"
-					],
-					[
-						"model",
+						"template",
 						"Text",
-						"->"
-					],
-					[
-						"apiKey",
-						"Text",
-						"->"
-					],
-					[
-						"optionals",
-						"Object",
 						"->"
 					]
 				],
@@ -104,13 +82,6 @@
 				"Summary": ""
 			}
 		},
-		"_MODELS": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
 		"regex": {
 			"new()": {
 				"Syntax": "**.new**( *target* : Variant; *pattern* : Text )",
@@ -128,35 +99,8 @@
 				],
 				"Summary": ""
 			}
-		},
-		"Provider": {
-			"new()": {
-				"Syntax": "**.new**( *config* : Variant )",
-				"Params": [
-					[
-						"config",
-						"Variant",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"Phrase": {
-			"new()": {
-				"Syntax": "**.new**( *template* : Text )",
-				"Params": [
-					[
-						"template",
-						"Text",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
 		}
 	},
-	"Env": {},
 	"_EMBEDDINGS": {
 		"modelsDropdownManager()": {
 			"Syntax": "**.modelsDropdownManager**( *e* : Object )",
@@ -239,22 +183,6 @@
 			],
 			"Summary": ""
 		},
-		"modelUpdateName()": {
-			"Syntax": "**.modelUpdateName**( *old* : Text; *new* : Text )",
-			"Params": [
-				[
-					"old",
-					"Text",
-					"->"
-				],
-				[
-					"new",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
 		"modelUpdateDropdown()": {
 			"Syntax": "**.modelUpdateDropdown**( *vector* : cs.embed.Vector )",
 			"Params": [
@@ -282,44 +210,60 @@
 		},
 		"_inheritedFrom_": "_COMMON"
 	},
-	"Model": {
-		"validate()": {
-			"Syntax": "**.validate**() : Boolean",
+	"Phrase": {
+		"render()": {
+			"Syntax": "**.render**( *data* : Object ) : Text",
 			"Params": [
 				[
+					"data",
+					"Object",
+					"->"
+				],
+				[
 					"",
-					"Boolean",
+					"Text",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"errors": {
-			"Syntax": "errors : Collection"
+		"validate()": {
+			"Syntax": "**.validate**( *dataclass* : 4D.DataClass ) : Object",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
 		},
-		"valid": {
-			"Syntax": "valid : Boolean"
+		"get keys()": {
+			"Syntax": "**.get keys**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
 		},
-		"needAPIKey": {
-			"Syntax": "needAPIKey : Boolean"
-		},
-		"apiKey": {
-			"Syntax": "apiKey : Text"
-		},
-		"organization": {
-			"Syntax": "organization : Text"
-		},
-		"project": {
-			"Syntax": "project : Text"
-		},
-		"baseURL": {
-			"Syntax": "baseURL : Text"
-		},
-		"model": {
-			"Syntax": "model : Text"
-		},
-		"name": {
-			"Syntax": "name : Text"
+		"get template()": {
+			"Syntax": "**.get template**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
 		}
 	},
 	"Vector": {
@@ -367,17 +311,6 @@
 			],
 			"Summary": ""
 		},
-		"get inputsMenu()": {
-			"Syntax": "**.get inputsMenu**() : cs.embed.menu",
-			"Params": [
-				[
-					"",
-					"cs.embed.menu",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"parsePhrase()": {
 			"Syntax": "**.parsePhrase**( *phrase* : Text ) : Text",
 			"Params": [
@@ -389,6 +322,17 @@
 				[
 					"",
 					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get inputsMenu()": {
+			"Syntax": "**.get inputsMenu**() : cs.embed.menu",
+			"Params": [
+				[
+					"",
+					"cs.embed.menu",
 					"<-"
 				]
 			],
@@ -428,68 +372,9 @@
 		}
 	},
 	"_COMMON": {
-		"isModelUsed()": {
-			"Syntax": "**.isModelUsed**( *name* : Text ) : Boolean",
-			"Params": [
-				[
-					"name",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"vectorsUsingTheModel()": {
-			"Syntax": "**.vectorsUsingTheModel**( *name* : Text ) : Collection",
-			"Params": [
-				[
-					"name",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get settingsFile()": {
-			"Syntax": "**.get settingsFile**() : 4D.File",
-			"Params": [
-				[
-					"",
-					"4D.File",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"writeVectors()": {
 			"Syntax": "**.writeVectors**()",
 			"Params": [],
-			"Summary": ""
-		},
-		"manager()": {
-			"Syntax": "**.manager**( *e* : Object; *from* : Text )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				],
-				[
-					"from",
-					"Text",
-					"->"
-				]
-			],
 			"Summary": ""
 		},
 		"readVectors()": {
@@ -508,25 +393,47 @@
 			"Params": [],
 			"Summary": ""
 		},
-		"writeModels()": {
-			"Syntax": "**.writeModels**()",
-			"Params": [],
+		"get settingsFile()": {
+			"Syntax": "**.get settingsFile**() : 4D.File",
+			"Params": [
+				[
+					"",
+					"4D.File",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"saveVectors()": {
+			"Syntax": "**.saveVectors**( *vectors* : Collection )",
+			"Params": [
+				[
+					"vectors",
+					"Collection",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"manager()": {
+			"Syntax": "**.manager**( *e* : Object; *from* : Text )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				],
+				[
+					"from",
+					"Text",
+					"->"
+				]
+			],
 			"Summary": ""
 		},
 		"writeSettings()": {
 			"Syntax": "**.writeSettings**()",
 			"Params": [],
-			"Summary": ""
-		},
-		"saveModels()": {
-			"Syntax": "**.saveModels**( *models* : Collection )",
-			"Params": [
-				[
-					"models",
-					"Collection",
-					"->"
-				]
-			],
 			"Summary": ""
 		},
 		"updateUI()": {
@@ -545,35 +452,8 @@
 			"Params": [],
 			"Summary": ""
 		},
-		"saveVectors()": {
-			"Syntax": "**.saveVectors**( *vectors* : Collection )",
-			"Params": [
-				[
-					"vectors",
-					"Collection",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"readModels()": {
-			"Syntax": "**.readModels**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"getSettings()": {
-			"Syntax": "**.getSettings**() : Collection",
-			"Params": [
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"settings": {
-			"Syntax": "settings : Object"
+		"DEBUG": {
+			"Syntax": "DEBUG : Boolean"
 		},
 		"itemPosition": {
 			"Syntax": "itemPosition : Integer"
@@ -581,32 +461,20 @@
 		"currentItem": {
 			"Syntax": "currentItem : Object"
 		},
-		"OPENAI": {
-			"Syntax": "OPENAI : Text"
-		},
 		"selectedItems": {
 			"Syntax": "selectedItems : Collection"
 		},
 		"vectors": {
 			"Syntax": "vectors : Collection"
 		},
-		"DEBUG": {
-			"Syntax": "DEBUG : Boolean"
-		},
 		"list": {
 			"Syntax": "list : Text"
 		},
-		"PROVIDERS": {
-			"Syntax": "PROVIDERS : Collection"
-		},
-		"models": {
-			"Syntax": "models : Collection"
-		},
-		"providers": {
-			"Syntax": "providers : Object"
-		},
 		"catalog": {
 			"Syntax": "catalog : cs.embed.DataStore"
+		},
+		"settings": {
+			"Syntax": "settings : Object"
 		}
 	},
 	"menuBar": {
@@ -1380,88 +1248,6 @@
 			"Syntax": "data : Collection"
 		}
 	},
-	"_MODELS": {
-		"deleteModel()": {
-			"Syntax": "**.deleteModel**( *name* : Text )",
-			"Params": [
-				[
-					"name",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"newModel()": {
-			"Syntax": "**.newModel**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"nameManager()": {
-			"Syntax": "**.nameManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"selectModel()": {
-			"Syntax": "**.selectModel**( *name* : Text )",
-			"Params": [
-				[
-					"name",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"listMetaInfo()": {
-			"Syntax": "**.listMetaInfo**( *me* : cs.embed.Model ) : Object",
-			"Params": [
-				[
-					"me",
-					"cs.embed.Model",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"listManager()": {
-			"Syntax": "**.listManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"manager()": {
-			"Syntax": "**.manager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"previousItem": {
-			"Syntax": "previousItem : Object"
-		},
-		"_inheritedFrom_": "_COMMON"
-	},
 	"regex": {
 		"countWords()": {
 			"Syntax": "**.countWords**( *target* : Text ) : Integer",
@@ -2152,144 +1938,6 @@
 		},
 		"success": {
 			"Syntax": "success : Boolean"
-		}
-	},
-	"Provider": {
-		"set apiKey()": {
-			"Syntax": "**.set apiKey**( *apikey* : Text )",
-			"Params": [
-				[
-					"apikey",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get apiKey()": {
-			"Syntax": "**.get apiKey**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"menuModels()": {
-			"Syntax": "**.menuModels**( *default* : Text ) : cs.embed.menu",
-			"Params": [
-				[
-					"default",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.menu",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"normalizedName()": {
-			"Syntax": "**.normalizedName**( *url* : Text ) : Text",
-			"Params": [
-				[
-					"url",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"loadModels()": {
-			"Syntax": "**.loadModels**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"OPENAI": {
-			"Syntax": "OPENAI : Text"
-		},
-		"success": {
-			"Syntax": "success : Boolean"
-		},
-		"endpoint": {
-			"Syntax": "endpoint : cs.AIKit.OpenAI"
-		},
-		"needToken": {
-			"Syntax": "needToken : Boolean"
-		},
-		"baseURL": {
-			"Syntax": "baseURL : Text"
-		},
-		"models": {
-			"Syntax": "models : Collection"
-		},
-		"name": {
-			"Syntax": "name : Text"
-		}
-	},
-	"Phrase": {
-		"render()": {
-			"Syntax": "**.render**( *data* : Object ) : Text",
-			"Params": [
-				[
-					"data",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"validate()": {
-			"Syntax": "**.validate**( *dataclass* : 4D.DataClass ) : Object",
-			"Params": [
-				[
-					"dataclass",
-					"4D.DataClass",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get keys()": {
-			"Syntax": "**.get keys**() : Collection",
-			"Params": [
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get template()": {
-			"Syntax": "**.get template**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
 		}
 	}
 }

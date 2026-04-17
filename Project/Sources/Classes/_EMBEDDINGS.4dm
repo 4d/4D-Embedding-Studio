@@ -143,7 +143,7 @@ Function listMetaInfo($me : cs:C1710.Vector) : Object
 				 || (Length:C16(String:C10($me.error))>0))\
 				 || ($me.model="")
 				
-				$meta.stroke:="red"
+				$meta.stroke:=FORM Get color scheme:C1761="dark" ? "#ea7979" : "red"
 				
 			End if 
 		End if 

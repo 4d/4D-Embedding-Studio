@@ -1,23 +1,7 @@
 {
-	"(COMMON)": {},
-	"(Default Classes)": {},
-	"(Default Folder)": {
-		"groups": [
-			"(Default Classes)",
-			"(Default Forms)",
-			"(Default Project Methods)",
-			"(Default Tables)"
-		]
-	},
-	"(Default Forms)": {},
-	"(Default Project Methods)": {},
-	"(Default Tables)": {},
-	"(MODELS)": {},
-	"(VECTOR_STUDIO)": {},
-	"(VECTORS)": {},
 	"API": {
 		"methods": [
-			"_VECTORS_WIZARD"
+			"_EMBEDDINGS_WIZARD"
 		]
 	},
 	"DEV": {
@@ -37,7 +21,6 @@
 		"classes": [
 			"menu",
 			"menuBar",
-			"Model",
 			"Phrase",
 			"regex",
 			"Vector"
@@ -55,18 +38,10 @@
 			"_EMBEDDINGS"
 		]
 	},
-	"trash": {
-		"groups": [
-			"(COMMON)",
-			"(Default Folder)",
-			"(MODELS)",
-			"(VECTOR_STUDIO)",
-			"(VECTORS)"
-		]
-	},
 	"TESTS": {
 		"methods": [
 			"test_phrase"
 		]
-	}
+	},
+	"trash": {}
 }
