@@ -10,7 +10,7 @@
 
 !.github/
 !.github/**/.*
-.github/.DS_Store
+.DS_Store
 
 #--------------------------------
 # Ignore data file
@@ -79,5 +79,5 @@ DEV/
 # Added by user
 #--------------------------------
 
-BUILD/Components
+BUILD/
 Project/Sources/AIProviders.json
