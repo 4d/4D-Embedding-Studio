@@ -20,8 +20,8 @@
 	"NAMESPACE": {
 		"classes": [
 			"EmbeddingDefinition",
-			"Phrase",
-			"Vector"
+			"EmbeddingSettings",
+			"Phrase"
 		]
 	},
 	"STUDIO": {
@@ -32,7 +32,7 @@
 			"EMBEDDINGS"
 		],
 		"classes": [
-			"_COMMON",
+			"_EmbeddingItem",
 			"_EMBEDDINGS"
 		]
 	},

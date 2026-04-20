@@ -1,5 +1,14 @@
-Class extends _COMMON
+property embeddings : cs:C1710.EmbeddingSettings
+property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project datastore
+property vectors : Collection
 
+// Main list
+property list:="list"
+property currentItem : Object
+property itemPosition : Integer
+property selectedItems : Collection
+
+// Details panel
 property _detailFields:=[\
 "phrase"; \
 "models"; \
@@ -8,11 +17,31 @@ property _detailFields:=[\
 property modelsDropdown : Object
 property _cache : Object  // Current catalog cache
 
+property DEBUG:=Structure file:C489=Structure file:C489(*)
+
+// ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___
 Class constructor
 	
-	Super:C1705()
+	This:C1470.read()
+	
+	If (Storage:C1525.studio=Null:C1517)
+		
+		Use (Storage:C1525)
+			
+			Storage:C1525.studio:=New shared object:C1526(\
+				"EMBEDDINGS"; 0; \
+				"MODELS"; 0)
+			
+		End use 
+	End if 
 	
 	This:C1470._cacheCatalog()
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function read()
+	
+	This:C1470.embeddings:=cs:C1710.EmbeddingSettings.new()
+	This:C1470.readEmbeddingItems()
 	
 	// MARK:- [MANAGERS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -22,12 +51,18 @@ Function manager($e : Object)
 	
 	If ($e.objectName=Null:C1517)
 		
-		Super:C1706.manager($e; "EMBEDDINGS")
-		
 		Case of 
 				
 				// ________________________________________________________________________________
 			: ($e.code=On Load:K2:1)
+				
+				Use (Storage:C1525.studio)
+					
+					Storage:C1525.studio["EMBEDDINGS"]:=Current form window:C827
+					
+				End use 
+				
+				SET TIMER:C645(-1)
 				
 				This:C1470.modelsDropdownManager($e)
 				
@@ -38,13 +73,28 @@ Function manager($e : Object)
 				// ______________________________________________________
 			: ($e.code=On Timer:K2:25)
 				
-				//
+				SET TIMER:C645(0)
 				
 				// ______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
+				If (Length:C16(OBJECT Get name:C1087(Object with focus:K67:3))=0)
+					
+					GOTO OBJECT:C206(*; This:C1470.list)
+					
+				End if 
+				
 				// TODO: Visual indicator
 				CALL FORM:C1391(Current form window:C827; Formula:C1597(Form:C1466.refresh()))
+				
+				// ______________________________________________________
+			: ($e.code=On Unload:K2:2)
+				
+				Use (Storage:C1525.studio)
+					
+					Storage:C1525.studio["EMBEDDINGS"]:=0
+					
+				End use 
 				
 				// ________________________________________________________________________________
 		End case 
@@ -67,8 +117,8 @@ Function manager($e : Object)
 				
 				If ($row>0)
 					
-					var $vector : cs:C1710.Vector:=Form:C1466.vectors[$row-1]
-					OBJECT SET HELP TIP:C1181(*; $me; $vector[""]#Null:C1517 ? String:C10($vector.helptip) : String:C10($vector.error))
+					var $item : cs:C1710._EmbeddingItem:=Form:C1466.vectors[$row-1]
+					OBJECT SET HELP TIP:C1181(*; $me; $item[""]#Null:C1517 ? String:C10($item.helptip) : String:C10($item.error))
 					
 				Else 
 					
@@ -114,6 +164,34 @@ Function manager($e : Object)
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Hide/show details based on selection
+Function updateUI() : Boolean
+	
+	var $t : Text
+	
+	If (This:C1470.currentItem=Null:C1517)
+		
+		For each ($t; This:C1470._detailFields)
+			
+			OBJECT SET VISIBLE:C603(*; $t; False:C215)
+			OBJECT SET VISIBLE:C603(*; $t+".label"; False:C215)
+			
+		End for each 
+		
+		return 
+		
+	End if 
+	
+	For each ($t; This:C1470._detailFields)
+		
+		OBJECT SET VISIBLE:C603(*; $t; True:C214)
+		OBJECT SET VISIBLE:C603(*; $t+".label"; True:C214)
+		
+	End for each 
+	
+	return True:C214
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function listManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
@@ -124,12 +202,12 @@ Function listManager($e : Object)
 		
 	Else 
 		
-		This:C1470.vectors:=This:C1470.vectors  // ‼️ If no item is selected, we must force a refresh for listMetaInfo to apply 
+		This:C1470.vectors:=This:C1470.vectors  // ‼️ If no item is selected, we must force a refresh for listMetaInfo to apply
 		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function listMetaInfo($me : cs:C1710.Vector) : Object
+Function listMetaInfo($me : cs:C1710._EmbeddingItem) : Object
 	
 	var $meta:={}
 	
@@ -156,13 +234,13 @@ Function moreManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	var $vector : cs:C1710.Vector:=This:C1470.currentItem
+	var $item : cs:C1710._EmbeddingItem:=This:C1470.currentItem
 	var $menu:=cs:C1710._menu.new()
 	
 	If (OBJECT Get name:C1087(Object with focus:K67:3)="phrase")
 		
 		$menu.edit(True:C214).line()
-		This:C1470._embeddedAttributesMenu($vector; $menu)
+		This:C1470._embeddedAttributesMenu($item; $menu)
 		
 	End if 
 	
@@ -183,8 +261,8 @@ Function moreManager($e : Object)
 			// ______________________________________________________
 		: (Position:C15("{"; $menu.choice)=1)  // Attribute to insert into the descriptive phrase
 			
-			This:C1470.insertInput($vector; $menu.choice)
-			This:C1470.saveVectors()
+			This:C1470.insertInput($item; $menu.choice)
+			This:C1470.saveEmbeddingItems()
 			
 			// ______________________________________________________
 		: ($menu.choice="editApiKey")
@@ -194,7 +272,7 @@ Function moreManager($e : Object)
 			// ______________________________________________________
 		: ($menu.choice="openSettingFile")
 			
-			OPEN URL:C673(This:C1470.settingsFile.platformPath)
+			OPEN URL:C673(This:C1470.embeddings.file.platformPath)
 			
 			// ______________________________________________________
 	End case 
@@ -204,21 +282,21 @@ Function phraseManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	var $vector : cs:C1710.Vector:=This:C1470.currentItem
+	var $item : cs:C1710._EmbeddingItem:=This:C1470.currentItem
 	var $me:="phrase"
 	var $plainText:=ST Get plain text:C1092(*; $me)  //Get edited text
 	
 	Case of 
 			
 			// ______________________________________________________
-		: ($vector=Null:C1517)
+		: ($item=Null:C1517)
 			
 			return 
 			
 			// ______________________________________________________
 		: ($e.code=On Mouse Enter:K2:33) || ($e.code=On Mouse Move:K2:35)
 			
-			OBJECT SET HELP TIP:C1181(*; $me; $vector[""]#Null:C1517 ? String:C10($vector.helptip) : String:C10($vector.error))
+			OBJECT SET HELP TIP:C1181(*; $me; $item[""]#Null:C1517 ? String:C10($item.helptip) : String:C10($item.error))
 			
 			// ______________________________________________________
 		: ($e.code=On Mouse Leave:K2:34)
@@ -235,7 +313,7 @@ Function phraseManager($e : Object)
 			End if 
 			
 			var $menu:=cs:C1710._menu.new().edit(True:C214).line()
-			This:C1470._embeddedAttributesMenu($vector; $menu)
+			This:C1470._embeddedAttributesMenu($item; $menu)
 			
 			If (Not:C34($menu.popup().selected))
 				
@@ -244,8 +322,8 @@ Function phraseManager($e : Object)
 			End if 
 			
 			// 📌 Ignored if an associated action (for edit items)
-			This:C1470.insertInput($vector; $menu.choice)
-			This:C1470.saveVectors()
+			This:C1470.insertInput($item; $menu.choice)
+			This:C1470.saveEmbeddingItems()
 			
 			// ______________________________________________________
 		: ($e.code=On Before Keystroke:K2:6)
@@ -265,20 +343,20 @@ Function phraseManager($e : Object)
 		: ($e.code=On After Edit:K2:43)
 			
 			// Highlight any errors, if any
-			$vector.phrase:=$vector.parsePhrase(cs:C1710.Phrase.new($plainText))
+			$item.phrase:=$item.parsePhrase(cs:C1710.Phrase.new($plainText))
 			
 			Form:C1466.vectors:=Form:C1466.vectors  // update UI
 			
 			// ______________________________________________________
 		: ($e.code=On Data Change:K2:15)
 			
-			$vector.definition.phrase:=cs:C1710.Phrase.new($plainText)
-			$vector.definition.version+=1
+			$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
+			$item.definition.version+=1
 			
 			// Highlight any errors, if any
-			ST SET TEXT:C1115(*; $me; $vector.parsePhrase($vector.definition.phrase); ST Start text:K78:15; ST End text:K78:16)
+			ST SET TEXT:C1115(*; $me; $item.parsePhrase($item.definition.phrase); ST Start text:K78:15; ST End text:K78:16)
 			
-			This:C1470.saveVectors()
+			This:C1470.saveEmbeddingItems()
 			
 			Form:C1466.vectors:=Form:C1466.vectors  // update UI
 			
@@ -308,10 +386,10 @@ Function modelsDropdownManager($e : Object)
 			
 			$dropDown:=This:C1470.modelsDropdown
 			
-			// Update current vector
+			// Update current item
 			This:C1470.currentItem.definition.model:=$dropDown.currentValue
 			This:C1470.currentItem.definition.version+=1
-			This:C1470.saveVectors()
+			This:C1470.saveEmbeddingItems()
 			
 			Form:C1466.vectors:=Form:C1466.vectors  // update UI
 			
@@ -320,7 +398,7 @@ Function modelsDropdownManager($e : Object)
 	
 	// MARK: -
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function insertInput($vector : cs:C1710.Vector; $input : Text)
+Function insertInput($item : cs:C1710._EmbeddingItem; $input : Text)
 	
 	var $me:="phrase"
 	var $plainText:=ST Get plain text:C1092(*; $me)  //Get edited text
@@ -344,15 +422,15 @@ Function insertInput($vector : cs:C1710.Vector; $input : Text)
 	HIGHLIGHT TEXT:C210(*; $me; $endSel; $endSel)
 	
 	// Highlight any errors, if any
-	$vector.definition.phrase:=cs:C1710.Phrase.new(ST Get plain text:C1092($newValue))
-	$vector.phrase:=$vector.parsePhrase($vector.definition.phrase)
+	$item.definition.phrase:=cs:C1710.Phrase.new(ST Get plain text:C1092($newValue))
+	$item.phrase:=$item.parsePhrase($item.definition.phrase)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function modelUpdateDropdown($vector : cs:C1710.Vector)
+Function modelUpdateDropdown($item : cs:C1710._EmbeddingItem)
 	
-	$vector:=$vector || This:C1470.currentItem
+	$item:=$item || This:C1470.currentItem
 	
-	If ($vector=Null:C1517)
+	If ($item=Null:C1517)
 		
 		return 
 		
@@ -360,9 +438,9 @@ Function modelUpdateDropdown($vector : cs:C1710.Vector)
 	
 	var $dropDown : Object:=This:C1470.modelsDropdown
 	
-	If ($dropDown.values.includes($vector.definition.model))
+	If ($dropDown.values.includes($item.definition.model))
 		
-		$dropDown.index:=$dropDown.values.indexOf($vector.definition.model)
+		$dropDown.index:=$dropDown.values.indexOf($item.definition.model)
 		
 	Else 
 		
@@ -370,12 +448,12 @@ Function modelUpdateDropdown($vector : cs:C1710.Vector)
 		
 	End if 
 	
-	$dropDown.currentValue:=$vector.definition.model || $dropDown.placeholder
+	$dropDown.currentValue:=$item.definition.model || $dropDown.placeholder
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function refresh()  //($force : Boolean)
 	
-	This:C1470.readVectors()
+	This:C1470.readEmbeddingItems()
 	
 	If (This:C1470._catalogModified())
 		
@@ -408,6 +486,99 @@ Function refresh()  //($force : Boolean)
 	
 	This:C1470.modelsDropdown.values:=This:C1470._getModelDropdownValues()
 	This:C1470.modelUpdateDropdown(This:C1470.currentItem)
+	
+	// MARK:- [VECTORS]
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function readEmbeddingItems() : Collection
+	
+/* #17301
+Get the possible vector fields in the current catalog
+The list is displayed with:
+• table/dataclass
+• vector field
+Enriched with saved EmbeddingDefinition entries from Settings/vectors.json.
+*/
+	This:C1470.embeddings:=This:C1470.embeddings || cs:C1710.EmbeddingSettings.new()
+	This:C1470.embeddings.load()
+	
+	var $items:=[]
+	
+	var $vf : Object
+	For each ($vf; This:C1470._collectVectorFields())
+		
+		var $def : cs:C1710.EmbeddingDefinition:=This:C1470.embeddings.find($vf.dataclassName; $vf.field.name)
+		var $wasSaved : Boolean:=$def#Null:C1517
+		
+		If (Not:C34($wasSaved))
+			
+			$def:=cs:C1710.EmbeddingDefinition.new($vf.dataclassName; $vf.field.name; ""; "")
+			
+		End if 
+		
+		var $item : cs:C1710._EmbeddingItem:=cs:C1710._EmbeddingItem.new($vf.dataclass; $def)
+		
+		If ($wasSaved)
+			
+			$item.phrase:=$item.parsePhrase($def.phrase)
+			
+			// TODO: Check if the model exists
+			If ($def.model="")
+				
+				$item.error:=Localized string:C991("theModelIsNotDefined")
+				
+			End if 
+		End if 
+		
+		$items.push($item)
+		
+	End for each 
+	
+	// Ghost entries: saved definitions that no longer match any catalog vector field.
+	var $saved : cs:C1710.EmbeddingDefinition
+	For each ($saved; This:C1470.embeddings.vectors)
+		
+		If ($items.query("definition.dataclassName = :1 & definition.vectorName = :2"; $saved.dataclassName; $saved.vectorName).length>0)
+			
+			continue
+			
+		End if 
+		
+		var $ghost : Object:={definition: $saved; error: ""}
+		
+		Case of 
+				
+				// ______________________________________________________
+			: (This:C1470.catalog[$saved.dataclassName]=Null:C1517)
+				
+				$ghost.error:=Replace string:C233(Localized string:C991("missingDataclass"); "{dataclass}"; $saved.dataclassName)
+				
+				// ______________________________________________________
+			: (This:C1470.catalog[$saved.dataclassName][$saved.vectorName]=Null:C1517)
+				
+				$ghost.error:=Replace string:C233(Replace string:C233(Localized string:C991("missingVector"); "{attribute}"; $saved.vectorName); "{dataclass}"; $saved.dataclassName)
+				
+				// ______________________________________________________
+			: (String:C10(This:C1470.catalog[$saved.dataclassName][$saved.vectorName].classID)#"4D.Vector")
+				
+				$ghost.error:=Replace string:C233(Replace string:C233(Localized string:C991("attributeIsNotAVector"); "{attribute}"; $saved.vectorName); "{dataclass}"; $saved.dataclassName)
+				
+				// ______________________________________________________
+		End case 
+		
+		$items.push($ghost)
+		
+	End for each 
+	
+	This:C1470.vectors:=$items.orderBy("definition.dataclassName asc, definition.vectorName asc")
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function saveEmbeddingItems()
+	
+	// Keep only defined items
+	This:C1470.embeddings.vectors:=This:C1470.vectors\
+		.filter(Formula:C1597(Bool:C1537($1.value.defined)))\
+		.map(Formula:C1597($1.value.definition))
+	This:C1470.embeddings.save()
 	
 	// MARK: -[PRIVATE]
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
@@ -472,14 +643,42 @@ Function _catalogModified() : Boolean
 	End for each 
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Returns a flat list of catalog vector fields: [{dataclass, dataclassName, field}]
+Function _collectVectorFields() : Collection
+	
+	var $fields : Collection:=[]
+	var $tableName; $fieldName : Text
+	
+	For each ($tableName; This:C1470.catalog)
+		
+		var $dataclass : 4D:C1709.DataClass:=This:C1470.catalog[$tableName]
+		
+		For each ($fieldName; $dataclass)
+			
+			var $field : Object:=$dataclass[$fieldName]
+			
+			If (String:C10($field.classID)="4D.Vector")
+				
+				$fields.push({\
+					dataclass: $dataclass; \
+					dataclassName: $dataclass.getInfo().name; \
+					field: $field})
+				
+			End if 
+		End for each 
+	End for each 
+	
+	return $fields
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _getModelDropdownValues() : Collection
 	
 	return cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name")
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _embeddedAttributesMenu($vector : cs:C1710.Vector; $menu : cs:C1710._menu)
+Function _embeddedAttributesMenu($item : cs:C1710._EmbeddingItem; $menu : cs:C1710._menu)
 	
-	var $embed:=$vector.inputsMenu
+	var $embed:=$item.inputsMenu
 	
 	If ($embed.itemCount()>0)
 		
@@ -490,3 +689,18 @@ Function _embeddedAttributesMenu($vector : cs:C1710.Vector; $menu : cs:C1710._me
 		$embed.release()
 		
 	End if 
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _popError($message : Text; $widget : Text; $target : Text)
+	
+	BEEP:C151
+	ALERT:C41($message)
+	
+	If (Length:C16($target)>0)
+		
+		var $o : Object:=OBJECT Get value:C1743($widget)
+		$o.target:=$target
+		OBJECT SET VALUE:C1742($widget; $o)
+		
+	End if 
+	

@@ -3,7 +3,7 @@ property phrase:=""  // Styled text for the UI editor (highlighted errors, etc.)
 property supportedAttributes:=[]
 property embedded:=[]
 
-Class constructor($dataclass : Object; $attribute : Object; $model : Text; $phrase : Text)
+Class constructor($dataclass : 4D:C1709.DataClass; $definition : cs:C1710.EmbeddingDefinition)
 	
 	If (Count parameters:C259<2)
 		
@@ -23,17 +23,9 @@ Class constructor($dataclass : Object; $attribute : Object; $model : Text; $phra
 	
 	If (OB Class:C1730($dataclass).superclass=4D:C1709.DataClass)
 		
-		var $o : Object:=$dataclass.getInfo()
-		
-		This:C1470.definition:=cs:C1710.EmbeddingDefinition.new($o.name; $attribute.name; $model || ""; $phrase || "")
+		This:C1470.definition:=$definition
 		
 		This:C1470.supportedAttributes:=cs:C1710._dataclassAttributes.me.forDataclass($dataclass)
-		
-	Else 
-		
-		// TODO: create with parameters
-		
-		//$class:=ds[$dataclass.name]  // Error if no longer exists
 		
 	End if 
 	
@@ -64,7 +56,7 @@ Function get inputsMenu() : cs:C1710._menu
 	return $menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Validate a compiled Phrase against this vector's dataclass and return styled
+	// Validate a compiled Phrase against this item's dataclass and return styled
 	// text (multistyle) with any attribute errors highlighted.
 Function parsePhrase($phrase : cs:C1710.Phrase) : Text
 	
@@ -107,7 +99,7 @@ Function get helptip() : Text
 	
 	return Try(This:C1470[""].errors.join("\r"))
 	
-	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> 
+	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
 Function set error($message : Text)
 	
 	This:C1470[""]:=This:C1470[""] || {\
@@ -116,3 +108,4 @@ Function set error($message : Text)
 		original: This:C1470.definition.toObject()}
 	
 	This:C1470[""].errors.push($message)
+	
