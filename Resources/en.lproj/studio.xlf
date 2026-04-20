@@ -86,6 +86,18 @@
           <source>The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</source>
           <target>The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</target>
         </trans-unit>
+        <trans-unit id="21" resname="relationsAreNotAllowed">
+          <source>Relations are not allowed: "{attribute}" cannot be used.</source>
+          <target>Relations are not allowed: "{attribute}" cannot be used.</target>
+        </trans-unit>
+        <trans-unit id="22" resname="calculatedAttributeIsNotAllowed">
+          <source>Calculated attributes are not allowed: "{attribute}" cannot be used.</source>
+          <target>Calculated attributes are not allowed: "{attribute}" cannot be used.</target>
+        </trans-unit>
+        <trans-unit id="23" resname="aliasAttributeIsNotAllowed">
+          <source>Alias attributes are not allowed: "{attribute}" cannot be used.</source>
+          <target>Alias attributes are not allowed: "{attribute}" cannot be used.</target>
+        </trans-unit>
       </group>
       <group resname="Models">
         <trans-unit id="29" resname="name">

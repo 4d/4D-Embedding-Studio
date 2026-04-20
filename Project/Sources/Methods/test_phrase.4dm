@@ -93,17 +93,29 @@ $tpl:=cs:C1710.Phrase.new("{firstName} {lastName}")
 $v:=$tpl.validate(ds:C1482.Students)
 ASSERT:C1129($v.success; "Validate simple: expected success, errors: "+JSON Stringify:C1217($v.errors))
 
-// --- Valid dot-notation through N:1 relation ---
+// --- Valid dot-notation through N:1 relation (with allowRelations) ---
 // Students.school → School (N:1), School.name is a field
 $tpl:=cs:C1710.Phrase.new("{firstName} at {school.name}")
-$v:=$tpl.validate(ds:C1482.Students)
+$v:=$tpl.validate(ds:C1482.Students; {allowRelations: True:C214})
 ASSERT:C1129($v.success; "Validate N:1: expected success, errors: "+JSON Stringify:C1217($v.errors))
 
-// --- Valid deep dot-notation ---
+// --- Valid deep dot-notation (with allowRelations) ---
 // Students.school → School → School.city → Cities, Cities.name
 $tpl:=cs:C1710.Phrase.new("{firstName} in {school.city.name}")
-$v:=$tpl.validate(ds:C1482.Students)
+$v:=$tpl.validate(ds:C1482.Students; {allowRelations: True:C214})
 ASSERT:C1129($v.success; "Validate deep N:1: expected success, errors: "+JSON Stringify:C1217($v.errors))
+
+// --- Invalid: dot-notation rejected by default (no options) ---
+$tpl:=cs:C1710.Phrase.new("{firstName} at {school.name}")
+$v:=$tpl.validate(ds:C1482.Students)
+ASSERT:C1129(Not:C34($v.success); "Validate relations not allowed: expected failure")
+ASSERT:C1129($v.errors.length=1; "Validate relations not allowed: expected 1 error")
+
+// --- Invalid: N:1 relation as simple key rejected by default ---
+$tpl:=cs:C1710.Phrase.new("{school}")
+$v:=$tpl.validate(ds:C1482.Students)
+ASSERT:C1129(Not:C34($v.success); "Validate relatedEntity not allowed: expected failure")
+ASSERT:C1129($v.errors.length=1; "Validate relatedEntity not allowed: expected 1 error")
 
 // --- Invalid: attribute does not exist ---
 $tpl:=cs:C1710.Phrase.new("{nonExistent}")
@@ -123,21 +135,21 @@ $tpl:=cs:C1710.Phrase.new("{strudents}")
 $v:=$tpl.validate(ds:C1482.School)
 ASSERT:C1129(Not:C34($v.success); "Validate 1:N: expected failure")
 
-// --- Invalid: intermediate is not a relation ---
+// --- Invalid: intermediate is not a relation (with allowRelations) ---
 // Students.firstName is a storage field, not a relation
 $tpl:=cs:C1710.Phrase.new("{firstName.something}")
-$v:=$tpl.validate(ds:C1482.Students)
+$v:=$tpl.validate(ds:C1482.Students; {allowRelations: True:C214})
 ASSERT:C1129(Not:C34($v.success); "Validate non-relation path: expected failure")
 
-// --- Invalid: non-existent in deep path ---
+// --- Invalid: non-existent in deep path (with allowRelations) ---
 $tpl:=cs:C1710.Phrase.new("{school.nonExistent}")
-$v:=$tpl.validate(ds:C1482.Students)
+$v:=$tpl.validate(ds:C1482.Students; {allowRelations: True:C214})
 ASSERT:C1129(Not:C34($v.success); "Validate deep nonExistent: expected failure")
 ASSERT:C1129($v.errors[0].key="school.nonExistent"; "Validate deep: error key mismatch")
 
-// --- Invalid: vector in related dataclass ---
+// --- Invalid: vector in related dataclass (with allowRelations) ---
 $tpl:=cs:C1710.Phrase.new("{school.school_vector_1}")
-$v:=$tpl.validate(ds:C1482.Students)
+$v:=$tpl.validate(ds:C1482.Students; {allowRelations: True:C214})
 ASSERT:C1129(Not:C34($v.success); "Validate related vector: expected failure")
 
 // --- Multiple errors ---

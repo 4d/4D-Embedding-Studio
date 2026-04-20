@@ -70,15 +70,42 @@ Function render($data : Object) : Text
 	// Validates that all keys in the phrase can be resolved against a DataClass.
 	// Walks dot-notation paths through relations (N:1 / 1:1).
 	// Returns {success: Boolean, errors: Collection of {key, message}}
-Function validate($dataclass : 4D:C1709.DataClass) : Object
+	//
+	// $options (all default to False — storage kind only):
+	//   .allowRelations  : Boolean — allow dot-notation paths through N:1 relations
+	//   .allowCalculated : Boolean — allow calculated attributes
+	//   .allowAlias      : Boolean — allow alias attributes
+Function validate($dataclass : 4D:C1709.DataClass; $options : Object) : Object
 	
 	var $errors:=[]
 	var $dcName : Text:=$dataclass.getInfo().name
+	
+	// Options with defaults (all False when omitted → storage kind only)
+	var $allowRelations:=False:C215
+	var $allowCalculated:=False:C215
+	var $allowAlias:=False:C215
+	
+	If ($options#Null:C1517)
+		
+		$allowRelations:=$options.allowRelations
+		$allowCalculated:=$options.allowCalculated
+		$allowAlias:=$options.allowAlias
+		
+	End if 
 	
 	var $kp : Variant
 	For each ($kp; This:C1470._keyPaths)
 		
 		var $segments : Collection:=(Value type:C1509($kp)=Is text:K8:3) ? [$kp] : $kp
+		
+		// Reject dot-notation paths when relations are not allowed
+		If ($segments.length>1) && (Not:C34($allowRelations))
+			
+			$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("relationsAreNotAllowed"; $segments.join("."))})
+			continue
+			
+		End if 
+		
 		var $current:=$dataclass
 		var $valid : Boolean:=True:C214
 		
@@ -124,12 +151,25 @@ Function validate($dataclass : 4D:C1709.DataClass) : Object
 				
 			Else 
 				
-				// Last segment: must not be a 1:N relation
-				If ($attribute.kind="relatedEntities")
-					
-					$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("theAttributeIsA1NRelation"; $segment)})
-					
-				End if 
+				// Last segment: check kind restrictions
+				Case of 
+					: ($attribute.kind="relatedEntities")
+						
+						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("theAttributeIsA1NRelation"; $segment)})
+						
+					: ($attribute.kind="relatedEntity") && (Not:C34($allowRelations))
+						
+						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("relationsAreNotAllowed"; $segment)})
+						
+					: ($attribute.kind="calculated") && (Not:C34($allowCalculated))
+						
+						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("calculatedAttributeIsNotAllowed"; $segment)})
+						
+					: ($attribute.kind="alias") && (Not:C34($allowAlias))
+						
+						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("aliasAttributeIsNotAllowed"; $segment)})
+						
+				End case 
 				
 			End if 
 			
