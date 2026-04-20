@@ -115,6 +115,160 @@ Function processEntitySelection($es : 4D:C1709.EntitySelection; $definition : Va
 	
 	return $report._done()
 	
+	// MARK:-[PLAYGROUND — ad-hoc, non-persisting helpers]
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Render the phrase for an entity and return the resulting text. No API call, no persistence.
+	// $definitionOrPhrase may be:
+	//   - cs.Phrase                  → used directly
+	//   - cs.EmbeddingDefinition     → uses $definition.phrase
+	//   - Text                       → compiled on the fly as a new Phrase
+	//   - Null                       → auto-resolved from settings (requires a unique match for $entity's dataclass)
+Function render($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) : Text
+	
+	If ($entity=Null:C1517)
+		
+		return ""
+		
+	End if 
+	
+	var $phrase : cs:C1710.Phrase:=This:C1470._phraseFrom($entity; $definitionOrPhrase)
+	
+	If ($phrase=Null:C1517)
+		
+		return ""
+		
+	End if 
+	
+	return $phrase.render($entity)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Compute a vector for an arbitrary input — without persisting anywhere.
+	// Useful for previews, similarity checks, REPL experimentation, or ad-hoc querying.
+	//
+	// Supported call shapes:
+	//   embed("some text"; "text-embedding-3-small")          → direct embed
+	//   embed("some text"; $definition)                        → uses $definition.model
+	//   embed($entity; $definition)                            → renders definition.phrase, embeds with definition.model
+	//   embed($entity; $phrase; "text-embedding-3-small")      → renders $phrase, embeds with given model
+	//   embed($entity; "template with {field}"; "model")       → compiles template on the fly
+	//   embed($entity)                                         → auto-resolve definition from settings (unique match required)
+	//
+	// Throws if no model can be determined.
+Function embed($input : Variant; $context : Variant; $model : Text) : 4D:C1709.Vector
+	
+	var $text : Text
+	var $modelName : Text:=$model
+	
+	Case of 
+			
+			// ______________________________________________________
+		: (Value type:C1509($input)=Is text:K8:3)
+			
+			// Text input → $context is the model (or an EmbeddingDefinition holding a model)
+			$text:=$input
+			
+			Case of 
+					
+				: (Value type:C1509($context)=Is text:K8:3)
+					
+					$modelName:=$context
+					
+				: (OB Instance of:C1731($context; cs:C1710.EmbeddingDefinition))
+					
+					$modelName:=String:C10($context.model)
+					
+			End case 
+			
+			// ______________________________________________________
+		Else 
+			
+			// Assume entity (anything else falls through validation below)
+			var $phrase : cs:C1710.Phrase:=This:C1470._phraseFrom($input; $context)
+			
+			If ($phrase=Null:C1517)
+				
+				throw:C1805({componentSignature: "4DVS"; message: "No phrase could be resolved for the given entity/context"})
+				
+			End if 
+			
+			$text:=$phrase.render($input)
+			
+			// Pick model from $context if it's a definition, otherwise rely on $model, otherwise auto-resolve
+			If (OB Instance of:C1731($context; cs:C1710.EmbeddingDefinition))
+				
+				$modelName:=String:C10($context.model)
+				
+			End if 
+			
+			If (Length:C16($modelName)=0)
+				
+				var $resolved : cs:C1710.EmbeddingDefinition:=This:C1470._resolveDefinitionFromEntity($input)
+				If ($resolved#Null:C1517)
+					
+					$modelName:=String:C10($resolved.model)
+					
+				End if 
+			End if 
+			
+			// ______________________________________________________
+	End case 
+	
+	If (Length:C16($modelName)=0)
+		
+		throw:C1805({componentSignature: "4DVS"; message: "No model specified (and none could be resolved from settings)"})
+		
+	End if 
+	
+	return This:C1470.processor.embed($text; $modelName)
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Polymorphic phrase extraction: Phrase | EmbeddingDefinition | Text template | Null (auto-resolve).
+Function _phraseFrom($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) : cs:C1710.Phrase
+	
+	Case of 
+			
+			// ______________________________________________________
+		: (OB Instance of:C1731($definitionOrPhrase; cs:C1710.Phrase))
+			
+			return $definitionOrPhrase
+			
+			// ______________________________________________________
+		: (OB Instance of:C1731($definitionOrPhrase; cs:C1710.EmbeddingDefinition))
+			
+			return $definitionOrPhrase.phrase
+			
+			// ______________________________________________________
+		: (Value type:C1509($definitionOrPhrase)=Is text:K8:3)
+			
+			return cs:C1710.Phrase.new($definitionOrPhrase)
+			
+			// ______________________________________________________
+		: ($definitionOrPhrase=Null:C1517)
+			
+			var $resolved : cs:C1710.EmbeddingDefinition:=This:C1470._resolveDefinitionFromEntity($entity)
+			return ($resolved=Null:C1517) ? Null:C1517 : $resolved.phrase
+			
+			// ______________________________________________________
+	End case 
+	
+	return Null:C1517
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Best-effort resolution of a single definition for an entity's dataclass.
+	// Returns Null when the match is not unique (0 or >1) — caller must specify explicitly.
+Function _resolveDefinitionFromEntity($entity : 4D:C1709.Entity) : cs:C1710.EmbeddingDefinition
+	
+	If ($entity=Null:C1517)
+		
+		return Null:C1517
+		
+	End if 
+	
+	var $dcName : Text:=This:C1470.resolver.dataclassNameFromEntity($entity)
+	var $matches : Collection:=This:C1470.settings.vectors.query("dataclassName = :1"; $dcName)
+	
+	return ($matches.length=1) ? $matches[0] : Null:C1517
+	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Validates a definition before running. On failure, records error in report and returns False.
 Function _validateDefinition($def : cs:C1710.EmbeddingDefinition; $report : cs:C1710.EmbeddingProcessResult) : Boolean

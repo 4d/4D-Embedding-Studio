@@ -20,6 +20,9 @@
 	"NAMESPACE": {
 		"classes": [
 			"EmbeddingDefinition",
+			"EmbeddingProcess",
+			"EmbeddingProcessor",
+			"EmbeddingProcessResult",
 			"EmbeddingSettings",
 			"Phrase"
 		]
@@ -45,6 +48,7 @@
 	"UTILS": {
 		"classes": [
 			"_dataclassAttributes",
+			"_EmbeddingResolver",
 			"_menu",
 			"_typeMedia"
 		]
