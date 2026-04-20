@@ -8,34 +8,6 @@
 				"Summary": ""
 			}
 		},
-		"EmbeddingDefinition": {
-			"new()": {
-				"Syntax": "**.new**( *dataclassName* : Text; *vectorName* : Text; *model* : Text; *phraseTemplate* : Text )",
-				"Params": [
-					[
-						"dataclassName",
-						"Text",
-						"->"
-					],
-					[
-						"vectorName",
-						"Text",
-						"->"
-					],
-					[
-						"model",
-						"Text",
-						"->"
-					],
-					[
-						"phraseTemplate",
-						"Text",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
 		"Phrase": {
 			"new()": {
 				"Syntax": "**.new**( *template* : Text )",
@@ -87,6 +59,20 @@
 				"Summary": ""
 			}
 		},
+		"_dataclassAttributes": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"EmbeddingProcessResult": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
 		"_menu": {
 			"new()": {
 				"Syntax": "**.new**( *data* : Variant )",
@@ -100,10 +86,75 @@
 				"Summary": ""
 			}
 		},
-		"_dataclassAttributes": {
+		"_EmbeddingResolver": {
 			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
+				"Syntax": "**.new**( *settings* : cs.embed.EmbeddingSettings )",
+				"Params": [
+					[
+						"settings",
+						"cs.embed.EmbeddingSettings",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"EmbeddingProcessor": {
+			"new()": {
+				"Syntax": "**.new**( *options* : Object )",
+				"Params": [
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"EmbeddingDefinition": {
+			"new()": {
+				"Syntax": "**.new**( *dataclassName* : Text; *vectorName* : Text; *model* : Text; *phraseTemplate* : Text )",
+				"Params": [
+					[
+						"dataclassName",
+						"Text",
+						"->"
+					],
+					[
+						"vectorName",
+						"Text",
+						"->"
+					],
+					[
+						"model",
+						"Text",
+						"->"
+					],
+					[
+						"phraseTemplate",
+						"Text",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"EmbeddingProcess": {
+			"new()": {
+				"Syntax": "**.new**( *settings* : cs.embed.EmbeddingSettings; *options* : Object )",
+				"Params": [
+					[
+						"settings",
+						"cs.embed.EmbeddingSettings",
+						"->"
+					],
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
 				"Summary": ""
 			}
 		}
@@ -272,34 +323,6 @@
 			"Syntax": "embeddings : cs.embed.EmbeddingSettings"
 		}
 	},
-	"EmbeddingDefinition": {
-		"toObject()": {
-			"Syntax": "**.toObject**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"phrase": {
-			"Syntax": "phrase : cs.embed.Phrase"
-		},
-		"model": {
-			"Syntax": "model : Text"
-		},
-		"vectorName": {
-			"Syntax": "vectorName : Text"
-		},
-		"dataclassName": {
-			"Syntax": "dataclassName : Text"
-		},
-		"version": {
-			"Syntax": "version : Integer"
-		}
-	},
 	"Phrase": {
 		"render()": {
 			"Syntax": "**.render**( *data* : Object ) : Text",
@@ -318,11 +341,16 @@
 			"Summary": ""
 		},
 		"validate()": {
-			"Syntax": "**.validate**( *dataclass* : 4D.DataClass ) : Object",
+			"Syntax": "**.validate**( *dataclass* : 4D.DataClass; *options* : Object ) : Object",
 			"Params": [
 				[
 					"dataclass",
 					"4D.DataClass",
+					"->"
+				],
+				[
+					"options",
+					"Object",
 					"->"
 				],
 				[
@@ -388,8 +416,14 @@
 			"Params": [],
 			"Summary": ""
 		},
+		"phrase": {
+			"Syntax": "phrase : Object"
+		},
 		"vectors": {
 			"Syntax": "vectors : Collection"
+		},
+		"batchSize": {
+			"Syntax": "batchSize : Integer"
 		},
 		"file": {
 			"Syntax": "file : 4D.File"
@@ -472,6 +506,101 @@
 	"_typeMedia": {
 		"medias": {
 			"Syntax": "medias : Collection"
+		}
+	},
+	"_dataclassAttributes": {
+		"reset()": {
+			"Syntax": "**.reset**( *dataclassName* : Text )",
+			"Params": [
+				[
+					"dataclassName",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"hasField()": {
+			"Syntax": "**.hasField**( *dataclass* : 4D.DataClass; *fieldName* : Text ) : Boolean",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"fieldName",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"forDataclass()": {
+			"Syntax": "**.forDataclass**( *dataclass* : 4D.DataClass ) : Collection",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
+	"EmbeddingProcessResult": {
+		"toObject()": {
+			"Syntax": "**.toObject**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get success()": {
+			"Syntax": "**.get success**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"apiCalls": {
+			"Syntax": "apiCalls : Integer"
+		},
+		"durationMs": {
+			"Syntax": "durationMs : Integer"
+		},
+		"entitiesSkipped": {
+			"Syntax": "entitiesSkipped : Integer"
+		},
+		"entitiesUpdated": {
+			"Syntax": "entitiesUpdated : Integer"
+		},
+		"errors": {
+			"Syntax": "errors : Collection"
+		},
+		"entitiesConsidered": {
+			"Syntax": "entitiesConsidered : Integer"
+		},
+		"definitionsProcessed": {
+			"Syntax": "definitionsProcessed : Integer"
 		}
 	},
 	"_menu": {
@@ -1071,24 +1200,50 @@
 			"Syntax": "data : Collection"
 		}
 	},
-	"_dataclassAttributes": {
-		"reset()": {
-			"Syntax": "**.reset**( *dataclassName* : Text )",
+	"_EmbeddingResolver": {
+		"dataclassNameFromEntity()": {
+			"Syntax": "**.dataclassNameFromEntity**( *entity* : 4D.Entity ) : Text",
 			"Params": [
 				[
-					"dataclassName",
-					"Text",
+					"entity",
+					"4D.Entity",
 					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"forDataclass()": {
-			"Syntax": "**.forDataclass**( *dataclass* : 4D.DataClass ) : Collection",
+		"dataclassNameFromSelection()": {
+			"Syntax": "**.dataclassNameFromSelection**( *es* : 4D.EntitySelection ) : Text",
 			"Params": [
 				[
-					"dataclass",
-					"4D.DataClass",
+					"es",
+					"4D.EntitySelection",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"resolveForEntity()": {
+			"Syntax": "**.resolveForEntity**( *definition* : Variant; *contextDataclassName* : Text ) : Collection",
+			"Params": [
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"contextDataclassName",
+					"Text",
 					"->"
 				],
 				[
@@ -1098,6 +1253,178 @@
 				]
 			],
 			"Summary": ""
+		},
+		"resolveForProcess()": {
+			"Syntax": "**.resolveForProcess**( *definition* : Variant ) : Collection",
+			"Params": [
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"settings": {
+			"Syntax": "settings : cs.embed.EmbeddingSettings"
+		}
+	},
+	"EmbeddingProcessor": {
+		"embedBatch()": {
+			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : Collection",
+			"Params": [
+				[
+					"texts",
+					"Collection",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"embed()": {
+			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : 4D.Vector",
+			"Params": [
+				[
+					"text",
+					"Text",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"4D.Vector",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"backoffMs": {
+			"Syntax": "backoffMs : Integer"
+		},
+		"maxRetries": {
+			"Syntax": "maxRetries : Integer"
+		},
+		"client": {
+			"Syntax": "client : cs.AIKit.OpenAI"
+		}
+	},
+	"EmbeddingDefinition": {
+		"toObject()": {
+			"Syntax": "**.toObject**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"phrase": {
+			"Syntax": "phrase : cs.embed.Phrase"
+		},
+		"model": {
+			"Syntax": "model : Text"
+		},
+		"vectorName": {
+			"Syntax": "vectorName : Text"
+		},
+		"dataclassName": {
+			"Syntax": "dataclassName : Text"
+		},
+		"version": {
+			"Syntax": "version : Integer"
+		}
+	},
+	"EmbeddingProcess": {
+		"processEntity()": {
+			"Syntax": "**.processEntity**( *entity* : 4D.Entity; *definition* : Variant ) : cs.embed.EmbeddingProcessResult",
+			"Params": [
+				[
+					"entity",
+					"4D.Entity",
+					"->"
+				],
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.embed.EmbeddingProcessResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"processEntitySelection()": {
+			"Syntax": "**.processEntitySelection**( *es* : 4D.EntitySelection; *definition* : Variant ) : cs.embed.EmbeddingProcessResult",
+			"Params": [
+				[
+					"es",
+					"4D.EntitySelection",
+					"->"
+				],
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.embed.EmbeddingProcessResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"process()": {
+			"Syntax": "**.process**( *definition* : Variant ) : cs.embed.EmbeddingProcessResult",
+			"Params": [
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.embed.EmbeddingProcessResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"options": {
+			"Syntax": "options : Object"
+		},
+		"resolver": {
+			"Syntax": "resolver : cs.embed._EmbeddingResolver"
+		},
+		"processor": {
+			"Syntax": "processor : cs.embed.EmbeddingProcessor"
+		},
+		"settings": {
+			"Syntax": "settings : cs.embed.EmbeddingSettings"
 		}
 	}
 }

@@ -38,7 +38,8 @@
 	},
 	"TESTS": {
 		"methods": [
-			"test_phrase"
+			"test_phrase",
+			"test_resolver"
 		]
 	},
 	"UTILS": {
