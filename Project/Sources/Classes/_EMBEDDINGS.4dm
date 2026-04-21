@@ -1,4 +1,4 @@
-property embeddings : cs:C1710.EmbeddingSettings
+property settings : cs:C1710.EmbeddingSettings
 property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project datastore
 property vectors : Collection
 
@@ -40,7 +40,7 @@ Class constructor
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function read()
 	
-	This:C1470.embeddings:=cs:C1710.EmbeddingSettings.new()
+	This:C1470.settings:=cs:C1710.EmbeddingSettings.new()
 	This:C1470.readEmbeddingItems()
 	
 	// MARK:- [MANAGERS]
@@ -272,7 +272,7 @@ Function moreManager($e : Object)
 			// ______________________________________________________
 		: ($menu.choice="openSettingFile")
 			
-			OPEN URL:C673(This:C1470.embeddings.file.platformPath)
+			OPEN URL:C673(This:C1470.settings.file.platformPath)
 			
 			// ______________________________________________________
 	End case 
@@ -498,15 +498,15 @@ The list is displayed with:
 • vector field
 Enriched with saved EmbeddingDefinition entries from Settings/vectors.json.
 */
-	This:C1470.embeddings:=This:C1470.embeddings || cs:C1710.EmbeddingSettings.new()
-	This:C1470.embeddings.load()
+	This:C1470.settings:=This:C1470.settings || cs:C1710.EmbeddingSettings.new()
+	This:C1470.settings.load()
 	
 	var $items:=[]
 	
 	var $vf : Object
 	For each ($vf; This:C1470._collectVectorFields())
 		
-		var $def : cs:C1710.EmbeddingDefinition:=This:C1470.embeddings.find($vf.dataclassName; $vf.field.name)
+		var $def : cs:C1710.EmbeddingDefinition:=This:C1470.settings.find($vf.dataclassName; $vf.field.name)
 		var $wasSaved : Boolean:=$def#Null:C1517
 		
 		If (Not:C34($wasSaved))
@@ -515,14 +515,14 @@ Enriched with saved EmbeddingDefinition entries from Settings/vectors.json.
 			
 		End if 
 		
-		var $item : cs:C1710._EmbeddingItem:=cs:C1710._EmbeddingItem.new($vf.dataclass; $def)
+		var $item : cs:C1710._EmbeddingItem:=cs:C1710._EmbeddingItem.new($vf.dataclass; $def; This:C1470.settings)
 		
 		If ($wasSaved)
 			
 			$item.phrase:=$item.parsePhrase($def.phrase)
 			
 			// TODO: Check if the model exists
-			If ($def.model="")
+			If (($def.model="") && (Length:C16($def.phrase.template)>0))
 				
 				$item.error:=Localized string:C991("theModelIsNotDefined")
 				
@@ -535,7 +535,7 @@ Enriched with saved EmbeddingDefinition entries from Settings/vectors.json.
 	
 	// Ghost entries: saved definitions that no longer match any catalog vector field.
 	var $saved : cs:C1710.EmbeddingDefinition
-	For each ($saved; This:C1470.embeddings.vectors)
+	For each ($saved; This:C1470.settings.vectors)
 		
 		If ($items.query("definition.dataclassName = :1 & definition.vectorName = :2"; $saved.dataclassName; $saved.vectorName).length>0)
 			
@@ -575,10 +575,10 @@ Enriched with saved EmbeddingDefinition entries from Settings/vectors.json.
 Function saveEmbeddingItems()
 	
 	// Keep only defined items
-	This:C1470.embeddings.vectors:=This:C1470.vectors\
+	This:C1470.settings.vectors:=This:C1470.vectors\
 		.filter(Formula:C1597(Bool:C1537($1.value.defined)))\
 		.map(Formula:C1597($1.value.definition))
-	This:C1470.embeddings.save()
+	This:C1470.settings.save()
 	
 	// MARK: -[PRIVATE]
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***

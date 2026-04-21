@@ -7,63 +7,86 @@ singleton Class constructor
 	This:C1470._fieldNameCache:={}
 
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the collection of "supported" attributes for the given dataclass.
-	// Result is cached, keyed by dataclass name, so multiple Vectors on the same
-	// dataclass share a single computation.
-Function forDataclass($dataclass : 4D:C1709.DataClass) : Collection
+	// Returns the collection of "supported" attributes for the given dataclass,
+	// filtered by the optional phrase options (allowRelations, allowCalculated, allowAlias).
+	// The base list is cached per dataclass; options filtering is applied on top without caching.
+Function forDataclass($dataclass : 4D:C1709.DataClass; $options : Object) : Collection
 
 /* #17306
 In the embedding phrase, the supported attributes shall be:
   • Simple fields
-  • Computed attributes
-  • Related fields (1:1, N:1 relationship)
-  • Aliases
+  • Computed attributes (when allowCalculated)
+  • Related fields (N:1 / 1:1 relationship) (when allowRelations)
+  • Aliases (when allowAlias)
 */
 
 	var $table:=$dataclass.getInfo()
 	var $key : Text:=$table.name
 
-	If (This:C1470._cache[$key]#Null:C1517)
+	If (This:C1470._cache[$key]=Null:C1517)
 
-		return This:C1470._cache[$key]
+		var $base:=[]
+
+		var $attrKey : Text
+		For each ($attrKey; $dataclass)
+
+			var $attribute : Object:=$dataclass[$attrKey]
+
+			If (String:C10($attribute.classID)="4D.Vector")
+				continue
+			End if
+
+			// 1:N relations are never valid in a phrase
+			If ($attribute.kind="relatedEntities")
+				continue
+			End if
+
+			// Skip N:1 FK source storage fields (the relatedEntity attribute is preferred)
+			If ($attribute.fieldNumber#Null:C1517)
+
+				var $oneTable; $oneField : Integer
+				GET RELATION PROPERTIES:C686($table.tableNumber; $attribute.fieldNumber; $oneTable; $oneField)
+
+				If ($oneField#0)
+					continue
+				End if
+			End if
+
+			$base.push($attribute)
+
+		End for each
+
+		This:C1470._cache[$key]:=$base
 
 	End if
 
-	var $supported:=[]
+	var $base:=This:C1470._cache[$key]
 
-	var $attrKey : Text
-	For each ($attrKey; $dataclass)
+	// Apply phrase options filtering
+	var $allowRelations : Boolean:=Bool:C1537($options#Null:C1517 ? $options.allowRelations : False:C215)
+	var $allowCalculated : Boolean:=Bool:C1537($options#Null:C1517 ? $options.allowCalculated : False:C215)
+	var $allowAlias : Boolean:=Bool:C1537($options#Null:C1517 ? $options.allowAlias : False:C215)
 
-		var $attribute : Object:=$dataclass[$attrKey]
+	If ($allowRelations & $allowCalculated & $allowAlias)
+		return $base
+	End if
 
-		// TODO: Ignore 1:N relationships ?
-
-		If (String:C10($attribute.classID)="4D.Vector")
-
+	var $filtered:=[]
+	var $attr : Object
+	For each ($attr; $base)
+		If ($attr.kind="relatedEntity") & (Not:C34($allowRelations))
 			continue
-
 		End if
-
-		// TODO: Ignore start/end of a relation ?
-		If ($attribute.fieldNumber#Null:C1517)
-
-			var $oneTable; $oneField : Integer
-			GET RELATION PROPERTIES:C686($table.tableNumber; $attribute.fieldNumber; $oneTable; $oneField)
-
-			If ($oneField#0)
-
-				continue
-
-			End if
+		If ($attr.kind="calculated") & (Not:C34($allowCalculated))
+			continue
 		End if
-
-		$supported.push($attribute)
-
+		If ($attr.kind="alias") & (Not:C34($allowAlias))
+			continue
+		End if
+		$filtered.push($attr)
 	End for each
 
-	This:C1470._cache[$key]:=$supported
-
-	return $supported
+	return $filtered
 
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the given field name exists on the dataclass.

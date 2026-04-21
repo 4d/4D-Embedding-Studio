@@ -2,8 +2,9 @@ property definition : cs:C1710.EmbeddingDefinition
 property phrase:=""  // Styled text for the UI editor (highlighted errors, etc.)
 property supportedAttributes:=[]
 property embedded:=[]
+property settings : cs:C1710.EmbeddingSettings
 
-Class constructor($dataclass : 4D:C1709.DataClass; $definition : cs:C1710.EmbeddingDefinition)
+Class constructor($dataclass : 4D:C1709.DataClass; $definition : cs:C1710.EmbeddingDefinition; $settings : cs:C1710.EmbeddingSettings)
 	
 	If (Count parameters:C259<2)
 		
@@ -24,8 +25,9 @@ Class constructor($dataclass : 4D:C1709.DataClass; $definition : cs:C1710.Embedd
 	If (OB Class:C1730($dataclass).superclass=4D:C1709.DataClass)
 		
 		This:C1470.definition:=$definition
+		This:C1470.settings:=$settings
 		
-		This:C1470.supportedAttributes:=cs:C1710._dataclassAttributes.me.forDataclass($dataclass)
+		This:C1470.supportedAttributes:=cs:C1710._dataclassAttributes.me.forDataclass($dataclass; ($settings#Null:C1517) ? $settings.phrase : Null:C1517)
 		
 	End if 
 	
@@ -66,7 +68,7 @@ In the embedding phrase, if the attribute is incorrect,
 and show a tooltip with an error message when the developer hovers over it.
 */
 	var $dataclass : 4D:C1709.DataClass:=ds:C1482[This:C1470.definition.dataclassName]
-	var $validation:=$phrase.validate($dataclass)
+	var $validation:=$phrase.validate($dataclass; (This:C1470.settings=Null:C1517) ? Null:C1517 : This:C1470.settings.phrase)
 	
 	var $text : Text:=$phrase.template
 	$text:=Replace string:C233($text; "&"; "&amp;")

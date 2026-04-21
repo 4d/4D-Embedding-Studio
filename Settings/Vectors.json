@@ -15,11 +15,11 @@
 			"phrase": "Non existing attribute {toto}"
 		},
 		{
-			"version": 5,
+			"version": 8,
 			"dataclassName": "Students",
 			"vectorName": "student_vector_1",
 			"model": "ModelAlias",
-			"phrase": "was Table_1 {fullName}"
+			"phrase": " {firstName} {lastName} "
 		},
 		{
 			"version": 0,
@@ -29,35 +29,5 @@
 			"phrase": ""
 		}
 	],
-	"models": [
-		{
-			"name": "first model",
-			"model": "text-embedding-3-small",
-			"apiKey": "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",
-			"baseURL": "https://api.openai.com/v1/"
-		},
-		{
-			"name": "hello",
-			"model": "text-embedding-ada-002",
-			"apiKey": "1234",
-			"baseURL": ""
-		},
-		{
-			"name": "Model",
-			"model": "text-embedding-3-large",
-			"apiKey": "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",
-			"baseURL": "https://api.openai.com/v1/"
-		},
-		{
-			"name": "Model 1",
-			"model": "text-embedding-3-large",
-			"apiKey": "zzz"
-		},
-		{
-			"name": "Model 10",
-			"model": "gpt-4o-mini",
-			"apiKey": "",
-			"baseURL": "http://localhost:1234/v1/"
-		}
-	]
+	"batchSize": 50
 }

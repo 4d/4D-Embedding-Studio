@@ -85,12 +85,18 @@ Function save()
 	var $out : Object:=This:C1470[""].raw || {}
 	$out.vectors:=[]
 	$out.batchSize:=This:C1470.batchSize
-	$out.phrase:={\
+	var $phraseOpts : Object:={\
 		allowRelations: Bool:C1537(This:C1470.phrase.allowRelations); \
 		allowCalculated: Bool:C1537(This:C1470.phrase.allowCalculated); \
 		allowAlias: Bool:C1537(This:C1470.phrase.allowAlias)}
-	// TODO: if $out.phrase is default one -> remove
-	OB REMOVE:C1226($out; "phrase")
+	var $defaults : Object:=This:C1470._defaultPhraseOptions()
+	If ($phraseOpts.allowRelations=$defaults.allowRelations \
+		& $phraseOpts.allowCalculated=$defaults.allowCalculated \
+		& $phraseOpts.allowAlias=$defaults.allowAlias)
+		OB REMOVE:C1226($out; "phrase")
+	Else 
+		$out.phrase:=$phraseOpts
+	End if 
 	
 	var $def : cs:C1710.EmbeddingDefinition
 	For each ($def; This:C1470.vectors)
