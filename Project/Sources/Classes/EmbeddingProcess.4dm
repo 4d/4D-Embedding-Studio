@@ -270,80 +270,29 @@ Function _resolveDefinitionFromEntity($entity : 4D:C1709.Entity) : cs:C1710.Embe
 	return ($matches.length=1) ? $matches[0] : Null:C1517
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-	// Validates a definition before running. On failure, records error in report and returns False.
+	// Validates a definition before running. On failure, records all errors in report and returns False.
 Function _validateDefinition($def : cs:C1710.EmbeddingDefinition; $report : cs:C1710.EmbeddingProcessResult) : Boolean
-	
+
 	If ($def=Null:C1517)
-		
+
 		$report._addError("definition"; Null:C1517; "Null definition")
 		return False:C215
-		
-	End if 
-	
+
+	End if
+
 	var $ref : Text:=String:C10($def.dataclassName)+"."+String:C10($def.vectorName)
-	
-	If (Length:C16(String:C10($def.dataclassName))=0)
-		
-		$report._addError("definition"; $ref; "Missing dataclassName")
-		return False:C215
-		
-	End if 
-	
-	If (Length:C16(String:C10($def.vectorName))=0)
-		
-		$report._addError("definition"; $ref; "Missing vectorName")
-		return False:C215
-		
-	End if 
-	
-	If (Length:C16(String:C10($def.model))=0)
-		
-		$report._addError("definition"; $ref; "No model configured for definition")
-		return False:C215
-		
-	End if 
-	
-	var $dc : 4D:C1709.DataClass:=ds:C1482[$def.dataclassName]
-	
-	If ($dc=Null:C1517)
-		
-		$report._addError("definition"; $ref; "Unknown dataclass: "+$def.dataclassName)
-		return False:C215
-		
-	End if 
-	
-	var $field : Object:=$dc[$def.vectorName]
-	
-	If ($field=Null:C1517)
-		
-		$report._addError("definition"; $ref; "Vector field not found: "+$def.vectorName)
-		return False:C215
-		
-	End if 
-	
-	If (String:C10($field.classID)#"4D.Vector")
-		
-		$report._addError("definition"; $ref; "Target field is not a 4D.Vector: "+$def.vectorName)
-		return False:C215
-		
-	End if 
-	
-	If ($def.phrase=Null:C1517)
-		
-		$report._addError("definition"; $ref; "Missing phrase")
-		return False:C215
-		
-	End if 
-	
-	var $validation : Object:=$def.phrase.validate($dc; This:C1470.settings.phrase)
-	
+	var $validation : Object:=$def.validate(This:C1470.settings)
+
 	If (Not:C34($validation.success))
-		
-		$report._addError("definition"; $ref; "Phrase validation failed: "+$validation.errors.extract("message").join(", "))
+
+		var $error : Object
+		For each ($error; $validation.errors)
+			$report._addError("definition"; $ref; $error.message)
+		End for each
 		return False:C215
-		
-	End if 
-	
+
+	End if
+
 	return True:C214
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***

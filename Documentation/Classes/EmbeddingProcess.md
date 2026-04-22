@@ -149,10 +149,11 @@ Render a phrase for an entity and return the resulting text. No API call, no per
 | Function result       | Text                                                                        | The rendered text.                                                          |
 
 ```4d
-$p.render($student; $def)                        // use def's phrase
-$p.render($student; cs.Phrase.new("Hi {firstName}"))
-$p.render($student; "Student: {lastName}")       // raw template
-$p.render($student)                              // auto-resolve
+var $text: Text
+$text:=$p.render($student; $def)                        // use def's phrase
+$text:=$p.render($student; cs.Phrase.new("Hi {firstName}"))
+$text:=$p.render($student; "Student: {lastName}")       // raw template
+$text:=$p.render($student)                              // auto-resolve
 ```
 
 ### embed()
@@ -171,23 +172,24 @@ Compute a vector for an arbitrary input, without persisting anywhere.
 Throws if no model can be determined.
 
 ```4d
+var $vector: 4D.Vector
 // Text + model
-$p.embed("some text"; "text-embedding-3-small")
+$vector:=$p.embed("some text"; "text-embedding-3-small")
 
 // Text + definition (picks up def.model)
-$p.embed("some text"; $def)
+$vector:=$p.embed("some text"; $def)
 
 // Entity + definition (uses def.phrase + def.model)
-$p.embed($student; $def)
+$vector:=$p.embed($student; $def)
 
 // Entity + phrase + explicit model
-$p.embed($student; $phrase; "text-embedding-3-small")
+$vector:=$p.embed($student; $phrase; "text-embedding-3-small")
 
 // Entity + ad-hoc template + model
-$p.embed($student; "Profile: {firstName} {lastName}"; "text-embedding-3-small")
+$vector:=$p.embed($student; "Profile: {firstName} {lastName}"; "text-embedding-3-small")
 
 // Entity alone (auto-resolve, only when exactly one def matches the dataclass)
-$p.embed($student)
+$vector:=$p.embed($student)
 ```
 
 ## See also

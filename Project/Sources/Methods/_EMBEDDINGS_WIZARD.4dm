@@ -1,4 +1,4 @@
-//%attributes = {"shared":true}
+//%attributes = {}
 #DECLARE() : Integer
 
 /*#17300

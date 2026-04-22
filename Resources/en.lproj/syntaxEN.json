@@ -495,14 +495,17 @@
 			],
 			"Summary": ""
 		},
-		"settings": {
-			"Syntax": "settings : cs.embed.EmbeddingSettings"
-		},
 		"embedded": {
 			"Syntax": "embedded : Collection"
 		},
 		"supportedAttributes": {
 			"Syntax": "supportedAttributes : Collection"
+		},
+		"version": {
+			"Syntax": "version : Integer"
+		},
+		"settings": {
+			"Syntax": "settings : cs.embed.EmbeddingSettings"
 		},
 		"phrase": {
 			"Syntax": "phrase : Text"
@@ -550,7 +553,7 @@
 			"Summary": ""
 		},
 		"forDataclass()": {
-			"Syntax": "**.forDataclass**( *dataclass* : 4D.DataClass { ; *options* : Object } ) : Collection",
+			"Syntax": "**.forDataclass**( *dataclass* : 4D.DataClass; *options* : Object ) : Collection",
 			"Params": [
 				[
 					"dataclass",
@@ -1352,6 +1355,33 @@
 			],
 			"Summary": ""
 		},
+		"validate()": {
+			"Syntax": "**.validate**( *settings* : cs.embed.EmbeddingSettings ) : Object",
+			"Params": [
+				[
+					"settings",
+					"cs.embed.EmbeddingSettings",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get hasDefinition()": {
+			"Syntax": "**.get hasDefinition**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"phrase": {
 			"Syntax": "phrase : cs.embed.Phrase"
 		},
@@ -1363,9 +1393,6 @@
 		},
 		"dataclassName": {
 			"Syntax": "dataclassName : Text"
-		},
-		"version": {
-			"Syntax": "version : Integer"
 		}
 	},
 	"EmbeddingProcess": {

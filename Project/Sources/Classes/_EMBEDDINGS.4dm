@@ -351,7 +351,7 @@ Function phraseManager($e : Object)
 		: ($e.code=On Data Change:K2:15)
 			
 			$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
-			$item.definition.version+=1
+			$item.version+=1
 			
 			// Highlight any errors, if any
 			ST SET TEXT:C1115(*; $me; $item.parsePhrase($item.definition.phrase); ST Start text:K78:15; ST End text:K78:16)
@@ -388,7 +388,7 @@ Function modelsDropdownManager($e : Object)
 			
 			// Update current item
 			This:C1470.currentItem.definition.model:=$dropDown.currentValue
-			This:C1470.currentItem.definition.version+=1
+			This:C1470.currentItem.version+=1
 			This:C1470.saveEmbeddingItems()
 			
 			Form:C1466.vectors:=Form:C1466.vectors  // update UI
@@ -518,7 +518,8 @@ Enriched with saved EmbeddingDefinition entries from Settings/vectors.json.
 		var $item : cs:C1710._EmbeddingItem:=cs:C1710._EmbeddingItem.new($vf.dataclass; $def; This:C1470.settings)
 		
 		If ($wasSaved)
-			
+
+			$item.version:=0
 			$item.phrase:=$item.parsePhrase($def.phrase)
 			
 			// TODO: Check if the model exists

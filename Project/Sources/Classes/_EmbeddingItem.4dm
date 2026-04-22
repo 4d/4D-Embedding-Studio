@@ -1,4 +1,5 @@
 property definition : cs:C1710.EmbeddingDefinition
+property version : Integer:=-1
 property phrase:=""  // Styled text for the UI editor (highlighted errors, etc.)
 property supportedAttributes:=[]
 property embedded:=[]
@@ -94,7 +95,7 @@ and show a tooltip with an error message when the developer hovers over it.
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get defined() : Boolean
 	
-	return (This:C1470.definition#Null:C1517) && (This:C1470.definition.version>=0)
+	return (This:C1470.definition#Null:C1517) && (This:C1470.version>=0)
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get helptip() : Text

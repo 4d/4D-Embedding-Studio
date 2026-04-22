@@ -2,8 +2,6 @@
 
 The `Phrase` class is a lightweight template engine: a template with `{variable}` placeholders is compiled once, then rendered efficiently against different data objects.
 
-Dot-notation is supported for nested fields and related attributes: `{relation.field}` or `{a.b.c}`.
-
 ## Properties
 
 | Property Name | Type | Description                                                                 |
@@ -20,8 +18,8 @@ Compile a template. Compilation walks the template once and extracts static part
 | *template*    | Text | Template string with `{variable}` markers.  |
 
 ```4d
-var $tpl:=cs.Phrase.new("Hello {firstName}, you study at {school.name}.")
-$tpl.keys // → ["firstName"; "school.name"]
+var $tpl:=cs.Phrase.new("Hello {firstName}, you study at {schoolName}.")
+$tpl.keys // → ["firstName"; "schoolName"]
 ```
 
 ## Functions
@@ -38,11 +36,11 @@ Render the compiled template by replacing variables with values from *data*. Mis
 | Function result | Text   | The rendered text.                                                          |
 
 ```4d
-$tpl.render({firstName: "Alice"; school: {name: "MIT"}})
+var $text:=$tpl.render({firstName: "Alice"; school: {name: "MIT"}})
 // → "Hello Alice, you study at MIT."
 
 // Works directly on entities
-$tpl.render(ds.Students.first())
+$text:=$tpl.render(ds.Students.first())
 ```
 
 ### validate()

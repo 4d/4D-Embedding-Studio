@@ -1,33 +1,28 @@
 {
 	"vectors": [
 		{
-			"version": 0,
 			"dataclassName": "AllTypes",
 			"vectorName": "Vector",
 			"model": "first model",
 			"phrase": ""
 		},
 		{
-			"version": 0,
 			"dataclassName": "School",
 			"vectorName": "vector_with_error",
 			"model": "",
 			"phrase": "Non existing attribute {toto}"
 		},
 		{
-			"version": 8,
 			"dataclassName": "Students",
 			"vectorName": "student_vector_1",
 			"model": "ModelAlias",
 			"phrase": " {firstName} {lastName} "
 		},
 		{
-			"version": 0,
 			"dataclassName": "Students",
 			"vectorName": "student_vector_2",
 			"model": "Model",
 			"phrase": ""
 		}
-	],
-	"batchSize": 50
+	]
 }

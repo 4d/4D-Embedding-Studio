@@ -13,6 +13,10 @@
 			"School",
 			"Students"
 		],
+		"methods": [
+			"_invalidateVectors",
+			"_test_process"
+		],
 		"classes": [
 			"StudentsEntity"
 		]
@@ -42,7 +46,8 @@
 	"TESTS": {
 		"methods": [
 			"test_phrase",
-			"test_resolver"
+			"test_resolver",
+			"test_settings"
 		]
 	},
 	"UTILS": {

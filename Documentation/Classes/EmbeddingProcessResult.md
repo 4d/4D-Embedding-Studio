@@ -57,7 +57,7 @@ If ($r.success)
 Else
 	var $err : Object
 	For each ($err; $r.errors)
-		TRACE("[" + $err.scope + "] " + String($err.ref) + " — " + $err.message)
+		ALERT("[" + $err.scope + "] " + String($err.ref) + " — " + $err.message)
 	End for each
 End if
 ```
