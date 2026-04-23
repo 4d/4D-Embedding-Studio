@@ -85,6 +85,41 @@ If (Not($result.success))
 End if
 ```
 
+### invalidateVectors()
+
+**invalidateVectors**() : Object
+
+Marks all already-computed entities for re-embedding, forcing a full rebuild on the next run. Only entities that already have a vector value are processed — entities with a `Null` vector are skipped.
+
+Useful during development or after a model/phrase change to trigger a clean rebuild of all vectors.
+
+The strategy depends on whether a companion `_dirty` field exists on the dataclass:
+
+| Companion `_dirty` field | Action taken |
+|--------------------------|--------------|
+| Present | Sets `<vectorName>_dirty` to `True` — vector is left untouched |
+| Absent | Nullifies the vector field |
+
+| Argument        | Type   | Description                                                                 |
+|-----------------|--------|-----------------------------------------------------------------------------|
+| Function result | Object | `{updated: Integer, skipped: Integer, errors: Collection of Text}` |
+
+- `updated` — number of entities successfully marked
+- `skipped` — number of entities that could not be saved
+- `errors` — one entry per save failure, formatted as `"DataclassName: statusText"`
+
+```4d
+var $result:=$def.invalidateVectors()
+
+If ($result.skipped > 0)
+    var $e : Text
+    For each ($e; $result.errors)
+       // $e
+    End for each
+End if
+// → { updated: 42; skipped: 0; errors: [] }
+```
+
 ### toObject()
 
 **toObject**() : Object

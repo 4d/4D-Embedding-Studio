@@ -246,8 +246,14 @@ Function moreManager($e : Object)
 	
 	If (This:C1470.DEBUG)
 		
-		$menu.line().append("🚧 Edit API key"; "editApiKey")
-		$menu.append("🚧 open setting file"; "openSettingFile")
+		$menu.line().append("🚧 Insert All Attributes"; "insertAllAttributes")
+		$menu.append("🚧 AI Generated Phrase"; "aiGeneratedPhrase")
+		
+		$menu.line().append("🚧 Open AI Setting"; "openAISetting")
+		$menu.append("🚧 Open Setting File"; "openSettingFile")
+		$menu.line()
+		$menu.append("🚧 Compute Vectors"; "computeVectors")
+		$menu.append("🚧 Invalid All Vectors"; "invalidVectors")
 		
 	End if 
 	
@@ -263,16 +269,76 @@ Function moreManager($e : Object)
 			
 			This:C1470.insertInput($item; $menu.choice)
 			This:C1470.saveEmbeddingItems()
+			This:C1470._promptInvalidate($item)
 			
 			// ______________________________________________________
-		: ($menu.choice="editApiKey")
+		: ($menu.choice="openAISetting")
 			
-			// TODO: Edit API key
+			OPEN SETTINGS WINDOW:C903("/Database/AI")
 			
 			// ______________________________________________________
 		: ($menu.choice="openSettingFile")
 			
 			OPEN URL:C673(This:C1470.settings.file.platformPath)
+			
+			// ______________________________________________________
+		: ($menu.choice="insertAllAttributes")
+			
+			var $plainText:=$item.supportedAttributes.map(Formula:C1597($1.value.name+"={"+$1.value.name+"}")).join(",")
+			$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
+			$item.phrase:=$item.parsePhrase($item.definition.phrase)
+			This:C1470.saveEmbeddingItems()
+			
+			// ______________________________________________________
+		: ($menu.choice="aiGeneratedPhrase")
+			
+			$plainText:=$item.supportedAttributes.map(Formula:C1597($1.value.name)).join(",")
+			
+			var $model:="EmbeddingStudioPhrase"
+			If (Not:C34(cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name").includes($model)))
+				ALERT:C41("You must configure a chat model with name: "+$model)
+				return 
+			End if 
+			var $client : cs:C1710.AIKit.OpenAI:=cs:C1710.AIKit.OpenAI.new()
+			
+			var $prompt:="You are an assistant that generates natural-language phrases for embedding database rows."
+			$prompt+="Your task : "
+			$prompt+="- Convert a list of fields into ONE short, natural sentence."
+			$prompt+="- Use all provided fields as template variables(e.g.{firstName})."
+			$prompt+="- The sentence must sound natural when variables are replaced with real values."
+			$prompt+="- Do NOT describe fields(no \"first name and last name\")."
+			$prompt+="- Do NOT list fields with commas unless it sounds natural."
+			$prompt+="- Prefer human-like phrasing(as if describing a real entity)."
+			$prompt+="- Include the table meaning(e.g.\"student\",\"product\") naturally."
+			$prompt+=""
+			$prompt+="Rules : "
+			$prompt+="- Output ONLY the final sentence."
+			$prompt+="- No explanations."
+			$prompt+="- No extra formatting."
+			$prompt+="- Exclude ID."
+			
+			var $messages:=[{role: "system"; content: $prompt}; {role: "user"; content: $plainText+"\n"+"table="+$item.definition.dataclassName}]
+			var $result:=$client.chat.completions.create($messages; {model: $model})
+			If ($result.success)
+				
+				$plainText:=$result.choice.message.text
+				$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
+				$item.phrase:=$item.parsePhrase($item.definition.phrase)
+				This:C1470.saveEmbeddingItems()
+				
+			Else 
+				ALERT:C41(JSON Stringify:C1217($result))
+			End if 
+			
+			// ______________________________________________________
+		: ($menu.choice="computeVectors")
+			
+			_test_process()
+			
+			// ______________________________________________________
+		: ($menu.choice="invalidVectors")
+			
+			_invalidateVectors()
 			
 			// ______________________________________________________
 	End case 
@@ -324,6 +390,7 @@ Function phraseManager($e : Object)
 			// 📌 Ignored if an associated action (for edit items)
 			This:C1470.insertInput($item; $menu.choice)
 			This:C1470.saveEmbeddingItems()
+			This:C1470._promptInvalidate($item)
 			
 			// ______________________________________________________
 		: ($e.code=On Before Keystroke:K2:6)
@@ -357,6 +424,7 @@ Function phraseManager($e : Object)
 			ST SET TEXT:C1115(*; $me; $item.parsePhrase($item.definition.phrase); ST Start text:K78:15; ST End text:K78:16)
 			
 			This:C1470.saveEmbeddingItems()
+			This:C1470._promptInvalidate($item)
 			
 			Form:C1466.vectors:=Form:C1466.vectors  // update UI
 			
@@ -390,6 +458,7 @@ Function modelsDropdownManager($e : Object)
 			This:C1470.currentItem.definition.model:=$dropDown.currentValue
 			This:C1470.currentItem.version+=1
 			This:C1470.saveEmbeddingItems()
+			This:C1470._promptInvalidate(This:C1470.currentItem)
 			
 			Form:C1466.vectors:=Form:C1466.vectors  // update UI
 			
@@ -518,7 +587,7 @@ Enriched with saved EmbeddingDefinition entries from Settings/vectors.json.
 		var $item : cs:C1710._EmbeddingItem:=cs:C1710._EmbeddingItem.new($vf.dataclass; $def; This:C1470.settings)
 		
 		If ($wasSaved)
-
+			
 			$item.version:=0
 			$item.phrase:=$item.parsePhrase($def.phrase)
 			
@@ -582,6 +651,40 @@ Function saveEmbeddingItems()
 	This:C1470.settings.save()
 	
 	// MARK: -[PRIVATE]
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Compares current phrase/model against the snapshot taken at load time.
+	// If either changed, prompts the developer and calls invalidateVectors() on confirmation.
+Function _promptInvalidate($item : cs:C1710._EmbeddingItem)
+	
+	If (($item=Null:C1517) || ($item[""]=Null:C1517) || ($item[""].original=Null:C1517))
+		return 
+	End if 
+	
+	var $orig : Object:=$item[""].original
+	var $changed : Boolean:=\
+		(String:C10($item.definition.phrase.template)#String:C10($orig.phrase))\
+		 || (String:C10($item.definition.model)#String:C10($orig.model))
+	
+	If (Not:C34($changed))
+		return 
+	End if 
+	
+	If (Not:C34($item.definition._hasVectorComputed()))
+		return 
+	End if 
+	
+	// Update snapshot so a subsequent save won't re-prompt for the same delta
+	$item[""].original:=$item.definition.toObject()
+	
+	CONFIRM:C162(\
+		"The definition for "+$item.definition.dataclassName+"."+$item.definition.vectorName+" has changed.\rDo you want to mark all existing vectors for recalculation?"; \
+		"Recalculate"; \
+		"Skip")  // TODO: localize
+	
+	If (OK=1)
+		$item.definition.invalidateVectors()
+	End if 
+	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _cacheCatalog()
 	

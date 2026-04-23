@@ -140,7 +140,7 @@ If (Length:C16($seedLog)>0)
 End if 
 
 // ══════════════════════════════════════════════════════════════════════
-// DRY-RUN: validates each definition, counts entities, no API calls
+// (DRY-)RUN: validates each definition, counts entities
 // ══════════════════════════════════════════════════════════════════════
 
 var $proc : cs:C1710.EmbeddingProcess:=cs:C1710.EmbeddingProcess.new($settings; {dryRun: $dryRun})
@@ -158,7 +158,7 @@ var $summary : Text:=\
 "\nDefinitions: "+String:C10($settings.vectors.length)+\
 "\nProcessed:   "+String:C10($result.definitionsProcessed)+\
 "\nConsidered:  "+String:C10($result.entitiesConsidered)+" entities"+\
-"\nAPI calls:   "+String:C10($result.apiCalls)
+"\nAPI calls:   "+String:C10($result.apiCalls)+($dryRun ? "(dry run)" : "")
 
 If ($result.errors.length>0)
 	

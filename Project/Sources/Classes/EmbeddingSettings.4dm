@@ -107,6 +107,27 @@ Function find($dataclassName : Text; $vectorName : Text) : cs:C1710.EmbeddingDef
 	
 	return This:C1470.vectors.query("dataclassName = :1 & vectorName = :2"; $dataclassName; $vectorName).first()
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Calls invalidateVectors() on every definition and merges the results.
+	// Returns {updated: Integer; skipped: Integer; errors: Collection of Text}
+Function invalidateVectors() : Object
+
+	var $updated : Integer:=0
+	var $skipped : Integer:=0
+	var $errors : Collection:=[]
+
+	var $def : cs:C1710.EmbeddingDefinition
+	For each ($def; This:C1470.vectors)
+
+		var $result : Object:=$def.invalidateVectors()
+		$updated+=$result.updated
+		$skipped+=$result.skipped
+		$errors.combine($result.errors)
+
+	End for each
+
+	return {updated: $updated; skipped: $skipped; errors: $errors}
+
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _defaultPhraseOptions() : Object
 	

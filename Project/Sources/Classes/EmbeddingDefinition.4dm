@@ -102,6 +102,69 @@ Function validate($settings : cs:C1710.EmbeddingSettings) : Object
 	return {success: ($errors.length=0); errors: $errors}
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+	// Nullifies the vector field (and sets the companion _dirty flag when present) for every
+	// entity in the definition's dataclass, forcing a full re-embedding on the next run.
+	// Returns {updated: Integer; skipped: Integer; errors: Collection of Text}
+Function invalidateVectors() : Object
+	
+	var $dc : 4D:C1709.DataClass:=ds:C1482[This:C1470.dataclassName]
+	
+	If ($dc=Null:C1517)
+		return {updated: 0; skipped: 0; errors: ["Unknown dataclass: "+This:C1470.dataclassName]}
+	End if 
+	
+	var $dirtyName : Text:=This:C1470.vectorName+"_dirty"
+	var $hasDirty : Boolean:=($dc[$dirtyName]#Null:C1517)
+	
+	var $updated : Integer:=0
+	var $skipped : Integer:=0
+	var $errors : Collection:=[]
+	
+	var $query:=This:C1470.vectorName+" != null"
+	If ($hasDirty)
+		$query+=" & "+$dirtyName+" = false"
+	End if 
+	var $entity : cs:C1710.Entity
+	For each ($entity; $dc.query($query))
+		If ($hasDirty)
+			$entity[$dirtyName]:=True:C214
+		Else 
+			$entity[This:C1470.vectorName]:=Null:C1517
+		End if 
+		
+		var $status : Object:=$entity.save()
+		
+		If ($status.success)
+			$updated+=1
+		Else 
+			$skipped+=1
+			$errors.push(This:C1470.dataclassName+": "+String:C10($status.statusText))
+		End if 
+		
+	End for each 
+	
+	return {updated: $updated; skipped: $skipped; errors: $errors}
+	
+Function _hasVectorComputed() : Boolean
+	
+	var $dc : 4D:C1709.DataClass:=ds:C1482[This:C1470.dataclassName]
+	
+	If ($dc=Null:C1517)
+		return False:C215
+	End if 
+	
+	var $dirtyName : Text:=This:C1470.vectorName+"_dirty"
+	var $hasDirty : Boolean:=($dc[$dirtyName]#Null:C1517)
+	
+	var $query:=This:C1470.vectorName+" != null"
+	If ($hasDirty)
+		$query+=" & "+$dirtyName+" = false"
+	End if 
+	var $s:=$dc.query($query)
+	
+	return $s.length>0  // is it optimized? I need not(isEmpty)
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 	// Returns a plain object suitable for JSON persistence.
 	// The phrase is flattened to its template text.
 Function toObject() : Object

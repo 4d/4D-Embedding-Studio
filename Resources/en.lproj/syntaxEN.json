@@ -411,6 +411,17 @@
 			],
 			"Summary": ""
 		},
+		"invalidateVectors()": {
+			"Syntax": "**.invalidateVectors**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"save()": {
 			"Syntax": "**.save**()",
 			"Params": [],
@@ -1346,6 +1357,17 @@
 	"EmbeddingDefinition": {
 		"toObject()": {
 			"Syntax": "**.toObject**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"invalidateVectors()": {
+			"Syntax": "**.invalidateVectors**() : Object",
 			"Params": [
 				[
 					"",

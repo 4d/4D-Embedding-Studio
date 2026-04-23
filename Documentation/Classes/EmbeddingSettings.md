@@ -97,6 +97,21 @@ Look up the saved definition for the given dataclass/vector pair.
 var $def:=$settings.find("Students"; "student_vector_1")
 ```
 
+### invalidateVectors()
+
+**invalidateVectors**() : Object
+
+Calls [`invalidateVectors()`](EmbeddingDefinition.md#invalidatevectors) on every definition in `vectors` and merges the results into a single status object.
+
+| Argument        | Type   | Description                                                                 |
+|-----------------|--------|-----------------------------------------------------------------------------|
+| Function result | Object | `{updated: Integer, skipped: Integer, errors: Collection of Text}` — accumulated across all definitions. |
+
+```4d
+var $result:=cs.EmbeddingSettings.new().invalidateVectors()
+// → { updated: 120; skipped: 0; errors: [] }
+```
+
 ## See also
 
 - [EmbeddingDefinition](EmbeddingDefinition.md)
