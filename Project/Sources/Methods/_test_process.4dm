@@ -1,8 +1,10 @@
 //%attributes = {}
+#DECLARE($definition : cs:C1710.EmbeddingDefinition)
+
 // Interactive configuration check for EmbeddingProcess.
 // Loads real settings, pre-checks each definition, then runs a dry-run.
 // Prompts the user to fix missing model/phrase before proceeding.
-var $dryRun:=Not:C34(Shift down:C543)
+var $dryRun:=Shift down:C543
 var $settings : cs:C1710.EmbeddingSettings:=cs:C1710.EmbeddingSettings.new()
 
 //_invalidateVectors
@@ -32,8 +34,9 @@ End if
 
 var $missing : Collection:=[]
 var $def : cs:C1710.EmbeddingDefinition
+var $scope : Collection:=($definition=Null:C1517) ? $settings.vectors : [$definition]
 
-For each ($def; $settings.vectors)
+For each ($def; $scope)
 	
 	var $ref : Text:=String:C10($def.dataclassName)+"."+String:C10($def.vectorName)
 	
@@ -70,7 +73,7 @@ End if
 var $seedLog : Text:=""
 var $seedDef : cs:C1710.EmbeddingDefinition
 
-For each ($seedDef; $settings.vectors)
+For each ($seedDef; $scope)
 	
 	If (Length:C16(String:C10($seedDef.dataclassName))=0)
 		continue
@@ -147,7 +150,7 @@ var $proc : cs:C1710.EmbeddingProcess:=cs:C1710.EmbeddingProcess.new($settings; 
 var $result : cs:C1710.EmbeddingProcessResult
 
 Try
-	$result:=$proc.process()
+	$result:=$proc.process($definition)
 Catch
 	ALERT:C41("❌ Process raised an error:\n"+Last errors:C1799[0].message)
 	return 

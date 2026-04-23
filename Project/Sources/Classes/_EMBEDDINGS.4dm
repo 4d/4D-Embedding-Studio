@@ -246,14 +246,17 @@ Function moreManager($e : Object)
 	
 	If (This:C1470.DEBUG)
 		
-		$menu.line().append("🚧 Insert All Attributes"; "insertAllAttributes")
+		$menu.append("🚧 Insert All Attributes"; "insertAllAttributes")
 		$menu.append("🚧 AI Generated Phrase"; "aiGeneratedPhrase")
 		
 		$menu.line().append("🚧 Open AI Setting"; "openAISetting")
 		$menu.append("🚧 Open Setting File"; "openSettingFile")
-		$menu.line()
-		$menu.append("🚧 Compute Vectors"; "computeVectors")
-		$menu.append("🚧 Invalid All Vectors"; "invalidVectors")
+		
+		$menu.line().append("🚧 Compute Vectors"; "computeVectors")
+		$menu.append("🚧 Invalid Vectors"; "invalidVectors")
+		
+		$menu.line().append("🚧 Compute All Vectors"; "computeAllVectors")
+		$menu.append("🚧 Invalid All Vectors"; "invalidAllVectors")
 		
 	End if 
 	
@@ -318,25 +321,50 @@ Function moreManager($e : Object)
 			$prompt+="- Exclude ID."
 			
 			var $messages:=[{role: "system"; content: $prompt}; {role: "user"; content: $plainText+"\n"+"table="+$item.definition.dataclassName}]
-			var $result:=$client.chat.completions.create($messages; {model: $model})
-			If ($result.success)
+			var $resultAI:=$client.chat.completions.create($messages; {model: $model})
+			If ($resultAI.success)
 				
-				$plainText:=$result.choice.message.text
+				$plainText:=$resultAI.choice.message.text
 				$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
 				$item.phrase:=$item.parsePhrase($item.definition.phrase)
 				This:C1470.saveEmbeddingItems()
 				
 			Else 
-				ALERT:C41(JSON Stringify:C1217($result))
+				ALERT:C41(JSON Stringify:C1217($resultAI))
 			End if 
 			
 			// ______________________________________________________
 		: ($menu.choice="computeVectors")
 			
-			_test_process()
+			_test_process($item.definition)
 			
 			// ______________________________________________________
 		: ($menu.choice="invalidVectors")
+			
+			var $resultInvalidate:=$item.definition.invalidateVectors()
+			
+			var $msg : Text:="✅ "+String:C10($resultInvalidate.updated)+" entity(ies) invalidated."
+			
+			If ($resultInvalidate.skipped>0)
+				$msg:=$msg+"\n⚠️ "+String:C10($resultInvalidate.skipped)+" skipped."
+			End if 
+			
+			If ($resultInvalidate.errors.length>0)
+				var $errorText : Text
+				For each ($errorText; $resultInvalidate.errors)
+					$msg:=$msg+"\n  • "+$errorText
+				End for each 
+			End if 
+			
+			ALERT:C41($msg)
+			
+			// ______________________________________________________
+		: ($menu.choice="computeAllVectors")
+			
+			_test_process()
+			
+			// ______________________________________________________
+		: ($menu.choice="invalidAllVectors")
 			
 			_invalidateVectors()
 			
