@@ -17,7 +17,8 @@
 property settings : cs:C1710.EmbeddingSettings
 property processor : cs:C1710.EmbeddingProcessor
 property resolver : cs:C1710._EmbeddingResolver
-property options : Object  // { onProgress, dryRun, force }
+property options : Object  // { onProgress, dryRun, force, debug }
+property _failedModels : Collection
 
 // MARK:-[CONSTRUCTOR]
 Class constructor($settings : cs:C1710.EmbeddingSettings; $options : Object)
@@ -26,6 +27,7 @@ Class constructor($settings : cs:C1710.EmbeddingSettings; $options : Object)
 	This:C1470.resolver:=cs:C1710._EmbeddingResolver.new(This:C1470.settings)
 	This:C1470.options:=$options || {}
 	This:C1470.processor:=$options.processor || cs:C1710.EmbeddingProcessor.new()
+	This:C1470._failedModels:=[]
 	
 	// MARK:-[PUBLIC]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -42,6 +44,14 @@ Function process($definition : Variant) : cs:C1710.EmbeddingProcessResult
 		
 		If (Not:C34(This:C1470._validateDefinition($def; $report)))
 			
+			continue
+			
+		End if 
+		
+		If (This:C1470._failedModels.includes($def.model))
+			
+			$report._addError("definition"; String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
+				"Skipped: model '"+String:C10($def.model)+"' encountered a critical API error")
 			continue
 			
 		End if 
@@ -78,6 +88,14 @@ Function processEntity($entity : 4D:C1709.Entity; $definition : Variant) : cs:C1
 			
 		End if 
 		
+		If (This:C1470._failedModels.includes($def.model))
+			
+			$report._addError("definition"; String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
+				"Skipped: model '"+String:C10($def.model)+"' encountered a critical API error")
+			continue
+			
+		End if 
+		
 		This:C1470._runOnEntity($entity; $def; $report)
 		
 	End for each 
@@ -105,6 +123,14 @@ Function processEntitySelection($es : 4D:C1709.EntitySelection; $definition : Va
 		
 		If (Not:C34(This:C1470._validateDefinition($def; $report)))
 			
+			continue
+			
+		End if 
+		
+		If (This:C1470._failedModels.includes($def.model))
+			
+			$report._addError("definition"; String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
+				"Skipped: model '"+String:C10($def.model)+"' encountered a critical API error")
 			continue
 			
 		End if 
@@ -187,7 +213,7 @@ Function embed($input : Variant; $context : Variant; $model : Text) : 4D:C1709.V
 			
 			If ($phrase=Null:C1517)
 				
-				throw:C1805({componentSignature: "4DVS"; message: "No phrase could be resolved for the given entity/context"})
+				throw:C1805({componentSignature: "4DES"; message: "No phrase could be resolved for the given entity/context"})
 				
 			End if 
 			
@@ -215,7 +241,7 @@ Function embed($input : Variant; $context : Variant; $model : Text) : 4D:C1709.V
 	
 	If (Length:C16($modelName)=0)
 		
-		throw:C1805({componentSignature: "4DVS"; message: "No model specified (and none could be resolved from settings)"})
+		throw:C1805({componentSignature: "4DES"; message: "No model specified (and none could be resolved from settings)"})
 		
 	End if 
 	
@@ -272,27 +298,27 @@ Function _resolveDefinitionFromEntity($entity : 4D:C1709.Entity) : cs:C1710.Embe
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Validates a definition before running. On failure, records all errors in report and returns False.
 Function _validateDefinition($def : cs:C1710.EmbeddingDefinition; $report : cs:C1710.EmbeddingProcessResult) : Boolean
-
+	
 	If ($def=Null:C1517)
-
+		
 		$report._addError("definition"; Null:C1517; "Null definition")
 		return False:C215
-
-	End if
-
+		
+	End if 
+	
 	var $ref : Text:=String:C10($def.dataclassName)+"."+String:C10($def.vectorName)
 	var $validation : Object:=$def.validate(This:C1470.settings)
-
+	
 	If (Not:C34($validation.success))
-
+		
 		var $error : Object
 		For each ($error; $validation.errors)
 			$report._addError("definition"; $ref; $error.message)
-		End for each
+		End for each 
 		return False:C215
-
-	End if
-
+		
+	End if 
+	
 	return True:C214
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
@@ -327,6 +353,8 @@ Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.EmbeddingDefini
 	
 	$report.apiCalls+=1
 	
+	var $entityStartMs : Integer:=Milliseconds:C459
+	
 	Try
 		
 		var $text : Text:=$def.phrase.render($entity)
@@ -345,6 +373,9 @@ Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.EmbeddingDefini
 		If ($status.success)
 			
 			$report.entitiesUpdated+=1
+			This:C1470._logDebug("Vector recomputed — vector: "+String:C10($def.dataclassName)+"."+String:C10($def.vectorName)\
+				+"; entityID: "+String:C10(This:C1470._entityRef($entity))\
+				+"; duration: "+String:C10(Milliseconds:C459-$entityStartMs)+"ms")
 			
 		Else 
 			
@@ -355,8 +386,18 @@ Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.EmbeddingDefini
 		
 	Catch
 		
+		var $entityErr : Object:=Last errors:C1799[0]
 		$report.entitiesSkipped+=1
-		$report._addError("entity"; This:C1470._entityRef($entity); Last errors:C1799[0].message)
+		If (Bool:C1537($entityErr.isCriticalAPIError))
+			This:C1470._failedModels.push(String:C10($def.model))
+			$report._addError("model"; String:C10($def.model); String:C10($entityErr.message))
+			LOG EVENT:C667(Into 4D diagnostic log:K38:8; \
+				"[4DES] Critical API error — model: "+String:C10($def.model)\
+				+"; message: "+String:C10($entityErr.message); \
+				Error message:K38:3)
+			return 
+		End if 
+		$report._addError("entity"; This:C1470._entityRef($entity); String:C10($entityErr.message))
 		
 	End try
 	
@@ -384,6 +425,15 @@ Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Embeddi
 		
 	End if 
 	
+	var $selStartMs : Integer:=Milliseconds:C459
+	var $updatedBefore : Integer:=$report.entitiesUpdated
+	var $skippedBefore : Integer:=$report.entitiesSkipped
+	LOG EVENT:C667(Into 4D diagnostic log:K38:8; \
+		"[4DES] Recalculation started — vector: "+String:C10($def.dataclassName)+"."+String:C10($def.vectorName)\
+		+"; entities: "+String:C10($pending.length)\
+		+"; timestamp: "+String:C10(Current date:C33)+"T"+String:C10(Current time:C178); \
+		Information message:K38:1)
+	
 	var $batchSize : Integer:=Num:C11(This:C1470.settings.batchSize)
 	If ($batchSize<=0)
 		
@@ -395,13 +445,36 @@ Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Embeddi
 	While ($i<$pending.length)
 		
 		var $chunk : 4D:C1709.EntitySelection:=$pending.slice($i; $i+$batchSize)
-		This:C1470._processChunk($chunk; $def; $hasDirty; $dirtyField; $report)
+		Try
+			
+			This:C1470._processChunk($chunk; $def; $hasDirty; $dirtyField; $report)
+			
+		Catch
+			
+			If (Bool:C1537(Last errors:C1799[0].isCriticalAPIError))
+				This:C1470._failedModels.push(String:C10($def.model))
+				LOG EVENT:C667(Into 4D diagnostic log:K38:8; \
+					"[4DES] Critical API error — model: "+String:C10($def.model)\
+					+"; vector: "+String:C10($def.dataclassName)+"."+String:C10($def.vectorName)\
+					+"; message: "+String:C10(Last errors:C1799[0].message); \
+					Error message:K38:3)
+				return 
+			End if 
+			
+		End try
 		
 		This:C1470._notifyProgress($def; $report)
 		
 		$i+=$batchSize
 		
 	End while 
+	
+	LOG EVENT:C667(Into 4D diagnostic log:K38:8; \
+		"[4DES] Recalculation completed — vector: "+String:C10($def.dataclassName)+"."+String:C10($def.vectorName)\
+		+"; duration: "+String:C10(Milliseconds:C459-$selStartMs)+"ms"\
+		+"; success: "+String:C10($report.entitiesUpdated-$updatedBefore)\
+		+"; failure: "+String:C10($report.entitiesSkipped-$skippedBefore); \
+		Information message:K38:1)
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Filter an entity selection down to rows that need (re)computation.
@@ -443,6 +516,7 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Embedd
 	// Single API call for the whole chunk
 	var $vectors : Collection
 	$report.apiCalls+=1
+	var $chunkStartMs : Integer:=Milliseconds:C459
 	
 	Try
 		
@@ -450,9 +524,13 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Embedd
 		
 	Catch
 		
-		// Entire chunk failed → entities stay dirty, picked up on next run
-		$report._addError("chunk"; $def.dataclassName+"."+$def.vectorName; Last errors:C1799[0].message)
+		var $chunkErr : Object:=Last errors:C1799[0]
 		$report.entitiesSkipped+=$chunk.length
+		If (Bool:C1537($chunkErr.isCriticalAPIError))
+			$report._addError("model"; String:C10($def.model); String:C10($chunkErr.message))
+			throw:C1805($chunkErr)
+		End if 
+		$report._addError("chunk"; $def.dataclassName+"."+$def.vectorName; String:C10($chunkErr.message))
 		return 
 		
 	End try
@@ -484,6 +562,8 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Embedd
 			If ($status.success)
 				
 				$report.entitiesUpdated+=1
+				This:C1470._logDebug("Vector recomputed — vector: "+String:C10($def.dataclassName)+"."+String:C10($def.vectorName)\
+					+"; entityID: "+String:C10(This:C1470._entityRef($entity)))
 				
 			Else 
 				
@@ -533,4 +613,12 @@ Function _entityRef($entity : 4D:C1709.Entity) : Variant
 	End try
 	
 	return String:C10($entity)
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Conditional debug logger — no-op when This.option.debug is False.
+Function _logDebug($message : Text)
+	
+	If (Bool:C1537(This:C1470.options.debug))
+		LOG EVENT:C667(Into 4D diagnostic log:K38:8; "[4DES] "+$message; Information message:K38:1)
+	End if 
 	
