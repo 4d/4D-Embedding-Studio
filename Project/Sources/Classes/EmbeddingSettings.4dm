@@ -1,7 +1,7 @@
 property file : 4D:C1709.File
 property vectors : Collection  // of cs:C1710.EmbeddingDefinition
 property batchSize : Integer
-property phrase : Object  // optionnal { allowRelations, allowCalculated, allowAlias }
+property phrase : Object  // optionnal { allowRelations, allowCalculated, allowAlias, allowObject }
 
 Class constructor($file : 4D:C1709.File)
 	
@@ -53,6 +53,7 @@ Function load()
 		This:C1470.phrase.allowRelations:=Bool:C1537($raw.phrase.allowRelations)
 		This:C1470.phrase.allowCalculated:=Bool:C1537($raw.phrase.allowCalculated)
 		This:C1470.phrase.allowAlias:=Bool:C1537($raw.phrase.allowAlias)
+		This:C1470.phrase.allowObject:=Bool:C1537($raw.phrase.allowObject)
 		
 	End if 
 	
@@ -86,11 +87,13 @@ Function save()
 	var $phraseOpts : Object:={\
 		allowRelations: Bool:C1537(This:C1470.phrase.allowRelations); \
 		allowCalculated: Bool:C1537(This:C1470.phrase.allowCalculated); \
-		allowAlias: Bool:C1537(This:C1470.phrase.allowAlias)}
+		allowAlias: Bool:C1537(This:C1470.phrase.allowAlias); \
+		allowObject: Bool:C1537(This:C1470.phrase.allowObject)}
 	var $defaults : Object:=This:C1470._defaultPhraseOptions()
 	If (($phraseOpts.allowRelations=$defaults.allowRelations)\
 		 && ($phraseOpts.allowCalculated=$defaults.allowCalculated)\
-		 && ($phraseOpts.allowAlias=$defaults.allowAlias))
+		 && ($phraseOpts.allowAlias=$defaults.allowAlias)\
+		 && ($phraseOpts.allowObject=$defaults.allowObject))
 		OB REMOVE:C1226($out; "phrase")
 	Else 
 		$out.phrase:=$phraseOpts
@@ -134,7 +137,8 @@ Function _defaultPhraseOptions() : Object
 	return {\
 		allowRelations: False:C215; \
 		allowCalculated: False:C215; \
-		allowAlias: False:C215}
+		allowAlias: False:C215; \
+		allowObject: False:C215}
 	
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***

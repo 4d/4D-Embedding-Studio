@@ -542,6 +542,27 @@
 			],
 			"Summary": ""
 		},
+		"isExcludedStorageType()": {
+			"Syntax": "**.isExcludedStorageType**( *attribute* : Object; *allowObject* : Boolean ) : Boolean",
+			"Params": [
+				[
+					"attribute",
+					"Object",
+					"->"
+				],
+				[
+					"allowObject",
+					"Boolean",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"hasField()": {
 			"Syntax": "**.hasField**( *dataclass* : 4D.DataClass; *fieldName* : Text ) : Boolean",
 			"Params": [

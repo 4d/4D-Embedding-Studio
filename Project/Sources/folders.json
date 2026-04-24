@@ -45,6 +45,7 @@
 	},
 	"TESTS": {
 		"methods": [
+			"test_dataclassAttributes",
 			"test_phrase",
 			"test_resolver",
 			"test_settings"

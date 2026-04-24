@@ -8,7 +8,7 @@ singleton Class constructor
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the collection of "supported" attributes for the given dataclass,
-	// filtered by the optional phrase options (allowRelations, allowCalculated, allowAlias).
+	// filtered by the optional phrase options (allowRelations, allowCalculated, allowAlias, allowObject).
 	// The base list is cached per dataclass; options filtering is applied on top without caching.
 Function forDataclass($dataclass : 4D:C1709.DataClass; $options : Object) : Collection
 	
@@ -33,6 +33,10 @@ In the embedding phrase, the supported attributes shall be:
 			var $attribute : Object:=$dataclass[$attrKey]
 			
 			If (String:C10($attribute.classID)="4D.Vector")
+				continue
+			End if 
+			
+			If (This:C1470.isExcludedStorageType($attribute; True:C214))
 				continue
 			End if 
 			
@@ -66,21 +70,25 @@ In the embedding phrase, the supported attributes shall be:
 	var $allowRelations : Boolean:=Bool:C1537($options#Null:C1517 ? $options.allowRelations : False:C215)
 	var $allowCalculated : Boolean:=Bool:C1537($options#Null:C1517 ? $options.allowCalculated : False:C215)
 	var $allowAlias : Boolean:=Bool:C1537($options#Null:C1517 ? $options.allowAlias : False:C215)
+	var $allowObject : Boolean:=Bool:C1537($options#Null:C1517 ? $options.allowObject : False:C215)
 	
-	If ($allowRelations & $allowCalculated & $allowAlias)
+	If ($allowRelations && $allowCalculated && $allowAlias && $allowObject)
 		return $base
 	End if 
 	
 	var $filtered:=[]
 	var $attr : Object
 	For each ($attr; $base)
-		If ($attr.kind="relatedEntity") & (Not:C34($allowRelations))
+		If (This:C1470.isExcludedStorageType($attr; $allowObject))
 			continue
 		End if 
-		If ($attr.kind="calculated") & (Not:C34($allowCalculated))
+		If ($attr.kind="relatedEntity") && (Not:C34($allowRelations))
 			continue
 		End if 
-		If ($attr.kind="alias") & (Not:C34($allowAlias))
+		If ($attr.kind="calculated") && (Not:C34($allowCalculated))
+			continue
+		End if 
+		If ($attr.kind="alias") && (Not:C34($allowAlias))
 			continue
 		End if 
 		$filtered.push($attr)
@@ -112,6 +120,17 @@ Function hasField($dataclass : 4D:C1709.DataClass; $fieldName : Text) : Boolean
 	End if 
 	
 	return Bool:C1537(This:C1470._fieldNameCache[$key][$fieldName])
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns True when a storage attribute should be excluded from a phrase.
+	// blob and image are always excluded; object is excluded unless $allowObject is True.
+Function isExcludedStorageType($attribute : Object; $allowObject : Boolean) : Boolean
+	
+	If ($attribute.kind#"storage")
+		return False:C215
+	End if 
+	return ($attribute.type="blob") || ($attribute.type="image")\
+		 || (($attribute.type="object") && Not:C34($allowObject))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Invalidate the cache. Call with no argument to clear everything,

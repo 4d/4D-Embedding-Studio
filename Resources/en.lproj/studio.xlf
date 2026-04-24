@@ -98,6 +98,10 @@
           <source>Alias attributes are not allowed: "{attribute}" cannot be used.</source>
           <target>Alias attributes are not allowed: "{attribute}" cannot be used.</target>
         </trans-unit>
+        <trans-unit id="24" resname="theAttributeTypeIsNotSupportedInAPhrase">
+          <source>The "{attribute}" attribute is of type blob, object or picture and cannot be used in this context.</source>
+          <target>The "{attribute}" attribute is of type blob, object or picture and cannot be used in this context.</target>
+        </trans-unit>
       </group>
       <group resname="Models">
         <trans-unit id="29" resname="name">

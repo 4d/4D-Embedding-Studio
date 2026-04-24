@@ -157,17 +157,21 @@ Function validate($dataclass : 4D:C1709.DataClass; $options : Object) : Object
 						
 						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("theAttributeIsA1NRelation"; $segment)})
 						
-					: ($attribute.kind="relatedEntity") && (Not:C34($allowRelations))
+					: (($attribute.kind="relatedEntity") && (Not:C34($allowRelations)))
 						
 						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("relationsAreNotAllowed"; $segment)})
 						
-					: ($attribute.kind="calculated") && (Not:C34($allowCalculated))
+					: (($attribute.kind="calculated") && (Not:C34($allowCalculated)))
 						
 						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("calculatedAttributeIsNotAllowed"; $segment)})
 						
-					: ($attribute.kind="alias") && (Not:C34($allowAlias))
+					: (($attribute.kind="alias") && (Not:C34($allowAlias)))
 						
 						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("aliasAttributeIsNotAllowed"; $segment)})
+						
+					: (cs:C1710._dataclassAttributes.me.isExcludedStorageType($attribute; $options#Null:C1517 ? Bool:C1537($options.allowObject) : False:C215))
+						
+						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("theAttributeTypeIsNotSupportedInAPhrase"; $segment)})
 						
 				End case 
 				

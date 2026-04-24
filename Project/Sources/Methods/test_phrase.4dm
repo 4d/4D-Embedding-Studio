@@ -159,5 +159,41 @@ ASSERT:C1129(Not:C34($v.success); "Validate multi-error: expected failure")
 ASSERT:C1129($v.errors.length=2; "Validate multi-error: expected 2 errors, got "+String:C10($v.errors.length))
 
 // ══════════════════════════════════════════════════════════════════════
+// VALIDATE TESTS — AllTypes (blob, object, picture rejected)
+// ══════════════════════════════════════════════════════════════════════
+
+// --- Scalar storage types accepted ---
+$tpl:=cs:C1710.Phrase.new("{Alpha} {Text} {Date} {Time} {Boolean} {Integer} {LongInteger} {Integer64} {Real}")
+$v:=$tpl.validate(ds:C1482.AllTypes)
+ASSERT:C1129($v.success; "AllTypes scalars: expected success, errors: "+JSON Stringify:C1217($v.errors))
+
+// --- Blob rejected ---
+$tpl:=cs:C1710.Phrase.new("{Blob}")
+$v:=$tpl.validate(ds:C1482.AllTypes)
+ASSERT:C1129(Not:C34($v.success); "AllTypes Blob: expected failure")
+ASSERT:C1129($v.errors.length=1; "AllTypes Blob: expected 1 error")
+ASSERT:C1129($v.errors[0].key="Blob"; "AllTypes Blob: error key mismatch")
+
+// --- Picture rejected ---
+$tpl:=cs:C1710.Phrase.new("{Picture}")
+$v:=$tpl.validate(ds:C1482.AllTypes)
+ASSERT:C1129(Not:C34($v.success); "AllTypes Picture: expected failure")
+ASSERT:C1129($v.errors.length=1; "AllTypes Picture: expected 1 error")
+ASSERT:C1129($v.errors[0].key="Picture"; "AllTypes Picture: error key mismatch")
+
+// --- Object rejected ---
+$tpl:=cs:C1710.Phrase.new("{Object}")
+$v:=$tpl.validate(ds:C1482.AllTypes)
+ASSERT:C1129(Not:C34($v.success); "AllTypes Object: expected failure")
+ASSERT:C1129($v.errors.length=1; "AllTypes Object: expected 1 error")
+ASSERT:C1129($v.errors[0].key="Object"; "AllTypes Object: error key mismatch")
+
+// --- Multiple unsupported types produce one error each ---
+$tpl:=cs:C1710.Phrase.new("{Blob} {Picture} {Object} {Alpha}")
+$v:=$tpl.validate(ds:C1482.AllTypes)
+ASSERT:C1129(Not:C34($v.success); "AllTypes multi unsupported: expected failure")
+ASSERT:C1129($v.errors.length=3; "AllTypes multi unsupported: expected 3 errors, got "+String:C10($v.errors.length))
+
+// ══════════════════════════════════════════════════════════════════════
 
 // ALERT("✅ All Phrase tests passed!")
