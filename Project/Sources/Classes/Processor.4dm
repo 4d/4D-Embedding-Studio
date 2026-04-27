@@ -1,5 +1,5 @@
 /**
- Thin wrapper around cs.AIKit.OpenAI embeddings API.
+ Thin wrapper around cs.embed.AIKit.OpenAI embeddings API.
  Stateless beyond configuration — safe to share between processes.
  Handles retries + rate-limit backoff; knows nothing about entities.
 **/

@@ -1,8 +1,8 @@
-# EmbeddingDefinition
+# Definition
 
-The `EmbeddingDefinition` class describes how a single vector field on a dataclass should be computed: which dataclass, which vector field, which model, and which text template ([Phrase](Phrase.md)) to render from each entity.
+The `Definition` class describes how a single vector field on a dataclass should be computed: which dataclass, which vector field, which model, and which text template ([Phrase](Phrase.md)) to render from each entity.
 
-A collection of these is what [EmbeddingSettings](EmbeddingSettings.md) persists.
+A collection of these is what [Settings](Settings.md) persists.
 
 ## Properties
 
@@ -25,7 +25,7 @@ Create a definition.
 | *phraseTemplate*  | Text | Phrase template with `{field}` placeholders — compiled into a [Phrase](Phrase.md). |
 
 ```4d
-var $def:=cs.EmbeddingDefinition.new(\
+var $def:=cs.embed.Definition.new(\
 	"Students"; \
 	"student_vector_1"; \
 	"text-embedding-3-small"; \
@@ -50,13 +50,13 @@ End if
 
 ### validate()
 
-**validate**( *settings* : EmbeddingSettings ) : Object
+**validate**( *settings* : Settings ) : Object
 
 Validates the definition against the live datastore model and the known embedding models. All errors are collected before returning — the result always describes the full set of problems found.
 
 | Argument        | Type                                             | Description                                                              |
 |-----------------|--------------------------------------------------|--------------------------------------------------------------------------|
-| *settings*      | [EmbeddingSettings](EmbeddingSettings.md) \| Null | Used to pass phrase validation options. Pass `Null` to skip phrase options. |
+| *settings*      | [Settings](Settings.md) \| Null | Used to pass phrase validation options. Pass `Null` to skip phrase options. |
 | Function result | Object                                           | `{success: Boolean, errors: Collection}` where each error is `{field: Text, message: Text}`. |
 
 Checked in order:
@@ -75,7 +75,7 @@ Checked in order:
 The first two checks (identity) return immediately on failure; the remaining checks accumulate so all problems are reported in one pass.
 
 ```4d
-var $result:=$def.validate(cs.EmbeddingSettings.new())
+var $result:=$def.validate(cs.embed.Settings.new())
 
 If (Not($result.success))
     var $err : Object
@@ -138,12 +138,12 @@ $def.toObject()
 
 ## Dirty flag convention
 
-The pipeline in [EmbeddingProcess](EmbeddingProcess.md) will recompute an entity whenever the target vector is `Null`, or when a sibling field `<vectorName>_dirty` exists on the dataclass and is `True`.
+The pipeline in [Process](Process.md) will recompute an entity whenever the target vector is `Null`, or when a sibling field `<vectorName>_dirty` exists on the dataclass and is `True`.
 
 Declaring the dirty flag is optional — when absent, only the null-vector case triggers recomputation. When present, it is cleared automatically on successful save.
 
 ## See also
 
-- [EmbeddingSettings](EmbeddingSettings.md)
-- [EmbeddingProcess](EmbeddingProcess.md)
+- [Settings](Settings.md)
+- [Process](Process.md)
 - [Phrase](Phrase.md)

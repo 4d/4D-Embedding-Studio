@@ -2,8 +2,8 @@
  Orchestrator for computing and storing embeddings on 4D entities.
 
  Usage:
-   var $p:=cs.EmbeddingProcess.new()              // uses defaults
-   var $p:=cs.EmbeddingProcess.new($settings; $options)
+   var $p:=cs.embed.Process.new()              // uses defaults
+   var $p:=cs.embed.Process.new($settings; $options)
 
    $p.process()                                    // all definitions in settings
    $p.process($def)                                // one or a collection of definitions
@@ -11,35 +11,35 @@
    $p.processEntity($entity; $def)
    $p.processEntitySelection($es; $def)
 
- All entry points return a cs.EmbeddingProcessResult.
+ All entry points return a cs.embed.ProcessResult.
 **/
 
-property settings : cs:C1710.EmbeddingSettings
-property processor : cs:C1710.EmbeddingProcessor
+property settings : cs:C1710.Settings
+property processor : cs:C1710.Processor
 property resolver : cs:C1710._EmbeddingResolver
 property options : Object  // { onProgress, dryRun, force, debug }
 property _failedModels : Collection
 
 // MARK:-[CONSTRUCTOR]
-Class constructor($settings : cs:C1710.EmbeddingSettings; $options : Object)
+Class constructor($settings : cs:C1710.Settings; $options : Object)
 	
-	This:C1470.settings:=$settings || cs:C1710.EmbeddingSettings.new()
+	This:C1470.settings:=$settings || cs:C1710.Settings.new()
 	This:C1470.resolver:=cs:C1710._EmbeddingResolver.new(This:C1470.settings)
 	This:C1470.options:=$options || {}
-	This:C1470.processor:=$options.processor || cs:C1710.EmbeddingProcessor.new()
+	This:C1470.processor:=$options.processor || cs:C1710.Processor.new()
 	This:C1470._failedModels:=[]
 	
 	// MARK:-[PUBLIC]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Process one, many, or all EmbeddingDefinitions across their full dataclass selections.
-	// $definition may be: Null (= all definitions in settings), a single EmbeddingDefinition,
-	//                     or a collection of EmbeddingDefinition.
-Function process($definition : Variant) : cs:C1710.EmbeddingProcessResult
+	// Process one, many, or all Definitions across their full dataclass selections.
+	// $definition may be: Null (= all definitions in settings), a single Definition,
+	//                     or a collection of Definition.
+Function process($definition : Variant) : cs:C1710.ProcessResult
 	
-	var $report : cs:C1710.EmbeddingProcessResult:=cs:C1710.EmbeddingProcessResult.new()
+	var $report : cs:C1710.ProcessResult:=cs:C1710.ProcessResult.new()
 	var $defs : Collection:=This:C1470.resolver.resolveForProcess($definition)
 	
-	var $def : cs:C1710.EmbeddingDefinition
+	var $def : cs:C1710.Definition
 	For each ($def; $defs)
 		
 		If (Not:C34(This:C1470._validateDefinition($def; $report)))
@@ -65,9 +65,9 @@ Function process($definition : Variant) : cs:C1710.EmbeddingProcessResult
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Process a single entity. $definition rules match resolveForEntity.
-Function processEntity($entity : 4D:C1709.Entity; $definition : Variant) : cs:C1710.EmbeddingProcessResult
+Function processEntity($entity : 4D:C1709.Entity; $definition : Variant) : cs:C1710.ProcessResult
 	
-	var $report : cs:C1710.EmbeddingProcessResult:=cs:C1710.EmbeddingProcessResult.new()
+	var $report : cs:C1710.ProcessResult:=cs:C1710.ProcessResult.new()
 	
 	If ($entity=Null:C1517)
 		
@@ -79,7 +79,7 @@ Function processEntity($entity : 4D:C1709.Entity; $definition : Variant) : cs:C1
 	var $dcName : Text:=This:C1470.resolver.dataclassNameFromEntity($entity)
 	var $defs : Collection:=This:C1470.resolver.resolveForEntity($definition; $dcName)
 	
-	var $def : cs:C1710.EmbeddingDefinition
+	var $def : cs:C1710.Definition
 	For each ($def; $defs)
 		
 		If (Not:C34(This:C1470._validateDefinition($def; $report)))
@@ -104,9 +104,9 @@ Function processEntity($entity : 4D:C1709.Entity; $definition : Variant) : cs:C1
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Process an entity selection. Preferred path for large jobs — honors batchSize.
-Function processEntitySelection($es : 4D:C1709.EntitySelection; $definition : Variant) : cs:C1710.EmbeddingProcessResult
+Function processEntitySelection($es : 4D:C1709.EntitySelection; $definition : Variant) : cs:C1710.ProcessResult
 	
-	var $report : cs:C1710.EmbeddingProcessResult:=cs:C1710.EmbeddingProcessResult.new()
+	var $report : cs:C1710.ProcessResult:=cs:C1710.ProcessResult.new()
 	
 	If ($es=Null:C1517)
 		
@@ -118,7 +118,7 @@ Function processEntitySelection($es : 4D:C1709.EntitySelection; $definition : Va
 	var $dcName : Text:=This:C1470.resolver.dataclassNameFromSelection($es)
 	var $defs : Collection:=This:C1470.resolver.resolveForEntity($definition; $dcName)
 	
-	var $def : cs:C1710.EmbeddingDefinition
+	var $def : cs:C1710.Definition
 	For each ($def; $defs)
 		
 		If (Not:C34(This:C1470._validateDefinition($def; $report)))
@@ -145,8 +145,8 @@ Function processEntitySelection($es : 4D:C1709.EntitySelection; $definition : Va
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Render the phrase for an entity and return the resulting text. No API call, no persistence.
 	// $definitionOrPhrase may be:
-	//   - cs.Phrase                  → used directly
-	//   - cs.EmbeddingDefinition     → uses $definition.phrase
+	//   - cs.embed.Phrase                  → used directly
+	//   - cs.embed.Definition     → uses $definition.phrase
 	//   - Text                       → compiled on the fly as a new Phrase
 	//   - Null                       → auto-resolved from settings (requires a unique match for $entity's dataclass)
 Function render($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) : Text
@@ -190,7 +190,7 @@ Function embed($input : Variant; $context : Variant; $model : Text) : 4D:C1709.V
 			// ______________________________________________________
 		: (Value type:C1509($input)=Is text:K8:3)
 			
-			// Text input → $context is the model (or an EmbeddingDefinition holding a model)
+			// Text input → $context is the model (or an Definition holding a model)
 			$text:=$input
 			
 			Case of 
@@ -199,7 +199,7 @@ Function embed($input : Variant; $context : Variant; $model : Text) : 4D:C1709.V
 					
 					$modelName:=$context
 					
-				: (OB Instance of:C1731($context; cs:C1710.EmbeddingDefinition))
+				: (OB Instance of:C1731($context; cs:C1710.Definition))
 					
 					$modelName:=String:C10($context.model)
 					
@@ -220,7 +220,7 @@ Function embed($input : Variant; $context : Variant; $model : Text) : 4D:C1709.V
 			$text:=$phrase.render($input)
 			
 			// Pick model from $context if it's a definition, otherwise rely on $model, otherwise auto-resolve
-			If (OB Instance of:C1731($context; cs:C1710.EmbeddingDefinition))
+			If (OB Instance of:C1731($context; cs:C1710.Definition))
 				
 				$modelName:=String:C10($context.model)
 				
@@ -228,7 +228,7 @@ Function embed($input : Variant; $context : Variant; $model : Text) : 4D:C1709.V
 			
 			If (Length:C16($modelName)=0)
 				
-				var $resolved : cs:C1710.EmbeddingDefinition:=This:C1470._resolveDefinitionFromEntity($input)
+				var $resolved : cs:C1710.Definition:=This:C1470._resolveDefinitionFromEntity($input)
 				If ($resolved#Null:C1517)
 					
 					$modelName:=String:C10($resolved.model)
@@ -248,7 +248,7 @@ Function embed($input : Variant; $context : Variant; $model : Text) : 4D:C1709.V
 	return This:C1470.processor.embed($text; $modelName)
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-	// Polymorphic phrase extraction: Phrase | EmbeddingDefinition | Text template | Null (auto-resolve).
+	// Polymorphic phrase extraction: Phrase | Definition | Text template | Null (auto-resolve).
 Function _phraseFrom($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) : cs:C1710.Phrase
 	
 	Case of 
@@ -259,7 +259,7 @@ Function _phraseFrom($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) :
 			return $definitionOrPhrase
 			
 			// ______________________________________________________
-		: (OB Instance of:C1731($definitionOrPhrase; cs:C1710.EmbeddingDefinition))
+		: (OB Instance of:C1731($definitionOrPhrase; cs:C1710.Definition))
 			
 			return $definitionOrPhrase.phrase
 			
@@ -271,7 +271,7 @@ Function _phraseFrom($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) :
 			// ______________________________________________________
 		: ($definitionOrPhrase=Null:C1517)
 			
-			var $resolved : cs:C1710.EmbeddingDefinition:=This:C1470._resolveDefinitionFromEntity($entity)
+			var $resolved : cs:C1710.Definition:=This:C1470._resolveDefinitionFromEntity($entity)
 			return ($resolved=Null:C1517) ? Null:C1517 : $resolved.phrase
 			
 			// ______________________________________________________
@@ -282,7 +282,7 @@ Function _phraseFrom($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) :
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Best-effort resolution of a single definition for an entity's dataclass.
 	// Returns Null when the match is not unique (0 or >1) — caller must specify explicitly.
-Function _resolveDefinitionFromEntity($entity : 4D:C1709.Entity) : cs:C1710.EmbeddingDefinition
+Function _resolveDefinitionFromEntity($entity : 4D:C1709.Entity) : cs:C1710.Definition
 	
 	If ($entity=Null:C1517)
 		
@@ -297,7 +297,7 @@ Function _resolveDefinitionFromEntity($entity : 4D:C1709.Entity) : cs:C1710.Embe
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Validates a definition before running. On failure, records all errors in report and returns False.
-Function _validateDefinition($def : cs:C1710.EmbeddingDefinition; $report : cs:C1710.EmbeddingProcessResult) : Boolean
+Function _validateDefinition($def : cs:C1710.Definition; $report : cs:C1710.ProcessResult) : Boolean
 	
 	If ($def=Null:C1517)
 		
@@ -323,7 +323,7 @@ Function _validateDefinition($def : cs:C1710.EmbeddingDefinition; $report : cs:C
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Single-entity fast path (no chunking, no server-side filter).
-Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.EmbeddingDefinition; $report : cs:C1710.EmbeddingProcessResult)
+Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.Definition; $report : cs:C1710.ProcessResult)
 	
 	var $dc : 4D:C1709.DataClass:=$entity.getDataClass()
 	var $dirtyField : Text:=$def.vectorName+"_dirty"
@@ -403,7 +403,7 @@ Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.EmbeddingDefini
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Core pipeline: filter → chunk → embed → persist.
-Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.EmbeddingDefinition; $report : cs:C1710.EmbeddingProcessResult)
+Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Definition; $report : cs:C1710.ProcessResult)
 	
 	var $dc : 4D:C1709.DataClass:=ds:C1482[$def.dataclassName]
 	var $dirtyField : Text:=$def.vectorName+"_dirty"
@@ -479,7 +479,7 @@ Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Embeddi
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Filter an entity selection down to rows that need (re)computation.
 	// Uses server-side query when possible (vector is null OR dirty flag set).
-Function _filterNeedsRecompute($es : 4D:C1709.EntitySelection; $def : cs:C1710.EmbeddingDefinition; $hasDirty : Boolean) : 4D:C1709.EntitySelection
+Function _filterNeedsRecompute($es : 4D:C1709.EntitySelection; $def : cs:C1710.Definition; $hasDirty : Boolean) : 4D:C1709.EntitySelection
 	
 	If (Bool:C1537(This:C1470.options.force))
 		
@@ -487,7 +487,7 @@ Function _filterNeedsRecompute($es : 4D:C1709.EntitySelection; $def : cs:C1710.E
 		
 	End if 
 	
-	// Attribute names come from EmbeddingDefinition (developer-controlled), not user input,
+	// Attribute names come from Definition (developer-controlled), not user input,
 	// so interpolating them into the query string is safe.
 	var $q : Text:=$def.vectorName+" = null"
 	
@@ -501,7 +501,7 @@ Function _filterNeedsRecompute($es : 4D:C1709.EntitySelection; $def : cs:C1710.E
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Process one chunk: build texts, call API once, zip vectors back, persist each entity.
-Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.EmbeddingDefinition; $hasDirty : Boolean; $dirtyField : Text; $report : cs:C1710.EmbeddingProcessResult)
+Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Definition; $hasDirty : Boolean; $dirtyField : Text; $report : cs:C1710.ProcessResult)
 	
 	// Build texts (positional: $texts[i] corresponds to $chunk entity #i)
 	var $texts : Collection:=[]
@@ -585,7 +585,7 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Embedd
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Fire optional onProgress callback (Formula receiving ({definition, report})).
-Function _notifyProgress($def : cs:C1710.EmbeddingDefinition; $report : cs:C1710.EmbeddingProcessResult)
+Function _notifyProgress($def : cs:C1710.Definition; $report : cs:C1710.ProcessResult)
 	
 	var $cb : 4D:C1709.Function:=This:C1470.options.onProgress
 	

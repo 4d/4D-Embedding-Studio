@@ -17,7 +17,7 @@ Class constructor()
 	// Records an error scoped to a definition, a chunk, or a single entity.
 	// $scope : "definition" | "chunk" | "entity"
 	// $ref   : caller-defined identifier (dataclass/vectorName, entity primary key, …)
-Function _addError($scope : Text; $ref : Variant; $message : Text) : cs:C1710.EmbeddingProcessResult
+Function _addError($scope : Text; $ref : Variant; $message : Text) : cs:C1710.ProcessResult
 	
 	This:C1470.errors.push({\
 		scope: $scope; \
@@ -28,7 +28,7 @@ Function _addError($scope : Text; $ref : Variant; $message : Text) : cs:C1710.Em
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Finalize the report (captures durationMs). Chainable.
-Function _done() : cs:C1710.EmbeddingProcessResult
+Function _done() : cs:C1710.ProcessResult
 	
 	This:C1470.durationMs:=Milliseconds:C459-This:C1470._startMs
 	

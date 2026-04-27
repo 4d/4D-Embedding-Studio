@@ -1,6 +1,6 @@
-# EmbeddingProcess
+# Process
 
-The `EmbeddingProcess` class orchestrates the full embedding pipeline: it browses 4D entities, renders text from their fields using an [EmbeddingDefinition](EmbeddingDefinition.md), calls the embeddings API through an [EmbeddingProcessor](EmbeddingProcessor.md), and stores the resulting `4D.Vector` on each entity.
+The `Process` class orchestrates the full embedding pipeline: it browses 4D entities, renders text from their fields using an [Definition](Definition.md), calls the embeddings API through an [Processor](Processor.md), and stores the resulting `4D.Vector` on each entity.
 
 It also exposes non-persisting helpers for previewing rendered phrases and computing one-off vectors (for similarity search queries, debugging, or experimentation).
 
@@ -8,8 +8,8 @@ It also exposes non-persisting helpers for previewing rendered phrases and compu
 
 | Property Name | Type                                                    | Description                                              |
 |---------------|---------------------------------------------------------|----------------------------------------------------------|
-| `settings`    | [EmbeddingSettings](EmbeddingSettings.md)               | The settings (vectors, batch size, phrase validation options). |
-| `processor`   | [EmbeddingProcessor](EmbeddingProcessor.md)             | The API-calling engine. Stateless and swappable.         |
+| `settings`    | [Settings](Settings.md)               | The settings (vectors, batch size, phrase validation options). |
+| `processor`   | [Processor](Processor.md)             | The API-calling engine. Stateless and swappable.         |
 | `options`     | Object                                                  | Runtime options: `onProgress`, `dryRun`, `force`, `processor`. |
 
 ### Options object
@@ -19,7 +19,7 @@ It also exposes non-persisting helpers for previewing rendered phrases and compu
 | `onProgress` | 4D.Function | Called after each chunk with `{definition, report}`.                       |
 | `dryRun`     | Boolean   | If `True`, runs the whole pipeline without calling the API or saving.       |
 | `force`      | Boolean   | If `True`, recomputes every entity ignoring null-vector / dirty-flag filter. |
-| `processor`  | [EmbeddingProcessor](EmbeddingProcessor.md) | Inject a custom processor (otherwise a default one is created). |
+| `processor`  | [Processor](Processor.md) | Inject a custom processor (otherwise a default one is created). |
 
 ## Class constructor
 
@@ -27,18 +27,18 @@ Create an instance of the orchestrator.
 
 | Argument Name | Type                                      | Description                                                         |
 |---------------|-------------------------------------------|---------------------------------------------------------------------|
-| *settings*    | [EmbeddingSettings](EmbeddingSettings.md) | Optional. If omitted, settings are loaded from the default `Settings/vectors.json`. |
+| *settings*    | [Settings](Settings.md) | Optional. If omitted, settings are loaded from the default `Settings/vectors.json`. |
 | *options*     | Object                                    | Optional runtime options (see table above).                         |
 
 ```4d
 // Simplest — uses defaults
-var $p:=cs.EmbeddingProcess.new()
+var $p:=cs.embed.Process.new()
 
 // With explicit settings
-var $p:=cs.EmbeddingProcess.new($settings)
+var $p:=cs.embed.Process.new($settings)
 
 // With options
-var $p:=cs.EmbeddingProcess.new($settings; {\
+var $p:=cs.embed.Process.new($settings; {\
 	force: True; \
 	onProgress: Formula(ALERT("chunk done: "+String($1.report.entitiesUpdated)))})
 ```
@@ -47,14 +47,14 @@ var $p:=cs.EmbeddingProcess.new($settings; {\
 
 ### process()
 
-**process**(*definition* : Variant) : [EmbeddingProcessResult](EmbeddingProcessResult.md)
+**process**(*definition* : Variant) : [ProcessResult](ProcessResult.md)
 
-Process one, many, or all [EmbeddingDefinition](EmbeddingDefinition.md) entries against the full content of their target dataclass.
+Process one, many, or all [Definition](Definition.md) entries against the full content of their target dataclass.
 
 | Argument        | Type                                                                        | Description                                                                 |
 |-----------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------|
-| *definition*    | `Null`, [EmbeddingDefinition](EmbeddingDefinition.md), or Collection        | `Null` → process every definition in settings. Otherwise process the given one(s). |
-| Function result | [EmbeddingProcessResult](EmbeddingProcessResult.md)                         | Statistics and per-error breakdown.                                         |
+| *definition*    | `Null`, [Definition](Definition.md), or Collection        | `Null` → process every definition in settings. Otherwise process the given one(s). |
+| Function result | [ProcessResult](ProcessResult.md)                         | Statistics and per-error breakdown.                                         |
 
 ```4d
 // Every definition in settings
@@ -69,15 +69,15 @@ var $r:=$p.process([$def1; $def2])
 
 ### processEntity()
 
-**processEntity**(*entity* : 4D.Entity ; *definition* : Variant) : [EmbeddingProcessResult](EmbeddingProcessResult.md)
+**processEntity**(*entity* : 4D.Entity ; *definition* : Variant) : [ProcessResult](ProcessResult.md)
 
 Process a single entity. Cheap path — no chunking, no server-side filter.
 
 | Argument        | Type                                                                                      | Description                                                                 |
 |-----------------|-------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | *entity*        | 4D.Entity                                                                                 | The entity to (re)compute vectors for.                                      |
-| *definition*    | `Null`, [EmbeddingDefinition](EmbeddingDefinition.md), Collection, or `{vectorName: ...}` | See [resolution rules](#definition-resolution). `Null` infers from entity's dataclass. |
-| Function result | [EmbeddingProcessResult](EmbeddingProcessResult.md)                                       | Statistics and per-error breakdown.                                         |
+| *definition*    | `Null`, [Definition](Definition.md), Collection, or `{vectorName: ...}` | See [resolution rules](#definition-resolution). `Null` infers from entity's dataclass. |
+| Function result | [ProcessResult](ProcessResult.md)                                       | Statistics and per-error breakdown.                                         |
 
 ```4d
 // Auto-resolve every definition matching this entity's dataclass
@@ -92,15 +92,15 @@ var $r:=$p.processEntity($entity; {vectorName: "student_vector_1"})
 
 ### processEntitySelection()
 
-**processEntitySelection**(*selection* : 4D.EntitySelection ; *definition* : Variant) : [EmbeddingProcessResult](EmbeddingProcessResult.md)
+**processEntitySelection**(*selection* : 4D.EntitySelection ; *definition* : Variant) : [ProcessResult](ProcessResult.md)
 
 Workhorse path for large jobs. Chunks the selection by `settings.batchSize`, sends one API call per chunk, saves each entity individually.
 
 | Argument        | Type                                                                                      | Description                                                                 |
 |-----------------|-------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | *selection*     | 4D.EntitySelection                                                                        | Entities to process. Pre-filtering by the caller is allowed; the pipeline still applies its null/dirty filter. |
-| *definition*    | `Null`, [EmbeddingDefinition](EmbeddingDefinition.md), Collection, or `{vectorName: ...}` | See [resolution rules](#definition-resolution).                             |
-| Function result | [EmbeddingProcessResult](EmbeddingProcessResult.md)                                       | Statistics and per-error breakdown.                                         |
+| *definition*    | `Null`, [Definition](Definition.md), Collection, or `{vectorName: ...}` | See [resolution rules](#definition-resolution).                             |
+| Function result | [ProcessResult](ProcessResult.md)                                       | Statistics and per-error breakdown.                                         |
 
 ```4d
 var $todo:=ds.Students.query("country = :1"; "FR")
@@ -114,7 +114,7 @@ The polymorphic *definition* argument accepted by `processEntity` and `processEn
 | Input                                                      | Behavior                                                                 |
 |------------------------------------------------------------|--------------------------------------------------------------------------|
 | `Null`                                                     | All definitions in settings whose `dataclassName` matches the entity/selection. |
-| [EmbeddingDefinition](EmbeddingDefinition.md)              | Used as-is; the `dataclassName` must match the entity/selection.         |
+| [Definition](Definition.md)              | Used as-is; the `dataclassName` must match the entity/selection.         |
 | `{vectorName: "..."}`                                      | Looked up in settings by `vectorName` against the entity/selection dataclass. |
 | Collection                                                 | Each item resolved using the rules above; mismatches are silently dropped. |
 
@@ -145,13 +145,13 @@ Render a phrase for an entity and return the resulting text. No API call, no per
 | Argument              | Type                                                                        | Description                                                                 |
 |-----------------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | *entity*              | 4D.Entity                                                                   | The entity to render against.                                               |
-| *definitionOrPhrase*  | `Null`, [Phrase](Phrase.md), [EmbeddingDefinition](EmbeddingDefinition.md), or Text | `Null` → auto-resolve via settings (requires a unique match). Text → compiled as a throwaway `cs.Phrase`. |
+| *definitionOrPhrase*  | `Null`, [Phrase](Phrase.md), [Definition](Definition.md), or Text | `Null` → auto-resolve via settings (requires a unique match). Text → compiled as a throwaway `cs.embed.Phrase`. |
 | Function result       | Text                                                                        | The rendered text.                                                          |
 
 ```4d
 var $text: Text
 $text:=$p.render($student; $def)                        // use def's phrase
-$text:=$p.render($student; cs.Phrase.new("Hi {firstName}"))
+$text:=$p.render($student; cs.embed.Phrase.new("Hi {firstName}"))
 $text:=$p.render($student; "Student: {lastName}")       // raw template
 $text:=$p.render($student)                              // auto-resolve
 ```
@@ -165,7 +165,7 @@ Compute a vector for an arbitrary input, without persisting anywhere.
 | Argument        | Type                                                                                     | Description                                                                 |
 |-----------------|------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | *input*         | Text or 4D.Entity                                                                        | Text → embedded directly. Entity → phrase rendered then embedded.          |
-| *context*       | Text, [Phrase](Phrase.md), [EmbeddingDefinition](EmbeddingDefinition.md), Text template, or `Null` | Provides phrase and/or model depending on *input*.                          |
+| *context*       | Text, [Phrase](Phrase.md), [Definition](Definition.md), Text template, or `Null` | Provides phrase and/or model depending on *input*.                          |
 | *model*         | Text                                                                                     | Optional explicit model name. Used when *context* does not carry one.      |
 | Function result | 4D.Vector                                                                                | The embedding vector.                                                       |
 
@@ -194,8 +194,8 @@ $vector:=$p.embed($student)
 
 ## See also
 
-- [EmbeddingSettings](EmbeddingSettings.md)
-- [EmbeddingDefinition](EmbeddingDefinition.md)
-- [EmbeddingProcessor](EmbeddingProcessor.md)
-- [EmbeddingProcessResult](EmbeddingProcessResult.md)
+- [Settings](Settings.md)
+- [Definition](Definition.md)
+- [Processor](Processor.md)
+- [ProcessResult](ProcessResult.md)
 - [Phrase](Phrase.md)

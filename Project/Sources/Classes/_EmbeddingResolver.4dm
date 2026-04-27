@@ -1,13 +1,13 @@
 /**
- Private helper for EmbeddingProcess.
+ Private helper for Process.
  Turns the polymorphic $definition parameter (Null | single | collection | vectorName-only stub)
- into a concrete Collection of cs.EmbeddingDefinition, using the provided EmbeddingSettings
+ into a concrete Collection of cs.embed.Definition, using the provided Settings
  and optionally an entity/entitySelection to infer dataclassName.
 **/
 
-property settings : cs:C1710.EmbeddingSettings
+property settings : cs:C1710.Settings
 
-Class constructor($settings : cs:C1710.EmbeddingSettings)
+Class constructor($settings : cs:C1710.Settings)
 
 	This:C1470.settings:=$settings
 
@@ -60,7 +60,7 @@ Function resolveForEntity($definition : Variant; $contextDataclassName : Text) :
 			var $item : Variant
 			For each ($item; $definition)
 
-				var $resolved : cs:C1710.EmbeddingDefinition:=This:C1470._resolveOne($item; $contextDataclassName)
+				var $resolved : cs:C1710.Definition:=This:C1470._resolveOne($item; $contextDataclassName)
 				If ($resolved#Null:C1517)
 
 					$out.push($resolved)
@@ -73,7 +73,7 @@ Function resolveForEntity($definition : Variant; $contextDataclassName : Text) :
 			// ______________________________________________________
 		: (Value type:C1509($definition)=Is object:K8:27)
 
-			var $single : cs:C1710.EmbeddingDefinition:=This:C1470._resolveOne($definition; $contextDataclassName)
+			var $single : cs:C1710.Definition:=This:C1470._resolveOne($definition; $contextDataclassName)
 			return ($single=Null:C1517) ? [] : [$single]
 
 			// ______________________________________________________
@@ -112,7 +112,7 @@ Function dataclassNameFromSelection($es : 4D:C1709.EntitySelection) : Text
 	// - Fully-specified definition (dataclassName+vectorName): returned as-is if dataclass matches.
 	// - Stub with only vectorName: looked up in settings against the context dataclass.
 	// - Mismatched dataclass: returns Null (caller records the error).
-Function _resolveOne($candidate : Object; $contextDataclassName : Text) : cs:C1710.EmbeddingDefinition
+Function _resolveOne($candidate : Object; $contextDataclassName : Text) : cs:C1710.Definition
 
 	If ($candidate=Null:C1517)
 
@@ -149,8 +149,8 @@ Function _resolveOne($candidate : Object; $contextDataclassName : Text) : cs:C17
 
 	End if
 
-	// If it's already a full EmbeddingDefinition, pass through
-	If (OB Instance of:C1731($candidate; cs:C1710.EmbeddingDefinition))
+	// If it's already a full Definition, pass through
+	If (OB Instance of:C1731($candidate; cs:C1710.Definition))
 
 		return $candidate
 

@@ -20,7 +20,7 @@ Function get hasDefinition : Boolean
 	// Validates the definition against the live ds model and known models from settings.
 	// Returns {success: Boolean, errors: Collection of {field, message}}
 	// $settings may be Null — phrase validation will run without options.
-Function validate($settings : cs:C1710.EmbeddingSettings) : Object
+Function validate($settings : cs:C1710.Settings) : Object
 	
 	var $errors:=[]
 	

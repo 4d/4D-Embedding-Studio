@@ -1,5 +1,5 @@
 //%attributes = {}
-// Unit tests for cs.Phrase
+// Unit tests for cs.embed.Phrase
 
 var $tpl : cs:C1710.Phrase
 var $result : Text

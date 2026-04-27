@@ -1,6 +1,6 @@
-# EmbeddingProcessor
+# Processor
 
-The `EmbeddingProcessor` class is a thin wrapper around [cs.AIKit.OpenAI](https://github.com/4d/4D-AIKit/blob/main/Documentation/Classes/OpenAI.md) focused on embeddings. It exposes two functions — one for a single text, one for a batch — and handles retries with exponential backoff (respecting the `Retry-After` header when present).
+The `Processor` class is a thin wrapper around [cs.embed.AIKit.OpenAI](https://github.com/4d/4D-AIKit/blob/main/Documentation/Classes/OpenAI.md) focused on embeddings. It exposes two functions — one for a single text, one for a batch — and handles retries with exponential backoff (respecting the `Retry-After` header when present).
 
 It is stateless beyond configuration and safe to share between processes.
 
@@ -8,7 +8,7 @@ It is stateless beyond configuration and safe to share between processes.
 
 | Property Name | Type                    | Description                                                  |
 |---------------|-------------------------|--------------------------------------------------------------|
-| `client`      | cs.AIKit.OpenAI         | The underlying AIKit client used for HTTP requests.          |
+| `client`      | cs.embed.AIKit.OpenAI         | The underlying AIKit client used for HTTP requests.          |
 | `maxRetries`  | Integer                 | Maximum number of retries on transient errors. Default: `3`. |
 | `backoffMs`   | Integer                 | Base delay (ms) between retries. Doubled each attempt.       |
 
@@ -21,12 +21,12 @@ Create a processor. All options are optional.
 | *options*     | Object | `{client, maxRetries, backoffMs}` — any field may be omitted.               |
 
 ```4d
-// Default — uses cs.AIKit.OpenAI.new() internally
-var $proc:=cs.EmbeddingProcessor.new()
+// Default — uses cs.embed.AIKit.OpenAI.new() internally
+var $proc:=cs.embed.Processor.new()
 
 // Provide a pre-configured AIKit client (custom API key, base URL, etc.)
-var $client:=cs.AIKit.OpenAI.new({apiKey: "…"; baseURL: "https://server.ai"})
-var $proc:=cs.EmbeddingProcessor.new({client: $client; maxRetries: 5; backoffMs: 1000})
+var $client:=cs.embed.AIKit.OpenAI.new({apiKey: "…"; baseURL: "https://server.ai"})
+var $proc:=cs.embed.Processor.new({client: $client; maxRetries: 5; backoffMs: 1000})
 ```
 
 ## Functions
@@ -78,5 +78,5 @@ Non-retryable errors are thrown immediately — see [OpenAIError](https://github
 
 ## See also
 
-- [EmbeddingProcess](EmbeddingProcess.md)
+- [Process](Process.md)
 - [OpenAIEmbeddingsAPI](https://github.com/4d/4D-AIKit/blob/main/Documentation/Classes/OpenAIEmbeddingsAPI.md) (AIKit)

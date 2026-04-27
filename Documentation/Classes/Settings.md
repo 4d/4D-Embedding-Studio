@@ -1,6 +1,6 @@
-# EmbeddingSettings
+# Settings
 
-The `EmbeddingSettings` class is the persisted configuration for the embedding pipeline. It loads and saves a JSON file (default: `Settings/vectors.json`) containing a list of [EmbeddingDefinition](EmbeddingDefinition.md) entries, a batch size, and phrase-validation options.
+The `Settings` class is the persisted configuration for the embedding pipeline. It loads and saves a JSON file (default: `Settings/vectors.json`) containing a list of [Definition](Definition.md) entries, a batch size, and phrase-validation options.
 
 Unknown top-level keys found in the JSON (e.g. `"models"`) are preserved on load and re-emitted on save.
 
@@ -9,8 +9,8 @@ Unknown top-level keys found in the JSON (e.g. `"models"`) are preserved on load
 | Property Name | Type                                                     | Description                                                                 |
 |---------------|----------------------------------------------------------|-----------------------------------------------------------------------------|
 | `file`        | 4D.File                                                  | The backing JSON file.                                                      |
-| `vectors`     | Collection of [EmbeddingDefinition](EmbeddingDefinition.md) | The configured definitions.                                                 |
-| `batchSize`   | Integer                                                  | Chunk size used by [EmbeddingProcess.processEntitySelection](EmbeddingProcess.md#processentityselection). Default: `50`. |
+| `vectors`     | Collection of [Definition](Definition.md) | The configured definitions.                                                 |
+| `batchSize`   | Integer                                                  | Chunk size used by [Process.processEntitySelection](Process.md#processentityselection). Default: `50`. |
 | `phrase`      | Object                                                   | Phrase-validation options (see below).                                      |
 
 ### phrase options
@@ -55,10 +55,10 @@ Create a settings instance. The backing file is loaded immediately.
 
 ```4d
 // Default location
-var $settings:=cs.EmbeddingSettings.new()
+var $settings:=cs.embed.Settings.new()
 
 // Custom file
-var $settings:=cs.EmbeddingSettings.new(File("/some/path/custom.json"))
+var $settings:=cs.embed.Settings.new(File("/some/path/custom.json"))
 ```
 
 ## Functions
@@ -76,14 +76,14 @@ Reload the backing file into memory, overwriting in-memory state. Missing or mal
 Serialize the current in-memory state to the backing file. Preserves unknown top-level keys that were present on load.
 
 ```4d
-$settings.vectors.push(cs.EmbeddingDefinition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName}"))
+$settings.vectors.push(cs.embed.Definition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName}"))
 $settings.batchSize:=100
 $settings.save()
 ```
 
 ### find()
 
-**find**(*dataclassName* : Text ; *vectorName* : Text) : [EmbeddingDefinition](EmbeddingDefinition.md)
+**find**(*dataclassName* : Text ; *vectorName* : Text) : [Definition](Definition.md)
 
 Look up the saved definition for the given dataclass/vector pair.
 
@@ -91,7 +91,7 @@ Look up the saved definition for the given dataclass/vector pair.
 |-----------------|-----------------------------------------------|-----------------------------------------------------|
 | *dataclassName* | Text                                          | Name of the dataclass.                              |
 | *vectorName*    | Text                                          | Name of the vector field on that dataclass.         |
-| Function result | [EmbeddingDefinition](EmbeddingDefinition.md) | The matching definition, or `Null` if none matches. |
+| Function result | [Definition](Definition.md) | The matching definition, or `Null` if none matches. |
 
 ```4d
 var $def:=$settings.find("Students"; "student_vector_1")
@@ -101,19 +101,19 @@ var $def:=$settings.find("Students"; "student_vector_1")
 
 **invalidateVectors**() : Object
 
-Calls [`invalidateVectors()`](EmbeddingDefinition.md#invalidatevectors) on every definition in `vectors` and merges the results into a single status object.
+Calls [`invalidateVectors()`](Definition.md#invalidatevectors) on every definition in `vectors` and merges the results into a single status object.
 
 | Argument        | Type   | Description                                                                 |
 |-----------------|--------|-----------------------------------------------------------------------------|
 | Function result | Object | `{updated: Integer, skipped: Integer, errors: Collection of Text}` — accumulated across all definitions. |
 
 ```4d
-var $result:=cs.EmbeddingSettings.new().invalidateVectors()
+var $result:=cs.embed.Settings.new().invalidateVectors()
 // → { updated: 120; skipped: 0; errors: [] }
 ```
 
 ## See also
 
-- [EmbeddingDefinition](EmbeddingDefinition.md)
-- [EmbeddingProcess](EmbeddingProcess.md)
+- [Definition](Definition.md)
+- [Process](Process.md)
 - [Phrase](Phrase.md)

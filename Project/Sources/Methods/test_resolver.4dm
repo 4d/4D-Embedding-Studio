@@ -1,14 +1,14 @@
 //%attributes = {}
-// Unit tests for cs._EmbeddingResolver
+// Unit tests for cs.embed._EmbeddingResolver
 
-// Build a cs.EmbeddingSettings pointing at a file that does not exist,
+// Build a cs.embed.Settings pointing at a file that does not exist,
 // so constructor/load does no I/O. We then populate .vectors manually.
 var $noFile : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).file("Settings/__test_resolver_nonexistent.json")
-var $settings : cs:C1710.EmbeddingSettings:=cs:C1710.EmbeddingSettings.new($noFile)
+var $settings : cs:C1710.Settings:=cs:C1710.Settings.new($noFile)
 
-var $defStudentsV1 : cs:C1710.EmbeddingDefinition:=cs:C1710.EmbeddingDefinition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName}")
-var $defStudentsV2 : cs:C1710.EmbeddingDefinition:=cs:C1710.EmbeddingDefinition.new("Students"; "student_vector_2"; "text-embedding-3-small"; "{lastName}")
-var $defSchoolV1 : cs:C1710.EmbeddingDefinition:=cs:C1710.EmbeddingDefinition.new("School"; "school_vector_1"; "text-embedding-3-small"; "{name}")
+var $defStudentsV1 : cs:C1710.Definition:=cs:C1710.Definition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName}")
+var $defStudentsV2 : cs:C1710.Definition:=cs:C1710.Definition.new("Students"; "student_vector_2"; "text-embedding-3-small"; "{lastName}")
+var $defSchoolV1 : cs:C1710.Definition:=cs:C1710.Definition.new("School"; "school_vector_1"; "text-embedding-3-small"; "{name}")
 
 $settings.vectors:=[$defStudentsV1; $defStudentsV2; $defSchoolV1]
 
@@ -70,12 +70,12 @@ ASSERT:C1129($out.length=0; "resolveForEntity(Null, Unknown): expected empty")
 $out:=$resolver.resolveForEntity(Null:C1517; "")
 ASSERT:C1129($out.length=0; "resolveForEntity(Null, ''): expected empty")
 
-// --- Fully-specified EmbeddingDefinition matching context → returned ---
+// --- Fully-specified Definition matching context → returned ---
 $out:=$resolver.resolveForEntity($defStudentsV1; "Students")
 ASSERT:C1129($out.length=1; "resolveForEntity(match): expected 1")
 ASSERT:C1129($out[0].vectorName="student_vector_1"; "resolveForEntity(match): wrong def")
 
-// --- Fully-specified EmbeddingDefinition mismatching context → empty ---
+// --- Fully-specified Definition mismatching context → empty ---
 $out:=$resolver.resolveForEntity($defSchoolV1; "Students")
 ASSERT:C1129($out.length=0; "resolveForEntity(mismatch): expected empty (School def, Students context)")
 
@@ -98,19 +98,19 @@ ASSERT:C1129($out.length=0; "resolveForEntity(stub, no context): expected empty"
 $out:=$resolver.resolveForEntity({vectorName: ""}; "Students")
 ASSERT:C1129($out.length=0; "resolveForEntity(empty vectorName): expected empty")
 
-// --- Plain object (non-EmbeddingDefinition) with dataclassName+vectorName → looked up in settings ---
+// --- Plain object (non-Definition) with dataclassName+vectorName → looked up in settings ---
 var $plain : Object:={dataclassName: "Students"; vectorName: "student_vector_1"}
 $out:=$resolver.resolveForEntity($plain; "Students")
 ASSERT:C1129($out.length=1; "resolveForEntity(plain object): expected 1")
-ASSERT:C1129(OB Instance of:C1731($out[0]; cs:C1710.EmbeddingDefinition); "resolveForEntity(plain): must return real EmbeddingDefinition")
+ASSERT:C1129(OB Instance of:C1731($out[0]; cs:C1710.Definition); "resolveForEntity(plain): must return real Definition")
 ASSERT:C1129($out[0].model="text-embedding-3-small"; "resolveForEntity(plain): model should come from settings")
 
 // --- Collection of mixed shapes ---
 $out:=$resolver.resolveForEntity([\
-	$defStudentsV1; \
-	{vectorName: "student_vector_2"}; \
-	$defSchoolV1\
-	]; "Students")
+$defStudentsV1; \
+{vectorName: "student_vector_2"}; \
+$defSchoolV1\
+]; "Students")
 ASSERT:C1129($out.length=2; "resolveForEntity(mixed collection): expected 2 kept (School one dropped), got "+String:C10($out.length))
 
 // --- Collection with all mismatches → empty ---
@@ -141,17 +141,17 @@ ASSERT:C1129($resolver.dataclassNameFromSelection($sel)="Students"; "dataclassNa
 
 // --- Real entity from ds.Students (only if there is at least one row) ---
 If ($sel.length>0)
-
+	
 	var $e : 4D:C1709.Entity:=$sel.first()
 	ASSERT:C1129($resolver.dataclassNameFromEntity($e)="Students"; "dataclassNameFromEntity: expected 'Students'")
-
-End if
+	
+End if 
 
 // ══════════════════════════════════════════════════════════════════════
 // Settings with empty vectors (edge case)
 // ══════════════════════════════════════════════════════════════════════
 
-var $emptySettings : cs:C1710.EmbeddingSettings:=cs:C1710.EmbeddingSettings.new($noFile)
+var $emptySettings : cs:C1710.Settings:=cs:C1710.Settings.new($noFile)
 $emptySettings.vectors:=[]
 
 var $emptyResolver : cs:C1710._EmbeddingResolver:=cs:C1710._EmbeddingResolver.new($emptySettings)

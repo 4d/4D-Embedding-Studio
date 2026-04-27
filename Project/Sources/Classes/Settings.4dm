@@ -1,5 +1,5 @@
 property file : 4D:C1709.File
-property vectors : Collection  // of cs:C1710.EmbeddingDefinition
+property vectors : Collection  // of cs:C1710.Definition
 property batchSize : Integer
 property phrase : Object  // optionnal { allowRelations, allowCalculated, allowAlias, allowObject }
 
@@ -12,7 +12,7 @@ Class constructor($file : 4D:C1709.File)
 	This:C1470.load()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Reads the settings file, if any, and populates This.vectors with EmbeddingDefinition objects.
+	// Reads the settings file, if any, and populates This.vectors with Definition objects.
 	// Also loads This.batchSize and This.phrase (allow* options).
 	// Any unknown top-level keys (e.g. "models") are preserved internally and restored on save.
 Function load()
@@ -66,7 +66,7 @@ Function load()
 	var $saved : Object
 	For each ($saved; $raw.vectors)
 		
-		var $def : cs:C1710.EmbeddingDefinition:=cs:C1710.EmbeddingDefinition.new(\
+		var $def : cs:C1710.Definition:=cs:C1710.Definition.new(\
 			String:C10($saved.dataclassName); \
 			String:C10($saved.vectorName); \
 			String:C10($saved.model); \
@@ -105,8 +105,8 @@ Function save()
 	This:C1470.file.setText(JSON Stringify:C1217($out; *))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the saved EmbeddingDefinition for the given dataclass/vector, or Null.
-Function find($dataclassName : Text; $vectorName : Text) : cs:C1710.EmbeddingDefinition
+	// Returns the saved Definition for the given dataclass/vector, or Null.
+Function find($dataclassName : Text; $vectorName : Text) : cs:C1710.Definition
 	
 	return This:C1470.vectors.query("dataclassName = :1 & vectorName = :2"; $dataclassName; $vectorName).first()
 	
@@ -119,7 +119,7 @@ Function invalidateVectors() : Object
 	var $skipped : Integer:=0
 	var $errors : Collection:=[]
 
-	var $def : cs:C1710.EmbeddingDefinition
+	var $def : cs:C1710.Definition
 	For each ($def; This:C1470.vectors)
 
 		var $result : Object:=$def.invalidateVectors()

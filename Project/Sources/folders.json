@@ -23,12 +23,12 @@
 	},
 	"NAMESPACE": {
 		"classes": [
-			"EmbeddingDefinition",
-			"EmbeddingProcess",
-			"EmbeddingProcessor",
-			"EmbeddingProcessResult",
-			"EmbeddingSettings",
-			"Phrase"
+			"Definition",
+			"Phrase",
+			"Process",
+			"Processor",
+			"ProcessResult",
+			"Settings"
 		]
 	},
 	"STUDIO": {

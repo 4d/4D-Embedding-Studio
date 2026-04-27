@@ -18,7 +18,7 @@ Compile a template. Compilation walks the template once and extracts static part
 | *template*    | Text | Template string with `{variable}` markers.  |
 
 ```4d
-var $tpl:=cs.Phrase.new("Hello {firstName}, you study at {schoolName}.")
+var $tpl:=cs.embed.Phrase.new("Hello {firstName}, you study at {schoolName}.")
 $tpl.keys // → ["firstName"; "schoolName"]
 ```
 
@@ -64,7 +64,7 @@ Validate that all keys in the phrase can be resolved against the given dataclass
 | `allowAlias`       | Boolean | `False` | Allow alias attributes.                                    |
 
 ```4d
-var $tpl:=cs.Phrase.new("{firstName} at {school.name}")
+var $tpl:=cs.embed.Phrase.new("{firstName} at {school.name}")
 
 // Storage-only validation — fails because {school.name} uses a relation
 var $v:=$tpl.validate(ds.Students)
@@ -87,5 +87,5 @@ Regardless of options:
 
 ## See also
 
-- [EmbeddingDefinition](EmbeddingDefinition.md) — holds a `Phrase`.
-- [EmbeddingProcess.render()](EmbeddingProcess.md#render) — renders a phrase for an entity via the orchestrator.
+- [Definition](Definition.md) — holds a `Phrase`.
+- [Process.render()](Process.md#render) — renders a phrase for an entity via the orchestrator.

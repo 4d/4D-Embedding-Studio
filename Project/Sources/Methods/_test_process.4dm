@@ -1,11 +1,11 @@
 //%attributes = {}
-#DECLARE($definition : cs:C1710.EmbeddingDefinition)
+#DECLARE($definition : cs:C1710.Definition)
 
-// Interactive configuration check for EmbeddingProcess.
+// Interactive configuration check for Process.
 // Loads real settings, pre-checks each definition, then runs a dry-run.
 // Prompts the user to fix missing model/phrase before proceeding.
 var $dryRun:=Shift down:C543
-var $settings : cs:C1710.EmbeddingSettings:=cs:C1710.EmbeddingSettings.new()
+var $settings : cs:C1710.Settings:=cs:C1710.Settings.new()
 
 //_invalidateVectors
 
@@ -33,7 +33,7 @@ End if
 // ══════════════════════════════════════════════════════════════════════
 
 var $missing : Collection:=[]
-var $def : cs:C1710.EmbeddingDefinition
+var $def : cs:C1710.Definition
 var $scope : Collection:=($definition=Null:C1517) ? $settings.vectors : [$definition]
 
 For each ($def; $scope)
@@ -71,7 +71,7 @@ End if
 // ══════════════════════════════════════════════════════════════════════
 
 var $seedLog : Text:=""
-var $seedDef : cs:C1710.EmbeddingDefinition
+var $seedDef : cs:C1710.Definition
 
 For each ($seedDef; $scope)
 	
@@ -146,8 +146,8 @@ End if
 // (DRY-)RUN: validates each definition, counts entities
 // ══════════════════════════════════════════════════════════════════════
 
-var $proc : cs:C1710.EmbeddingProcess:=cs:C1710.EmbeddingProcess.new($settings; {dryRun: $dryRun})
-var $result : cs:C1710.EmbeddingProcessResult
+var $proc : cs:C1710.Process:=cs:C1710.Process.new($settings; {dryRun: $dryRun})
+var $result : cs:C1710.ProcessResult
 
 Try
 	$result:=$proc.process($definition)

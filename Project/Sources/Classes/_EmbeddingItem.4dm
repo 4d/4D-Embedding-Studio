@@ -1,11 +1,11 @@
-property definition : cs:C1710.EmbeddingDefinition
+property definition : cs:C1710.Definition
 property version : Integer:=-1
 property phrase:=""  // Styled text for the UI editor (highlighted errors, etc.)
 property supportedAttributes:=[]
 property embedded:=[]
-property settings : cs:C1710.EmbeddingSettings
+property settings : cs:C1710.Settings
 
-Class constructor($dataclass : 4D:C1709.DataClass; $definition : cs:C1710.EmbeddingDefinition; $settings : cs:C1710.EmbeddingSettings)
+Class constructor($dataclass : 4D:C1709.DataClass; $definition : cs:C1710.Definition; $settings : cs:C1710.Settings)
 	
 	If (Count parameters:C259<2)
 		

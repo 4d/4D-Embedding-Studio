@@ -1,4 +1,4 @@
-property settings : cs:C1710.EmbeddingSettings
+property settings : cs:C1710.Settings
 property catalog : cs:C1710.DataStore:=ds:C1482  // Always use the host project datastore
 property vectors : Collection
 
@@ -40,7 +40,7 @@ Class constructor
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function read()
 	
-	This:C1470.settings:=cs:C1710.EmbeddingSettings.new()
+	This:C1470.settings:=cs:C1710.Settings.new()
 	This:C1470.readEmbeddingItems()
 	
 	// MARK:- [MANAGERS]
@@ -297,7 +297,7 @@ Function moreManager($e : Object)
 			
 			$plainText:=$item.supportedAttributes.map(Formula:C1597($1.value.name)).join(",")
 			
-			var $model:="EmbeddingStudioPhrase"
+			var $model:="StudioPhrase"
 			If (Not:C34(cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name").includes($model)))
 				ALERT:C41("You must configure a chat model with name: "+$model)
 				return 
@@ -593,9 +593,9 @@ Get the possible vector fields in the current catalog
 The list is displayed with:
 • table/dataclass
 • vector field
-Enriched with saved EmbeddingDefinition entries from Settings/vectors.json.
+Enriched with saved Definition entries from Settings/vectors.json.
 */
-	This:C1470.settings:=This:C1470.settings || cs:C1710.EmbeddingSettings.new()
+	This:C1470.settings:=This:C1470.settings || cs:C1710.Settings.new()
 	This:C1470.settings.load()
 	
 	var $items:=[]
@@ -603,12 +603,12 @@ Enriched with saved EmbeddingDefinition entries from Settings/vectors.json.
 	var $vf : Object
 	For each ($vf; This:C1470._collectVectorFields())
 		
-		var $def : cs:C1710.EmbeddingDefinition:=This:C1470.settings.find($vf.dataclassName; $vf.field.name)
+		var $def : cs:C1710.Definition:=This:C1470.settings.find($vf.dataclassName; $vf.field.name)
 		var $wasSaved : Boolean:=$def#Null:C1517
 		
 		If (Not:C34($wasSaved))
 			
-			$def:=cs:C1710.EmbeddingDefinition.new($vf.dataclassName; $vf.field.name; ""; "")
+			$def:=cs:C1710.Definition.new($vf.dataclassName; $vf.field.name; ""; "")
 			
 		End if 
 		
@@ -632,7 +632,7 @@ Enriched with saved EmbeddingDefinition entries from Settings/vectors.json.
 	End for each 
 	
 	// Ghost entries: saved definitions that no longer match any catalog vector field.
-	var $saved : cs:C1710.EmbeddingDefinition
+	var $saved : cs:C1710.Definition
 	For each ($saved; This:C1470.settings.vectors)
 		
 		If ($items.query("definition.dataclassName = :1 & definition.vectorName = :2"; $saved.dataclassName; $saved.vectorName).length>0)

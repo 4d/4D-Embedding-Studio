@@ -28,7 +28,7 @@ A 4D component for defining, computing, and maintaining AI embedding vectors dir
 **2. Run the full pipeline** (all definitions, all records):
 
 ```4d
-var $p:=cs.EmbeddingProcess.new()
+var $p:=cs.embed.Process.new()
 var $r:=$p.process()
 
 If ($r.success)
@@ -39,7 +39,7 @@ End if
 **3. Process a single entity on save** (e.g. in a trigger or REST hook):
 
 ```4d
-var $p:=cs.EmbeddingProcess.new()
+var $p:=cs.embed.Process.new()
 $p.processEntity($entity)
 ```
 
@@ -51,9 +51,9 @@ Declare a Boolean field named `<vectorName>_dirty` on your dataclass. When the f
 
 | Class | Description |
 |---|---|
-| [EmbeddingProcess](Documentation/Classes/EmbeddingProcess.md) | Main orchestrator — entry point for all batch and entity operations. |
-| [EmbeddingSettings](Documentation/Classes/EmbeddingSettings.md) | Loads and saves the `vectors.json` configuration file. |
-| [EmbeddingDefinition](Documentation/Classes/EmbeddingDefinition.md) | Describes one vector field: dataclass, field name, model, and phrase template. |
-| [EmbeddingProcessor](Documentation/Classes/EmbeddingProcessor.md) | Thin wrapper around the AIKit embeddings API with retry/backoff logic. |
-| [EmbeddingProcessResult](Documentation/Classes/EmbeddingProcessResult.md) | Returned by every batch function — statistics and error breakdown. |
+| [Process](Documentation/Classes/Process.md) | Main orchestrator — entry point for all batch and entity operations. |
+| [Settings](Documentation/Classes/Settings.md) | Loads and saves the `vectors.json` configuration file. |
+| [Definition](Documentation/Classes/Definition.md) | Describes one vector field: dataclass, field name, model, and phrase template. |
+| [Processor](Documentation/Classes/Processor.md) | Thin wrapper around the AIKit embeddings API with retry/backoff logic. |
+| [ProcessResult](Documentation/Classes/ProcessResult.md) | Returned by every batch function — statistics and error breakdown. |
 | [Phrase](Documentation/Classes/Phrase.md) | Lightweight `{variable}` template engine used to build text from entity attributes. |
