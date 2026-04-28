@@ -334,7 +334,7 @@ Function moreManager($e : Object)
 			// ______________________________________________________
 		: ($menu.choice="computeVectors")
 			
-			_test_process($item.definition)
+			_computeVectors($item.definition)
 			
 			// ______________________________________________________
 		: ($menu.choice="invalidVectors")
@@ -359,7 +359,7 @@ Function moreManager($e : Object)
 			// ______________________________________________________
 		: ($menu.choice="computeAllVectors")
 			
-			_test_process()
+			_computeVectors()
 			
 			// ______________________________________________________
 		: ($menu.choice="invalidAllVectors")

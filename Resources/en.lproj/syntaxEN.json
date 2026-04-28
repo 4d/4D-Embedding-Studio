@@ -162,6 +162,19 @@
 				],
 				"Summary": ""
 			}
+		},
+		"_TestProcessProcessor": {
+			"new()": {
+				"Syntax": "**.new**( *options* : Object )",
+				"Params": [
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
 		}
 	},
 	"_typeMedia": {
@@ -1552,6 +1565,65 @@
 		},
 		"data": {
 			"Syntax": "data : Collection"
+		}
+	},
+	"_TestProcessProcessor": {
+		"embedBatch()": {
+			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : Collection",
+			"Params": [
+				[
+					"texts",
+					"Collection",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"embed()": {
+			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : 4D.Vector",
+			"Params": [
+				[
+					"text",
+					"Text",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"4D.Vector",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"counter": {
+			"Syntax": "counter : Integer"
+		},
+		"nonCriticalTexts": {
+			"Syntax": "nonCriticalTexts : Collection"
+		},
+		"criticalModels": {
+			"Syntax": "criticalModels : Collection"
+		},
+		"embedBatchCalls": {
+			"Syntax": "embedBatchCalls : Collection"
+		},
+		"embedCalls": {
+			"Syntax": "embedCalls : Collection"
 		}
 	}
 }

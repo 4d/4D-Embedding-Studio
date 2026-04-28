@@ -14,8 +14,8 @@
 			"Students"
 		],
 		"methods": [
-			"_invalidateVectors",
-			"_test_process"
+			"_computeVectors",
+			"_invalidateVectors"
 		],
 		"classes": [
 			"StudentsEntity"
@@ -45,10 +45,18 @@
 	},
 	"TESTS": {
 		"methods": [
+			"_onTestErrors",
+			"_runTests",
+			"_runTestsCLI",
 			"test_dataclassAttributes",
 			"test_phrase",
+			"test_process",
+			"test_processor",
 			"test_resolver",
 			"test_settings"
+		],
+		"classes": [
+			"_TestProcessProcessor"
 		]
 	},
 	"UTILS": {
