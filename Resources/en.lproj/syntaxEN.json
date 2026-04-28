@@ -1,6 +1,36 @@
 {
 	"_method_": {},
 	"cs.embed": {
+		"_typeMedia": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_EmbeddingItem": {
+			"new()": {
+				"Syntax": "**.new**( *dataclass* : 4D.DataClass; *definition* : cs.embed.Definition; *settings* : cs.embed.Settings )",
+				"Params": [
+					[
+						"dataclass",
+						"4D.DataClass",
+						"->"
+					],
+					[
+						"definition",
+						"cs.embed.Definition",
+						"->"
+					],
+					[
+						"settings",
+						"cs.embed.Settings",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
 		"_EMBEDDINGS": {
 			"new()": {
 				"Syntax": "**.new**()",
@@ -49,20 +79,10 @@
 				"Summary": ""
 			}
 		},
-		"_EmbeddingItem": {
+		"_Resolver": {
 			"new()": {
-				"Syntax": "**.new**( *dataclass* : 4D.DataClass; *definition* : cs.embed.Definition; *settings* : cs.embed.Settings )",
+				"Syntax": "**.new**( *settings* : cs.embed.Settings )",
 				"Params": [
-					[
-						"dataclass",
-						"4D.DataClass",
-						"->"
-					],
-					[
-						"definition",
-						"cs.embed.Definition",
-						"->"
-					],
 					[
 						"settings",
 						"cs.embed.Settings",
@@ -72,10 +92,21 @@
 				"Summary": ""
 			}
 		},
-		"_typeMedia": {
+		"Process": {
 			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
+				"Syntax": "**.new**( *settings* : cs.embed.Settings; *options* : Object )",
+				"Params": [
+					[
+						"settings",
+						"cs.embed.Settings",
+						"->"
+					],
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
 				"Summary": ""
 			}
 		},
@@ -131,37 +162,91 @@
 				],
 				"Summary": ""
 			}
+		}
+	},
+	"_typeMedia": {
+		"medias": {
+			"Syntax": "medias : Collection"
+		}
+	},
+	"_EmbeddingItem": {
+		"set error()": {
+			"Syntax": "**.set error**( *message* : Text )",
+			"Params": [
+				[
+					"message",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
 		},
-		"_EmbeddingResolver": {
-			"new()": {
-				"Syntax": "**.new**( *settings* : cs.embed.Settings )",
-				"Params": [
-					[
-						"settings",
-						"cs.embed.Settings",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
+		"get defined()": {
+			"Syntax": "**.get defined**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
 		},
-		"Process": {
-			"new()": {
-				"Syntax": "**.new**( *settings* : cs.embed.Settings; *options* : Object )",
-				"Params": [
-					[
-						"settings",
-						"cs.embed.Settings",
-						"->"
-					],
-					[
-						"options",
-						"Object",
-						"->"
-					]
+		"get helptip()": {
+			"Syntax": "**.get helptip**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"parsePhrase()": {
+			"Syntax": "**.parsePhrase**( *phrase* : cs.embed.Phrase ) : Text",
+			"Params": [
+				[
+					"phrase",
+					"cs.embed.Phrase",
+					"->"
 				],
-				"Summary": ""
-			}
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get inputsMenu()": {
+			"Syntax": "**.get inputsMenu**() : cs.embed._menu",
+			"Params": [
+				[
+					"",
+					"cs.embed._menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"embedded": {
+			"Syntax": "embedded : Collection"
+		},
+		"supportedAttributes": {
+			"Syntax": "supportedAttributes : Collection"
+		},
+		"version": {
+			"Syntax": "version : Integer"
+		},
+		"settings": {
+			"Syntax": "settings : cs.embed.Settings"
+		},
+		"phrase": {
+			"Syntax": "phrase : Text"
+		},
+		"definition": {
+			"Syntax": "definition : cs.embed.Definition"
 		}
 	},
 	"_EMBEDDINGS": {
@@ -300,9 +385,6 @@
 			],
 			"Summary": ""
 		},
-		"DEBUG": {
-			"Syntax": "DEBUG : Boolean"
-		},
 		"itemPosition": {
 			"Syntax": "itemPosition : Integer"
 		},
@@ -437,8 +519,8 @@
 		"phrase": {
 			"Syntax": "phrase : Object"
 		},
-		"vectors": {
-			"Syntax": "vectors : Collection"
+		"definitions": {
+			"Syntax": "definitions : Collection"
 		},
 		"batchSize": {
 			"Syntax": "batchSize : Integer"
@@ -447,46 +529,13 @@
 			"Syntax": "file : 4D.File"
 		}
 	},
-	"_EmbeddingItem": {
-		"set error()": {
-			"Syntax": "**.set error**( *message* : Text )",
+	"_Resolver": {
+		"dataclassNameFromEntity()": {
+			"Syntax": "**.dataclassNameFromEntity**( *entity* : 4D.Entity ) : Text",
 			"Params": [
 				[
-					"message",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get defined()": {
-			"Syntax": "**.get defined**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get helptip()": {
-			"Syntax": "**.get helptip**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"parsePhrase()": {
-			"Syntax": "**.parsePhrase**( *phrase* : cs.embed.Phrase ) : Text",
-			"Params": [
-				[
-					"phrase",
-					"cs.embed.Phrase",
+					"entity",
+					"4D.Entity",
 					"->"
 				],
 				[
@@ -497,39 +546,180 @@
 			],
 			"Summary": ""
 		},
-		"get inputsMenu()": {
-			"Syntax": "**.get inputsMenu**() : cs.embed._menu",
+		"dataclassNameFromSelection()": {
+			"Syntax": "**.dataclassNameFromSelection**( *es* : 4D.EntitySelection ) : Text",
 			"Params": [
 				[
+					"es",
+					"4D.EntitySelection",
+					"->"
+				],
+				[
 					"",
-					"cs.embed._menu",
+					"Text",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"embedded": {
-			"Syntax": "embedded : Collection"
+		"resolveForEntity()": {
+			"Syntax": "**.resolveForEntity**( *definition* : Variant; *contextDataclassName* : Text ) : Collection",
+			"Params": [
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"contextDataclassName",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
 		},
-		"supportedAttributes": {
-			"Syntax": "supportedAttributes : Collection"
-		},
-		"version": {
-			"Syntax": "version : Integer"
+		"resolveForProcess()": {
+			"Syntax": "**.resolveForProcess**( *definition* : Variant ) : Collection",
+			"Params": [
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
 		},
 		"settings": {
 			"Syntax": "settings : cs.embed.Settings"
-		},
-		"phrase": {
-			"Syntax": "phrase : Text"
-		},
-		"definition": {
-			"Syntax": "definition : cs.embed.Definition"
 		}
 	},
-	"_typeMedia": {
-		"medias": {
-			"Syntax": "medias : Collection"
+	"Process": {
+		"embed()": {
+			"Syntax": "**.embed**( *input* : Variant; *context* : Variant; *model* : Text ) : 4D.Vector",
+			"Params": [
+				[
+					"input",
+					"Variant",
+					"->"
+				],
+				[
+					"context",
+					"Variant",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"4D.Vector",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"processEntitySelection()": {
+			"Syntax": "**.processEntitySelection**( *es* : 4D.EntitySelection; *definition* : Variant ) : cs.embed.ProcessResult",
+			"Params": [
+				[
+					"es",
+					"4D.EntitySelection",
+					"->"
+				],
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.embed.ProcessResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"render()": {
+			"Syntax": "**.render**( *entity* : 4D.Entity; *definitionOrPhrase* : Variant ) : Text",
+			"Params": [
+				[
+					"entity",
+					"4D.Entity",
+					"->"
+				],
+				[
+					"definitionOrPhrase",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"processEntity()": {
+			"Syntax": "**.processEntity**( *entity* : 4D.Entity; *definition* : Variant ) : cs.embed.ProcessResult",
+			"Params": [
+				[
+					"entity",
+					"4D.Entity",
+					"->"
+				],
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.embed.ProcessResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"process()": {
+			"Syntax": "**.process**( *definition* : Variant ) : cs.embed.ProcessResult",
+			"Params": [
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.embed.ProcessResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"options": {
+			"Syntax": "options : Object"
+		},
+		"resolver": {
+			"Syntax": "resolver : cs.embed._Resolver"
+		},
+		"processor": {
+			"Syntax": "processor : cs.embed.Processor"
+		},
+		"settings": {
+			"Syntax": "settings : cs.embed.Settings"
 		}
 	},
 	"_dataclassAttributes": {
@@ -1362,199 +1552,6 @@
 		},
 		"data": {
 			"Syntax": "data : Collection"
-		}
-	},
-	"_EmbeddingResolver": {
-		"dataclassNameFromEntity()": {
-			"Syntax": "**.dataclassNameFromEntity**( *entity* : 4D.Entity ) : Text",
-			"Params": [
-				[
-					"entity",
-					"4D.Entity",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"dataclassNameFromSelection()": {
-			"Syntax": "**.dataclassNameFromSelection**( *es* : 4D.EntitySelection ) : Text",
-			"Params": [
-				[
-					"es",
-					"4D.EntitySelection",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"resolveForEntity()": {
-			"Syntax": "**.resolveForEntity**( *definition* : Variant; *contextDataclassName* : Text ) : Collection",
-			"Params": [
-				[
-					"definition",
-					"Variant",
-					"->"
-				],
-				[
-					"contextDataclassName",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"resolveForProcess()": {
-			"Syntax": "**.resolveForProcess**( *definition* : Variant ) : Collection",
-			"Params": [
-				[
-					"definition",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"settings": {
-			"Syntax": "settings : cs.embed.Settings"
-		}
-	},
-	"Process": {
-		"embed()": {
-			"Syntax": "**.embed**( *input* : Variant; *context* : Variant; *model* : Text ) : 4D.Vector",
-			"Params": [
-				[
-					"input",
-					"Variant",
-					"->"
-				],
-				[
-					"context",
-					"Variant",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"4D.Vector",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"processEntitySelection()": {
-			"Syntax": "**.processEntitySelection**( *es* : 4D.EntitySelection; *definition* : Variant ) : cs.embed.ProcessResult",
-			"Params": [
-				[
-					"es",
-					"4D.EntitySelection",
-					"->"
-				],
-				[
-					"definition",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.ProcessResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"process()": {
-			"Syntax": "**.process**( *definition* : Variant ) : cs.embed.ProcessResult",
-			"Params": [
-				[
-					"definition",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.ProcessResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"render()": {
-			"Syntax": "**.render**( *entity* : 4D.Entity; *definitionOrPhrase* : Variant ) : Text",
-			"Params": [
-				[
-					"entity",
-					"4D.Entity",
-					"->"
-				],
-				[
-					"definitionOrPhrase",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"processEntity()": {
-			"Syntax": "**.processEntity**( *entity* : 4D.Entity; *definition* : Variant ) : cs.embed.ProcessResult",
-			"Params": [
-				[
-					"entity",
-					"4D.Entity",
-					"->"
-				],
-				[
-					"definition",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.ProcessResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"options": {
-			"Syntax": "options : Object"
-		},
-		"resolver": {
-			"Syntax": "resolver : cs.embed._EmbeddingResolver"
-		},
-		"processor": {
-			"Syntax": "processor : cs.embed.Processor"
-		},
-		"settings": {
-			"Syntax": "settings : cs.embed.Settings"
 		}
 	}
 }

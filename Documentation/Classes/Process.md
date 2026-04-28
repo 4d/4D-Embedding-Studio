@@ -10,15 +10,19 @@ It also exposes non-persisting helpers for previewing rendered phrases and compu
 |---------------|---------------------------------------------------------|----------------------------------------------------------|
 | `settings`    | [Settings](Settings.md)               | The settings (vectors, batch size, phrase validation options). |
 | `processor`   | [Processor](Processor.md)             | The API-calling engine. Stateless and swappable.         |
-| `options`     | Object                                                  | Runtime options: `onProgress`, `dryRun`, `force`, `processor`. |
+| `options`     | Object                                                  | Runtime options object (see [Options object](#options-object) below). |
 
 ### Options object
 
 | Key          | Type      | Description                                                                 |
 |--------------|-----------|-----------------------------------------------------------------------------|
-| `onProgress` | 4D.Function | Called after each chunk with `{definition, report}`.                       |
-| `dryRun`     | Boolean   | If `True`, runs the whole pipeline without calling the API or saving.       |
+| `onProgress` | 4D.Function | Called after each processed chunk with `{definition, report}`.             |
+| `onSuccess`  | 4D.Function | Called once at the end when `report.success = True`, with `{report, success, errors}`. |
+| `onError`    | 4D.Function | Called once at the end when `report.success = False`, with `{report, success, errors}`. |
+| `onTerminate`| 4D.Function | Called once at the end in all cases (after `onSuccess`/`onError`), with `{report, success, errors}`. |
+| `dryRun`     | Boolean   | If `True`, runs selection/filter logic but skips API calls and entity saves. |
 | `force`      | Boolean   | If `True`, recomputes every entity ignoring null-vector / dirty-flag filter. |
+| `debug`      | Boolean   | If `True`, emits additional diagnostic log entries.                        |
 | `processor`  | [Processor](Processor.md) | Inject a custom processor (otherwise a default one is created). |
 
 ## Class constructor

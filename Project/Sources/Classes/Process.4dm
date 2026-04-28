@@ -12,19 +12,32 @@
    $p.processEntitySelection($es; $def)
 
  All entry points return a cs.embed.ProcessResult.
+
+ Options object ($options)
+
+ | Key | Type | Default | Description |
+ | --- | --- | --- | --- |
+ | onProgress | 4D.Function | Null | Optional callback fired during selection processing after each batch. Receives `{definition, report}`. |
+ | onSuccess | 4D.Function | Null | Optional callback fired once when processing ends with `report.success = true`. Receives `{report, success, errors}`. |
+ | onError | 4D.Function | Null | Optional callback fired once when processing ends with `report.success = false`. Receives `{report, success, errors}`. |
+ | onTerminate | 4D.Function | Null | Optional callback fired once at the end in all cases (after `onSuccess` or `onError`). Receives `{report, success, errors}`. |
+ | dryRun | Boolean | False | If true, computes filtering/progress only and skips writes/API calls. |
+ | force | Boolean | False | If true, bypasses "already embedded / not dirty" filtering and recomputes all targeted rows. |
+ | debug | Boolean | False | If true, emits extra diagnostic log entries. |
+ | processor | cs.embed.Processor | New processor instance | Optional processor override, mainly for tests or custom providers. |
 **/
 
 property settings : cs:C1710.Settings
 property processor : cs:C1710.Processor
-property resolver : cs:C1710._EmbeddingResolver
-property options : Object  // { onProgress, dryRun, force, debug }
+property resolver : cs:C1710._Resolver
+property options : Object  // { onProgress, onSuccess, onError, onTerminate, dryRun, force, debug, processor }
 property _failedModels : Collection
 
 // MARK:-[CONSTRUCTOR]
 Class constructor($settings : cs:C1710.Settings; $options : Object)
 	
 	This:C1470.settings:=$settings || cs:C1710.Settings.new()
-	This:C1470.resolver:=cs:C1710._EmbeddingResolver.new(This:C1470.settings)
+	This:C1470.resolver:=cs:C1710._Resolver.new(This:C1470.settings)
 	This:C1470.options:=$options || {}
 	This:C1470.processor:=$options.processor || cs:C1710.Processor.new()
 	This:C1470._failedModels:=[]
@@ -61,7 +74,7 @@ Function process($definition : Variant) : cs:C1710.ProcessResult
 		
 	End for each 
 	
-	return $report._done()
+	return This:C1470._doneWithCallbacks($report)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Process a single entity. $definition rules match resolveForEntity.
@@ -72,7 +85,7 @@ Function processEntity($entity : 4D:C1709.Entity; $definition : Variant) : cs:C1
 	If ($entity=Null:C1517)
 		
 		$report._addError("entity"; Null:C1517; "Null entity")
-		return $report._done()
+		return This:C1470._doneWithCallbacks($report)
 		
 	End if 
 	
@@ -100,7 +113,7 @@ Function processEntity($entity : 4D:C1709.Entity; $definition : Variant) : cs:C1
 		
 	End for each 
 	
-	return $report._done()
+	return This:C1470._doneWithCallbacks($report)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Process an entity selection. Preferred path for large jobs — honors batchSize.
@@ -111,7 +124,7 @@ Function processEntitySelection($es : 4D:C1709.EntitySelection; $definition : Va
 	If ($es=Null:C1517)
 		
 		$report._addError("selection"; Null:C1517; "Null entity selection")
-		return $report._done()
+		return This:C1470._doneWithCallbacks($report)
 		
 	End if 
 	
@@ -139,7 +152,34 @@ Function processEntitySelection($es : 4D:C1709.EntitySelection; $definition : Va
 		
 	End for each 
 	
-	return $report._done()
+	return This:C1470._doneWithCallbacks($report)
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Finalize report and fire optional lifecycle callbacks.
+	// Callbacks are Formula receiving ({report, success, errors}).
+Function _doneWithCallbacks($report : cs:C1710.ProcessResult) : cs:C1710.ProcessResult
+	
+	var $done : cs:C1710.ProcessResult:=$report._done()
+	var $payload : Object:={report: $done; success: $done.success; errors: $done.errors}
+	
+	If ($done.success)
+		var $onSuccess : 4D:C1709.Function:=This:C1470.options.onSuccess
+		If ($onSuccess#Null:C1517)
+			Try($onSuccess.call(Null:C1517; $payload))
+		End if 
+	Else 
+		var $onError : 4D:C1709.Function:=This:C1470.options.onError
+		If ($onError#Null:C1517)
+			Try($onError.call(Null:C1517; $payload))
+		End if 
+	End if 
+	
+	var $onTerminate : 4D:C1709.Function:=This:C1470.options.onTerminate
+	If ($onTerminate#Null:C1517)
+		Try($onTerminate.call(Null:C1517; $payload))
+	End if 
+	
+	return $done
 	
 	// MARK:-[PLAYGROUND — ad-hoc, non-persisting helpers]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -291,7 +331,7 @@ Function _resolveDefinitionFromEntity($entity : 4D:C1709.Entity) : cs:C1710.Defi
 	End if 
 	
 	var $dcName : Text:=This:C1470.resolver.dataclassNameFromEntity($entity)
-	var $matches : Collection:=This:C1470.settings.vectors.query("dataclassName = :1"; $dcName)
+	var $matches : Collection:=This:C1470.settings.definitions.query("dataclassName = :1"; $dcName)
 	
 	return ($matches.length=1) ? $matches[0] : Null:C1517
 	

@@ -1,5 +1,5 @@
 //%attributes = {}
-// Unit tests for cs.embed._EmbeddingResolver
+// Unit tests for cs.embed._Resolver
 
 // Build a cs.embed.Settings pointing at a file that does not exist,
 // so constructor/load does no I/O. We then populate .vectors manually.
@@ -10,9 +10,9 @@ var $defStudentsV1 : cs:C1710.Definition:=cs:C1710.Definition.new("Students"; "s
 var $defStudentsV2 : cs:C1710.Definition:=cs:C1710.Definition.new("Students"; "student_vector_2"; "text-embedding-3-small"; "{lastName}")
 var $defSchoolV1 : cs:C1710.Definition:=cs:C1710.Definition.new("School"; "school_vector_1"; "text-embedding-3-small"; "{name}")
 
-$settings.vectors:=[$defStudentsV1; $defStudentsV2; $defSchoolV1]
+$settings.definitions:=[$defStudentsV1; $defStudentsV2; $defSchoolV1]
 
-var $resolver : cs:C1710._EmbeddingResolver:=cs:C1710._EmbeddingResolver.new($settings)
+var $resolver : cs:C1710._Resolver:=cs:C1710._Resolver.new($settings)
 var $out : Collection
 
 // ══════════════════════════════════════════════════════════════════════
@@ -42,11 +42,11 @@ ASSERT:C1129($out.length=0; "resolveForProcess([]): expected empty")
 $out:=$resolver.resolveForProcess("not a definition")
 ASSERT:C1129($out.length=0; "resolveForProcess(text): expected empty")
 
-// --- Null-returned collection does not share identity with settings.vectors ---
+// --- Null-returned collection does not share identity with settings.definitions ---
 // (i.e. mutating the result should not mutate settings)
 $out:=$resolver.resolveForProcess(Null:C1517)
 $out.pop()
-ASSERT:C1129($settings.vectors.length=3; "resolveForProcess(Null): result must be a copy")
+ASSERT:C1129($settings.definitions.length=3; "resolveForProcess(Null): result must be a copy")
 
 // ══════════════════════════════════════════════════════════════════════
 // resolveForEntity — with inferred dataclass context
@@ -152,9 +152,9 @@ End if
 // ══════════════════════════════════════════════════════════════════════
 
 var $emptySettings : cs:C1710.Settings:=cs:C1710.Settings.new($noFile)
-$emptySettings.vectors:=[]
+$emptysettings.definitions:=[]
 
-var $emptyResolver : cs:C1710._EmbeddingResolver:=cs:C1710._EmbeddingResolver.new($emptySettings)
+var $emptyResolver : cs:C1710._Resolver:=cs:C1710._Resolver.new($emptySettings)
 
 $out:=$emptyResolver.resolveForProcess(Null:C1517)
 ASSERT:C1129($out.length=0; "empty settings / resolveForProcess(Null): expected empty")

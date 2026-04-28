@@ -9,7 +9,7 @@ var $tmpFile : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).file("S
 // ══════════════════════════════════════════════════════════════════════
 
 var $s : cs:C1710.Settings:=cs:C1710.Settings.new($noFile)
-ASSERT:C1129($s.vectors.length=0; "defaults: expected empty vectors")
+ASSERT:C1129($s.definitions.length=0; "defaults: expected empty vectors")
 ASSERT:C1129($s.batchSize=50; "defaults: expected batchSize=50, got "+String:C10($s.batchSize))
 ASSERT:C1129($s.phrase.allowRelations=False:C215; "defaults: allowRelations should be false")
 ASSERT:C1129($s.phrase.allowCalculated=False:C215; "defaults: allowCalculated should be false")
@@ -26,13 +26,13 @@ vectors: [\
 {dataclassName: "School"; vectorName: "school_vector_1"; model: "text-embedding-3-large"; phrase: "{name}"}]}))
 
 $s:=cs:C1710.Settings.new($tmpFile)
-ASSERT:C1129($s.vectors.length=2; "load: expected 2 vectors, got "+String:C10($s.vectors.length))
-ASSERT:C1129($s.vectors[0].dataclassName="Students"; "load[0]: dataclassName mismatch")
-ASSERT:C1129($s.vectors[0].vectorName="student_vector_1"; "load[0]: vectorName mismatch")
-ASSERT:C1129($s.vectors[0].model="text-embedding-3-small"; "load[0]: model mismatch")
-ASSERT:C1129($s.vectors[1].dataclassName="School"; "load[1]: dataclassName mismatch")
-ASSERT:C1129($s.vectors[1].model="text-embedding-3-large"; "load[1]: model mismatch")
-ASSERT:C1129(OB Instance of:C1731($s.vectors[0]; cs:C1710.Definition); "load: vectors must be Definition instances")
+ASSERT:C1129($s.definitions.length=2; "load: expected 2 vectors, got "+String:C10($s.definitions.length))
+ASSERT:C1129($s.definitions[0].dataclassName="Students"; "load[0]: dataclassName mismatch")
+ASSERT:C1129($s.definitions[0].vectorName="student_vector_1"; "load[0]: vectorName mismatch")
+ASSERT:C1129($s.definitions[0].model="text-embedding-3-small"; "load[0]: model mismatch")
+ASSERT:C1129($s.definitions[1].dataclassName="School"; "load[1]: dataclassName mismatch")
+ASSERT:C1129($s.definitions[1].model="text-embedding-3-large"; "load[1]: model mismatch")
+ASSERT:C1129(OB Instance of:C1731($s.definitions[0]; cs:C1710.Definition); "load: vectors must be Definition instances")
 
 // --- Custom batchSize ---
 $tmpFile.setText(JSON Stringify:C1217({batchSize: 25; vectors: []}))
@@ -59,13 +59,13 @@ ASSERT:C1129($s.phrase.allowAlias=False:C215; "phrase: allowAlias expected false
 // --- Malformed JSON → silent, defaults ---
 $tmpFile.setText("not valid json {{{")
 $s:=cs:C1710.Settings.new($tmpFile)
-ASSERT:C1129($s.vectors.length=0; "malformed JSON: expected empty vectors")
+ASSERT:C1129($s.definitions.length=0; "malformed JSON: expected empty vectors")
 ASSERT:C1129($s.batchSize=50; "malformed JSON: expected default batchSize")
 
 // --- Missing vectors key → empty vectors, batchSize still loaded ---
 $tmpFile.setText(JSON Stringify:C1217({batchSize: 10}))
 $s:=cs:C1710.Settings.new($tmpFile)
-ASSERT:C1129($s.vectors.length=0; "missing vectors key: expected empty")
+ASSERT:C1129($s.definitions.length=0; "missing vectors key: expected empty")
 ASSERT:C1129($s.batchSize=10; "missing vectors key: batchSize still loaded")
 
 // ══════════════════════════════════════════════════════════════════════
@@ -109,17 +109,17 @@ ASSERT:C1129($found=Null:C1517; "find: unknown names → Null")
 // --- Round-trip: vectors, batchSize, phrase options ---
 $s:=cs:C1710.Settings.new($noFile)  // start clean (no file → raw={})
 $s.file:=$tmpFile
-$s.vectors:=[cs:C1710.Definition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName} {lastName}")]
+$s.definitions:=[cs:C1710.Definition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName} {lastName}")]
 $s.batchSize:=20
 $s.phrase.allowRelations:=True:C214
 $s.save()
 
 var $s2 : cs:C1710.Settings:=cs:C1710.Settings.new($tmpFile)
-ASSERT:C1129($s2.vectors.length=1; "save round-trip: expected 1 vector")
-ASSERT:C1129($s2.vectors[0].dataclassName="Students"; "save round-trip: dataclassName mismatch")
-ASSERT:C1129($s2.vectors[0].vectorName="student_vector_1"; "save round-trip: vectorName mismatch")
-ASSERT:C1129($s2.vectors[0].model="text-embedding-3-small"; "save round-trip: model mismatch")
-ASSERT:C1129($s2.vectors[0].phrase.template="{firstName} {lastName}"; "save round-trip: phrase mismatch")
+ASSERT:C1129($s2.definitions.length=1; "save round-trip: expected 1 vector")
+ASSERT:C1129($s2.definitions[0].dataclassName="Students"; "save round-trip: dataclassName mismatch")
+ASSERT:C1129($s2.definitions[0].vectorName="student_vector_1"; "save round-trip: vectorName mismatch")
+ASSERT:C1129($s2.definitions[0].model="text-embedding-3-small"; "save round-trip: model mismatch")
+ASSERT:C1129($s2.definitions[0].phrase.template="{firstName} {lastName}"; "save round-trip: phrase mismatch")
 ASSERT:C1129($s2.batchSize=20; "save round-trip: batchSize mismatch")
 ASSERT:C1129($s2.phrase.allowRelations=True:C214; "save round-trip: allowRelations mismatch")
 
@@ -143,7 +143,7 @@ ASSERT:C1129($raw.models.myModel="text-embedding-3-small"; "save: preserved key 
 // --- Definition without model and phrase filtered out (hasDefinition=false) ---
 $s:=cs:C1710.Settings.new($noFile)
 $s.file:=$tmpFile
-$s.vectors:=[\
+$s.definitions:=[\
 cs:C1710.Definition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName}"); \
 cs:C1710.Definition.new("Students"; "student_vector_2"; ""; "")]
 $s.save()

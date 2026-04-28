@@ -17,8 +17,6 @@ property _detailFields:=[\
 property modelsDropdown : Object
 property _cache : Object  // Current catalog cache
 
-property DEBUG:=Structure file:C489=Structure file:C489(*)
-
 // ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___
 Class constructor
 	
@@ -244,7 +242,7 @@ Function moreManager($e : Object)
 		
 	End if 
 	
-	If (This:C1470.DEBUG)
+	If (This:C1470.settings._isDev)
 		
 		$menu.append("🚧 Insert All Attributes"; "insertAllAttributes")
 		$menu.append("🚧 AI Generated Phrase"; "aiGeneratedPhrase")
@@ -633,7 +631,7 @@ Enriched with saved Definition entries from Settings/vectors.json.
 	
 	// Ghost entries: saved definitions that no longer match any catalog vector field.
 	var $saved : cs:C1710.Definition
-	For each ($saved; This:C1470.settings.vectors)
+	For each ($saved; This:C1470.settings.definitions)
 		
 		If ($items.query("definition.dataclassName = :1 & definition.vectorName = :2"; $saved.dataclassName; $saved.vectorName).length>0)
 			
@@ -673,7 +671,7 @@ Enriched with saved Definition entries from Settings/vectors.json.
 Function saveEmbeddingItems()
 	
 	// Keep only defined items
-	This:C1470.settings.vectors:=This:C1470.vectors\
+	This:C1470.settings.definitions:=This:C1470.vectors\
 		.filter(Formula:C1597(Bool:C1537($1.value.defined)))\
 		.map(Formula:C1597($1.value.definition))
 	This:C1470.settings.save()

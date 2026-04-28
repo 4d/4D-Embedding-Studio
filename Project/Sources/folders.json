@@ -54,8 +54,8 @@
 	"UTILS": {
 		"classes": [
 			"_dataclassAttributes",
-			"_EmbeddingResolver",
 			"_menu",
+			"_Resolver",
 			"_typeMedia"
 		]
 	},

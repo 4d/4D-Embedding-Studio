@@ -21,7 +21,7 @@ If (Not:C34($settings.file.exists))
 	
 End if 
 
-If ($settings.vectors.length=0)
+If ($settings.definitions.length=0)
 	
 	ALERT:C41("⚠️ No vector definitions in settings.\n\nAdd definitions to:\n"+$settings.file.path)
 	return 
@@ -34,7 +34,7 @@ End if
 
 var $missing : Collection:=[]
 var $def : cs:C1710.Definition
-var $scope : Collection:=($definition=Null:C1517) ? $settings.vectors : [$definition]
+var $scope : Collection:=($definition=Null:C1517) ? $settings.definitions : [$definition]
 
 For each ($def; $scope)
 	
@@ -158,7 +158,7 @@ End try
 
 var $summary : Text:=\
 "Settings:   "+$settings.file.path+\
-"\nDefinitions: "+String:C10($settings.vectors.length)+\
+"\nDefinitions: "+String:C10($scope.length)+\
 "\nProcessed:   "+String:C10($result.definitionsProcessed)+\
 "\nConsidered:  "+String:C10($result.entitiesConsidered)+" entities"+\
 "\nAPI calls:   "+String:C10($result.apiCalls)+($dryRun ? "(dry run)" : "")
@@ -175,6 +175,6 @@ If ($result.errors.length>0)
 	
 Else 
 	
-	ALERT:C41("✅ Configuration OK — all "+String:C10($settings.vectors.length)+" definition(s) passed.\n\n"+$summary)
+	ALERT:C41("✅ Configuration OK — all "+String:C10($scope.length)+" definition(s) passed.\n\n"+$summary)
 	
 End if 
