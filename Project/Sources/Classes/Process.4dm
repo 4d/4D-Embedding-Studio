@@ -39,7 +39,7 @@ Class constructor($settings : cs:C1710.Settings; $options : Object)
 	This:C1470.settings:=$settings || cs:C1710.Settings.new()
 	This:C1470.resolver:=cs:C1710._Resolver.new(This:C1470.settings)
 	This:C1470.options:=$options || {}
-	This:C1470.processor:=$options.processor || cs:C1710.Processor.new()
+	This:C1470.processor:=This:C1470._buildProcessor($options)
 	This:C1470._failedModels:=[]
 	
 	// MARK:-[PUBLIC]
@@ -653,6 +653,44 @@ Function _entityRef($entity : 4D:C1709.Entity) : Variant
 	End try
 	
 	return String:C10($entity)
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Build the processor to use, in priority order:
+	//   1. Explicit injection via $options.processor (test mock / caller override)
+	//   2. settings.processor.className → try cs[$className].new($cfg), validate duck type
+	//   3. settings.processor (no className) → cs.Processor.new($cfg) with forwarded options
+	//   4. Default cs.Processor.new()
+Function _buildProcessor($options : Object) : Object
+	
+	If (($options#Null:C1517) && ($options.processor#Null:C1517))
+		return $options.processor
+	End if 
+	
+	var $cfg : Object:=This:C1470.settings.processor
+	
+	If ($cfg=Null:C1517)
+		return cs:C1710.Processor.new()
+	End if 
+	
+	var $className : Text:=String:C10($cfg.className)
+	If ($className#"")
+		Try
+			var $instance : Object:=cs:C1710[$className].new($cfg)
+			If ((OB Instance of:C1731($instance.embed; 4D:C1709.Function))\
+				 && (OB Instance of:C1731($instance.embedBatch; 4D:C1709.Function)))
+				return $instance
+			End if 
+			LOG EVENT:C667(Into 4D diagnostic log:K38:8; \
+				"[4DES] processor.className '"+$className+"' is missing embed or embedBatch — using default Processor"; \
+				Error message:K38:3)
+		Catch
+			LOG EVENT:C667(Into 4D diagnostic log:K38:8; \
+				"[4DES] processor.className '"+$className+"' could not be instantiated — using default Processor"; \
+				Error message:K38:3)
+		End try
+	End if 
+	
+	return cs:C1710.Processor.new($cfg)
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Conditional debug logger — no-op when This.option.debug is False.

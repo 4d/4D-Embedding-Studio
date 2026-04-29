@@ -12,6 +12,7 @@ Unknown top-level keys found in the JSON (e.g. `"models"`) are preserved on load
 | `vectors`     | Collection of [Definition](Definition.md) | The configured definitions.                                                 |
 | `batchSize`   | Integer                                                  | Chunk size used by [Process.processEntitySelection](Process.md#processentityselection). Default: `50`. |
 | `phrase`      | Object                                                   | Phrase-validation options (see below).                                      |
+| `processor`   | Object                                                   | Optional processor configuration (see below).                               |
 
 ### phrase options
 
@@ -22,6 +23,21 @@ Passed verbatim to [Phrase.validate()](Phrase.md#validate) whenever the pipeline
 | `allowRelations`   | Boolean | `False` | Allow dot-notation through N:1 / 1:1 relations.         |
 | `allowCalculated`  | Boolean | `False` | Allow calculated attributes in phrases.                 |
 | `allowAlias`       | Boolean | `False` | Allow alias attributes in phrases.                      |
+| `allowObject`      | Boolean | `False` | Allow object attributes in phrases.                     |
+
+> **Invalidation caveat.** Dirty-flag tracking only covers direct scalar fields on the entity. Fields that are only reachable through one of these options — a related entity's attribute, a calculated value, an alias, or a sub-property of an object — will **not** automatically mark the entity as dirty when they change. If such fields are part of a phrase and their source data changes, the vector will not be recomputed unless you call `invalidateVectors()` explicitly or use `force: true` when processing.
+
+### processor options
+
+Controls how [Process](Process.md) builds its embeddings processor. When absent, a default `Processor` is created with its own defaults.
+
+| Field          | Type    | Default | Description                                                                 |
+|----------------|---------|---------|-----------------------------------------------------------------------------|
+| `className`    | Text    | —       | Name of a project class to instantiate instead of the built-in `Processor`. The class must expose `embed` and `embedBatch` functions. If instantiation fails or the interface is missing, a diagnostic error is logged and the default `Processor` is used as fallback. |
+| `maxRetries`   | Integer | `3`     | Number of retry attempts on rate-limit errors (forwarded to `Processor`).   |
+| `backoffMs`    | Integer | `500`   | Base back-off delay in ms, doubled each retry (forwarded to `Processor`).   |
+
+Any additional keys are forwarded as-is to the constructor of the target class (built-in or custom).
 
 ## File format
 
@@ -31,7 +47,12 @@ Passed verbatim to [Phrase.validate()](Phrase.md#validate) whenever the pipeline
   "phrase": {
     "allowRelations": false,
     "allowCalculated": false,
-    "allowAlias": false
+    "allowAlias": false,
+    "allowObject": false
+  },
+  "processor": {
+    "maxRetries": 5,
+    "backoffMs": 200
   },
   "vectors": [
     {
@@ -42,6 +63,17 @@ Passed verbatim to [Phrase.validate()](Phrase.md#validate) whenever the pipeline
       "version": 0
     }
   ]
+}
+```
+
+With a custom processor class:
+
+```json
+{
+  "processor": {
+    "className": "MyCustomProcessor"
+  },
+  "vectors": [...]
 }
 ```
 

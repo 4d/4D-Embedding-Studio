@@ -38,6 +38,26 @@
 				"Summary": ""
 			}
 		},
+		"ProcessResult": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"Phrase": {
+			"new()": {
+				"Syntax": "**.new**( *template* : Text )",
+				"Params": [
+					[
+						"template",
+						"Text",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
 		"Definition": {
 			"new()": {
 				"Syntax": "**.new**( *dataclassName* : Text; *vectorName* : Text; *model* : Text; *phraseTemplate* : Text )",
@@ -110,10 +130,16 @@
 				"Summary": ""
 			}
 		},
-		"_dataclassAttributes": {
+		"_TestProcessProcessor": {
 			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
+				"Syntax": "**.new**( *options* : Object )",
+				"Params": [
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
 				"Summary": ""
 			}
 		},
@@ -130,23 +156,10 @@
 				"Summary": ""
 			}
 		},
-		"ProcessResult": {
+		"_dataclassAttributes": {
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
-				"Summary": ""
-			}
-		},
-		"Phrase": {
-			"new()": {
-				"Syntax": "**.new**( *template* : Text )",
-				"Params": [
-					[
-						"template",
-						"Text",
-						"->"
-					]
-				],
 				"Summary": ""
 			}
 		},
@@ -157,19 +170,6 @@
 					[
 						"data",
 						"Variant",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"_TestProcessProcessor": {
-			"new()": {
-				"Syntax": "**.new**( *options* : Object )",
-				"Params": [
-					[
-						"options",
-						"Object",
 						"->"
 					]
 				],
@@ -423,6 +423,112 @@
 			"Syntax": "settings : cs.embed.Settings"
 		}
 	},
+	"ProcessResult": {
+		"toObject()": {
+			"Syntax": "**.toObject**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get success()": {
+			"Syntax": "**.get success**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"apiCalls": {
+			"Syntax": "apiCalls : Integer"
+		},
+		"durationMs": {
+			"Syntax": "durationMs : Integer"
+		},
+		"entitiesSkipped": {
+			"Syntax": "entitiesSkipped : Integer"
+		},
+		"entitiesUpdated": {
+			"Syntax": "entitiesUpdated : Integer"
+		},
+		"errors": {
+			"Syntax": "errors : Collection"
+		},
+		"entitiesConsidered": {
+			"Syntax": "entitiesConsidered : Integer"
+		},
+		"definitionsProcessed": {
+			"Syntax": "definitionsProcessed : Integer"
+		}
+	},
+	"Phrase": {
+		"render()": {
+			"Syntax": "**.render**( *data* : Object ) : Text",
+			"Params": [
+				[
+					"data",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"validate()": {
+			"Syntax": "**.validate**( *dataclass* : 4D.DataClass; *options* : Object ) : Object",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get keys()": {
+			"Syntax": "**.get keys**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get template()": {
+			"Syntax": "**.get template**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
 	"Definition": {
 		"toObject()": {
 			"Syntax": "**.toObject**() : Object",
@@ -528,6 +634,9 @@
 			"Syntax": "**.load**()",
 			"Params": [],
 			"Summary": ""
+		},
+		"processor": {
+			"Syntax": "processor : Object"
 		},
 		"phrase": {
 			"Syntax": "phrase : Object"
@@ -735,6 +844,118 @@
 			"Syntax": "settings : cs.embed.Settings"
 		}
 	},
+	"_TestProcessProcessor": {
+		"embedBatch()": {
+			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : Collection",
+			"Params": [
+				[
+					"texts",
+					"Collection",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"embed()": {
+			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : 4D.Vector",
+			"Params": [
+				[
+					"text",
+					"Text",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"4D.Vector",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"counter": {
+			"Syntax": "counter : Integer"
+		},
+		"nonCriticalTexts": {
+			"Syntax": "nonCriticalTexts : Collection"
+		},
+		"criticalModels": {
+			"Syntax": "criticalModels : Collection"
+		},
+		"embedBatchCalls": {
+			"Syntax": "embedBatchCalls : Collection"
+		},
+		"embedCalls": {
+			"Syntax": "embedCalls : Collection"
+		}
+	},
+	"Processor": {
+		"embedBatch()": {
+			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : Collection",
+			"Params": [
+				[
+					"texts",
+					"Collection",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"embed()": {
+			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : 4D.Vector",
+			"Params": [
+				[
+					"text",
+					"Text",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"4D.Vector",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"backoffMs": {
+			"Syntax": "backoffMs : Integer"
+		},
+		"maxRetries": {
+			"Syntax": "maxRetries : Integer"
+		},
+		"client": {
+			"Syntax": "client : cs.AIKit.OpenAI"
+		}
+	},
 	"_dataclassAttributes": {
 		"reset()": {
 			"Syntax": "**.reset**( *dataclassName* : Text )",
@@ -805,165 +1026,6 @@
 				[
 					"",
 					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		}
-	},
-	"Processor": {
-		"embedBatch()": {
-			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : Collection",
-			"Params": [
-				[
-					"texts",
-					"Collection",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"embed()": {
-			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : 4D.Vector",
-			"Params": [
-				[
-					"text",
-					"Text",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"4D.Vector",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"backoffMs": {
-			"Syntax": "backoffMs : Integer"
-		},
-		"maxRetries": {
-			"Syntax": "maxRetries : Integer"
-		},
-		"client": {
-			"Syntax": "client : cs.AIKit.OpenAI"
-		}
-	},
-	"ProcessResult": {
-		"toObject()": {
-			"Syntax": "**.toObject**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get success()": {
-			"Syntax": "**.get success**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"apiCalls": {
-			"Syntax": "apiCalls : Integer"
-		},
-		"durationMs": {
-			"Syntax": "durationMs : Integer"
-		},
-		"entitiesSkipped": {
-			"Syntax": "entitiesSkipped : Integer"
-		},
-		"entitiesUpdated": {
-			"Syntax": "entitiesUpdated : Integer"
-		},
-		"errors": {
-			"Syntax": "errors : Collection"
-		},
-		"entitiesConsidered": {
-			"Syntax": "entitiesConsidered : Integer"
-		},
-		"definitionsProcessed": {
-			"Syntax": "definitionsProcessed : Integer"
-		}
-	},
-	"Phrase": {
-		"render()": {
-			"Syntax": "**.render**( *data* : Object ) : Text",
-			"Params": [
-				[
-					"data",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"validate()": {
-			"Syntax": "**.validate**( *dataclass* : 4D.DataClass; *options* : Object ) : Object",
-			"Params": [
-				[
-					"dataclass",
-					"4D.DataClass",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get keys()": {
-			"Syntax": "**.get keys**() : Collection",
-			"Params": [
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get template()": {
-			"Syntax": "**.get template**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
 					"<-"
 				]
 			],
@@ -1565,65 +1627,6 @@
 		},
 		"data": {
 			"Syntax": "data : Collection"
-		}
-	},
-	"_TestProcessProcessor": {
-		"embedBatch()": {
-			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : Collection",
-			"Params": [
-				[
-					"texts",
-					"Collection",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"embed()": {
-			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : 4D.Vector",
-			"Params": [
-				[
-					"text",
-					"Text",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"4D.Vector",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"counter": {
-			"Syntax": "counter : Integer"
-		},
-		"nonCriticalTexts": {
-			"Syntax": "nonCriticalTexts : Collection"
-		},
-		"criticalModels": {
-			"Syntax": "criticalModels : Collection"
-		},
-		"embedBatchCalls": {
-			"Syntax": "embedBatchCalls : Collection"
-		},
-		"embedCalls": {
-			"Syntax": "embedCalls : Collection"
 		}
 	}
 }

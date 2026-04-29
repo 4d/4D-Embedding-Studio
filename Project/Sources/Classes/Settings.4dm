@@ -2,6 +2,7 @@ property file : 4D:C1709.File
 property definitions : Collection  // of cs:C1710.Definition
 property batchSize : Integer
 property phrase : Object  // optionnal { allowRelations, allowCalculated, allowAlias, allowObject }
+property processor : Object  // optional { className?, maxRetries?, backoffMs?, … }
 property _isDev : Boolean
 
 Class constructor($file : 4D:C1709.File)
@@ -22,6 +23,7 @@ Function load()
 	This:C1470[""].raw:={}
 	This:C1470.batchSize:=This:C1470._defaultBatchSize()
 	This:C1470.phrase:=This:C1470._defaultPhraseOptions()
+	This:C1470.processor:=Null:C1517
 	This:C1470._isDev:=(Structure file:C489=Structure file:C489(*))
 	
 	If (Not:C34(This:C1470.file.exists))
@@ -55,6 +57,10 @@ Function load()
 		For each ($key; $raw.phrase)
 			This:C1470.phrase[$key]:=$raw.phrase[$key]
 		End for each 
+	End if 
+	
+	If (Value type:C1509($raw.processor)=Is object:K8:27)
+		This:C1470.processor:=$raw.processor
 	End if 
 	
 	This:C1470._isDev:=This:C1470._isDev || Bool:C1537($raw.dev)
@@ -102,6 +108,12 @@ Function save()
 	End if 
 	
 	$out.vectors:=This:C1470.definitions.copy().filter(Formula:C1597($1.value.hasDefinition)).map(Formula:C1597($1.value.toObject()))
+	
+	If (This:C1470.processor#Null:C1517)
+		$out.processor:=This:C1470.processor
+	Else 
+		OB REMOVE:C1226($out; "processor")
+	End if 
 	
 	If (This:C1470._isDev)
 		$out.dev:=True:C214

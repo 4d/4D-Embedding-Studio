@@ -42,6 +42,13 @@ Function embedBatch($texts : Collection; $model : Text) : Collection
 	
 	return $result.vectors
 	
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _shouldRetry($result : cs:C1710.AIKit.OpenAIEmbeddingsResult) : Boolean
+	ASSERT:C1129(Not:C34($result.success))
+	
+	return $result.errors.reduce(Formula:C1597($1.accumulate:=$1.accumulate || Bool:C1537($1.value.isRateLimitError)); False:C215)
+	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Calls embeddings.create with retry on transient errors.
 	// $input : Text or Collection (AIKit accepts both).
@@ -61,7 +68,7 @@ Function _createWithRetry($input : Variant; $model : Text) : cs:C1710.AIKit.Open
 		End if 
 		
 		// Non-retryable → critical error; throw structured object so callers can detect it by model
-		If (Not:C34($result._shouldRetry()))
+		If (Not:C34(This:C1470._shouldRetry($result)))
 			
 			throw:C1805({componentSignature: "4DES"; \
 				isCriticalAPIError: True:C214; \
