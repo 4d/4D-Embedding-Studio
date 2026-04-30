@@ -247,14 +247,16 @@ Function moreManager($e : Object)
 		$menu.append("🚧 Insert All Attributes"; "insertAllAttributes")
 		$menu.append("🚧 AI Generated Phrase"; "aiGeneratedPhrase")
 		
-		$menu.line().append("🚧 Open AI Setting"; "openAISetting")
-		$menu.append("🚧 Open Setting File"; "openSettingFile")
-		
 		$menu.line().append("🚧 Compute Vectors"; "computeVectors")
 		$menu.append("🚧 Invalid Vectors"; "invalidVectors")
+		$menu.append("🚧 Stat Vectors"; "statVectors")
 		
 		$menu.line().append("🚧 Compute All Vectors"; "computeAllVectors")
 		$menu.append("🚧 Invalid All Vectors"; "invalidAllVectors")
+		$menu.append("🚧 Stat All Vectors"; "statAllVectors")
+		
+		$menu.line().append("🚧 Open AI Setting"; "openAISetting")
+		$menu.append("🚧 Open Setting File"; "openSettingFile")
 		
 		var $diagEnabled : Integer:=Get database parameter:C643(Diagnostic log recording:K37:69)
 		$menu.line().append("🚧 Toggle Diagnostic Log"; "toggleDiagnosticLogRecording"; ($diagEnabled=1))
@@ -380,6 +382,16 @@ Function moreManager($e : Object)
 		: ($menu.choice="invalidAllVectors")
 			
 			_invalidateVectors()
+			
+			// ______________________________________________________
+		: ($menu.choice="statVectors")
+			
+			_statVectors($item.definition)
+			
+			// ______________________________________________________
+		: ($menu.choice="statAllVectors")
+			
+			_statVectors()
 			
 			// ______________________________________________________
 		: ($menu.choice="toggleDiagnosticLogRecording")
