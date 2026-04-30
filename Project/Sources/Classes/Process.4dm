@@ -417,12 +417,15 @@ Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.Definition; $re
 		
 		var $status : Object:=$entity.save()
 		
-		If ($status.success && $debug)
+		If ($status.success)
 			
 			$report.entitiesUpdated+=1
-			This:C1470._logDebug("Vector recomputed — vector: "+String:C10($def.dataclassName)+"."+String:C10($def.vectorName)\
-				+"; entityID: "+String:C10(This:C1470._entityRef($entity))\
-				+"; duration: "+String:C10(Milliseconds:C459-$entityStartMs)+"ms")
+			
+			If ($debug)
+				This:C1470._logDebug("Vector recomputed — vector: "+String:C10($def.dataclassName)+"."+String:C10($def.vectorName)\
+					+"; entityID: "+String:C10(This:C1470._entityRef($entity))\
+					+"; duration: "+String:C10(Milliseconds:C459-$entityStartMs)+"ms")
+			End if 
 			
 		Else 
 			
@@ -494,7 +497,7 @@ Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Definit
 		var $chunk : 4D:C1709.EntitySelection:=$pending.slice($i; $i+$batchSize)
 		Try
 			
-			This:C1470._processChunk($chunk; $def; $hasDirty; $dirtyField; $report)
+			This:C1470._processChunk($chunk; $def; $hasDirty; $dirtyField; $report; $debug)
 			
 		Catch
 			
@@ -606,11 +609,14 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Defini
 			
 			var $status : Object:=$entity.save()
 			
-			If ($status.success && $debug)  // filter debug to not compute string
+			If ($status.success)
 				
 				$report.entitiesUpdated+=1
-				This:C1470._logDebug("Vector recomputed — vector: "+String:C10($def.dataclassName)+"."+String:C10($def.vectorName)\
-					+"; entityID: "+String:C10(This:C1470._entityRef($entity)))
+				
+				If ($debug)
+					This:C1470._logDebug("Vector recomputed — vector: "+String:C10($def.dataclassName)+"."+String:C10($def.vectorName)\
+						+"; entityID: "+String:C10(This:C1470._entityRef($entity)))
+				End if 
 				
 			Else 
 				
