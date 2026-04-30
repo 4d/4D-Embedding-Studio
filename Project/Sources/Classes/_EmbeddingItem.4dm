@@ -4,6 +4,12 @@ property phrase:=""  // Styled text for the UI editor (highlighted errors, etc.)
 property embedded:=[]
 property settings : cs:C1710.Settings
 
+property touched : Boolean:=False:C215
+property original : Object
+
+property _phraseErrors : Collection:=[]
+property _modelErrors : Collection:=[]
+
 property _dataclass : cs:C1710.DataClass
 
 Class constructor($dataclass : 4D:C1709.DataClass; $definition : cs:C1710.Definition; $settings : cs:C1710.Settings)
@@ -32,10 +38,10 @@ Class constructor($dataclass : 4D:C1709.DataClass; $definition : cs:C1710.Defini
 		
 	End if 
 	
-	This:C1470[""]:={\
-		touched: False:C215; \
-		errors: []; \
-		original: This:C1470.definition.toObject()}
+	This:C1470.touched:=False:C215
+	This:C1470._phraseErrors:=[]
+	This:C1470._modelErrors:=[]
+	This:C1470.original:=This:C1470.definition.toObject()
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 	// Gives a menu of available dataclass attributes to insert into the descriptive phrase.
@@ -89,20 +95,20 @@ and show a tooltip with an error message when the developer hovers over it.
 	$text:=Replace string:C233($text; "<"; "&lt;")
 	$text:=Replace string:C233($text; ">"; "&gt;")
 	
-	This:C1470[""].errors:=[]
-	
+	This:C1470._phraseErrors:=[]
+
 	var $err : Object
 	var $errorColor:=FORM Get color scheme:C1761="dark" ? "#ea7979" : "red"
 	For each ($err; $validation.errors)
-		
-		This:C1470.error:=$err.message
-		
+
+		This:C1470._phraseErrors.push($err.message)
+
 		var $styled : Text:=$err.key
 		ST SET ATTRIBUTES:C1093($styled; ST Start text:K78:15; ST End text:K78:16; Attribute text color:K65:7; $errorColor)
 		$text:=Replace string:C233($text; "{"+$err.key+"}"; "{"+$styled+"}")
-		
-	End for each 
-	
+
+	End for each
+
 	return "<span>"+$text+"</span>"  // In multistyle text format
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
@@ -111,20 +117,62 @@ Function get defined() : Boolean
 	return (This:C1470.definition#Null:C1517) && (This:C1470.version>=0)
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+	// Concatenation of phrase + model error messages (most recent validate() pass).
+Function get errors() : Collection
+
+	return This:C1470._phraseErrors.concat(This:C1470._modelErrors)
+
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+	// Always safe to call: returns the joined error list (empty string when none).
 Function get helptip() : Text
-	
-	return Try(This:C1470[""].errors.join("\r"))
-	
-	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
-Function set error($message : Text)
-	
-	This:C1470[""]:=This:C1470[""] || {\
-		touched: False:C215; \
-		errors: []; \
-		original: This:C1470.definition.toObject()}
-	
-	This:C1470[""].errors.push($message)
-	
+
+	return This:C1470.errors.join("\r")
+
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Re-runs phrase + model validation and refreshes _phraseErrors / _modelErrors.
+	// Also refreshes the styled phrase so the editor stays in sync.
+Function validate()
+
+	This:C1470.phrase:=This:C1470.parsePhrase(This:C1470.definition.phrase)
+	This:C1470._validateModel()
+
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Validates the model:
+	//  • a phrase set without a configured model
+	//  • a model name that is not part of the available modelAliases
+Function _validateModel()
+
+	This:C1470._modelErrors:=[]
+
+	If (This:C1470.definition=Null:C1517)
+		return
+	End if
+
+	var $model : Text:=String:C10(This:C1470.definition.model)
+
+	If (Length:C16($model)=0)
+
+		If (Length:C16(String:C10(This:C1470.definition.phrase.template))>0)
+
+			This:C1470._modelErrors.push(Localized string:C991("theModelIsNotDefined"))
+
+		End if
+
+		return
+
+	End if
+
+	// Model is set — must be part of the available aliases
+	var $aliases : Collection:=cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name")
+
+	If (Not:C34($aliases.includes($model)))
+
+		var $msg : Text:=Localized string:C991("theModelIsNotAvailable")
+		$msg:=Replace string:C233($msg; "{model}"; $model)
+		This:C1470._modelErrors.push($msg)
+
+	End if
+
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get supportedAttributes() : Collection
 	return cs:C1710._dataclassAttributes.me.forDataclass(This:C1470._dataclass; (This:C1470.settings#Null:C1517) ? This:C1470.settings.phrase : Null:C1517)

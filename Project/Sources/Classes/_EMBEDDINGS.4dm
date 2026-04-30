@@ -116,7 +116,7 @@ Function manager($e : Object)
 				If ($row>0)
 					
 					var $item : cs:C1710._EmbeddingItem:=Form:C1466.vectors[$row-1]
-					OBJECT SET HELP TIP:C1181(*; $me; $item[""]#Null:C1517 ? String:C10($item.helptip) : String:C10($item.error))
+					OBJECT SET HELP TIP:C1181(*; $me; String:C10($item.helptip))
 					
 				Else 
 					
@@ -214,15 +214,13 @@ Function listMetaInfo($me : cs:C1710._EmbeddingItem) : Object
 		$meta.fontWeight:="bold"
 		
 		If ($me#This:C1470.currentItem)
-			
-			If (($me[""].errors.length>0)\
-				 || (Length:C16(String:C10($me.error))>0))\
-				 || ($me.definition.model="")
-				
+
+			If ($me.errors.length>0)
+
 				$meta.stroke:=FORM Get color scheme:C1761="dark" ? "#ea7979" : "red"
-				
-			End if 
-		End if 
+
+			End if
+		End if
 	End if 
 	
 	return $meta
@@ -450,8 +448,8 @@ Function phraseManager($e : Object)
 			
 			// ______________________________________________________
 		: ($e.code=On Mouse Enter:K2:33) || ($e.code=On Mouse Move:K2:35)
-			
-			OBJECT SET HELP TIP:C1181(*; $me; $item[""]#Null:C1517 ? String:C10($item.helptip) : String:C10($item.error))
+
+			OBJECT SET HELP TIP:C1181(*; $me; String:C10($item.helptip))
 			
 			// ______________________________________________________
 		: ($e.code=On Mouse Leave:K2:34)
@@ -511,8 +509,9 @@ Function phraseManager($e : Object)
 			$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
 			$item.version+=1
 			
-			// Highlight any errors, if any
-			ST SET TEXT:C1115(*; $me; $item.parsePhrase($item.definition.phrase); ST Start text:K78:15; ST End text:K78:16)
+			// Re-validate phrase + model and refresh styled text
+			$item.validate()
+			ST SET TEXT:C1115(*; $me; $item.phrase; ST Start text:K78:15; ST End text:K78:16)
 			
 			This:C1470.saveEmbeddingItems()
 			This:C1470._promptInvalidate($item)
@@ -548,6 +547,7 @@ Function modelsDropdownManager($e : Object)
 			// Update current item
 			This:C1470.currentItem.definition.model:=$dropDown.currentValue
 			This:C1470.currentItem.version+=1
+			This:C1470.currentItem.validate()  // refresh _modelErrors
 			This:C1470.saveEmbeddingItems()
 			This:C1470._promptInvalidate(This:C1470.currentItem)
 			
@@ -678,17 +678,11 @@ Enriched with saved Definition entries from Settings/vectors.json.
 		var $item : cs:C1710._EmbeddingItem:=cs:C1710._EmbeddingItem.new($vf.dataclass; $def; This:C1470.settings)
 		
 		If ($wasSaved)
-			
+
 			$item.version:=0
-			$item.phrase:=$item.parsePhrase($def.phrase)
-			
-			// TODO: Check if the model exists
-			If (($def.model="") && (Length:C16($def.phrase.template)>0))
-				
-				$item.error:=Localized string:C991("theModelIsNotDefined")
-				
-			End if 
-		End if 
+			$item.validate()  // refreshes styled phrase + _phraseErrors + _modelErrors
+
+		End if
 		
 		$items.push($item)
 		
@@ -704,28 +698,30 @@ Enriched with saved Definition entries from Settings/vectors.json.
 			
 		End if 
 		
-		var $ghost : Object:={definition: $saved; error: ""}
-		
-		Case of 
-				
+		var $ghost : Object:={definition: $saved; errors: []; helptip: ""}
+
+		Case of
+
 				// ______________________________________________________
 			: (This:C1470.catalog[$saved.dataclassName]=Null:C1517)
-				
-				$ghost.error:=Replace string:C233(Localized string:C991("missingDataclass"); "{dataclass}"; $saved.dataclassName)
-				
+
+				$ghost.errors.push(Replace string:C233(Localized string:C991("missingDataclass"); "{dataclass}"; $saved.dataclassName))
+
 				// ______________________________________________________
 			: (This:C1470.catalog[$saved.dataclassName][$saved.vectorName]=Null:C1517)
-				
-				$ghost.error:=Replace string:C233(Replace string:C233(Localized string:C991("missingVector"); "{attribute}"; $saved.vectorName); "{dataclass}"; $saved.dataclassName)
-				
+
+				$ghost.errors.push(Replace string:C233(Replace string:C233(Localized string:C991("missingVector"); "{attribute}"; $saved.vectorName); "{dataclass}"; $saved.dataclassName))
+
 				// ______________________________________________________
 			: (String:C10(This:C1470.catalog[$saved.dataclassName][$saved.vectorName].classID)#"4D.Vector")
-				
-				$ghost.error:=Replace string:C233(Replace string:C233(Localized string:C991("attributeIsNotAVector"); "{attribute}"; $saved.vectorName); "{dataclass}"; $saved.dataclassName)
-				
+
+				$ghost.errors.push(Replace string:C233(Replace string:C233(Localized string:C991("attributeIsNotAVector"); "{attribute}"; $saved.vectorName); "{dataclass}"; $saved.dataclassName))
+
 				// ______________________________________________________
-		End case 
-		
+		End case
+
+		$ghost.helptip:=$ghost.errors.join("\r")
+
 		$items.push($ghost)
 		
 	End for each 
@@ -747,11 +743,11 @@ Function saveEmbeddingItems()
 	// If either changed, prompts the developer and calls invalidateVectors() on confirmation.
 Function _promptInvalidate($item : cs:C1710._EmbeddingItem)
 	
-	If (($item=Null:C1517) || ($item[""]=Null:C1517) || ($item[""].original=Null:C1517))
+	If (($item=Null:C1517) || ($item.original=Null:C1517))
 		return 
 	End if 
 	
-	var $orig : Object:=$item[""].original
+	var $orig : Object:=$item.original
 	var $changed : Boolean:=\
 		(String:C10($item.definition.phrase.template)#String:C10($orig.phrase))\
 		 || (String:C10($item.definition.model)#String:C10($orig.model))
@@ -765,7 +761,7 @@ Function _promptInvalidate($item : cs:C1710._EmbeddingItem)
 	End if 
 	
 	// Update snapshot so a subsequent save won't re-prompt for the same delta
-	$item[""].original:=$item.definition.toObject()
+	$item.original:=$item.definition.toObject()
 	
 	CONFIRM:C162(\
 		"The definition for "+$item.definition.dataclassName+"."+$item.definition.vectorName+" has changed.\rDo you want to mark all existing vectors for recalculation?"; \

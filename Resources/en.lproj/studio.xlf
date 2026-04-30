@@ -78,6 +78,10 @@
           <source>The model is not defined</source>
           <target>The model is not defined</target>
         </trans-unit>
+        <trans-unit id="theModelIsNotAvailable" resname="theModelIsNotAvailable">
+          <source>The model "{model}" is not available.</source>
+          <target>The model "{model}" is not available.</target>
+        </trans-unit>
         <trans-unit id="19" resname="theAttributeIsNotARelation">
           <source>The "{attribute}" attribute is not a N:1 relation.</source>
           <target>The "{attribute}" attribute is not a N:1 relation.</target>
