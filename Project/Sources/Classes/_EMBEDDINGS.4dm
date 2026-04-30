@@ -256,6 +256,21 @@ Function moreManager($e : Object)
 		$menu.line().append("🚧 Compute All Vectors"; "computeAllVectors")
 		$menu.append("🚧 Invalid All Vectors"; "invalidAllVectors")
 		
+		var $diagEnabled : Integer:=Get database parameter:C643(Diagnostic log recording:K37:69)
+		$menu.line().append("🚧 Toggle Diagnostic Log"; "toggleDiagnosticLogRecording"; ($diagEnabled=1))
+		
+		var $diagLevel : Integer:=Get database parameter:C643(Diagnostic log level:K37:108)
+		var $levelSubmenu:=cs:C1710._menu.new("no-localization")
+		var $levelNames:=["Trace"; "Debug"; "Info"; "Warning"; "Error"]
+		var $levelConsts:=[Log trace:K37:109; Log debug:K37:110; Log info:K37:111; Log warn:K37:112; Log error:K37:113]
+		var $i : Integer
+		For ($i; 0; $levelNames.length-1)
+			$levelSubmenu.append($levelNames[$i]; "diagLevel:"+String:C10($levelConsts[$i]); ($diagLevel=$levelConsts[$i]))
+		End for 
+		$menu.append("🚧 Diagnostic Log Level"; $levelSubmenu)
+		
+		$menu.append("🚧 Open Diagnostic Log"; "openDiagosticLog")
+		
 	End if 
 	
 	Case of 
@@ -365,6 +380,27 @@ Function moreManager($e : Object)
 		: ($menu.choice="invalidAllVectors")
 			
 			_invalidateVectors()
+			
+			// ______________________________________________________
+		: ($menu.choice="toggleDiagnosticLogRecording")
+			
+			var $current : Integer:=Get database parameter:C643(Diagnostic log recording:K37:69)
+			SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69; ($current=0) ? 1 : 0)
+			
+			// ______________________________________________________
+		: (Position:C15("diagLevel:"; $menu.choice)=1)
+			
+			SET DATABASE PARAMETER:C642(Diagnostic log level:K37:108; Num:C11(Substring:C12($menu.choice; Length:C16("diagLevel:")+1)))
+			
+			// ______________________________________________________
+		: ($menu.choice="openDiagosticLog")
+			
+			var $file:=Folder:C1567(fk logs folder:K87:17).files().filter(Formula:C1597(Position:C15("4DDiagnosticLog_"; $1.value.name)=1)).sort().first()
+			If ($file=Null:C1517)
+				ALERT:C41("No log")
+			Else 
+				OPEN URL:C673($file.platformPath)
+			End if 
 			
 			// ______________________________________________________
 	End case 

@@ -70,7 +70,7 @@ Function process($definition : Variant) : cs:C1710.ProcessResult
 		End if 
 		
 		var $dc : 4D:C1709.DataClass:=ds:C1482[$def.dataclassName]
-		This:C1470._runOnSelection($dc.all(); $def; $report)
+		This:C1470._runOnSelection($dc.all(); $def; $report; This:C1470._isDebug())
 		
 	End for each 
 	
@@ -109,7 +109,7 @@ Function processEntity($entity : 4D:C1709.Entity; $definition : Variant) : cs:C1
 			
 		End if 
 		
-		This:C1470._runOnEntity($entity; $def; $report)
+		This:C1470._runOnEntity($entity; $def; $report; This:C1470._isDebug())
 		
 	End for each 
 	
@@ -148,38 +148,11 @@ Function processEntitySelection($es : 4D:C1709.EntitySelection; $definition : Va
 			
 		End if 
 		
-		This:C1470._runOnSelection($es; $def; $report)
+		This:C1470._runOnSelection($es; $def; $report; This:C1470._isDebug())
 		
 	End for each 
 	
 	return This:C1470._doneWithCallbacks($report)
-	
-	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-	// Finalize report and fire optional lifecycle callbacks.
-	// Callbacks are Formula receiving ({report, success, errors}).
-Function _doneWithCallbacks($report : cs:C1710.ProcessResult) : cs:C1710.ProcessResult
-	
-	var $done : cs:C1710.ProcessResult:=$report._done()
-	var $payload : Object:={report: $done; success: $done.success; errors: $done.errors}
-	
-	If ($done.success)
-		var $onSuccess : 4D:C1709.Function:=This:C1470.options.onSuccess
-		If ($onSuccess#Null:C1517)
-			Try($onSuccess.call(Null:C1517; $payload))
-		End if 
-	Else 
-		var $onError : 4D:C1709.Function:=This:C1470.options.onError
-		If ($onError#Null:C1517)
-			Try($onError.call(Null:C1517; $payload))
-		End if 
-	End if 
-	
-	var $onTerminate : 4D:C1709.Function:=This:C1470.options.onTerminate
-	If ($onTerminate#Null:C1517)
-		Try($onTerminate.call(Null:C1517; $payload))
-	End if 
-	
-	return $done
 	
 	// MARK:-[PLAYGROUND — ad-hoc, non-persisting helpers]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -287,6 +260,40 @@ Function embed($input : Variant; $context : Variant; $model : Text) : 4D:C1709.V
 	
 	return This:C1470.processor.embed($text; $modelName)
 	
+	// MARK:-[PRIVATE]
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Finalize report and fire optional lifecycle callbacks.
+	// Callbacks are Formula receiving ({report, success, errors}).
+Function _doneWithCallbacks($report : cs:C1710.ProcessResult) : cs:C1710.ProcessResult
+	
+	var $done : cs:C1710.ProcessResult:=$report._done()
+	var $payload : Object:={report: $done; success: $done.success; errors: $done.errors}
+	
+	If ($done.success)
+		var $onSuccess : 4D:C1709.Function:=This:C1470.options.onSuccess
+		If ($onSuccess#Null:C1517)
+			Try($onSuccess.call(Null:C1517; $payload))
+		End if 
+	Else 
+		var $onError : 4D:C1709.Function:=This:C1470.options.onError
+		If ($onError#Null:C1517)
+			Try($onError.call(Null:C1517; $payload))
+		End if 
+	End if 
+	
+	var $onTerminate : 4D:C1709.Function:=This:C1470.options.onTerminate
+	If ($onTerminate#Null:C1517)
+		Try($onTerminate.call(Null:C1517; $payload))
+	End if 
+	
+	return $done
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// is debug info 
+Function _isDebug() : Boolean
+	return (This:C1470.options.debug#Null:C1517) ? Bool:C1537(This:C1470.options.debug) : Get database parameter:C643(Diagnostic log level:K37:108)<=Log debug:K37:110
+	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Polymorphic phrase extraction: Phrase | Definition | Text template | Null (auto-resolve).
 Function _phraseFrom($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) : cs:C1710.Phrase
@@ -363,7 +370,7 @@ Function _validateDefinition($def : cs:C1710.Definition; $report : cs:C1710.Proc
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Single-entity fast path (no chunking, no server-side filter).
-Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.Definition; $report : cs:C1710.ProcessResult)
+Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.Definition; $report : cs:C1710.ProcessResult; $debug : Boolean)
 	
 	var $dc : 4D:C1709.DataClass:=$entity.getDataClass()
 	var $dirtyField : Text:=$def.vectorName+"_dirty"
@@ -410,7 +417,7 @@ Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.Definition; $re
 		
 		var $status : Object:=$entity.save()
 		
-		If ($status.success)
+		If ($status.success && $debug)
 			
 			$report.entitiesUpdated+=1
 			This:C1470._logDebug("Vector recomputed — vector: "+String:C10($def.dataclassName)+"."+String:C10($def.vectorName)\
@@ -443,7 +450,7 @@ Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.Definition; $re
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Core pipeline: filter → chunk → embed → persist.
-Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Definition; $report : cs:C1710.ProcessResult)
+Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Definition; $report : cs:C1710.ProcessResult; $debug : Boolean)
 	
 	var $dc : 4D:C1709.DataClass:=ds:C1482[$def.dataclassName]
 	var $dirtyField : Text:=$def.vectorName+"_dirty"
@@ -541,7 +548,7 @@ Function _filterNeedsRecompute($es : 4D:C1709.EntitySelection; $def : cs:C1710.D
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Process one chunk: build texts, call API once, zip vectors back, persist each entity.
-Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Definition; $hasDirty : Boolean; $dirtyField : Text; $report : cs:C1710.ProcessResult)
+Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Definition; $hasDirty : Boolean; $dirtyField : Text; $report : cs:C1710.ProcessResult; $debug : Boolean)
 	
 	// Build texts (positional: $texts[i] corresponds to $chunk entity #i)
 	var $texts : Collection:=[]
@@ -599,7 +606,7 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Defini
 			
 			var $status : Object:=$entity.save()
 			
-			If ($status.success)
+			If ($status.success && $debug)  // filter debug to not compute string
 				
 				$report.entitiesUpdated+=1
 				This:C1470._logDebug("Vector recomputed — vector: "+String:C10($def.dataclassName)+"."+String:C10($def.vectorName)\
@@ -696,7 +703,5 @@ Function _buildProcessor($options : Object) : Object
 	// Conditional debug logger — no-op when This.option.debug is False.
 Function _logDebug($message : Text)
 	
-	If (Bool:C1537(This:C1470.options.debug))
-		LOG EVENT:C667(Into 4D diagnostic log:K38:8; "[4DES] "+$message; Information message:K38:1)
-	End if 
+	LOG EVENT:C667(Into 4D diagnostic log:K38:8; "[4DES] "+$message; Information message:K38:1)  // XXX: no debug level?
 	

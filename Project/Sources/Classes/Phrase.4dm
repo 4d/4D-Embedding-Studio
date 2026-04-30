@@ -84,12 +84,14 @@ Function validate($dataclass : 4D:C1709.DataClass; $options : Object) : Object
 	var $allowRelations:=False:C215
 	var $allowCalculated:=False:C215
 	var $allowAlias:=False:C215
+	var $allowObject:=False:C215
 	
 	If ($options#Null:C1517)
 		
 		$allowRelations:=$options.allowRelations
 		$allowCalculated:=$options.allowCalculated
 		$allowAlias:=$options.allowAlias
+		$allowObject:=$options.allowObject
 		
 	End if 
 	
@@ -169,7 +171,7 @@ Function validate($dataclass : 4D:C1709.DataClass; $options : Object) : Object
 						
 						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("aliasAttributeIsNotAllowed"; $segment)})
 						
-					: (cs:C1710._dataclassAttributes.me.isExcludedStorageType($attribute; $options#Null:C1517 ? Bool:C1537($options.allowObject) : False:C215))
+					: (cs:C1710._dataclassAttributes.me.isExcludedStorageType($attribute; $allowObject))
 						
 						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("theAttributeTypeIsNotSupportedInAPhrase"; $segment)})
 						
