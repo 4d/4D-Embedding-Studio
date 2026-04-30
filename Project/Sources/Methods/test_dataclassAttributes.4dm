@@ -38,7 +38,11 @@ ASSERT:C1129($attrs.query("name = :1"; "town").length=0; "default: alias 'town' 
 // ══════════════════════════════════════════════════════════════════════
 
 $attrs:=$dca.forDataclass(ds:C1482.Students; {allowRelations: True:C214})
-ASSERT:C1129($attrs.query("name = :1"; "school").length=1; "allowRelations: 'school' relatedEntity must be included")
+// relation is now {name; fields} object, not a flat attribute object
+var $schoolEntry:=$attrs.query("name = :1"; "school").first()
+ASSERT:C1129($schoolEntry#Null:C1517; "allowRelations: 'school' must be present in result")
+ASSERT:C1129(Value type:C1509($schoolEntry.fields)=Is collection:K8:32; "allowRelations: 'school' entry must have a fields Collection")
+ASSERT:C1129($schoolEntry.fields.length>0; "allowRelations: 'school' fields must not be empty")
 ASSERT:C1129($attrs.query("name = :1"; "firstName").length=1; "allowRelations: simple fields still present")
 ASSERT:C1129($attrs.query("name = :1"; "student_vector_1").length=0; "allowRelations: vectors still excluded")
 ASSERT:C1129($attrs.query("name = :1"; "school_ID").length=0; "allowRelations: FK storage still excluded")
@@ -70,7 +74,8 @@ ASSERT:C1129($attrs.query("name = :1"; "fullName").length=0; "allowAlias: calcul
 // ══════════════════════════════════════════════════════════════════════
 
 $attrs:=$dca.forDataclass(ds:C1482.Students; {allowRelations: True:C214; allowCalculated: True:C214; allowAlias: True:C214})
-ASSERT:C1129($attrs.query("name = :1"; "school").length=1; "all options: relatedEntity included")
+var $schoolEntry2:=$attrs.query("name = :1"; "school").first()
+ASSERT:C1129(Value type:C1509($schoolEntry2.fields)=Is collection:K8:32; "all options: relatedEntity 'school' must have a fields Collection")
 ASSERT:C1129($attrs.query("name = :1"; "fullName").length=1; "all options: calculated included")
 ASSERT:C1129($attrs.query("name = :1"; "town").length=1; "all options: alias included")
 ASSERT:C1129($attrs.query("name = :1"; "firstName").length=1; "all options: simple fields present")
@@ -90,7 +95,8 @@ ASSERT:C1129($attrs.query("name = :1"; "city_ID").length=0; "School default: FK 
 ASSERT:C1129($attrs.query("name = :1"; "city").length=0; "School default: relatedEntity 'city' excluded without allowRelations")
 
 $attrs:=$dca.forDataclass(ds:C1482.School; {allowRelations: True:C214})
-ASSERT:C1129($attrs.query("name = :1"; "city").length=1; "School allowRelations: 'city' N:1 must be included")
+var $cityEntry:=$attrs.query("name = :1"; "city").first()
+ASSERT:C1129(Value type:C1509($cityEntry.fields)=Is collection:K8:32; "School allowRelations: 'city' must have a fields Collection")
 ASSERT:C1129($attrs.query("name = :1"; "strudents").length=0; "School allowRelations: 1:N 'strudents' still excluded")
 
 // ══════════════════════════════════════════════════════════════════════

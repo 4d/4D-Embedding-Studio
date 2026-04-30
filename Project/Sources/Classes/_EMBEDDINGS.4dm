@@ -258,6 +258,14 @@ Function moreManager($e : Object)
 		$menu.line().append("🚧 Open AI Setting"; "openAISetting")
 		$menu.append("🚧 Open Setting File"; "openSettingFile")
 		
+		var $phraseOpts : Object:=This:C1470.settings.phrase
+		var $phraseSubmenu:=cs:C1710._menu.new("no-localization")
+		$phraseSubmenu.append("Allow Relations"; "phraseOption:allowRelations"; Bool:C1537($phraseOpts.allowRelations))
+		$phraseSubmenu.append("Allow Calculated"; "phraseOption:allowCalculated"; Bool:C1537($phraseOpts.allowCalculated))
+		$phraseSubmenu.append("Allow Alias"; "phraseOption:allowAlias"; Bool:C1537($phraseOpts.allowAlias))
+		$phraseSubmenu.append("Allow Object"; "phraseOption:allowObject"; Bool:C1537($phraseOpts.allowObject))
+		$menu.append("🚧 Phrase Settings"; $phraseSubmenu)
+		
 		var $diagEnabled : Integer:=Get database parameter:C643(Diagnostic log recording:K37:69)
 		$menu.line().append("🚧 Toggle Diagnostic Log"; "toggleDiagnosticLogRecording"; ($diagEnabled=1))
 		
@@ -394,6 +402,13 @@ Function moreManager($e : Object)
 			_statVectors()
 			
 			// ______________________________________________________
+		: (Position:C15("phraseOption:"; $menu.choice)=1)
+			
+			var $optKey : Text:=Substring:C12($menu.choice; Length:C16("phraseOption:")+1)
+			This:C1470.settings.phrase[$optKey]:=Not:C34(Bool:C1537(This:C1470.settings.phrase[$optKey]))
+			This:C1470.settings.save()
+			
+			// ______________________________________________________
 		: ($menu.choice="toggleDiagnosticLogRecording")
 			
 			var $current : Integer:=Get database parameter:C643(Diagnostic log recording:K37:69)
@@ -463,8 +478,10 @@ Function phraseManager($e : Object)
 			
 			// 📌 Ignored if an associated action (for edit items)
 			This:C1470.insertInput($item; $menu.choice)
+			
+			// XXX: maybe launch on times this:
 			This:C1470.saveEmbeddingItems()
-			This:C1470._promptInvalidate($item)
+			This:C1470._promptInvalidate($item)  // XXX: maybe too aggressive, ask if go out? (but if never? do not saveEmbeddingItems?)
 			
 			// ______________________________________________________
 		: ($e.code=On Before Keystroke:K2:6)

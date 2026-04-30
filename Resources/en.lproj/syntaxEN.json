@@ -246,9 +246,6 @@
 		"embedded": {
 			"Syntax": "embedded : Collection"
 		},
-		"supportedAttributes": {
-			"Syntax": "supportedAttributes : Collection"
-		},
 		"version": {
 			"Syntax": "version : Integer"
 		},
@@ -260,6 +257,17 @@
 		},
 		"definition": {
 			"Syntax": "definition : cs.embed.Definition"
+		},
+		"get supportedAttributes()": {
+			"Syntax": "**.get supportedAttributes**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
 		}
 	},
 	"_EMBEDDINGS": {

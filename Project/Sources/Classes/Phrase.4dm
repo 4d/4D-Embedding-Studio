@@ -53,10 +53,11 @@ Function render($data : Object) : Text
 		var $value : Variant:=(Value type:C1509($path)=Is text:K8:3) ? $data[$path] : This:C1470._resolve($path; $data)
 		
 		If ($value#Null:C1517)
-			
-			// TODO: if object or collection? ignore?
-			$result+=String:C10($value)
-			
+			If ((Value type:C1509($value)=Is object:K8:27) || (Value type:C1509($value)=Is collection:K8:32))
+				$result+=JSON Stringify:C1217($value)
+			Else 
+				$result+=String:C10($value)
+			End if 
 		End if 
 		
 	End for 

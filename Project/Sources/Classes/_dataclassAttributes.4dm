@@ -72,17 +72,21 @@ In the embedding phrase, the supported attributes shall be:
 	var $allowAlias : Boolean:=Bool:C1537($options#Null:C1517 ? $options.allowAlias : False:C215)
 	var $allowObject : Boolean:=Bool:C1537($options#Null:C1517 ? $options.allowObject : False:C215)
 	
-	If ($allowRelations && $allowCalculated && $allowAlias && $allowObject)
-		return $base
-	End if 
-	
 	var $filtered:=[]
 	var $attr : Object
 	For each ($attr; $base)
 		If (This:C1470.isExcludedStorageType($attr; $allowObject))
 			continue
 		End if 
-		If ($attr.kind="relatedEntity") && (Not:C34($allowRelations))
+		If ($attr.kind="relatedEntity")
+			If (Not:C34($allowRelations))
+				continue
+			End if 
+			var $relatedDC : 4D:C1709.DataClass:=ds:C1482[$attr.relatedDataClass]
+			If ($relatedDC#Null:C1517)
+				var $subOptions:={allowRelations: False:C215; allowCalculated: $allowCalculated; allowAlias: $allowAlias; allowObject: $allowObject}
+				$filtered.push({name: $attr.name; fields: This:C1470.forDataclass($relatedDC; $subOptions)})
+			End if
 			continue
 		End if 
 		If ($attr.kind="calculated") && (Not:C34($allowCalculated))

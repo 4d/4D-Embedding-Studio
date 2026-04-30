@@ -15,7 +15,8 @@
 		],
 		"methods": [
 			"_computeVectors",
-			"_invalidateVectors"
+			"_invalidateVectors",
+			"_statVectors"
 		],
 		"classes": [
 			"StudentsEntity"
