@@ -22,13 +22,38 @@ var $tpl:=cs.embed.Phrase.new("Hello {firstName}, you study at {schoolName}.")
 $tpl.keys // → ["firstName"; "schoolName"]
 ```
 
+### Default values
+
+Each placeholder may declare an inline default after a `|`:
+
+```
+{field|default text}
+```
+
+The default is rendered when the resolved value is `Null`, missing, or an empty string. Otherwise the value is rendered as usual.
+
+```4d
+var $tpl:=cs.embed.Phrase.new("Customer {firstName|Anonymous} from {city|unknown city}, registered {signupDate|recently}.")
+$tpl.render({firstName: ""; city: Null})
+// → "Customer Anonymous from unknown city, registered recently."
+```
+
+Notes:
+
+- Only the first `|` is the separator; subsequent `|` characters are part of the default text.
+- The default text is taken verbatim — surrounding whitespace is preserved (e.g. `{x| n/a }` renders ` n/a `).
+- Whitespace around the field name is still trimmed (`{ name | X}` is the same key as `{name| X}`).
+- Numeric `0` and boolean `False` are treated as present values, not as missing.
+- Works with dot-notation: `{user.address.city|unknown}`.
+- Defaults do not affect `keys` or `validate()` — they are render-only metadata.
+
 ## Functions
 
 ### render()
 
 **render**(*data* : Object) : Text
 
-Render the compiled template by replacing variables with values from *data*. Missing keys produce an empty string.
+Render the compiled template by replacing variables with values from *data*. Missing keys produce an empty string, unless an inline default was provided via `{field|default}` syntax (see [Default values](#default-values)).
 
 | Argument        | Type   | Description                                                                 |
 |-----------------|--------|-----------------------------------------------------------------------------|

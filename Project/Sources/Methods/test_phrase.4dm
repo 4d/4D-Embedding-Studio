@@ -67,6 +67,86 @@ $result:=$tpl.render({a: "1"; b: "2"; c: "3"})
 ASSERT:C1129($result="123"; "Adjacent: expected '123', got '"+$result+"'")
 
 // ══════════════════════════════════════════════════════════════════════
+// DEFAULT VALUE TESTS (pipe syntax)
+// ══════════════════════════════════════════════════════════════════════
+
+// --- Default used when key missing ---
+$tpl:=cs:C1710.Phrase.new("{name|Anonymous}")
+$result:=$tpl.render({})
+ASSERT:C1129($result="Anonymous"; "Default missing: expected 'Anonymous', got '"+$result+"'")
+
+// --- Default used when value is Null ---
+$tpl:=cs:C1710.Phrase.new("{name|Anonymous}")
+$result:=$tpl.render({name: Null:C1517})
+ASSERT:C1129($result="Anonymous"; "Default null: expected 'Anonymous', got '"+$result+"'")
+
+// --- Default used when value is empty string ---
+$tpl:=cs:C1710.Phrase.new("{name|Anonymous}")
+$result:=$tpl.render({name: ""})
+ASSERT:C1129($result="Anonymous"; "Default empty: expected 'Anonymous', got '"+$result+"'")
+
+// --- Default ignored when value is present ---
+$tpl:=cs:C1710.Phrase.new("{name|Anonymous}")
+$result:=$tpl.render({name: "Alice"})
+ASSERT:C1129($result="Alice"; "Default ignored: expected 'Alice', got '"+$result+"'")
+
+// --- Numeric 0 is NOT treated as missing ---
+$tpl:=cs:C1710.Phrase.new("{age|unknown}")
+$result:=$tpl.render({age: 0})
+ASSERT:C1129($result="0"; "Default zero: expected '0', got '"+$result+"'")
+
+// --- False is NOT treated as missing (default must NOT be used) ---
+$tpl:=cs:C1710.Phrase.new("{active|n/a}")
+$result:=$tpl.render({active: False:C215})
+ASSERT:C1129($result#"n/a"; "Default false: expected NOT 'n/a', got '"+$result+"'")
+ASSERT:C1129($result#""; "Default false: expected non-empty, got '"+$result+"'")
+
+// --- Default text untrimmed ---
+$tpl:=cs:C1710.Phrase.new("[{x| n/a }]")
+$result:=$tpl.render({})
+ASSERT:C1129($result="[ n/a ]"; "Default untrimmed: expected '[ n/a ]', got '"+$result+"'")
+
+// --- Multiple | only first is separator ---
+$tpl:=cs:C1710.Phrase.new("{x|a|b}")
+$result:=$tpl.render({})
+ASSERT:C1129($result="a|b"; "Default multi-pipe: expected 'a|b', got '"+$result+"'")
+
+// --- Whitespace around field name still trimmed; default untrimmed ---
+$tpl:=cs:C1710.Phrase.new("{ name | Anonymous}")
+ASSERT:C1129($tpl.keys[0]="name"; "Default trim key: expected 'name', got '"+$tpl.keys[0]+"'")
+$result:=$tpl.render({})
+ASSERT:C1129($result=" Anonymous"; "Default trim val: expected ' Anonymous', got '"+$result+"'")
+
+// --- Dot-notation with default — empty string triggers default ---
+$tpl:=cs:C1710.Phrase.new("{user.name|Anonymous}")
+$result:=$tpl.render({user: {name: ""}})
+ASSERT:C1129($result="Anonymous"; "Default dot empty: expected 'Anonymous', got '"+$result+"'")
+
+// --- Dot-notation with default — present value wins ---
+$result:=$tpl.render({user: {name: "Alice"}})
+ASSERT:C1129($result="Alice"; "Default dot present: expected 'Alice', got '"+$result+"'")
+
+// --- Dot-notation with default — missing intermediate triggers default ---
+$result:=$tpl.render({})
+ASSERT:C1129($result="Anonymous"; "Default dot missing: expected 'Anonymous', got '"+$result+"'")
+
+// --- keys getter unaffected by defaults ---
+$tpl:=cs:C1710.Phrase.new("{firstName|X} {lastName|Y}")
+ASSERT:C1129($tpl.keys.length=2; "Default keys: expected 2 keys")
+ASSERT:C1129($tpl.keys[0]="firstName"; "Default keys[0]: expected 'firstName', got '"+$tpl.keys[0]+"'")
+ASSERT:C1129($tpl.keys[1]="lastName"; "Default keys[1]: expected 'lastName', got '"+$tpl.keys[1]+"'")
+
+// --- User's example end-to-end ---
+$tpl:=cs:C1710.Phrase.new("Customer {firstName|Anonymous} from {city|unknown city}, registered {signupDate|recently}.")
+$result:=$tpl.render({firstName: ""; city: Null:C1517})
+ASSERT:C1129($result="Customer Anonymous from unknown city, registered recently."; "Default e2e: got '"+$result+"'")
+
+// --- Empty default = empty render (no-op) ---
+$tpl:=cs:C1710.Phrase.new("{name|}")
+$result:=$tpl.render({})
+ASSERT:C1129($result=""; "Default empty default: expected '', got '"+$result+"'")
+
+// ══════════════════════════════════════════════════════════════════════
 // DOT-NOTATION TESTS
 // ══════════════════════════════════════════════════════════════════════
 
@@ -157,6 +237,17 @@ $tpl:=cs:C1710.Phrase.new("{nonExistent} {student_vector_1} {firstName}")
 $v:=$tpl.validate(ds:C1482.Students)
 ASSERT:C1129(Not:C34($v.success); "Validate multi-error: expected failure")
 ASSERT:C1129($v.errors.length=2; "Validate multi-error: expected 2 errors, got "+String:C10($v.errors.length))
+
+// --- validate() ignores defaults (valid fields with defaults pass) ---
+$tpl:=cs:C1710.Phrase.new("{firstName|Anon} {lastName|}")
+$v:=$tpl.validate(ds:C1482.Students)
+ASSERT:C1129($v.success; "Validate with defaults: expected success, errors: "+JSON Stringify:C1217($v.errors))
+
+// --- validate() reports missing field even when a default is present ---
+$tpl:=cs:C1710.Phrase.new("{nonExistent|fallback}")
+$v:=$tpl.validate(ds:C1482.Students)
+ASSERT:C1129(Not:C34($v.success); "Validate default+missing: expected failure")
+ASSERT:C1129($v.errors[0].key="nonExistent"; "Validate default+missing: error key mismatch, got '"+$v.errors[0].key+"'")
 
 // ══════════════════════════════════════════════════════════════════════
 // VALIDATE TESTS — AllTypes (blob, object, picture rejected)

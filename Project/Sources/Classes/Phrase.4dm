@@ -13,6 +13,7 @@
 property _template : Text
 property _parts : Collection:=[]  // Static text segments between variables
 property _keyPaths : Collection:=[]  // Text for simple keys, Collection for dot-notation (e.g. "a.b.c" → ["a", "b", "c"])
+property _defaults : Collection:=[]  // Default text per key, used when value is Null/missing/empty (parallel to _keyPaths)
 
 // MARK:-[CONSTRUCTOR]
 Class constructor($template : Text)
@@ -52,7 +53,18 @@ Function render($data : Object) : Text
 		// Fast path for simple keys, deep resolve for dot-notation
 		var $value : Variant:=(Value type:C1509($path)=Is text:K8:3) ? $data[$path] : This:C1470._resolve($path; $data)
 		
-		If ($value#Null:C1517)
+		var $useDefault : Boolean:=False:C215
+		If ($value=Null:C1517)
+			$useDefault:=True:C214
+		Else 
+			If ((Value type:C1509($value)=Is text:K8:3) && ($value=""))
+				$useDefault:=True:C214
+			End if 
+		End if 
+		
+		If ($useDefault)
+			$result+=String:C10(This:C1470._defaults[$i])
+		Else 
 			If ((Value type:C1509($value)=Is object:K8:27) || (Value type:C1509($value)=Is collection:K8:32))
 				$result+=JSON Stringify:C1217($value)
 			Else 
@@ -211,8 +223,15 @@ Function _compile()
 			
 		End if 
 		
-		// Captured variable name (group 1), trimmed
+		// Captured variable name (group 1), optionally split on first "|" into name + default
 		var $key : Text:=Substring:C12(This:C1470._template; $pos{1}; $len{1})
+		
+		var $default : Text:=""
+		var $pipePos : Integer:=Position:C15("|"; $key)
+		If ($pipePos>0)
+			$default:=Substring:C12($key; $pipePos+1)
+			$key:=Substring:C12($key; 1; $pipePos-1)
+		End if 
 		
 		var $trimmed : Text:=Trim:C1853($key)
 		
@@ -226,6 +245,8 @@ Function _compile()
 			This:C1470._keyPaths.push($trimmed)
 			
 		End if 
+		
+		This:C1470._defaults.push($default)
 		
 		// Advance cursor past the match
 		$cursor:=$pos{0}+$len{0}
