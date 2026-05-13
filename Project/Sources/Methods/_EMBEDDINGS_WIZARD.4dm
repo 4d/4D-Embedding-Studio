@@ -1,9 +1,9 @@
-//%attributes = {"shared":true}
+//%attributes = {}
 #DECLARE() : Integer
 
 /*#17300
-In project mode, if the “4D Vector Studio” component is loaded, in the “Design > Vector” menu, 
-a “Vector Studio” item allows you to open the wizard window.
+In project mode, if the “4D Embeddings Studio” component is loaded, in the “Design > Embeddings Studio...” menu, 
+a “Embeddings Studio” item allows you to open the wizard window.
 */
 
 var $form:="EMBEDDINGS"

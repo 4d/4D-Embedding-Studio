@@ -1,0 +1,168 @@
+# Process
+
+The `Process` class orchestrates the full embedding pipeline: it browses 4D entities, renders text from their fields using an [Definition](Definition.md), calls the embeddings API through an [Embedder](Embedder.md), and stores the resulting `4D.Vector` on each entity.
+
+For ad-hoc, non-persisting helpers (previewing rendered phrases, computing one-off vectors), see [Playground](Playground.md).
+
+## Properties
+
+| Property Name | Type                                                    | Description                                              |
+|---------------|---------------------------------------------------------|----------------------------------------------------------|
+| `settings`    | [Settings](Settings.md)               | The settings (vectors, batch size, phrase validation options). |
+| `embedder`    | [Embedder](Embedder.md)               | The API-calling engine. Stateless and swappable.         |
+| `options`     | Object                                                  | Runtime options object (see [Options object](#options-object) below). |
+
+### Options object
+
+| Key          | Type      | Description                                                                 |
+|--------------|-----------|-----------------------------------------------------------------------------|
+| `onProgress` | 4D.Function | Called after each processed chunk with `{definition, report}`.             |
+| `onSuccess`  | 4D.Function | Called once at the end when `report.success = True`, with `{report, success, errors}`. |
+| `onError`    | 4D.Function | Called once at the end when `report.success = False`, with `{report, success, errors}`. |
+| `onTerminate`| 4D.Function | Called once at the end in all cases (after `onSuccess`/`onError`), with `{report, success, errors}`. |
+| `dryRun`     | Boolean   | If `True`, runs selection/filter logic but skips API calls and entity saves. |
+| `force`      | Boolean   | If `True`, recomputes every entity ignoring null-vector / dirty-flag filter. |
+| `debug`      | Boolean   | If `True`, emits additional diagnostic log entries.                        |
+| `embedder`   | [Embedder](Embedder.md) | Inject a custom embedder (otherwise a default one is created). |
+
+## Class constructor
+
+Create an instance of the orchestrator.
+
+| Argument Name | Type                                      | Description                                                         |
+|---------------|-------------------------------------------|---------------------------------------------------------------------|
+| *settings*    | [Settings](Settings.md) | Optional. If omitted, settings are loaded from the default `Settings/vectors.json`. |
+| *options*     | Object                                    | Optional runtime options (see table above).                         |
+
+```4d
+// Simplest — uses defaults
+var $p:=cs.embed.Process.new()
+
+// With explicit settings
+var $p:=cs.embed.Process.new($settings)
+
+// With options
+var $p:=cs.embed.Process.new($settings; {\
+	force: True; \
+	onProgress: Formula(ALERT("chunk done: "+String($1.report.entitiesUpdated)))})
+```
+
+## Batch processing functions
+
+### process()
+
+**process**(*definition* : Variant) : [ProcessResult](ProcessResult.md)
+
+Process one, many, or all [Definition](Definition.md) entries against the full content of their target dataclass.
+
+| Argument        | Type                                                                        | Description                                                                 |
+|-----------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| *definition*    | `Null`, [Definition](Definition.md), or Collection        | `Null` → process every definition in settings. Otherwise process the given one(s). |
+| Function result | [ProcessResult](ProcessResult.md)                         | Statistics and per-error breakdown.                                         |
+
+```4d
+// Every definition in settings
+var $r:=$p.process()
+
+// One specific definition
+var $r:=$p.process($def)
+
+// Multiple definitions
+var $r:=$p.process([$def1; $def2])
+```
+
+### processEntity()
+
+**processEntity**(*entity* : 4D.Entity ; *definition* : Variant) : [ProcessResult](ProcessResult.md)
+
+Process a single entity. Cheap path — no chunking, no server-side filter.
+
+| Argument        | Type                                                                                      | Description                                                                 |
+|-----------------|-------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| *entity*        | 4D.Entity                                                                                 | The entity to (re)compute vectors for.                                      |
+| *definition*    | `Null`, [Definition](Definition.md), Collection, or `{vectorName: ...}` | See [resolution rules](#definition-resolution). `Null` infers from entity's dataclass. |
+| Function result | [ProcessResult](ProcessResult.md)                                       | Statistics and per-error breakdown.                                         |
+
+```4d
+// Auto-resolve every definition matching this entity's dataclass
+var $r:=$p.processEntity($entity)
+
+// Specific definition
+var $r:=$p.processEntity($entity; $def)
+
+// By vector name only (looked up in settings against the entity's dataclass)
+var $r:=$p.processEntity($entity; {vectorName: "student_vector_1"})
+```
+
+### processEntitySelection()
+
+**processEntitySelection**(*selection* : 4D.EntitySelection ; *definition* : Variant) : [ProcessResult](ProcessResult.md)
+
+Workhorse path for large jobs. Chunks the selection by `settings.batchSize`, sends one API call per chunk, saves each entity individually.
+
+| Argument        | Type                                                                                      | Description                                                                 |
+|-----------------|-------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| *selection*     | 4D.EntitySelection                                                                        | Entities to process. Pre-filtering by the caller is allowed; the pipeline still applies its null/dirty filter. |
+| *definition*    | `Null`, [Definition](Definition.md), Collection, or `{vectorName: ...}` | See [resolution rules](#definition-resolution).                             |
+| Function result | [ProcessResult](ProcessResult.md)                                       | Statistics and per-error breakdown.                                         |
+
+```4d
+var $todo:=ds.Students.query("country = :1"; "FR")
+var $r:=$p.processEntitySelection($todo; $def)
+```
+
+### Definition resolution
+
+The polymorphic *definition* argument accepted by `processEntity` and `processEntitySelection`:
+
+| Input                                                      | Behavior                                                                 |
+|------------------------------------------------------------|--------------------------------------------------------------------------|
+| `Null`                                                     | All definitions in settings whose `dataclassName` matches the entity/selection. |
+| [Definition](Definition.md)              | Used as-is; the `dataclassName` must match the entity/selection.         |
+| `{vectorName: "..."}`                                      | Looked up in settings by `vectorName` against the entity/selection dataclass. |
+| Collection                                                 | Each item resolved using the rules above; mismatches are silently dropped. |
+
+`process()` ignores the entity-context rules (it has no entity) — a `Null` argument means *all definitions in settings*.
+
+### Recompute rules
+
+An entity is (re)computed when **any** of these are true:
+
+- The target vector field is `Null`.
+- A sibling field named `{vectorName}_dirty` exists and is `True`.
+- The `force` option is `True`.
+
+The dirty field is optional per dataclass. If it doesn't exist, only the null-vector case triggers recomputation. Upon successful save, the pipeline clears the dirty flag (when present).
+
+For `processEntitySelection`, the filter is executed as a server-side ORDA query before any API call, so only the rows that actually need work are loaded into memory. For `processEntity`, the check is done in memory on the already-fetched entity.
+
+### _search()
+
+**_search**(*text* : Text ; *definition* : Definition ; *limit* : Integer) : Collection
+
+Search for the most similar entities by embedding a query text and running a vector similarity query (cosine metric). Returns a collection of objects ordered by similarity (best first).
+
+| Argument        | Type       | Description                                                                 |
+|-----------------|------------|-----------------------------------------------------------------------------|
+| *text*          | Text       | The search query to vectorize.                                              |
+| *definition*    | [Definition](Definition.md) | The vector definition to search against.                    |
+| *limit*         | Integer    | Maximum number of results. Default: `10`.                                   |
+| Function result | Collection | Collection of `{entity, phrase}` — entity is the matched entity, phrase is its rendered text. |
+
+```4d
+var $results:=$p._search("machine learning"; $def; 5)
+var $r : Object
+For each ($r; $results)
+    ALERT(String($r.entity.getKey())+" — "+$r.phrase)
+End for each
+```
+
+## See also
+
+- [Playground](Playground.md)
+- [Settings](Settings.md)
+- [Definition](Definition.md)
+- [Embedder](Embedder.md)
+- [ProcessResult](ProcessResult.md)
+- [Phrase](Phrase.md)
+- [Rate Limiting](../RateLimit.md)

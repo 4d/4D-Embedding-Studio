@@ -97,7 +97,7 @@
 						"onLoad",
 						"onSelectionChange"
 					],
-					"dataSource": "Form:C1466.vectors",
+					"dataSource": "Form:C1466.items",
 					"right": 400,
 					"sizingX": "fixed",
 					"sizingY": "grow",
@@ -114,7 +114,7 @@
 							"footer": {
 								"name": "Footer1"
 							},
-							"dataSource": "This:C1470.dataclassName",
+							"dataSource": "This:C1470.definition.dataclassName",
 							"width": 141,
 							"enterable": false
 						},
@@ -128,7 +128,7 @@
 							"footer": {
 								"name": "Footer2"
 							},
-							"dataSource": "This:C1470.vectorName",
+							"dataSource": "This:C1470.definition.vectorName",
 							"enterable": false
 						}
 					]
@@ -191,6 +191,21 @@
 					"right": 800,
 					"visibility": "hidden"
 				},
+				"autoInvalidate": {
+					"type": "checkbox",
+					"left": 419,
+					"top": 262,
+					"width": 381,
+					"height": 20,
+					"events": [
+						"onClick",
+						"onDataChange"
+					],
+					"dataSource": "Form:C1466.currentItem.definition.autoInvalidate",
+					"right": 800,
+					"visibility": "hidden",
+					"text": ":xliff:autoInvalidateOnSave"
+				},
 				"more": {
 					"type": "button",
 					"top": 27,
@@ -223,7 +238,7 @@
 			}
 		}
 	],
-	"geometryStamp": 489,
+	"geometryStamp": 490,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

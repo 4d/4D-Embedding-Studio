@@ -1,5 +1,4 @@
-//%attributes = {}
-If (Non:C34(Is compiled mode:C492))
+If (Not:C34(Is compiled mode:C492))
 	
 	ARRAY TEXT:C222($componentsArray; 0)
 	COMPONENT LIST:C1001($componentsArray)
@@ -11,4 +10,28 @@ If (Non:C34(Is compiled mode:C492))
 		ON EVENT CALL:C190("quickOpenEventHandler"; "$quickOpenListener")
 		
 	End if 
+	
+	If (Structure file:C489=Structure file:C489(*))  // DEV: VERSION MINI
+		
+		If ((cs:C1710.AIKit#Null:C1517) && (cs:C1710.AIKit.OpenAIProviders=Null:C1517))
+			
+			var $c:=Split string:C1554(Application version:C493; "")
+			var $major : Text:=$c[0]+$c[1]
+			
+			If (Application version:C493(*)="A@")
+				
+				var $version : Text:="DEV ("+$major+"R"+$c[2]+")"
+				
+			Else 
+				
+				$version:=$major+Choose:C955($c[2]="0"; ("."+$c[3]); ("R"+$c[2]))
+				
+			End if 
+			
+			ALERT:C41("You must use 4D 21R3>, current="+$version)
+			
+		End if 
+		
+	End if 
+	
 End if 

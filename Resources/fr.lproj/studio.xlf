@@ -24,6 +24,10 @@
           <source>Model</source>
           <target>Modèle</target>
         </trans-unit>
+        <trans-unit id="autoInvalidateOnSave" resname="autoInvalidateOnSave">
+          <source>Auto-invalidate on save</source>
+          <target>Invalider automatiquement à l'enregistrement</target>
+        </trans-unit>
         <trans-unit id="48" resname="embed">
           <source>Insert</source>
           <target>Insérer</target>
@@ -77,6 +81,38 @@
         <trans-unit id="tqepk+C7nSjsmFD87VD0gA" resname="theModelIsNotDefined">
           <source>The model is not defined</source>
           <target>Le modèle n'est pas défini</target>
+        </trans-unit>
+        <trans-unit id="theModelIsNotAvailable" resname="theModelIsNotAvailable">
+          <source>The model "{model}" is not available.</source>
+          <target>Le modèle « {model} » n'est pas disponible.</target>
+        </trans-unit>
+        <trans-unit id="19" resname="theAttributeIsNotARelation">
+          <source>The "{attribute}" attribute is not a N:1 relation.</source>
+          <target>L'attribut "{attribute}" n'est pas une relation N:1.</target>
+        </trans-unit>
+        <trans-unit id="20" resname="theAttributeIsA1NRelation">
+          <source>The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</source>
+          <target>L'attribut "{attribute}" est une relation 1:N et ne peut pas être utilisé dans ce contexte.</target>
+        </trans-unit>
+        <trans-unit id="21" resname="relationsAreNotAllowed">
+          <source>Relations are not allowed: "{attribute}" cannot be used.</source>
+          <target>Les relations ne sont pas autorisées : « {attribute} » ne peut pas être utilisé.</target>
+        </trans-unit>
+        <trans-unit id="22" resname="calculatedAttributeIsNotAllowed">
+          <source>Calculated attributes are not allowed: "{attribute}" cannot be used.</source>
+          <target>Les attributs calculés ne sont pas autorisés : « {attribute} » ne peut pas être utilisé.</target>
+        </trans-unit>
+        <trans-unit id="23" resname="aliasAttributeIsNotAllowed">
+          <source>Alias attributes are not allowed: "{attribute}" cannot be used.</source>
+          <target>Les attributs alias ne sont pas autorisés : « {attribute} » ne peut pas être utilisé.</target>
+        </trans-unit>
+        <trans-unit id="24" resname="theAttributeTypeIsNotSupportedInAPhrase">
+          <source>The "{attribute}" attribute is of type blob, object or picture and cannot be used in this context.</source>
+          <target>L'attribut "{attribute}" est de type blob, objet ou image et ne peut pas être utilisé dans ce contexte.</target>
+        </trans-unit>
+        <trans-unit id="phraseHasNoKeyField" resname="phraseHasNoKeyField">
+          <source>The phrase has no key field. At least one attribute is required so that each record generates a unique text.</source>
+          <target>La phrase ne contient aucun champ clé. Au moins un attribut est requis pour que chaque enregistrement génère un texte unique.</target>
         </trans-unit>
       </group>
       <group resname="Models">

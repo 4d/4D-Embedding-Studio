@@ -141,7 +141,7 @@ Class constructor($data)
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Adds/insert an item
 	// If afterItem < 0, it is considered as the offset from the item count of the menu
-Function append($item; $param; $mark; $afterItem : Integer) : cs:C1710.menu
+Function append($item; $param; $mark; $afterItem : Integer) : cs:C1710._menu
 	
 	var $t : Text
 	var $o : Object
@@ -213,7 +213,7 @@ Function append($item; $param; $mark; $afterItem : Integer) : cs:C1710.menu
 				
 				If (Value type:C1509($param)=Is object:K8:27)  // Submenu
 					
-					If (Asserted:C1132(OB Instance of:C1731($param; cs:C1710.menu)))
+					If (Asserted:C1132(OB Instance of:C1731($param; cs:C1710._menu)))
 						
 						// FIXME:Remove empty submenu in the cleanup phase
 						// If ($param.itemCount()>0) // Don't do it if there are no items in the sub-menu
@@ -389,7 +389,7 @@ Function add($ref : Text; $text : Text; $param : Variant; $mark : Boolean)
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Adds/insert a line
 	// If afterItem < 0, it is considered as the offset from the item count of the menu
-Function line($afterItem : Integer) : cs:C1710.menu
+Function line($afterItem : Integer) : cs:C1710._menu
 	
 	If (Count parameters:C259>=1)
 		
@@ -406,7 +406,7 @@ Function line($afterItem : Integer) : cs:C1710.menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Delete an item or the last added item
-Function delete($index : Integer) : cs:C1710.menu
+Function delete($index : Integer) : cs:C1710._menu
 	
 	If (Count parameters:C259=0)
 		
@@ -434,7 +434,7 @@ Function release()
 	// MARK:-[PROPERTIES]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Modifies the icon associated with a menu item
-Function icon($proxy : Text; $index : Integer) : cs:C1710.menu
+Function icon($proxy : Text; $index : Integer) : cs:C1710._menu
 	
 	$index:=Count parameters:C259>=2 ? $index : -1
 	
@@ -452,7 +452,7 @@ Function icon($proxy : Text; $index : Integer) : cs:C1710.menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Sets the check mark of a menu item
-Function mark($checked : Boolean; $index : Integer) : cs:C1710.menu
+Function mark($checked : Boolean; $index : Integer) : cs:C1710._menu
 	
 	Case of 
 			
@@ -478,7 +478,7 @@ Function mark($checked : Boolean; $index : Integer) : cs:C1710.menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Associates a custom parameter to a menu item
-Function parameter($param : Text; $index : Integer) : cs:C1710.menu
+Function parameter($param : Text; $index : Integer) : cs:C1710._menu
 	
 	If (Count parameters:C259=0)
 		
@@ -494,7 +494,7 @@ Function parameter($param : Text; $index : Integer) : cs:C1710.menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Associate a standard action with a menu item
-Function action($action : Variant; $index : Integer) : cs:C1710.menu
+Function action($action : Variant; $index : Integer) : cs:C1710._menu
 	
 	If (Count parameters:C259=1)
 		
@@ -510,7 +510,7 @@ Function action($action : Variant; $index : Integer) : cs:C1710.menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Defines the project method associated with a menu item
-Function method($method : Text; $index : Integer) : cs:C1710.menu
+Function method($method : Text; $index : Integer) : cs:C1710._menu
 	
 	If (Count parameters:C259>1)
 		
@@ -527,7 +527,7 @@ Function method($method : Text; $index : Integer) : cs:C1710.menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Replaces the shortcut key associated with the menu item
-Function shortcut($key; $modifier : Integer; $index : Integer) : cs:C1710.menu
+Function shortcut($key; $modifier : Integer; $index : Integer) : cs:C1710._menu
 	
 	$index:=($index=0) ? -1 : $index
 	
@@ -564,7 +564,7 @@ Function shortcut($key; $modifier : Integer; $index : Integer) : cs:C1710.menu
 ⚠️ ONE CAN SET A PROPERTY FOR ALL MENU TYPE (MENU BAR OR POPUP)
    BUT  UNIQUELY RETRIEVE IT FOR THE MENU BAR ITEMS
 */
-Function property($property : Text; $value : Variant; $index : Integer) : cs:C1710.menu
+Function property($property : Text; $value : Variant; $index : Integer) : cs:C1710._menu
 	
 	If (Count parameters:C259>=3)
 		
@@ -580,7 +580,7 @@ Function property($property : Text; $value : Variant; $index : Integer) : cs:C17
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Changes the font style of the menu item
-Function setStyle($tyle : Integer; $index : Integer) : cs:C1710.menu
+Function setStyle($tyle : Integer; $index : Integer) : cs:C1710._menu
 	
 	$index:=Count parameters:C259>=2 ? $index : -1
 	SET MENU ITEM STYLE:C425(This:C1470.ref; $index; $tyle)
@@ -588,7 +588,7 @@ Function setStyle($tyle : Integer; $index : Integer) : cs:C1710.menu
 	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function indent($index : Integer; $number : Integer) : cs:C1710.menu
+Function indent($index : Integer; $number : Integer) : cs:C1710._menu
 	
 	$number:=$number>0 ? $number : 1
 	$index:=Count parameters:C259>=1 ? $index : -1
@@ -600,7 +600,7 @@ Function indent($index : Integer; $number : Integer) : cs:C1710.menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Defines the activated status of a menu item
-Function enable($enabled : Boolean; $index : Integer) : cs:C1710.menu
+Function enable($enabled : Boolean; $index : Integer) : cs:C1710._menu
 	
 	Case of 
 			
@@ -642,7 +642,7 @@ Function enable($enabled : Boolean; $index : Integer) : cs:C1710.menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Disable a menu item
-Function disable($index : Integer) : cs:C1710.menu
+Function disable($index : Integer) : cs:C1710._menu
 	
 	$index:=Count parameters:C259>=1 ? $index : -1
 	DISABLE MENU ITEM:C150(This:C1470.ref; $index)
@@ -652,7 +652,7 @@ Function disable($index : Integer) : cs:C1710.menu
 	// MARK:-[DATA]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Associates data to a menu item
-Function setData($name : Text; $value : Variant; $index : Integer) : cs:C1710.menu
+Function setData($name : Text; $value : Variant; $index : Integer) : cs:C1710._menu
 	
 	var $ref : Text
 	var $o : Object
@@ -857,7 +857,7 @@ Function getProperty($property : Text; $index : Integer) : Variant
 	// MARK:-[TOOLS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Display the current menu as a pop-up menu
-Function popup($where : Variant; $x : Variant; $y : Integer) : cs:C1710.menu
+Function popup($where : Variant; $x : Variant; $y : Integer) : cs:C1710._menu
 	
 	This:C1470._cleanup()
 	
@@ -929,7 +929,7 @@ Function popup($where : Variant; $x : Variant; $y : Integer) : cs:C1710.menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Standard Edit menu
-Function edit($contextual : Boolean) : cs:C1710.menu
+Function edit($contextual : Boolean) : cs:C1710._menu
 	
 	If ($contextual)
 		
@@ -965,7 +965,7 @@ Function edit($contextual : Boolean) : cs:C1710.menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Default File menu
-Function file() : cs:C1710.menu
+Function file() : cs:C1710._menu
 	
 	This:C1470.append(":xliff:CommonClose").shortcut("W").action(ak cancel:K76:36)
 	This:C1470.line()
@@ -975,7 +975,7 @@ Function file() : cs:C1710.menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Fonts menu with or without styles
-Function fonts($withStyle; $callback : Text) : cs:C1710.menu
+Function fonts($withStyle; $callback : Text) : cs:C1710._menu
 	
 	var $menuStyles : Text
 	var $i; $j : Integer
@@ -1044,7 +1044,7 @@ Function fonts($withStyle; $callback : Text) : cs:C1710.menu
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Windows menu
-Function windows($callback : Text) : cs:C1710.menu
+Function windows($callback : Text) : cs:C1710._menu
 	
 	var $name : Text
 	var $current; $frontmostWindow; $i : Integer

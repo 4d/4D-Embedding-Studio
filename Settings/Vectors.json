@@ -1,63 +1,33 @@
 {
-	"vectors": [
+	"definitions": [
 		{
-			"version": 0,
 			"dataclassName": "AllTypes",
 			"vectorName": "Vector",
-			"model": "first model",
-			"phrase": ""
+			"modelAlias": "first model",
+			"phrase": "",
+			"autoInvalidate": true
 		},
 		{
-			"version": 0,
 			"dataclassName": "School",
 			"vectorName": "vector_with_error",
-			"model": "",
-			"phrase": "Non existing attribute {toto}"
+			"modelAlias": "",
+			"phrase": "Non existing attribute {toto}",
+			"autoInvalidate": true
 		},
 		{
-			"version": 3,
 			"dataclassName": "Students",
 			"vectorName": "student_vector_1",
-			"model": "hello",
-			"phrase": "was Table_1 Field_5"
+			"modelAlias": "ModelAlias",
+			"phrase": " {firstName} {lastName} ",
+			"autoInvalidate": true
 		},
 		{
-			"version": 0,
 			"dataclassName": "Students",
 			"vectorName": "student_vector_2",
-			"model": "Model",
-			"phrase": ""
+			"modelAlias": "modelAlias",
+			"phrase": "",
+			"autoInvalidate": true
 		}
 	],
-	"models": [
-		{
-			"name": "first model",
-			"model": "text-embedding-3-small",
-			"apiKey": "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",
-			"baseURL": "https://api.openai.com/v1/"
-		},
-		{
-			"name": "hello",
-			"model": "text-embedding-ada-002",
-			"apiKey": "1234",
-			"baseURL": ""
-		},
-		{
-			"name": "Model",
-			"model": "text-embedding-3-large",
-			"apiKey": "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",
-			"baseURL": "https://api.openai.com/v1/"
-		},
-		{
-			"name": "Model 1",
-			"model": "text-embedding-3-large",
-			"apiKey": "zzz"
-		},
-		{
-			"name": "Model 10",
-			"model": "gpt-4o-mini",
-			"apiKey": "",
-			"baseURL": "http://localhost:1234/v1/"
-		}
-	]
+	"dev": true
 }

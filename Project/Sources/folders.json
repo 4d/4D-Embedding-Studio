@@ -1,24 +1,7 @@
 {
-	"(COMMON)": {},
-	"(Default Classes)": {},
-	"(Default Folder)": {
-		"groups": [
-			"(Default Classes)",
-			"(Default Forms)",
-			"(Default Project Methods)",
-			"(Default Tables)"
-		]
-	},
-	"(Default Forms)": {},
-	"(Default Project Methods)": {},
-	"(Default Tables)": {},
-	"(MODELS)": {},
-	"(VECTOR_STUDIO)": {},
-	"(VECTORS)": {},
 	"API": {
 		"methods": [
-			"_MODELS_WIZARD",
-			"_VECTORS_WIZARD"
+			"_EMBEDDINGS_WIZARD"
 		]
 	},
 	"DEV": {
@@ -30,19 +13,26 @@
 			"School",
 			"Students"
 		],
+		"methods": [
+			"_computeVectors",
+			"_invalidateVectors",
+			"_runInWorker",
+			"_statVectors"
+		],
 		"classes": [
 			"StudentsEntity"
 		]
 	},
 	"NAMESPACE": {
 		"classes": [
-			"Env",
-			"menu",
-			"menuBar",
-			"Model",
-			"Provider",
-			"regex",
-			"Vector"
+			"Definition",
+			"Embedder",
+			"EmbedderResult",
+			"Phrase",
+			"Playground",
+			"Process",
+			"ProcessResult",
+			"Settings"
 		]
 	},
 	"STUDIO": {
@@ -50,22 +40,42 @@
 			"FORM_MANAGER"
 		],
 		"forms": [
-			"EMBEDDINGS",
-			"MODELS"
+			"EMBEDDINGS"
 		],
 		"classes": [
-			"_COMMON",
-			"_EMBEDDINGS",
-			"_MODELS"
+			"_EmbeddingItem",
+			"_EMBEDDINGS"
 		]
 	},
-	"trash": {
-		"groups": [
-			"(COMMON)",
-			"(Default Folder)",
-			"(MODELS)",
-			"(VECTOR_STUDIO)",
-			"(VECTORS)"
+	"TESTS": {
+		"methods": [
+			"_onTestErrors",
+			"_runTests",
+			"_runTestsCLI",
+			"test_dataclassAttributes",
+			"test_embedder",
+			"test_phrase",
+			"test_playground",
+			"test_process",
+			"test_process_rateLimit",
+			"test_resolver",
+			"test_settings"
+		],
+		"classes": [
+			"_TestProcessEmbedder"
 		]
-	}
+	},
+	"UTILS": {
+		"classes": [
+			"_dataclassAttributes",
+			"_ExecutionLog",
+			"_Logger",
+			"_menu",
+			"_ProcessBase",
+			"_RateLimiter",
+			"_Resolver",
+			"_typeMedia"
+		]
+	},
+	"trash": {}
 }

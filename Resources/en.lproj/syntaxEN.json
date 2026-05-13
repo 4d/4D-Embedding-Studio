@@ -1,10 +1,33 @@
 {
 	"_method_": {},
 	"cs.embed": {
-		"Env": {
+		"_typeMedia": {
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_EmbeddingItem": {
+			"new()": {
+				"Syntax": "**.new**( *dataclass* : 4D.DataClass; *definition* : cs.embed.Definition; *settings* : cs.embed.Settings )",
+				"Params": [
+					[
+						"dataclass",
+						"4D.DataClass",
+						"->"
+					],
+					[
+						"definition",
+						"cs.embed.Definition",
+						"->"
+					],
+					[
+						"settings",
+						"cs.embed.Settings",
+						"->"
+					]
+				],
 				"Summary": ""
 			}
 		},
@@ -15,83 +38,106 @@
 				"Summary": ""
 			}
 		},
-		"Model": {
-			"new()": {
-				"Syntax": "**.new**( *name* : Variant; *model* : Text; *apiKey* : Text; *optionals* : Object )",
-				"Params": [
-					[
-						"name",
-						"Variant",
-						"->"
-					],
-					[
-						"model",
-						"Text",
-						"->"
-					],
-					[
-						"apiKey",
-						"Text",
-						"->"
-					],
-					[
-						"optionals",
-						"Object",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"Vector": {
-			"new()": {
-				"Syntax": "**.new**( *dataclass* : Object; *attribute* : Object; *model* : Text; *phrase* : Text )",
-				"Params": [
-					[
-						"dataclass",
-						"Object",
-						"->"
-					],
-					[
-						"attribute",
-						"Object",
-						"->"
-					],
-					[
-						"model",
-						"Text",
-						"->"
-					],
-					[
-						"phrase",
-						"Text",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"_COMMON": {
+		"ProcessResult": {
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
 				"Summary": ""
 			}
 		},
-		"menuBar": {
+		"Phrase": {
 			"new()": {
-				"Syntax": "**.new**( *menus* : Collection )",
+				"Syntax": "**.new**( *template* : Text )",
 				"Params": [
 					[
-						"menus",
-						"Collection",
+						"template",
+						"Text",
 						"->"
 					]
 				],
 				"Summary": ""
 			}
 		},
-		"menu": {
+		"Definition": {
+			"new()": {
+				"Syntax": "**.new**( *dataclassName* : Text; *vectorName* : Text; *modelAlias* : Text; *phraseTemplate* : Text )",
+				"Params": [
+					[
+						"dataclassName",
+						"Text",
+						"->"
+					],
+					[
+						"vectorName",
+						"Text",
+						"->"
+					],
+					[
+						"modelAlias",
+						"Text",
+						"->"
+					],
+					[
+						"phraseTemplate",
+						"Text",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"Settings": {
+			"new()": {
+				"Syntax": "**.new**( *file* : 4D.File )",
+				"Params": [
+					[
+						"file",
+						"4D.File",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_Resolver": {
+			"new()": {
+				"Syntax": "**.new**( *settings* : cs.embed.Settings )",
+				"Params": [
+					[
+						"settings",
+						"cs.embed.Settings",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"Process": {
+			"new()": {
+				"Syntax": "**.new**( *settings* : cs.embed.Settings; *options* : Object )",
+				"Params": [
+					[
+						"settings",
+						"cs.embed.Settings",
+						"->"
+					],
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_dataclassAttributes": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_menu": {
 			"new()": {
 				"Syntax": "**.new**( *data* : Variant )",
 				"Params": [
@@ -104,38 +150,107 @@
 				"Summary": ""
 			}
 		},
-		"_MODELS": {
+		"_Logger": {
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
 				"Summary": ""
 			}
 		},
-		"regex": {
+		"_ExecutionLog": {
 			"new()": {
-				"Syntax": "**.new**( *target* : Variant; *pattern* : Text )",
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"Embedder": {
+			"new()": {
+				"Syntax": "**.new**( *options* : Object )",
 				"Params": [
 					[
-						"target",
-						"Variant",
-						"->"
-					],
-					[
-						"pattern",
-						"Text",
+						"options",
+						"Object",
 						"->"
 					]
 				],
 				"Summary": ""
 			}
 		},
-		"Provider": {
+		"EmbedderResult": {
 			"new()": {
-				"Syntax": "**.new**( *config* : Variant )",
+				"Syntax": "**.new**( *result* : Object; *isBatch* : Boolean )",
 				"Params": [
 					[
-						"config",
-						"Variant",
+						"result",
+						"Object",
+						"->"
+					],
+					[
+						"isBatch",
+						"Boolean",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_RateLimiter": {
+			"new()": {
+				"Syntax": "**.new**( *configBatchSize* : Integer )",
+				"Params": [
+					[
+						"configBatchSize",
+						"Integer",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_TestProcessEmbedder": {
+			"new()": {
+				"Syntax": "**.new**( *options* : Object )",
+				"Params": [
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"Playground": {
+			"new()": {
+				"Syntax": "**.new**( *settings* : cs.embed.Settings; *options* : Object )",
+				"Params": [
+					[
+						"settings",
+						"cs.embed.Settings",
+						"->"
+					],
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_ProcessBase": {
+			"new()": {
+				"Syntax": "**.new**( *settings* : cs.embed.Settings; *options* : Object )",
+				"Params": [
+					[
+						"settings",
+						"cs.embed.Settings",
+						"->"
+					],
+					[
+						"options",
+						"Object",
 						"->"
 					]
 				],
@@ -143,8 +258,159 @@
 			}
 		}
 	},
-	"Env": {},
+	"_typeMedia": {
+		"medias": {
+			"Syntax": "medias : Collection"
+		}
+	},
+	"_EmbeddingItem": {
+		"get defined()": {
+			"Syntax": "**.get defined**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get helptip()": {
+			"Syntax": "**.get helptip**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"parsePhrase()": {
+			"Syntax": "**.parsePhrase**( *phrase* : cs.embed.Phrase ) : Text",
+			"Params": [
+				[
+					"phrase",
+					"cs.embed.Phrase",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get inputsMenu()": {
+			"Syntax": "**.get inputsMenu**() : cs.embed._menu",
+			"Params": [
+				[
+					"",
+					"cs.embed._menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"embedded": {
+			"Syntax": "embedded : Collection"
+		},
+		"version": {
+			"Syntax": "version : Integer"
+		},
+		"settings": {
+			"Syntax": "settings : cs.embed.Settings"
+		},
+		"phrase": {
+			"Syntax": "phrase : Text"
+		},
+		"definition": {
+			"Syntax": "definition : cs.embed.Definition"
+		},
+		"get supportedAttributes()": {
+			"Syntax": "**.get supportedAttributes**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get errors()": {
+			"Syntax": "**.get errors**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"validate()": {
+			"Syntax": "**.validate**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"original": {
+			"Syntax": "original : Object"
+		},
+		"touched": {
+			"Syntax": "touched : Boolean"
+		},
+		"createDirtyAssociatedAttributeIndex()": {
+			"Syntax": "**.createDirtyAssociatedAttributeIndex**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"hasDirtyAssociatedAttribute()": {
+			"Syntax": "**.hasDirtyAssociatedAttribute**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"createDirtyAssociatedAttribute()": {
+			"Syntax": "**.createDirtyAssociatedAttribute**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"dirtyAssociatedAttributeIndexed()": {
+			"Syntax": "**.dirtyAssociatedAttributeIndexed**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
 	"_EMBEDDINGS": {
+		"saveEmbeddingItems()": {
+			"Syntax": "**.saveEmbeddingItems**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"updateUI()": {
+			"Syntax": "**.updateUI**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"modelsDropdownManager()": {
 			"Syntax": "**.modelsDropdownManager**( *e* : Object )",
 			"Params": [
@@ -156,29 +422,23 @@
 			],
 			"Summary": ""
 		},
-		"phraseManager()": {
-			"Syntax": "**.phraseManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
+		"read()": {
+			"Syntax": "**.read**()",
+			"Params": [],
 			"Summary": ""
 		},
-		"listMetaInfo()": {
-			"Syntax": "**.listMetaInfo**( *me* : cs.embed.Vector ) : Object",
+		"insertInput()": {
+			"Syntax": "**.insertInput**( *item* : cs.embed._EmbeddingItem; *input* : Text )",
 			"Params": [
 				[
-					"me",
-					"cs.embed.Vector",
+					"item",
+					"cs.embed._EmbeddingItem",
 					"->"
 				],
 				[
-					"",
-					"Object",
-					"<-"
+					"input",
+					"Text",
+					"->"
 				]
 			],
 			"Summary": ""
@@ -188,17 +448,12 @@
 			"Params": [],
 			"Summary": ""
 		},
-		"insertInput()": {
-			"Syntax": "**.insertInput**( *vector* : cs.embed.Vector; *input* : Text )",
+		"moreManager()": {
+			"Syntax": "**.moreManager**( *e* : Object )",
 			"Params": [
 				[
-					"vector",
-					"cs.embed.Vector",
-					"->"
-				],
-				[
-					"input",
-					"Text",
+					"e",
+					"Object",
 					"->"
 				]
 			],
@@ -215,40 +470,24 @@
 			],
 			"Summary": ""
 		},
-		"moreManager()": {
-			"Syntax": "**.moreManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"modelUpdateName()": {
-			"Syntax": "**.modelUpdateName**( *old* : Text; *new* : Text )",
-			"Params": [
-				[
-					"old",
-					"Text",
-					"->"
-				],
-				[
-					"new",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
 		"modelUpdateDropdown()": {
-			"Syntax": "**.modelUpdateDropdown**( *vector* : cs.embed.Vector )",
+			"Syntax": "**.modelUpdateDropdown**( *item* : cs.embed._EmbeddingItem )",
 			"Params": [
 				[
-					"vector",
-					"cs.embed.Vector",
+					"item",
+					"cs.embed._EmbeddingItem",
 					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"readEmbeddingItems()": {
+			"Syntax": "**.readEmbeddingItems**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
 				]
 			],
 			"Summary": ""
@@ -264,260 +503,83 @@
 			],
 			"Summary": ""
 		},
-		"modelsDropdown": {
-			"Syntax": "modelsDropdown : Object"
-		},
-		"_inheritedFrom_": "_COMMON"
-	},
-	"Model": {
-		"validate()": {
-			"Syntax": "**.validate**() : Boolean",
+		"listMetaInfo()": {
+			"Syntax": "**.listMetaInfo**( *me* : cs.embed._EmbeddingItem ) : Object",
 			"Params": [
 				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"errors": {
-			"Syntax": "errors : Collection"
-		},
-		"valid": {
-			"Syntax": "valid : Boolean"
-		},
-		"needAPIKey": {
-			"Syntax": "needAPIKey : Boolean"
-		},
-		"apiKey": {
-			"Syntax": "apiKey : Text"
-		},
-		"organization": {
-			"Syntax": "organization : Text"
-		},
-		"project": {
-			"Syntax": "project : Text"
-		},
-		"baseURL": {
-			"Syntax": "baseURL : Text"
-		},
-		"model": {
-			"Syntax": "model : Text"
-		},
-		"name": {
-			"Syntax": "name : Text"
-		}
-	},
-	"Vector": {
-		"set error()": {
-			"Syntax": "**.set error**( *message* : Text )",
-			"Params": [
-				[
-					"message",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get helptip()": {
-			"Syntax": "**.get helptip**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get definition()": {
-			"Syntax": "**.get definition**() : cs.embed.Vector",
-			"Params": [
-				[
-					"",
-					"cs.embed.Vector",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get defined()": {
-			"Syntax": "**.get defined**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get inputsMenu()": {
-			"Syntax": "**.get inputsMenu**() : cs.embed.menu",
-			"Params": [
-				[
-					"",
-					"cs.embed.menu",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"parsePhrase()": {
-			"Syntax": "**.parsePhrase**( *phrase* : Text ) : Text",
-			"Params": [
-				[
-					"phrase",
-					"Text",
+					"me",
+					"cs.embed._EmbeddingItem",
 					"->"
 				],
 				[
 					"",
-					"Text",
+					"Object",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"getSupportedAttributes()": {
-			"Syntax": "**.getSupportedAttributes**( *dataclass* : 4D.DataClass )",
-			"Params": [
-				[
-					"dataclass",
-					"4D.DataClass",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"embedded": {
-			"Syntax": "embedded : Collection"
-		},
-		"vectorName": {
-			"Syntax": "vectorName : Text"
-		},
-		"phrase": {
-			"Syntax": "phrase : Text"
-		},
-		"model": {
-			"Syntax": "model : Text"
-		},
-		"supportedAttributes": {
-			"Syntax": "supportedAttributes : Collection"
-		},
-		"dataclassName": {
-			"Syntax": "dataclassName : Text"
-		},
-		"version": {
-			"Syntax": "version : Integer"
-		}
-	},
-	"_COMMON": {
-		"isModelUsed()": {
-			"Syntax": "**.isModelUsed**( *name* : Text ) : Boolean",
-			"Params": [
-				[
-					"name",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"vectorsUsingTheModel()": {
-			"Syntax": "**.vectorsUsingTheModel**( *name* : Text ) : Collection",
-			"Params": [
-				[
-					"name",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get settingsFile()": {
-			"Syntax": "**.get settingsFile**() : 4D.File",
-			"Params": [
-				[
-					"",
-					"4D.File",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"writeVectors()": {
-			"Syntax": "**.writeVectors**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"manager()": {
-			"Syntax": "**.manager**( *e* : Object; *from* : Text )",
+		"phraseManager()": {
+			"Syntax": "**.phraseManager**( *e* : Object )",
 			"Params": [
 				[
 					"e",
 					"Object",
 					"->"
-				],
+				]
+			],
+			"Summary": ""
+		},
+		"itemPosition": {
+			"Syntax": "itemPosition : Integer"
+		},
+		"currentItem": {
+			"Syntax": "currentItem : Object"
+		},
+		"modelsDropdown": {
+			"Syntax": "modelsDropdown : Object"
+		},
+		"selectedItems": {
+			"Syntax": "selectedItems : Collection"
+		},
+		"list": {
+			"Syntax": "list : Text"
+		},
+		"catalog": {
+			"Syntax": "catalog : cs.embed.DataStore"
+		},
+		"settings": {
+			"Syntax": "settings : cs.embed.Settings"
+		},
+		"autoInvalidateManager()": {
+			"Syntax": "**.autoInvalidateManager**( *e* : Object )",
+			"Params": [
 				[
-					"from",
-					"Text",
+					"e",
+					"Object",
 					"->"
 				]
 			],
 			"Summary": ""
 		},
-		"readVectors()": {
-			"Syntax": "**.readVectors**() : Collection",
+		"items": {
+			"Syntax": "items : Collection"
+		}
+	},
+	"ProcessResult": {
+		"toObject()": {
+			"Syntax": "**.toObject**() : Object",
 			"Params": [
 				[
 					"",
-					"Collection",
+					"Object",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"readSettings()": {
-			"Syntax": "**.readSettings**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"writeModels()": {
-			"Syntax": "**.writeModels**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"writeSettings()": {
-			"Syntax": "**.writeSettings**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"saveModels()": {
-			"Syntax": "**.saveModels**( *models* : Collection )",
-			"Params": [
-				[
-					"models",
-					"Collection",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"updateUI()": {
-			"Syntax": "**.updateUI**() : Boolean",
+		"get success()": {
+			"Syntax": "**.get success**() : Boolean",
 			"Params": [
 				[
 					"",
@@ -527,30 +589,298 @@
 			],
 			"Summary": ""
 		},
-		"read()": {
-			"Syntax": "**.read**()",
-			"Params": [],
-			"Summary": ""
+		"apiCalls": {
+			"Syntax": "apiCalls : Integer"
 		},
-		"saveVectors()": {
-			"Syntax": "**.saveVectors**( *vectors* : Collection )",
+		"entitiesSkipped": {
+			"Syntax": "entitiesSkipped : Integer"
+		},
+		"entitiesUpdated": {
+			"Syntax": "entitiesUpdated : Integer"
+		},
+		"errors": {
+			"Syntax": "errors : Collection"
+		},
+		"entitiesConsidered": {
+			"Syntax": "entitiesConsidered : Integer"
+		},
+		"definitionsProcessed": {
+			"Syntax": "definitionsProcessed : Integer"
+		},
+		"duration": {
+			"Syntax": "duration : Integer"
+		},
+		"totalTokens": {
+			"Syntax": "totalTokens : Integer"
+		},
+		"promptTokens": {
+			"Syntax": "promptTokens : Integer"
+		}
+	},
+	"Phrase": {
+		"render()": {
+			"Syntax": "**.render**( *data* : Object ) : Text",
 			"Params": [
 				[
-					"vectors",
-					"Collection",
+					"data",
+					"Object",
 					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"readModels()": {
-			"Syntax": "**.readModels**()",
+		"validate()": {
+			"Syntax": "**.validate**( *dataclass* : 4D.DataClass; *options* : Object ) : Object",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get keys()": {
+			"Syntax": "**.get keys**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get template()": {
+			"Syntax": "**.get template**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"attributes()": {
+			"Syntax": "**.attributes**( *dataclass* : 4D.DataClass ) : Collection",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
+	"Definition": {
+		"toObject()": {
+			"Syntax": "**.toObject**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"invalidateVectors()": {
+			"Syntax": "**.invalidateVectors**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"validate()": {
+			"Syntax": "**.validate**( *settings* : cs.embed.Settings ) : Object",
+			"Params": [
+				[
+					"settings",
+					"cs.embed.Settings",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get hasDefinition()": {
+			"Syntax": "**.get hasDefinition**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"phrase": {
+			"Syntax": "phrase : cs.embed.Phrase"
+		},
+		"vectorName": {
+			"Syntax": "vectorName : Text"
+		},
+		"dataclassName": {
+			"Syntax": "dataclassName : Text"
+		},
+		"autoInvalidate": {
+			"Syntax": "autoInvalidate : Boolean"
+		},
+		"modelAlias": {
+			"Syntax": "modelAlias : Text"
+		}
+	},
+	"Settings": {
+		"find()": {
+			"Syntax": "**.find**( *dataclassName* : Text; *vectorName* : Text ) : cs.embed.Definition",
+			"Params": [
+				[
+					"dataclassName",
+					"Text",
+					"->"
+				],
+				[
+					"vectorName",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.embed.Definition",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"invalidateVectors()": {
+			"Syntax": "**.invalidateVectors**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"save()": {
+			"Syntax": "**.save**()",
 			"Params": [],
 			"Summary": ""
 		},
-		"getSettings()": {
-			"Syntax": "**.getSettings**() : Collection",
+		"load()": {
+			"Syntax": "**.load**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"phrase": {
+			"Syntax": "phrase : Object"
+		},
+		"definitions": {
+			"Syntax": "definitions : Collection"
+		},
+		"batchSize": {
+			"Syntax": "batchSize : Integer"
+		},
+		"file": {
+			"Syntax": "file : 4D.File"
+		},
+		"embedder": {
+			"Syntax": "embedder : Object"
+		}
+	},
+	"_Resolver": {
+		"dataclassNameFromEntity()": {
+			"Syntax": "**.dataclassNameFromEntity**( *entity* : 4D.Entity ) : Text",
 			"Params": [
+				[
+					"entity",
+					"4D.Entity",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"dataclassNameFromSelection()": {
+			"Syntax": "**.dataclassNameFromSelection**( *es* : 4D.EntitySelection ) : Text",
+			"Params": [
+				[
+					"es",
+					"4D.EntitySelection",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"resolveForEntity()": {
+			"Syntax": "**.resolveForEntity**( *definition* : Variant; *contextDataclassName* : Text ) : Collection",
+			"Params": [
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"contextDataclassName",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"resolveForProcess()": {
+			"Syntax": "**.resolveForProcess**( *definition* : Variant ) : Collection",
+			"Params": [
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
 				[
 					"",
 					"Collection",
@@ -560,219 +890,149 @@
 			"Summary": ""
 		},
 		"settings": {
-			"Syntax": "settings : Object"
-		},
-		"itemPosition": {
-			"Syntax": "itemPosition : Integer"
-		},
-		"currentItem": {
-			"Syntax": "currentItem : Object"
-		},
-		"OPENAI": {
-			"Syntax": "OPENAI : Text"
-		},
-		"selectedItems": {
-			"Syntax": "selectedItems : Collection"
-		},
-		"vectors": {
-			"Syntax": "vectors : Collection"
-		},
-		"DEBUG": {
-			"Syntax": "DEBUG : Boolean"
-		},
-		"list": {
-			"Syntax": "list : Text"
-		},
-		"PROVIDERS": {
-			"Syntax": "PROVIDERS : Collection"
-		},
-		"models": {
-			"Syntax": "models : Collection"
-		},
-		"providers": {
-			"Syntax": "providers : Object"
-		},
-		"catalog": {
-			"Syntax": "catalog : cs.embed.DataStore"
+			"Syntax": "settings : cs.embed.Settings"
 		}
 	},
-	"menuBar": {
-		"defaultMinimalMenuBar()": {
-			"Syntax": "**.defaultMinimalMenuBar**() : cs.embed.menuBar",
+	"Process": {
+		"processEntitySelection()": {
+			"Syntax": "**.processEntitySelection**( *es* : 4D.EntitySelection; *definition* : Variant ) : cs.embed.ProcessResult",
 			"Params": [
 				[
-					"",
-					"cs.embed.menuBar",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"getMenuItemParameter()": {
-			"Syntax": "**.getMenuItemParameter**( *type* : Integer ) : Variant",
-			"Params": [
-				[
-					"type",
-					"Integer",
+					"es",
+					"4D.EntitySelection",
 					"->"
 				],
 				[
-					"",
-					"Variant",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"menuSelected()": {
-			"Syntax": "**.menuSelected**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setMenuBar()": {
-			"Syntax": "**.setMenuBar**( *menu* : Variant; *retain* : Boolean )",
-			"Params": [
-				[
-					"menu",
+					"definition",
 					"Variant",
 					"->"
 				],
 				[
-					"retain",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"hide()": {
-			"Syntax": "**.hide**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"setHelpMenu()": {
-			"Syntax": "**.setHelpMenu**( *items* : Collection )",
-			"Params": [
-				[
-					"items",
-					"Collection",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"enableItem()": {
-			"Syntax": "**.enableItem**( *item* : Text; *enabled* : Boolean )",
-			"Params": [
-				[
-					"item",
-					"Text",
-					"->"
-				],
-				[
-					"enabled",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"disableItem()": {
-			"Syntax": "**.disableItem**( *item* : Text )",
-			"Params": [
-				[
-					"item",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"update()": {
-			"Syntax": "**.update**( *index* : Integer; *menu* : cs.embed.menu ) : cs.embed.menuBar",
-			"Params": [
-				[
-					"index",
-					"Integer",
-					"->"
-				],
-				[
-					"menu",
-					"cs.embed.menu",
-					"->"
-				],
-				[
 					"",
-					"cs.embed.menuBar",
+					"cs.embed.ProcessResult",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"show()": {
-			"Syntax": "**.show**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"resetsAbout()": {
-			"Syntax": "**.resetsAbout**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"setAbout()": {
-			"Syntax": "**.setAbout**( *label* : Text; *method* : Text )",
+		"processEntity()": {
+			"Syntax": "**.processEntity**( *entity* : 4D.Entity; *definition* : Variant ) : cs.embed.ProcessResult",
 			"Params": [
 				[
-					"label",
-					"Text",
+					"entity",
+					"4D.Entity",
 					"->"
 				],
 				[
-					"method",
-					"Text",
+					"definition",
+					"Variant",
 					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"set()": {
-			"Syntax": "**.set**() : cs.embed.menuBar",
-			"Params": [
+				],
 				[
 					"",
-					"cs.embed.menuBar",
+					"cs.embed.ProcessResult",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"populate()": {
-			"Syntax": "**.populate**( *menus* : Collection ) : cs.embed.menuBar",
+		"process()": {
+			"Syntax": "**.process**( *definition* : Variant ) : cs.embed.ProcessResult",
 			"Params": [
 				[
-					"menus",
-					"Collection",
+					"definition",
+					"Variant",
 					"->"
 				],
 				[
 					"",
-					"cs.embed.menuBar",
+					"cs.embed.ProcessResult",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"_inheritedFrom_": "menu"
+		"_inheritedFrom_": "_ProcessBase"
 	},
-	"menu": {
+	"_dataclassAttributes": {
+		"reset()": {
+			"Syntax": "**.reset**( *dataclassName* : Text )",
+			"Params": [
+				[
+					"dataclassName",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"isExcludedStorageType()": {
+			"Syntax": "**.isExcludedStorageType**( *attribute* : Object; *allowObject* : Boolean ) : Boolean",
+			"Params": [
+				[
+					"attribute",
+					"Object",
+					"->"
+				],
+				[
+					"allowObject",
+					"Boolean",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"hasField()": {
+			"Syntax": "**.hasField**( *dataclass* : 4D.DataClass; *fieldName* : Text ) : Boolean",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"fieldName",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"forDataclass()": {
+			"Syntax": "**.forDataclass**( *dataclass* : 4D.DataClass; *options* : Object ) : Collection",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
+	"_menu": {
 		"fonts()": {
-			"Syntax": "**.fonts**( *withStyle* : Variant; *callback* : Text ) : cs.embed.menu",
+			"Syntax": "**.fonts**( *withStyle* : Variant; *callback* : Text ) : cs.embed._menu",
 			"Params": [
 				[
 					"withStyle",
@@ -786,14 +1046,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"edit()": {
-			"Syntax": "**.edit**( *contextual* : Boolean ) : cs.embed.menu",
+			"Syntax": "**.edit**( *contextual* : Boolean ) : cs.embed._menu",
 			"Params": [
 				[
 					"contextual",
@@ -802,14 +1062,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"windows()": {
-			"Syntax": "**.windows**( *callback* : Text ) : cs.embed.menu",
+			"Syntax": "**.windows**( *callback* : Text ) : cs.embed._menu",
 			"Params": [
 				[
 					"callback",
@@ -818,14 +1078,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"popup()": {
-			"Syntax": "**.popup**( *where* : Variant; *x* : Variant; *y* : Integer ) : cs.embed.menu",
+			"Syntax": "**.popup**( *where* : Variant; *x* : Variant; *y* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"where",
@@ -844,7 +1104,7 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -872,7 +1132,7 @@
 			"Summary": ""
 		},
 		"icon()": {
-			"Syntax": "**.icon**( *proxy* : Text; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.icon**( *proxy* : Text; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"proxy",
@@ -886,14 +1146,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"disable()": {
-			"Syntax": "**.disable**( *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.disable**( *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"index",
@@ -902,7 +1162,7 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -957,7 +1217,7 @@
 			"Summary": ""
 		},
 		"setData()": {
-			"Syntax": "**.setData**( *name* : Text; *value* : Variant; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.setData**( *name* : Text; *value* : Variant; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"name",
@@ -976,14 +1236,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"enable()": {
-			"Syntax": "**.enable**( *enabled* : Boolean; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.enable**( *enabled* : Boolean; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"enabled",
@@ -997,7 +1257,7 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -1025,7 +1285,7 @@
 			"Summary": ""
 		},
 		"property()": {
-			"Syntax": "**.property**( *property* : Text; *value* : Variant; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.property**( *property* : Text; *value* : Variant; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"property",
@@ -1044,14 +1304,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"indent()": {
-			"Syntax": "**.indent**( *index* : Integer; *number* : Integer ) : cs.embed.menu",
+			"Syntax": "**.indent**( *index* : Integer; *number* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"index",
@@ -1065,14 +1325,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"parameter()": {
-			"Syntax": "**.parameter**( *param* : Text; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.parameter**( *param* : Text; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"param",
@@ -1086,14 +1346,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"mark()": {
-			"Syntax": "**.mark**( *checked* : Boolean; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.mark**( *checked* : Boolean; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"checked",
@@ -1107,14 +1367,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"method()": {
-			"Syntax": "**.method**( *method* : Text; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.method**( *method* : Text; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"method",
@@ -1128,7 +1388,7 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -1167,7 +1427,7 @@
 			"Summary": ""
 		},
 		"setStyle()": {
-			"Syntax": "**.setStyle**( *tyle* : Integer; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.setStyle**( *tyle* : Integer; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"tyle",
@@ -1181,14 +1441,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"delete()": {
-			"Syntax": "**.delete**( *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.delete**( *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"index",
@@ -1197,25 +1457,25 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"file()": {
-			"Syntax": "**.file**() : cs.embed.menu",
+			"Syntax": "**.file**() : cs.embed._menu",
 			"Params": [
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"shortcut()": {
-			"Syntax": "**.shortcut**( *key* : Variant; *modifier* : Integer; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.shortcut**( *key* : Variant; *modifier* : Integer; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"key",
@@ -1234,7 +1494,7 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -1272,7 +1532,7 @@
 			"Summary": ""
 		},
 		"action()": {
-			"Syntax": "**.action**( *action* : Variant; *index* : Integer ) : cs.embed.menu",
+			"Syntax": "**.action**( *action* : Variant; *index* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"action",
@@ -1286,14 +1546,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"line()": {
-			"Syntax": "**.line**( *afterItem* : Integer ) : cs.embed.menu",
+			"Syntax": "**.line**( *afterItem* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"afterItem",
@@ -1302,14 +1562,14 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"append()": {
-			"Syntax": "**.append**( *item* : Variant; *param* : Variant; *mark* : Variant; *afterItem* : Integer ) : cs.embed.menu",
+			"Syntax": "**.append**( *item* : Variant; *param* : Variant; *mark* : Variant; *afterItem* : Integer ) : cs.embed._menu",
 			"Params": [
 				[
 					"item",
@@ -1333,7 +1593,7 @@
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed._menu",
 					"<-"
 				]
 			],
@@ -1367,825 +1627,389 @@
 			"Syntax": "data : Collection"
 		}
 	},
-	"_MODELS": {
-		"deleteModel()": {
-			"Syntax": "**.deleteModel**( *name* : Text )",
+	"_Logger": {
+		"error()": {
+			"Syntax": "**.error**( *payload* : Variant )",
 			"Params": [
 				[
-					"name",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"newModel()": {
-			"Syntax": "**.newModel**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"nameManager()": {
-			"Syntax": "**.nameManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"selectModel()": {
-			"Syntax": "**.selectModel**( *name* : Text )",
-			"Params": [
-				[
-					"name",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"listMetaInfo()": {
-			"Syntax": "**.listMetaInfo**( *me* : cs.embed.Model ) : Object",
-			"Params": [
-				[
-					"me",
-					"cs.embed.Model",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"listManager()": {
-			"Syntax": "**.listManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"manager()": {
-			"Syntax": "**.manager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"previousItem": {
-			"Syntax": "previousItem : Object"
-		},
-		"_inheritedFrom_": "_COMMON"
-	},
-	"regex": {
-		"countWords()": {
-			"Syntax": "**.countWords**( *target* : Text ) : Integer",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"split()": {
-			"Syntax": "**.split**() : Collection",
-			"Params": [
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"Trim()": {
-			"Syntax": "**.Trim**( *char* : Text ) : Text",
-			"Params": [
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"trim()": {
-			"Syntax": "**.trim**( *target* : Text; *char* : Text ) : Text",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set pattern()": {
-			"Syntax": "**.set pattern**( *pattern* : Text )",
-			"Params": [
-				[
-					"pattern",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"TrimTrailing()": {
-			"Syntax": "**.TrimTrailing**( *char* : Text ) : Text",
-			"Params": [
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set target()": {
-			"Syntax": "**.set target**( *target* : Variant )",
-			"Params": [
-				[
-					"target",
+					"payload",
 					"Variant",
 					"->"
 				]
 			],
 			"Summary": ""
 		},
-		"setOptions()": {
-			"Syntax": "**.setOptions**( *options* : Integer ) : cs.embed.regex",
+		"debug()": {
+			"Syntax": "**.debug**( *payload* : Variant )",
 			"Params": [
 				[
-					"options",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.regex",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"TrimLeading()": {
-			"Syntax": "**.TrimLeading**( *char* : Text ) : Text",
-			"Params": [
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"group()": {
-			"Syntax": "**.group**( *index* : Integer ) : Text",
-			"Params": [
-				[
-					"index",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"trimLeading()": {
-			"Syntax": "**.trimLeading**( *target* : Text; *char* : Text ) : Text",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"extractMailsAdresses()": {
-			"Syntax": "**.extractMailsAdresses**( *target* : Variant; *domains* : Collection ) : Collection",
-			"Params": [
-				[
-					"target",
+					"payload",
 					"Variant",
 					"->"
-				],
-				[
-					"domains",
-					"Collection",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"extractDates()": {
-			"Syntax": "**.extractDates**( *target* : Variant; *pivotYear* : Integer ) : Collection",
+		"warn()": {
+			"Syntax": "**.warn**( *payload* : Variant )",
 			"Params": [
 				[
-					"target",
+					"payload",
 					"Variant",
 					"->"
-				],
-				[
-					"pivotYear",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"start()": {
-			"Syntax": "**.start**( *index* : Integer ) : Integer",
+		"info()": {
+			"Syntax": "**.info**( *payload* : Variant )",
 			"Params": [
 				[
-					"index",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"stripTags()": {
-			"Syntax": "**.stripTags**( *target* : Text; *allow* : Variant ) : Text",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"allow",
+					"payload",
 					"Variant",
 					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"addslashes()": {
-			"Syntax": "**.addslashes**( *in* : Text ) : Text",
-			"Params": [
-				[
-					"in",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
+		"outputType": {
+			"Syntax": "outputType : Integer"
 		},
-		"LookingAt()": {
-			"Syntax": "**.LookingAt**( *pattern* : Text ) : Boolean",
-			"Params": [
-				[
-					"pattern",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"StripTags()": {
-			"Syntax": "**.StripTags**( *allow* : Variant ) : Text",
-			"Params": [
-				[
-					"allow",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"lookingAt()": {
-			"Syntax": "**.lookingAt**( *target* : Text; *pattern* : Text ) : Boolean",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"pattern",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"replace()": {
-			"Syntax": "**.replace**( *replacement* : Text; *count* : Integer; *position* : Integer ) : Text",
-			"Params": [
-				[
-					"replacement",
-					"Text",
-					"->"
-				],
-				[
-					"count",
-					"Integer",
-					"->"
-				],
-				[
-					"position",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"end()": {
-			"Syntax": "**.end**( *index* : Integer ) : Integer",
-			"Params": [
-				[
-					"index",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get count()": {
-			"Syntax": "**.get count**() : Integer",
-			"Params": [
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get allowSpaceAndComments()": {
-			"Syntax": "**.get allowSpaceAndComments**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"extract()": {
-			"Syntax": "**.extract**( *groups* : Variant ) : Collection",
-			"Params": [
-				[
-					"groups",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set allowSpaceAndComments()": {
-			"Syntax": "**.set allowSpaceAndComments**( *on* : Boolean )",
-			"Params": [
-				[
-					"on",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"escape()": {
-			"Syntax": "**.escape**( *in* : Text ) : Text",
-			"Params": [
-				[
-					"in",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get pattern()": {
-			"Syntax": "**.get pattern**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"length()": {
-			"Syntax": "**.length**( *index* : Integer ) : Integer",
-			"Params": [
-				[
-					"index",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set treatTargetAsOneLine()": {
-			"Syntax": "**.set treatTargetAsOneLine**( *on* : Boolean )",
-			"Params": [
-				[
-					"on",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get treatTargetAsOneLine()": {
-			"Syntax": "**.get treatTargetAsOneLine**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set caseSensitve()": {
-			"Syntax": "**.set caseSensitve**( *on* : Boolean )",
-			"Params": [
-				[
-					"on",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"trimTrailing()": {
-			"Syntax": "**.trimTrailing**( *target* : Text; *char* : Text ) : Text",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"validateMail()": {
-			"Syntax": "**.validateMail**( *target* : Text ) : Boolean",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get target()": {
-			"Syntax": "**.get target**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setPattern()": {
-			"Syntax": "**.setPattern**( *pattern* : Text ) : cs.embed.regex",
-			"Params": [
-				[
-					"pattern",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.regex",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set dotMatchNewLine()": {
-			"Syntax": "**.set dotMatchNewLine**( *on* : Boolean )",
-			"Params": [
-				[
-					"on",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get dotMatchNewLine()": {
-			"Syntax": "**.get dotMatchNewLine**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get caseSensitve()": {
-			"Syntax": "**.get caseSensitve**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setTarget()": {
-			"Syntax": "**.setTarget**( *target* : Variant ) : cs.embed.regex",
-			"Params": [
-				[
-					"target",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.regex",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"loadPattern()": {
-			"Syntax": "**.loadPattern**( *ID* : Text; *file* : 4D.File ) : cs.embed.regex",
-			"Params": [
-				[
-					"ID",
-					"Text",
-					"->"
-				],
-				[
-					"file",
-					"4D.File",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.regex",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"substitute()": {
-			"Syntax": "**.substitute**( *replacement* : Text; *count* : Integer; *position* : Integer ) : Text",
-			"Params": [
-				[
-					"replacement",
-					"Text",
-					"->"
-				],
-				[
-					"count",
-					"Integer",
-					"->"
-				],
-				[
-					"position",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"match()": {
-			"Syntax": "**.match**( *start* : Variant; *all* : Boolean ) : Boolean",
-			"Params": [
-				[
-					"start",
-					"Variant",
-					"->"
-				],
-				[
-					"all",
-					"Boolean",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get lastError()": {
-			"Syntax": "**.get lastError**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"errors": {
-			"Syntax": "errors : Collection"
-		},
-		"searchTime": {
-			"Syntax": "searchTime : Integer"
-		},
-		"matches": {
-			"Syntax": "matches : Collection"
-		},
-		"success": {
-			"Syntax": "success : Boolean"
+		"prefix": {
+			"Syntax": "prefix : Text"
 		}
 	},
-	"Provider": {
-		"set apiKey()": {
-			"Syntax": "**.set apiKey**( *apikey* : Text )",
+	"_ExecutionLog": {
+		"updateDefinition()": {
+			"Syntax": "**.updateDefinition**( *defKey* : Text; *startTime* : Text; *endTime* : Text; *status* : Text; *error* : Variant; *usage* : Object )",
 			"Params": [
 				[
-					"apikey",
+					"defKey",
 					"Text",
+					"->"
+				],
+				[
+					"startTime",
+					"Text",
+					"->"
+				],
+				[
+					"endTime",
+					"Text",
+					"->"
+				],
+				[
+					"status",
+					"Text",
+					"->"
+				],
+				[
+					"error",
+					"Variant",
+					"->"
+				],
+				[
+					"usage",
+					"Object",
 					"->"
 				]
 			],
 			"Summary": ""
 		},
-		"get apiKey()": {
-			"Syntax": "**.get apiKey**() : Text",
+		"endFullRun()": {
+			"Syntax": "**.endFullRun**( *startTimestamp* : Text; *endTimestamp* : Text; *status* : Text; *error* : Variant; *nextComputeDate* : Variant; *usage* : Object )",
 			"Params": [
 				[
-					"",
+					"startTimestamp",
 					"Text",
-					"<-"
+					"->"
+				],
+				[
+					"endTimestamp",
+					"Text",
+					"->"
+				],
+				[
+					"status",
+					"Text",
+					"->"
+				],
+				[
+					"error",
+					"Variant",
+					"->"
+				],
+				[
+					"nextComputeDate",
+					"Variant",
+					"->"
+				],
+				[
+					"usage",
+					"Object",
+					"->"
 				]
 			],
 			"Summary": ""
 		},
-		"menuModels()": {
-			"Syntax": "**.menuModels**( *default* : Text ) : cs.embed.menu",
+		"startFullRun()": {
+			"Syntax": "**.startFullRun**( *startTimestamp* : Text )",
 			"Params": [
 				[
-					"default",
+					"startTimestamp",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		}
+	},
+	"Embedder": {
+		"embedBatch()": {
+			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.embed.EmbedderResult",
+			"Params": [
+				[
+					"texts",
+					"Collection",
+					"->"
+				],
+				[
+					"model",
 					"Text",
 					"->"
 				],
 				[
 					"",
-					"cs.embed.menu",
+					"cs.embed.EmbedderResult",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"normalizedName()": {
-			"Syntax": "**.normalizedName**( *url* : Text ) : Text",
+		"embed()": {
+			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.embed.EmbedderResult",
 			"Params": [
 				[
-					"url",
+					"text",
 					"Text",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.embed.EmbedderResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"backoffMs": {
+			"Syntax": "backoffMs : Integer"
+		},
+		"maxRetries": {
+			"Syntax": "maxRetries : Integer"
+		},
+		"client": {
+			"Syntax": "client : cs.AIKit.OpenAI"
+		}
+	},
+	"EmbedderResult": {
+		"resetTokens": {
+			"Syntax": "resetTokens : Text"
+		},
+		"limitTokens": {
+			"Syntax": "limitTokens : Integer"
+		},
+		"remainingTokens": {
+			"Syntax": "remainingTokens : Integer"
+		},
+		"resetRequests": {
+			"Syntax": "resetRequests : Text"
+		},
+		"promptTokens": {
+			"Syntax": "promptTokens : Integer"
+		},
+		"totalTokens": {
+			"Syntax": "totalTokens : Integer"
+		},
+		"limitRequests": {
+			"Syntax": "limitRequests : Integer"
+		},
+		"remainingRequests": {
+			"Syntax": "remainingRequests : Integer"
+		},
+		"vectors": {
+			"Syntax": "vectors : Collection"
+		},
+		"vector": {
+			"Syntax": "vector : 4D.Vector"
+		}
+	},
+	"_RateLimiter": {
+		"nextBatchSize()": {
+			"Syntax": "**.nextBatchSize**() : Integer",
+			"Params": [
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"waitIfNeeded()": {
+			"Syntax": "**.waitIfNeeded**( *estimatedTokens* : Integer )",
+			"Params": [
+				[
+					"estimatedTokens",
+					"Integer",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"update()": {
+			"Syntax": "**.update**( *embedderResult* : cs.embed.EmbedderResult; *chunkSize* : Integer )",
+			"Params": [
+				[
+					"embedderResult",
+					"cs.embed.EmbedderResult",
+					"->"
+				],
+				[
+					"chunkSize",
+					"Integer",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"configBatchSize": {
+			"Syntax": "configBatchSize : Integer"
+		},
+		"tokensPerEntity": {
+			"Syntax": "tokensPerEntity : Real"
+		},
+		"remainingTokens": {
+			"Syntax": "remainingTokens : Integer"
+		},
+		"resetRequestsSeconds": {
+			"Syntax": "resetRequestsSeconds : Integer"
+		},
+		"resetTokensSeconds": {
+			"Syntax": "resetTokensSeconds : Integer"
+		},
+		"limitTokens": {
+			"Syntax": "limitTokens : Integer"
+		},
+		"remainingRequests": {
+			"Syntax": "remainingRequests : Integer"
+		}
+	},
+	"_TestProcessEmbedder": {
+		"embedBatch()": {
+			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.embed.EmbedderResult",
+			"Params": [
+				[
+					"texts",
+					"Collection",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.embed.EmbedderResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"embed()": {
+			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.embed.EmbedderResult",
+			"Params": [
+				[
+					"text",
+					"Text",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.embed.EmbedderResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"counter": {
+			"Syntax": "counter : Integer"
+		},
+		"nonCriticalTexts": {
+			"Syntax": "nonCriticalTexts : Collection"
+		},
+		"criticalModels": {
+			"Syntax": "criticalModels : Collection"
+		},
+		"embedBatchCalls": {
+			"Syntax": "embedBatchCalls : Collection"
+		},
+		"embedCalls": {
+			"Syntax": "embedCalls : Collection"
+		},
+		"rateLimits": {
+			"Syntax": "rateLimits : Collection"
+		}
+	},
+	"Playground": {
+		"embed()": {
+			"Syntax": "**.embed**( *input* : Variant; *context* : Variant; *model* : Text ) : cs.embed.EmbedderResult",
+			"Params": [
+				[
+					"input",
+					"Variant",
+					"->"
+				],
+				[
+					"context",
+					"Variant",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.embed.EmbedderResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"render()": {
+			"Syntax": "**.render**( *entity* : 4D.Entity; *definitionOrPhrase* : Variant ) : Text",
+			"Params": [
+				[
+					"entity",
+					"4D.Entity",
+					"->"
+				],
+				[
+					"definitionOrPhrase",
+					"Variant",
 					"->"
 				],
 				[
@@ -2196,31 +2020,20 @@
 			],
 			"Summary": ""
 		},
-		"loadModels()": {
-			"Syntax": "**.loadModels**()",
-			"Params": [],
-			"Summary": ""
+		"_inheritedFrom_": "_ProcessBase"
+	},
+	"_ProcessBase": {
+		"options": {
+			"Syntax": "options : Object"
 		},
-		"OPENAI": {
-			"Syntax": "OPENAI : Text"
+		"resolver": {
+			"Syntax": "resolver : cs.embed._Resolver"
 		},
-		"success": {
-			"Syntax": "success : Boolean"
+		"embedder": {
+			"Syntax": "embedder : cs.embed.Embedder"
 		},
-		"endpoint": {
-			"Syntax": "endpoint : cs.AIKit.OpenAI"
-		},
-		"needToken": {
-			"Syntax": "needToken : Boolean"
-		},
-		"baseURL": {
-			"Syntax": "baseURL : Text"
-		},
-		"models": {
-			"Syntax": "models : Collection"
-		},
-		"name": {
-			"Syntax": "name : Text"
+		"settings": {
+			"Syntax": "settings : cs.embed.Settings"
 		}
 	}
 }

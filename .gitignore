@@ -10,7 +10,7 @@
 
 !.github/
 !.github/**/.*
-.github/.DS_Store
+.DS_Store
 
 #--------------------------------
 # Ignore data file
@@ -69,6 +69,7 @@ Project/Sources/Methods/00_*.4dm
 Libraries/lib4d-arm64.dylib
 
 DEV/
+Logs/
 
 #--------------------------------
 # [!] Never omit forms
@@ -79,5 +80,5 @@ DEV/
 # Added by user
 #--------------------------------
 
-BUILD/Components
+BUILD/
 Project/Sources/AIProviders.json

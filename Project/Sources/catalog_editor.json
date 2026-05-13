@@ -117,10 +117,10 @@
 			"coordinates": {
 				"left": 40,
 				"top": 40,
-				"width": 158.734375,
-				"height": 204.44661458333
+				"width": 251.00390625,
+				"height": 214.07552083333
 			},
-			"displayable_fields_count": 7,
+			"displayable_fields_count": 8,
 			"fields_ordering": 2,
 			"fields": {
 				"student_not_defined": {

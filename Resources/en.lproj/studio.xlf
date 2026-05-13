@@ -24,6 +24,10 @@
           <source>Model</source>
           <target>Model</target>
         </trans-unit>
+        <trans-unit id="autoInvalidateOnSave" resname="autoInvalidateOnSave">
+          <source>Auto-invalidate on save</source>
+          <target>Auto-invalidate on save</target>
+        </trans-unit>
         <trans-unit id="48" resname="embed">
           <source>Insert</source>
           <target>Insert</target>
@@ -77,6 +81,38 @@
         <trans-unit id="tqepk+C7nSjsmFD87VD0gA" resname="theModelIsNotDefined">
           <source>The model is not defined</source>
           <target>The model is not defined</target>
+        </trans-unit>
+        <trans-unit id="theModelIsNotAvailable" resname="theModelIsNotAvailable">
+          <source>The model "{model}" is not available.</source>
+          <target>The model "{model}" is not available.</target>
+        </trans-unit>
+        <trans-unit id="19" resname="theAttributeIsNotARelation">
+          <source>The "{attribute}" attribute is not a N:1 relation.</source>
+          <target>The "{attribute}" attribute is not a N:1 relation.</target>
+        </trans-unit>
+        <trans-unit id="20" resname="theAttributeIsA1NRelation">
+          <source>The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</source>
+          <target>The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</target>
+        </trans-unit>
+        <trans-unit id="21" resname="relationsAreNotAllowed">
+          <source>Relations are not allowed: "{attribute}" cannot be used.</source>
+          <target>Relations are not allowed: "{attribute}" cannot be used.</target>
+        </trans-unit>
+        <trans-unit id="22" resname="calculatedAttributeIsNotAllowed">
+          <source>Calculated attributes are not allowed: "{attribute}" cannot be used.</source>
+          <target>Calculated attributes are not allowed: "{attribute}" cannot be used.</target>
+        </trans-unit>
+        <trans-unit id="23" resname="aliasAttributeIsNotAllowed">
+          <source>Alias attributes are not allowed: "{attribute}" cannot be used.</source>
+          <target>Alias attributes are not allowed: "{attribute}" cannot be used.</target>
+        </trans-unit>
+        <trans-unit id="24" resname="theAttributeTypeIsNotSupportedInAPhrase">
+          <source>The "{attribute}" attribute is of type blob, object or picture and cannot be used in this context.</source>
+          <target>The "{attribute}" attribute is of type blob, object or picture and cannot be used in this context.</target>
+        </trans-unit>
+        <trans-unit id="phraseHasNoKeyField" resname="phraseHasNoKeyField">
+          <source>The phrase has no key field. At least one attribute is required so that each record generates a unique text.</source>
+          <target>The phrase has no key field. At least one attribute is required so that each record generates a unique text.</target>
         </trans-unit>
       </group>
       <group resname="Models">

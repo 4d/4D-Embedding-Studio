@@ -16,6 +16,7 @@
 		<field name="student_not_defined" uuid="E5A4EA4FB2284FFD92F076DE914B5996" type="21" blob_switch_size="2147483647" id="7">
 			<field_extra class_id="4D.Vector"/>
 		</field>
+		<field name="student_vector_2_dirty" uuid="BC2E61AA44454FBEABB67AEDF6D8E7D1" type="1" id="8"/>
 		<primary_key field_name="ID" field_uuid="8C8244E61CBA42229EE02B9CE64EE77C"/>
 	</table>
 	<table name="School" uuid="459BCA81417F4262A46553B1E206CFD5" id="2">
@@ -92,6 +93,11 @@
 	<index kind="regular" uuid="521BD0AB5ED44DB18AC5D9C43749690B" type="7">
 		<field_ref uuid="73C6788103CC42E18DB3EBFB2AC190B5" name="name">
 			<table_ref uuid="BEAD477F60C44BA48389849A9AD01D77" name="Cities"/>
+		</field_ref>
+	</index>
+	<index kind="regular" name="student_vector_1_dirty_Students" uuid="8983DA9DBB554030875661C347B3AAA0" type="7">
+		<field_ref uuid="BC2E61AA44454FBEABB67AEDF6D8E7D1" name="student_vector_2_dirty">
+			<table_ref uuid="32D85E6A49EF4EB5A51A993D95FD4E3B" name="Students"/>
 		</field_ref>
 	</index>
 	<index kind="regular" unique_keys="true" uuid="BBA554CCFB1F41E491FCEC16D853AEBF" type="7">
