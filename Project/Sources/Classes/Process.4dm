@@ -1,6 +1,6 @@
 /**
  Orchestrator for computing and storing embeddings on 4D entities.
-
+ 
  Usage:
    var $p:=cs.embed.Process.new()              // uses defaults
    var $p:=cs.embed.Process.new($settings; $options)
@@ -523,6 +523,11 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Defini
 	var $k : Integer:=0
 	For each ($entity; $chunk)
 		
+		var $entityStartMs : Integer
+		If ($debug)
+			$entityStartMs:=Milliseconds:C459
+		End if 
+		
 		Try
 			
 			$entity[$def.vectorName]:=$vectors[$k]
@@ -541,7 +546,8 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Defini
 				
 				If ($debug)
 					cs:C1710._Logger.me.debug("Vector recomputed — vector: "+String:C10($def.dataclassName)+"."+String:C10($def.vectorName)\
-						+"; entityID: "+String:C10(This:C1470._entityRef($entity)))
+						+"; entityID: "+String:C10(This:C1470._entityRef($entity))\
+						+"; duration: "+String:C10(Milliseconds:C459-$entityStartMs)+"ms")
 				End if 
 				
 			Else 
