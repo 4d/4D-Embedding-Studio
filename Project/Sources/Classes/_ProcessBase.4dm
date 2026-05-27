@@ -17,11 +17,11 @@ Class constructor($settings : cs:C1710.Settings; $options : Object)
 	
 Function _buildEmbedder($options : Object) : Object
 	
-	If (($options#Null:C1517) && ($options.embedder#Null:C1517))
+	If (($options#Null:C1517) && (Value type:C1509($options.embedder)=Is object:K8:27))
 		return $options.embedder
 	End if 
 	
-	var $cfg : Object:=This:C1470.settings.embedder
+	var $cfg : Object:=(Value type:C1509(This:C1470.settings.embedder)=Is object:K8:27) ? This:C1470.settings.embedder : Null:C1517
 	
 	If ($cfg=Null:C1517)
 		return cs:C1710.Embedder.new()
@@ -29,16 +29,20 @@ Function _buildEmbedder($options : Object) : Object
 	
 	var $className : Text:=String:C10($cfg.className)
 	If ($className#"")
-		Try
-			var $instance : Object:=cs:C1710[$className].new($cfg)
-			If ((OB Instance of:C1731($instance.embed; 4D:C1709.Function))\
-				 && (OB Instance of:C1731($instance.embedBatch; 4D:C1709.Function)))
-				return $instance
-			End if 
-			cs:C1710._Logger.me.error("embedder.className '"+$className+"' is missing embed or embedBatch — using default Embedder")
-		Catch
-			cs:C1710._Logger.me.error("embedder.className '"+$className+"' could not be instantiated — using default Embedder")
-		End try
+		If (cs:C1710[$className]#Null:C1517)
+			Try
+				var $instance : Object:=cs:C1710[$className].new($cfg)
+				If ((OB Instance of:C1731($instance.embed; 4D:C1709.Function))\
+					 && (OB Instance of:C1731($instance.embedBatch; 4D:C1709.Function)))
+					return $instance
+				End if 
+				cs:C1710._Logger.me.error("embedder.className '"+$className+"' is missing embed or embedBatch — using default Embedder")
+			Catch
+				cs:C1710._Logger.me.error("embedder.className '"+$className+"' could not be instantiated — using default Embedder")
+			End try
+		Else 
+			cs:C1710._Logger.me.error("embedder.className '"+$className+"' not in class store — using default Embedder")
+		End if 
 	End if 
 	
 	return cs:C1710.Embedder.new($cfg)
