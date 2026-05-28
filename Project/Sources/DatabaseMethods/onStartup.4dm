@@ -31,7 +31,5 @@ If (Not:C34(Is compiled mode:C492))
 			ALERT:C41("You must use 4D 21R3>, current="+$version)
 			
 		End if 
-		
 	End if 
-	
 End if 

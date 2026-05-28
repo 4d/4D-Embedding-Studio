@@ -54,25 +54,37 @@ Function get inputsMenu() : cs:C1710._menu
 	For each ($attribute; This:C1470.supportedAttributes.orderBy("name"))
 		
 		If ($attribute.fields#Null:C1517)
+			
 			var $relationName : Text:=String:C10($attribute.name)
 			var $submenu:=cs:C1710._menu.new()
+			
 			var $subAttr : Object
 			For each ($subAttr; $attribute.fields.orderBy("name"))
+				
 				$submenu.append($subAttr.name; "{"+$relationName+"."+$subAttr.name+"}")
+				
 				If ($subAttr.fieldType#Null:C1517)
+					
 					Try($submenu.icon($medias[Num:C11($subAttr.fieldType)]))
+					
 				End if 
 			End for each 
+			
 			$menu.append($relationName; $submenu)
 			$menu.icon($medias[42])
+			
 		Else 
+			
 			$menu.append($attribute.name; "{"+$attribute.name+"}")
+			
 			If ($attribute.fieldType#Null:C1517)
+				
 				var $fieldType:=Num:C11($attribute.fieldType)
+				
 				Try($menu.icon($medias[$fieldType]))
+				
 			End if 
 		End if 
-		
 	End for each 
 	
 	return $menu
@@ -145,7 +157,9 @@ Function _validateModel()
 	This:C1470._modelErrors:=[]
 	
 	If (This:C1470.definition=Null:C1517)
+		
 		return 
+		
 	End if 
 	
 	var $model : Text:=String:C10(This:C1470.definition.modelAlias)
@@ -167,34 +181,35 @@ Function _validateModel()
 	
 	If (Not:C34($aliases.includes($model)))
 		
-		var $msg : Text:=Localized string:C991("theModelIsNotAvailable")
-		$msg:=Replace string:C233($msg; "{model}"; $model)
-		This:C1470._modelErrors.push($msg)
+		This:C1470._modelErrors.push(Replace string:C233(Localized string:C991("theModelIsNotAvailable"); "{model}"; $model))
 		
 	End if 
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get supportedAttributes() : Collection
+	
 	return cs:C1710._dataclassAttributes.me.forDataclass(This:C1470._dataclass; (This:C1470.settings#Null:C1517) ? This:C1470.settings.phrase : Null:C1517)
 	
-	
 	// MARK:- dirty attributes
-	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function hasDirtyAssociatedAttribute() : Boolean
 	
 	return This:C1470._dataclass[This:C1470.definition.vectorName+"_dirty"]#Null:C1517
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function dirtyAssociatedAttributeIndexed() : Boolean
+	
 	var $attr : Object:=This:C1470._dataclass[This:C1470.definition.vectorName+"_dirty"]
-	If ($attr=Null:C1517)
-		return False:C215
-	End if 
-	return Bool:C1537($attr.indexed)
 	
+	return $attr=Null:C1517 ? False:C215 : Bool:C1537($attr.indexed)
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function createDirtyAssociatedAttribute()
+	
 	If (This:C1470.hasDirtyAssociatedAttribute())
+		
 		return 
+		
 	End if 
 	
 	var $t:=This:C1470.definition.dataclassName
@@ -208,7 +223,6 @@ Function createDirtyAssociatedAttribute()
 		
 	End SQL
 	
-	
 	DOCUMENT:="CREATE INDEX "+$f+"_"+$t+" ON ["+$t+"] ("+$f+");"
 	
 	Begin SQL
@@ -217,9 +231,13 @@ Function createDirtyAssociatedAttribute()
 		
 	End SQL
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function createDirtyAssociatedAttributeIndex()
+	
 	If (This:C1470.dirtyAssociatedAttributeIndexed())
+		
 		return 
+		
 	End if 
 	
 	var $t:=This:C1470.definition.dataclassName
@@ -232,5 +250,3 @@ Function createDirtyAssociatedAttributeIndex()
 		EXECUTE IMMEDIATE : DOCUMENT
 		
 	End SQL
-	
-	

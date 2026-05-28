@@ -70,11 +70,6 @@ Function manager($e : Object)
 				OBJECT SET FORMAT:C236(*; "Header2"; "path:/.PRODUCT_RESOURCES/Images/StructureEditor/Field_14.png")
 				
 				// ______________________________________________________
-			: ($e.code=On Timer:K2:25)
-				
-				SET TIMER:C645(0)
-				
-				// ______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
 				If (Length:C16(OBJECT Get name:C1087(Object with focus:K67:3))=0)
@@ -83,8 +78,17 @@ Function manager($e : Object)
 					
 				End if 
 				
+				// The list of models may have been modified
+				This:C1470.modelsDropdownManager($e)
+				This:C1470.modelUpdateDropdown()
+				
 				// TODO: Visual indicator
 				CALL FORM:C1391(Current form window:C827; Formula:C1597(Form:C1466.refresh()))
+				
+				// ______________________________________________________
+			: ($e.code=On Timer:K2:25)
+				
+				SET TIMER:C645(0)
 				
 				// ______________________________________________________
 			: ($e.code=On Unload:K2:2)
@@ -102,11 +106,13 @@ Function manager($e : Object)
 		
 	End if 
 	
-	If (($e.code=On Mouse Enter:K2:33) || ($e.code=On Mouse Move:K2:35) || ($e.code=On Mouse Leave:K2:34))
+	If (($e.code=On Mouse Enter:K2:33)\
+		 || ($e.code=On Mouse Move:K2:35)\
+		 || ($e.code=On Mouse Leave:K2:34))
 		
 		Case of 
 				
-				//______________________________________________________
+				// ______________________________________________________
 			: ($e.objectName=This:C1470.list)
 				
 				var $me:=This:C1470.list
@@ -125,12 +131,12 @@ Function manager($e : Object)
 					
 				End if 
 				
-				//______________________________________________________
+				// ______________________________________________________
 			: ($e.objectName="phrase")
 				
 				This:C1470.phraseManager($e)
 				
-				//______________________________________________________
+				// ______________________________________________________
 		End case 
 		
 		return 
@@ -247,20 +253,15 @@ Function moreManager($e : Object)
 	End if 
 	
 	If (This:C1470.settings._isDev)
-		
 		var $workerBusy : Boolean:=(Process number:C372("EmbeddingStudio")>0)
-		
 		$menu.append("🚧 Insert All Attributes"; "insertAllAttributes")
 		$menu.append("🚧 AI Generated Phrase"; "aiGeneratedPhrase")
-		
 		$menu.line().append($workerBusy ? "⏳ Compute Vectors" : "🚧 Compute Vectors"; "computeVectors").enable(Not:C34($workerBusy))
 		$menu.append($workerBusy ? "⏳ Invalid Vectors" : "🚧 Invalid Vectors"; "invalidVectors").enable(Not:C34($workerBusy))
 		$menu.append($workerBusy ? "⏳ Stat Vectors" : "🚧 Stat Vectors"; "statVectors").enable(Not:C34($workerBusy))
-		
 		$menu.line().append($workerBusy ? "⏳ Compute All Vectors" : "🚧 Compute All Vectors"; "computeAllVectors").enable(Not:C34($workerBusy))
 		$menu.append($workerBusy ? "⏳ Invalid All Vectors" : "🚧 Invalid All Vectors"; "invalidAllVectors").enable(Not:C34($workerBusy))
 		$menu.append($workerBusy ? "⏳ Stat All Vectors" : "🚧 Stat All Vectors"; "statAllVectors").enable(Not:C34($workerBusy))
-		
 		var $modelAliases : Collection:=This:C1470._getModelDropdownValues()
 		If ($modelAliases.length>0)
 			var $allSameModel : Text
@@ -275,11 +276,9 @@ Function moreManager($e : Object)
 			End for each 
 			$menu.append("🚧 Set All Vectors To"; $modelSubmenu)
 		End if 
-		
 		$menu.line().append("🚧 Open AI Setting"; "openAISetting")
 		$menu.append("🚧 Open Setting File"; "openSettingFile")
 		$menu.append("🚧 Open Execution Log"; "openExecutionLog")
-		
 		var $phraseOpts : Object:=This:C1470.settings.phrase
 		var $phraseSubmenu:=cs:C1710._menu.new("no-localization")
 		$phraseSubmenu.append("Allow Relations"; "phraseOption:allowRelations"; Bool:C1537($phraseOpts.allowRelations))
@@ -287,10 +286,8 @@ Function moreManager($e : Object)
 		$phraseSubmenu.append("Allow Alias"; "phraseOption:allowAlias"; Bool:C1537($phraseOpts.allowAlias))
 		$phraseSubmenu.append("Allow Object"; "phraseOption:allowObject"; Bool:C1537($phraseOpts.allowObject))
 		$menu.append("🚧 Phrase Settings"; $phraseSubmenu)
-		
 		var $diagEnabled : Integer:=Get database parameter:C643(Diagnostic log recording:K37:69)
 		$menu.line().append("🚧 Toggle Diagnostic Log"; "toggleDiagnosticLogRecording"; ($diagEnabled=1))
-		
 		var $diagLevel : Integer:=Get database parameter:C643(Diagnostic log level:K37:108)
 		var $levelSubmenu:=cs:C1710._menu.new("no-localization")
 		var $levelNames:=["Trace"; "Debug"; "Info"; "Warning"; "Error"]
@@ -300,16 +297,13 @@ Function moreManager($e : Object)
 			$levelSubmenu.append($levelNames[$i]; "diagLevel:"+String:C10($levelConsts[$i]); ($diagLevel=$levelConsts[$i]))
 		End for 
 		$menu.append("🚧 Diagnostic Log Level"; $levelSubmenu)
-		
 		$menu.append("🚧 Open Diagnostic Log"; "openDiagosticLog")
-		
 		Case of 
 			: (Not:C34($item.hasDirtyAssociatedAttribute()))
 				$menu.line().append("🚧 Create dirty attribute"; "createDirtyAttribute")
 			: (Not:C34($item.dirtyAssociatedAttributeIndexed()))
 				$menu.line().append("🚧 Create index dirty attribute"; "createDirtyAttributeIndex")
 		End case 
-		
 	End if 
 	
 	Case of 
@@ -328,44 +322,33 @@ Function moreManager($e : Object)
 			
 			// ______________________________________________________
 		: ($menu.choice="openAISetting")
-			
 			OPEN SETTINGS WINDOW:C903("/Database/AI")
-			
 			// ______________________________________________________
 		: ($menu.choice="openSettingFile")
-			
 			OPEN URL:C673(This:C1470.settings.file.platformPath)
-			
 			// ______________________________________________________
 		: ($menu.choice="openExecutionLog")
-			
 			var $execFile : 4D:C1709.File:=cs:C1710._ExecutionLog.me._file()
 			If ($execFile.exists)
 				OPEN URL:C673($execFile.platformPath)
 			Else 
 				ALERT:C41("No execution log file found.")
 			End if 
-			
 			// ______________________________________________________
 		: ($menu.choice="insertAllAttributes")
-			
 			var $plainText:=$item.supportedAttributes.map(Formula:C1597($1.value.name+"={"+$1.value.name+"}")).join(",")
 			$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
 			$item.phrase:=$item.parsePhrase($item.definition.phrase)
 			This:C1470.saveEmbeddingItems()
-			
 			// ______________________________________________________
 		: ($menu.choice="aiGeneratedPhrase")
-			
 			$plainText:=$item.supportedAttributes.map(Formula:C1597($1.value.name)).join(",")
-			
 			var $model:="StudioPhrase"
 			If (Not:C34(cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name").includes($model)))
 				ALERT:C41("You must configure a chat model with name: "+$model)
 				return 
 			End if 
 			var $client : cs:C1710.AIKit.OpenAI:=cs:C1710.AIKit.OpenAI.new()
-			
 			var $prompt:="You are an assistant that generates natural-language phrases for embedding database rows."
 			$prompt+="Your task : "
 			$prompt+="- Convert a list of fields into ONE short, natural sentence."
@@ -381,53 +364,36 @@ Function moreManager($e : Object)
 			$prompt+="- No explanations."
 			$prompt+="- No extra formatting."
 			$prompt+="- Exclude ID."
-			
 			var $messages:=[{role: "system"; content: $prompt}; {role: "user"; content: $plainText+"\n"+"table="+$item.definition.dataclassName}]
 			var $resultAI:=$client.chat.completions.create($messages; {model: $model})
 			If ($resultAI.success)
-				
 				$plainText:=$resultAI.choice.message.text
 				$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
 				$item.phrase:=$item.parsePhrase($item.definition.phrase)
 				This:C1470.saveEmbeddingItems()
-				
 			Else 
 				ALERT:C41(JSON Stringify:C1217($resultAI))
 			End if 
-			
 			// ______________________________________________________
 		: ($menu.choice="computeVectors")
-			
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1; $2)); Formula:C1597(_computeVectors($1)); $item.definition)
-			
 			// ______________________________________________________
 		: ($menu.choice="invalidVectors")
-			
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1; $2)); Formula:C1597(_invalidateVectors($1)); $item.definition)
-			
 			// ______________________________________________________
 		: ($menu.choice="computeAllVectors")
-			
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1)); Formula:C1597(_computeVectors))
-			
 			// ______________________________________________________
 		: ($menu.choice="invalidAllVectors")
-			
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1)); Formula:C1597(_invalidateVectors))
-			
 			// ______________________________________________________
 		: ($menu.choice="statVectors")
-			
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1; $2)); Formula:C1597(_statVectors($1)); $item.definition)
-			
 			// ______________________________________________________
 		: ($menu.choice="statAllVectors")
-			
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1)); Formula:C1597(_statVectors))
-			
 			// ______________________________________________________
 		: (Position:C15("setAllModels:"; $menu.choice)=1)
-			
 			var $chosenAlias : Text:=Substring:C12($menu.choice; Length:C16("setAllModels:")+1)
 			var $def : cs:C1710.Definition
 			For each ($def; This:C1470.settings.definitions)
@@ -436,45 +402,32 @@ Function moreManager($e : Object)
 			This:C1470.settings.save()
 			This:C1470.readEmbeddingItems()
 			This:C1470.modelUpdateDropdown()
-			
 			// ______________________________________________________
 		: (Position:C15("phraseOption:"; $menu.choice)=1)
-			
 			var $optKey : Text:=Substring:C12($menu.choice; Length:C16("phraseOption:")+1)
 			This:C1470.settings.phrase[$optKey]:=Not:C34(Bool:C1537(This:C1470.settings.phrase[$optKey]))
 			This:C1470.settings.save()
-			
 			// ______________________________________________________
 		: ($menu.choice="toggleDiagnosticLogRecording")
-			
 			var $current : Integer:=Get database parameter:C643(Diagnostic log recording:K37:69)
 			SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69; ($current=0) ? 1 : 0)
-			
 			// ______________________________________________________
 		: (Position:C15("diagLevel:"; $menu.choice)=1)
-			
 			SET DATABASE PARAMETER:C642(Diagnostic log level:K37:108; Num:C11(Substring:C12($menu.choice; Length:C16("diagLevel:")+1)))
-			
 			// ______________________________________________________
 		: ($menu.choice="openDiagosticLog")
-			
 			var $file:=Folder:C1567(fk logs folder:K87:17).files().filter(Formula:C1597(Position:C15("4DDiagnosticLog_"; $1.value.name)=1)).sort().first()
 			If ($file=Null:C1517)
 				ALERT:C41("No log")
 			Else 
 				OPEN URL:C673($file.platformPath)
 			End if 
-			
 			// ______________________________________________________
 		: ($menu.choice="createDirtyAttribute")
-			
 			$item.createDirtyAssociatedAttribute()
-			
 			// ______________________________________________________
 		: ($menu.choice="createDirtyAttributeIndex")
-			
 			$item.createDirtyAssociatedAttributeIndex()
-			
 			// ______________________________________________________
 	End case 
 	
@@ -588,9 +541,24 @@ Function modelsDropdownManager($e : Object)
 			This:C1470.modelsDropdown:=$dropDown
 			
 			//______________________________________________________
+		: ($e.code=On Activate:K2:9)  // Update model list if any
+			
+			This:C1470.modelsDropdown.values:=This:C1470._getModelDropdownValues()
+			
+			//______________________________________________________
 		: ($e.code=On Data Change:K2:15)
 			
 			$dropDown:=This:C1470.modelsDropdown
+			
+			// TODO: To localize
+			If ($dropDown.currentValue=".Create a model…")
+				
+				// FIXME: Set the appropriate selector for the models page when the command is updated
+				OPEN SETTINGS WINDOW:C903("/Database/AI")
+				
+				return 
+				
+			End if 
 			
 			// Update current item
 			This:C1470.currentItem.definition.modelAlias:=$dropDown.currentValue
@@ -609,18 +577,17 @@ Function autoInvalidateManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
-	If ($e.code#On Clicked:K2:4)
+	If ($e.code#On Clicked:K2:4)\
+		 || (This:C1470.currentItem=Null:C1517)
+		
 		return 
-	End if 
-	
-	If (This:C1470.currentItem=Null:C1517)
-		return 
+		
 	End if 
 	
 	This:C1470.currentItem.version+=1
 	This:C1470.saveEmbeddingItems()
 	
-	Form:C1466.items:=Form:C1466.items  // update UI
+	Form:C1466.items:=Form:C1466.items  // Update UI
 	
 	// MARK: -
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -663,21 +630,25 @@ Function modelUpdateDropdown($item : cs:C1710._EmbeddingItem)
 	End if 
 	
 	var $dropDown : Object:=This:C1470.modelsDropdown
+	var $model : Text:=$item.definition.modelAlias
 	
-	If ($dropDown.values.includes($item.definition.modelAlias))
+	If ($dropDown.values.includes($model))
 		
-		$dropDown.index:=$dropDown.values.indexOf($item.definition.modelAlias)
+		$dropDown.index:=$dropDown.values.indexOf($model)
 		
 	Else 
 		
 		$dropDown.index:=-1
+		OBJECT SET RGB COLORS:C628(*; "models"; Length:C16(String:C10($model))>0 ? "red" : Foreground color:K23:1)
 		
 	End if 
 	
-	$dropDown.currentValue:=$item.definition.modelAlias || $dropDown.placeholder
+	// TODO: To localize
+	$dropDown.placeholder:=$dropDown.values.length>2 ? Localized string:C991("selectAModel") : ".Create a model…"
+	$dropDown.currentValue:=$model || $dropDown.placeholder
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function refresh()  //($force : Boolean)
+Function refresh()
 	
 	This:C1470.readEmbeddingItems()
 	
@@ -725,14 +696,18 @@ The list is displayed with:
 Enriched with saved Definition entries from Settings/vectors.json.
 */
 	If (This:C1470.settings=Null:C1517)
+		
 		This:C1470.settings:=cs:C1710.Settings.new()
+		
 	Else 
+		
 		This:C1470.settings.load()
+		
 	End if 
 	
 	var $items:=[]
-	
 	var $vf : Object
+	
 	For each ($vf; This:C1470._collectVectorFields())
 		
 		var $def : cs:C1710.Definition:=This:C1470.settings.find($vf.dataclassName; $vf.field.name)
@@ -749,7 +724,7 @@ Enriched with saved Definition entries from Settings/vectors.json.
 		If ($wasSaved)
 			
 			$item.version:=0
-			$item.validate()  // refreshes styled phrase + _phraseErrors + _modelErrors
+			$item.validate()  // Refreshes styled phrase + _phraseErrors + _modelErrors
 			
 		End if 
 		
@@ -759,6 +734,7 @@ Enriched with saved Definition entries from Settings/vectors.json.
 	
 	// Ghost entries: saved definitions that no longer match any catalog vector field.
 	var $saved : cs:C1710.Definition
+	
 	For each ($saved; This:C1470.settings.definitions)
 		
 		If ($items.query("definition.dataclassName = :1 & definition.vectorName = :2"; $saved.dataclassName; $saved.vectorName).length>0)
@@ -767,7 +743,10 @@ Enriched with saved Definition entries from Settings/vectors.json.
 			
 		End if 
 		
-		var $ghost : Object:={definition: $saved; errors: []; helptip: ""}
+		var $ghost : Object:={\
+			definition: $saved; \
+			errors: []; \
+			helptip: ""}
 		
 		Case of 
 				
@@ -804,6 +783,7 @@ Function saveEmbeddingItems()
 	This:C1470.settings.definitions:=This:C1470.items\
 		.filter(Formula:C1597(Bool:C1537($1.value.defined)))\
 		.map(Formula:C1597($1.value.definition))
+	
 	This:C1470.settings.save()
 	
 	// MARK: -[PRIVATE]
@@ -812,8 +792,11 @@ Function saveEmbeddingItems()
 	// If either changed, prompts the developer and calls invalidateVectors() on confirmation.
 Function _promptInvalidate($item : cs:C1710._EmbeddingItem)
 	
-	If (($item=Null:C1517) || ($item.original=Null:C1517))
+	If (($item=Null:C1517)\
+		 || ($item.original=Null:C1517))
+		
 		return 
+		
 	End if 
 	
 	var $orig : Object:=$item.original
@@ -821,24 +804,26 @@ Function _promptInvalidate($item : cs:C1710._EmbeddingItem)
 		(String:C10($item.definition.phrase.template)#String:C10($orig.phrase))\
 		 || (String:C10($item.definition.modelAlias)#String:C10($orig.modelAlias))
 	
-	If (Not:C34($changed))
+	If (Not:C34($changed))\
+		 || (Not:C34($item.definition._hasVectorComputed()))
+		
 		return 
-	End if 
-	
-	If (Not:C34($item.definition._hasVectorComputed()))
-		return 
+		
 	End if 
 	
 	// Update snapshot so a subsequent save won't re-prompt for the same delta
 	$item.original:=$item.definition.toObject()
 	
+	// TODO: To localize
 	CONFIRM:C162(\
 		"The definition for "+$item.definition.dataclassName+"."+$item.definition.vectorName+" has changed.\rDo you want to mark all existing vectors for recalculation?"; \
 		"Recalculate"; \
 		"Skip")  // TODO: localize
 	
-	If (OK=1)
+	If (Bool:C1537(OK))
+		
 		$item.definition.invalidateVectors()
+		
 	End if 
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
@@ -847,7 +832,6 @@ Function _cacheCatalog()
 	This:C1470._cache:={}
 	
 	var $dataclass; $attribute : Text
-	
 	For each ($dataclass; This:C1470.catalog)
 		
 		This:C1470._cache[$dataclass]:={}
@@ -865,7 +849,6 @@ Function _catalogModified() : Boolean
 	This:C1470.catalog:=ds:C1482
 	
 	var $dataclass; $attribute : Text
-	
 	For each ($dataclass; This:C1470._cache)
 		
 		If (This:C1470.catalog[$dataclass]=Null:C1517)
@@ -906,7 +889,7 @@ Function _catalogModified() : Boolean
 	// Returns a flat list of catalog vector fields: [{dataclass, dataclassName, field}]
 Function _collectVectorFields() : Collection
 	
-	var $fields : Collection:=[]
+	var $fields:=[]
 	var $tableName; $fieldName : Text
 	
 	For each ($tableName; This:C1470.catalog)
@@ -933,7 +916,13 @@ Function _collectVectorFields() : Collection
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _getModelDropdownValues() : Collection
 	
-	return cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name")
+	// return cs.AIKit.OpenAIProviders.new().modelAliases().extract("name")
+	var $models:=cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name")
+	$models.push("-")
+	// TODO: To localize
+	$models.push(".Create a model…")
+	
+	return $models
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _embeddedAttributesMenu($item : cs:C1710._EmbeddingItem; $menu : cs:C1710._menu)

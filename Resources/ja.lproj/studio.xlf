@@ -40,6 +40,10 @@
           <source>Edit the model…</source>
           <target state="new">Edit the model…</target>
         </trans-unit>
+        <trans-unit id="autoInvalidateOnSave" resname="autoInvalidateOnSave">
+          <source>Auto-invalidate on save</source>
+          <target state="new">Auto-invalidate on save</target>
+        </trans-unit>
       </group>
       <group resname="Errors">
         <trans-unit id="10" resname="theAttributeDoesn'tExistsInTheDataclass">
@@ -77,6 +81,22 @@
         <trans-unit id="tqepk+C7nSjsmFD87VD0gA" resname="theModelIsNotDefined">
           <source>The model is not defined</source>
           <target state="new">The model is not defined</target>
+        </trans-unit>
+        <trans-unit id="23" resname="aliasAttributeIsNotAllowed">
+          <source>Alias attributes are not allowed: "{attribute}" cannot be used.</source>
+          <target state="new">Alias attributes are not allowed: "{attribute}" cannot be used.</target>
+        </trans-unit>
+        <trans-unit id="phraseHasNoKeyField" resname="phraseHasNoKeyField">
+          <source>The phrase has no key field. At least one attribute is required so that each record generates a unique text.</source>
+          <target state="new">The phrase has no key field. At least one attribute is required so that each record generates a unique text.</target>
+        </trans-unit>
+        <trans-unit id="20" resname="theAttributeIsA1NRelation">
+          <source>The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</source>
+          <target state="new">The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</target>
+        </trans-unit>
+        <trans-unit id="theModelIsNotAvailable" resname="theModelIsNotAvailable">
+          <source>The model "{model}" is not available.</source>
+          <target state="new">The model "{model}" is not available.</target>
         </trans-unit>
       </group>
       <group resname="Models">
