@@ -48,6 +48,11 @@ $p.processEntity($entity)
 
 Declare a Boolean field named `<vectorName>_dirty` on your dataclass. When the flag is `True`, the pipeline recomputes the vector even if one already exists. The flag is cleared automatically after a successful save.
 
+## Architecture
+
+See [Architecture](Documentation/Architecture.md) for the component map and the
+`process()` data flow (resolve → filter → chunk → render → embed → persist).
+
 ## Class reference
 
 | Class | Description |
