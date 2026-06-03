@@ -132,6 +132,22 @@ Look up the saved definition for the given dataclass/vector pair.
 var $def:=$settings.find("Students"; "student_vector_1")
 ```
 
+### findAll()
+
+**findAll**(*dataclassName* : Text) : Collection of [Definition](Definition.md)
+
+Return every saved definition configured for the given dataclass.
+
+| Argument        | Type                                          | Description                                                |
+|-----------------|-----------------------------------------------|------------------------------------------------------------|
+| *dataclassName* | Text                                          | Name of the dataclass.                                     |
+| Function result | Collection of [Definition](Definition.md) | All matching definitions (empty collection if none match). |
+
+```4d
+var $defs:=$settings.findAll("Students")
+// → every Students definition; used by Process.process(ds.Students)
+```
+
 ### invalidateVectors()
 
 **invalidateVectors**() : Object

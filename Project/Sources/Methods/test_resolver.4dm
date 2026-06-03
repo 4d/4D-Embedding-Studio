@@ -28,7 +28,7 @@ $out:=$resolver.resolveForProcess($defStudentsV1)
 ASSERT:C1129($out.length=1; "resolveForProcess(single): expected 1, got "+String:C10($out.length))
 ASSERT:C1129($out[0].vectorName="student_vector_1"; "resolveForProcess(single): wrong def returned")
 
-// --- Collection → pass-through (copied) ---
+// --- Collection of full Definitions → flat-mapped, order preserved ---
 $out:=$resolver.resolveForProcess([$defStudentsV1; $defSchoolV1])
 ASSERT:C1129($out.length=2; "resolveForProcess(collection): expected 2, got "+String:C10($out.length))
 ASSERT:C1129($out[0].vectorName="student_vector_1"; "resolveForProcess(collection): order preserved")
@@ -47,6 +47,48 @@ ASSERT:C1129($out.length=0; "resolveForProcess(text): expected empty")
 $out:=$resolver.resolveForProcess(Null:C1517)
 $out.pop()
 ASSERT:C1129($settings.definitions.length=3; "resolveForProcess(Null): result must be a copy")
+
+// --- DataClass → every saved definition for that dataclass (expands to many) ---
+$out:=$resolver.resolveForProcess(ds:C1482.Students)
+ASSERT:C1129($out.length=2; "resolveForProcess(DataClass Students): expected 2, got "+String:C10($out.length))
+ASSERT:C1129($out.query("dataclassName # Students").length=0; "resolveForProcess(DataClass Students): all must be Students")
+
+// --- DataClass with a field named "name" → uses getInfo().name, not the attribute ---
+$out:=$resolver.resolveForProcess(ds:C1482.School)
+ASSERT:C1129($out.length=1; "resolveForProcess(DataClass School): expected 1, got "+String:C10($out.length))
+ASSERT:C1129($out[0].vectorName="school_vector_1"; "resolveForProcess(DataClass School): wrong def")
+
+// --- Plain stub (dataclassName+vectorName) matching settings → real Definition from settings ---
+$out:=$resolver.resolveForProcess({dataclassName: "Students"; vectorName: "student_vector_2"})
+ASSERT:C1129($out.length=1; "resolveForProcess(stub match): expected 1")
+ASSERT:C1129(OB Instance of:C1731($out[0]; cs:C1710.Definition); "resolveForProcess(stub match): must be real Definition")
+ASSERT:C1129($out[0].modelAlias="text-embedding-3-small"; "resolveForProcess(stub match): modelAlias from settings")
+
+// --- Plain stub with no matching definition → a new Definition is built from its fields ---
+$out:=$resolver.resolveForProcess({dataclassName: "Cities"; vectorName: "city_vec"; modelAlias: "text-embedding-3-large"; phrase: {template: "{name}"}})
+ASSERT:C1129($out.length=1; "resolveForProcess(stub new): expected 1")
+ASSERT:C1129(OB Instance of:C1731($out[0]; cs:C1710.Definition); "resolveForProcess(stub new): must be a Definition")
+ASSERT:C1129($out[0].dataclassName="Cities"; "resolveForProcess(stub new): dataclassName")
+ASSERT:C1129($out[0].vectorName="city_vec"; "resolveForProcess(stub new): vectorName")
+ASSERT:C1129($out[0].modelAlias="text-embedding-3-large"; "resolveForProcess(stub new): modelAlias")
+ASSERT:C1129($out[0].phrase.template="{name}"; "resolveForProcess(stub new): phrase template")
+
+// --- Collection containing a DataClass → flat-mapped/expanded ---
+$out:=$resolver.resolveForProcess([ds:C1482.Students])
+ASSERT:C1129($out.length=2; "resolveForProcess([DataClass]): expected 2, got "+String:C10($out.length))
+
+// --- Collection of mixed shapes: Definition + DataClass + stub → flattened ---
+$out:=$resolver.resolveForProcess([\
+$defSchoolV1; \
+ds:C1482.Students; \
+{dataclassName: "School"; vectorName: "school_vector_1"}\
+])
+ASSERT:C1129($out.length=4; "resolveForProcess(mixed collection): expected 1+2+1=4, got "+String:C10($out.length))
+
+// --- Collection with an unsupported item → that item contributes nothing ---
+$out:=$resolver.resolveForProcess(["not a definition"; $defStudentsV1])
+ASSERT:C1129($out.length=1; "resolveForProcess(collection w/ junk): expected 1, got "+String:C10($out.length))
+ASSERT:C1129($out[0].vectorName="student_vector_1"; "resolveForProcess(collection w/ junk): wrong def")
 
 // ══════════════════════════════════════════════════════════════════════
 // resolveForEntity — with inferred dataclass context

@@ -129,6 +129,11 @@ Function find($dataclassName : Text; $vectorName : Text) : cs:C1710.Definition
 	
 	return This:C1470.definitions.query("dataclassName = :1 & vectorName = :2"; $dataclassName; $vectorName).first()
 	
+	// Returns the saved Definitions for the given dataclass
+Function findAll($dataclassName : Text) : Collection
+	
+	return This:C1470.definitions.query("dataclassName = :1 "; $dataclassName)
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Calls invalidateVectors() on every definition and merges the results.
 	// Returns {updated: Integer; skipped: Integer; errors: Collection of Text}

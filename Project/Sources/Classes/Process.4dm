@@ -228,9 +228,16 @@ Function _validateDefinition($def : cs:C1710.Definition; $report : cs:C1710.Proc
 		
 	End if 
 	
-	var $ref : Text:=String:C10($def.dataclassName)+"."+String:C10($def.vectorName)
+	If ($def.validate=Null:C1517)
+		
+		$report._addError("definition"; Null:C1517; "Definition seems to not be an instance of it "+JSON Stringify:C1217($def))
+		return False:C215
+		
+	End if 
+	
 	var $validation : Object:=$def.validate(This:C1470.settings)
 	
+	var $ref : Text:=String:C10($def.dataclassName)+"."+String:C10($def.vectorName)
 	If (Not:C34($validation.success))
 		
 		var $error : Object

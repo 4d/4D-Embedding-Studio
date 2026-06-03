@@ -25,16 +25,18 @@ Function resolveForProcess($definition : Variant) : Collection
 			
 			// ______________________________________________________
 		: (Value type:C1509($definition)=Is collection:K8:32)
-			
-			return $definition.copy()
-			
+
+			// Flat-map each item: an item may itself expand to several definitions
+			// (e.g. a DataClass), so we cannot just copy the collection as-is.
+			return This:C1470._resolveMany($definition)
+
 			// ______________________________________________________
 		: (Value type:C1509($definition)=Is object:K8:27)
-			
-			return [$definition]
-			
+
+			return This:C1470._resolveOneForProcess($definition)
+
 			// ______________________________________________________
-		Else 
+		Else
 			
 			return []
 			
@@ -107,6 +109,60 @@ Function dataclassNameFromSelection($es : 4D:C1709.EntitySelection) : Text
 	
 	return $es.getDataClass().getInfo().name
 	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Flat-maps _resolveOneForProcess over a collection of polymorphic items.
+	// Each item may expand to zero, one or several definitions.
+Function _resolveMany($items : Collection) : Collection
+
+	var $out : Collection:=[]
+	var $item : Variant
+	For each ($item; $items)
+
+		$out.combine(This:C1470._resolveOneForProcess($item))
+
+	End for each
+	return $out
+
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Resolves a single polymorphic item (no entity context) into a Collection of Definition.
+	// - cs.Definition instance  → itself.
+	// - 4D.DataClass            → every saved definition for that dataclass.
+	// - plain object stub        → matching saved definition, or a new one built from its fields.
+	// - anything else            → empty.
+Function _resolveOneForProcess($item : Variant) : Collection
+
+	If (Value type:C1509($item)#Is object:K8:27)
+
+		return []
+
+	End if
+
+	If (OB Instance of:C1731($item; cs:C1710.Definition))
+
+		return [$item]
+
+	End if
+
+	If (OB Instance of:C1731($item; 4D:C1709.DataClass))
+
+		return This:C1470.settings.findAll($item.getInfo().name)
+
+	End if
+
+	var $found : cs:C1710.Definition:=This:C1470.settings.find(String:C10($item.dataclassName); String:C10($item.vectorName))
+
+	If ($found#Null:C1517)
+
+		return [$found]
+
+	End if
+
+	return [cs:C1710.Definition.new(\
+		String:C10($item.dataclassName); \
+		String:C10($item.vectorName); \
+		String:C10($item.modelAlias); \
+		($item.phrase=Null:C1517) ? "" : String:C10($item.phrase.template))]
+
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Normalizes a single definition argument against an entity dataclass context.
 	// - Fully-specified definition (dataclassName+vectorName): returned as-is if dataclass matches.

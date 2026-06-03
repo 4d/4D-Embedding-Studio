@@ -57,7 +57,7 @@ Process one, many, or all [Definition](Definition.md) entries against the full c
 
 | Argument        | Type                                                                        | Description                                                                 |
 |-----------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------|
-| *definition*    | `Null`, [Definition](Definition.md), or Collection        | `Null` → process every definition in settings. Otherwise process the given one(s). |
+| *definition*    | `Null`, [Definition](Definition.md), `4D.DataClass`, plain object, or Collection | See [process() resolution](#process-resolution). `Null` → every definition in settings. |
 | Function result | [ProcessResult](ProcessResult.md)                         | Statistics and per-error breakdown.                                         |
 
 ```4d
@@ -69,7 +69,29 @@ var $r:=$p.process($def)
 
 // Multiple definitions
 var $r:=$p.process([$def1; $def2])
+
+// Every definition configured for a whole dataclass
+var $r:=$p.process(ds.Students)
+
+// A plain descriptor — looked up in settings, or built on the fly
+var $r:=$p.process({dataclassName: "Students"; vectorName: "student_vector_1"})
+
+// Any mix — each item is resolved independently and flattened
+var $r:=$p.process([ds.Students; $def; {dataclassName: "School"; vectorName: "school_vector_1"}])
 ```
+
+#### process() resolution
+
+`process()` has no entity context, so it resolves each input into concrete [Definition](Definition.md) objects directly from settings:
+
+| Input                                              | Behavior                                                                                   |
+|----------------------------------------------------|---------------------------------------------------------------------------------------------|
+| `Null`                                             | Every definition in settings.                                                               |
+| [Definition](Definition.md)                        | Used as-is.                                                                                  |
+| `4D.DataClass` (e.g. `ds.Students`)                | Every definition in settings whose `dataclassName` matches that dataclass.                  |
+| `{dataclassName: "..."; vectorName: "..."}`        | The matching saved definition, or — if none is found — a new `Definition` built from the object's fields (`modelAlias`, `phrase.template`). |
+| Collection                                         | Each item is resolved with the rules above and the results are **flattened** into one collection (a `4D.DataClass` item can expand to several definitions). Unsupported items are dropped. |
+| Anything else                                      | Empty result.                                                                               |
 
 ### processEntity()
 
@@ -111,9 +133,9 @@ var $todo:=ds.Students.query("country = :1"; "FR")
 var $r:=$p.processEntitySelection($todo; $def)
 ```
 
-### Definition resolution
+### Definition resolution (entity context)
 
-The polymorphic *definition* argument accepted by `processEntity` and `processEntitySelection`:
+The polymorphic *definition* argument accepted by `processEntity` and `processEntitySelection`. Unlike [`process()`](#process-resolution), these have an entity/selection to infer the dataclass from, so a bare `{vectorName: "..."}` stub is enough:
 
 | Input                                                      | Behavior                                                                 |
 |------------------------------------------------------------|--------------------------------------------------------------------------|
@@ -121,8 +143,6 @@ The polymorphic *definition* argument accepted by `processEntity` and `processEn
 | [Definition](Definition.md)              | Used as-is; the `dataclassName` must match the entity/selection.         |
 | `{vectorName: "..."}`                                      | Looked up in settings by `vectorName` against the entity/selection dataclass. |
 | Collection                                                 | Each item resolved using the rules above; mismatches are silently dropped. |
-
-`process()` ignores the entity-context rules (it has no entity) — a `Null` argument means *all definitions in settings*.
 
 ### Recompute rules
 
