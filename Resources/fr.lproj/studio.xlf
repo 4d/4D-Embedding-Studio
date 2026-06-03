@@ -148,6 +148,10 @@
           <source>Select a model</source>
           <target>Sélectionnez un modèle</target>
         </trans-unit>
+        <trans-unit id="59" resname="createAModel">
+          <source>Create a model…</source>
+          <target>Créer un modèle…</target>
+        </trans-unit>
         <trans-unit id="26" resname="informations">
           <source>Informations</source>
           <target>Informations</target>

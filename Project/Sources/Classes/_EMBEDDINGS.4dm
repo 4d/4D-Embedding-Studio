@@ -550,8 +550,7 @@ Function modelsDropdownManager($e : Object)
 			
 			$dropDown:=This:C1470.modelsDropdown
 			
-			// TODO: To localize
-			If ($dropDown.currentValue=".Create a model…")
+			If ($dropDown.currentValue=Localized string:C991("createAModel"))
 				
 				// FIXME: Set the appropriate selector for the models page when the command is updated
 				OPEN SETTINGS WINDOW:C903("/Database/AI")
@@ -643,8 +642,7 @@ Function modelUpdateDropdown($item : cs:C1710._EmbeddingItem)
 		
 	End if 
 	
-	// TODO: To localize
-	$dropDown.placeholder:=$dropDown.values.length>2 ? Localized string:C991("selectAModel") : ".Create a model…"
+	$dropDown.placeholder:=$dropDown.values.length>2 ? Localized string:C991("selectAModel") : Localized string:C991("createAModel")
 	$dropDown.currentValue:=$model || $dropDown.placeholder
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -917,10 +915,9 @@ Function _collectVectorFields() : Collection
 Function _getModelDropdownValues() : Collection
 	
 	// return cs.AIKit.OpenAIProviders.new().modelAliases().extract("name")
-	var $models:=cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name")
+	var $models : Collection:=cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name")
 	$models.push("-")
-	// TODO: To localize
-	$models.push(".Create a model…")
+	$models.push(Localized string:C991("createAModel"))
 	
 	return $models
 	
