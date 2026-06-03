@@ -122,7 +122,7 @@ Function _createWithRetry($input : Variant; $model : Text) : cs:C1710.AIKit.Open
 	throw:C1805({\
 		componentSignature: "4DES"; \
 		errorCode: $retryErrorCode; \
-		message: "Embedding API unreachable after "+String:C10(This:C1470.maxRetries)+" retries"; \
+		message: Replace string:C233(Localized string:C991("errApiUnreachable"); "{retries}"; String:C10(This:C1470.maxRetries)); \
 		errors: $result.errors})
 	
 	return $result

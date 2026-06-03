@@ -16,23 +16,38 @@ The orchestrator never throws out of its public batch API — failures are recor
 | `promptTokens`          | Integer    | Total prompt tokens consumed across all API calls in this run.           |
 | `totalTokens`           | Integer    | Total tokens consumed across all API calls in this run.                  |
 | `duration`            | Integer    | Total duration of the job in milliseconds.                               |
-| `errors`                | Collection | List of `{scope, ref, message}` entries recorded during the run.         |
+| `errors`                | Collection | List of [ProcessError](ProcessError.md) entries recorded during the run. |
 
 ### Computed properties
 
-| Property  | Type    | Description                                       |
-|-----------|---------|---------------------------------------------------|
-| `success` | Boolean | `True` when `errors.length = 0`.                  |
+| Property   | Type    | Description                                                                            |
+|------------|---------|---------------------------------------------------------------------------------------|
+| `success`  | Boolean | `True` when no `"error"` or `"fatal"` entry was recorded. `"warning"` entries do not fail the run. |
+| `hasFatal` | Boolean | `True` when at least one `"fatal"` entry was recorded (e.g. a model became unavailable). |
 
-### Error entry shape
+### Error entries
 
-| Field     | Type    | Description                                                                  |
-|-----------|---------|------------------------------------------------------------------------------|
-| `scope`   | Text    | One of `"definition"` (validation failure), `"chunk"` (whole-batch API failure), `"entity"` (individual embed or save failure), `"selection"` (null selection passed). |
-| `ref`     | Variant | Scope-dependent reference — dataclass/vector name, chunk tag, or entity key. |
-| `message` | Text    | Human-readable error message.                                                |
+Each item in `errors` is a [ProcessError](ProcessError.md) with `scope`, `severity`, `code`, `ref`, `message`, and `retryable`. See [ProcessError](ProcessError.md) for the field meanings and [ProcessErrorCode](ProcessErrorCode.md) for the `code` catalogue.
 
 ## Functions
+
+### errorsByScope()
+
+**errorsByScope**( $scope : Text ) : Collection
+
+Errors filtered by `scope` (`"pipeline"`, `"definition"`, `"chunk"`, `"entity"`).
+
+### errorsByCode()
+
+**errorsByCode**( $code : Integer ) : Collection
+
+Errors filtered by machine-readable code — see [ProcessErrorCode](ProcessErrorCode.md).
+
+### retryableErrors()
+
+**retryableErrors**() : Collection
+
+Errors flagged `retryable` — re-running the operation could plausibly succeed.
 
 ### toObject()
 
@@ -67,3 +82,5 @@ End if
 ## See also
 
 - [Process](Process.md)
+- [ProcessError](ProcessError.md) — the typed shape of each `errors` entry.
+- [ProcessErrorCode](ProcessErrorCode.md) — the `code` catalogue.

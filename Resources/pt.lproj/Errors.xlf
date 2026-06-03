@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
+  <file datatype="x-STR#" original="Undefined" source-language="en" target-language="pt">
+    <header>
+      <prop-group name="4DPop XLIFF Pro">
+        <prop prop-type="version">3.0</prop>
+      </prop-group>
+    </header>
+    <body>
+      <group resname="Phrase">
+        <trans-unit id="10" resname="theAttributeDoesn'tExistsInTheDataclass">
+          <source>The attribute "{attribute}" doesn't exists in the dataclass "{dataclass}".</source>
+          <target state="new">The attribute "{attribute}" doesn't exists in the dataclass "{dataclass}".</target>
+        </trans-unit>
+        <trans-unit id="12" resname="theAttributeIsAVector">
+          <source>The "{attribute}" attribute is a vector and cannot be used in this context.</source>
+          <target state="new">The "{attribute}" attribute is a vector and cannot be used in this context.</target>
+        </trans-unit>
+        <trans-unit id="23" resname="aliasAttributeIsNotAllowed">
+          <source>Alias attributes are not allowed: "{attribute}" cannot be used.</source>
+          <target state="new">Alias attributes are not allowed: "{attribute}" cannot be used.</target>
+        </trans-unit>
+        <trans-unit id="phraseHasNoKeyField" resname="phraseHasNoKeyField">
+          <source>The phrase has no key field. At least one attribute is required so that each record generates a unique text.</source>
+          <target state="new">The phrase has no key field. At least one attribute is required so that each record generates a unique text.</target>
+        </trans-unit>
+        <trans-unit id="20" resname="theAttributeIsA1NRelation">
+          <source>The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</source>
+          <target state="new">The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</target>
+        </trans-unit>
+      </group>
+      <group resname="Embeddings">
+        <trans-unit id="7" resname="missingDataclass">
+          <source>Missing dataclass "{dataclass}".</source>
+          <target state="new">Missing dataclass "{dataclass}".</target>
+        </trans-unit>
+        <trans-unit id="9" resname="missingVector">
+          <source>Missing vector "{attribute}" of dataclass "{dataclass}".</source>
+          <target state="new">Missing vector "{attribute}" of dataclass "{dataclass}".</target>
+        </trans-unit>
+        <trans-unit id="5" resname="attributeIsNotAVector">
+          <source>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</source>
+          <target state="new">The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</target>
+        </trans-unit>
+      </group>
+      <group resname="Model">
+        <trans-unit id="tqepk+C7nSjsmFD87VD0gA" resname="theModelIsNotDefined">
+          <source>The model is not defined</source>
+          <target state="new">The model is not defined</target>
+        </trans-unit>
+        <trans-unit id="theModelIsNotAvailable" resname="theModelIsNotAvailable">
+          <source>The model "{model}" is not available.</source>
+          <target state="new">The model "{model}" is not available.</target>
+        </trans-unit>
+        <trans-unit id="13" resname="theModelNameMustBeUnique">
+          <source>The model name "{name}" is already in use and must be unique.</source>
+          <target state="new">The model name "{name}" is already in use and must be unique.</target>
+        </trans-unit>
+        <trans-unit id="17" resname="thisModelCannotBeDeletedBecauseItIsUsed">
+          <source>This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</source>
+          <target state="new">This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</target>
+        </trans-unit>
+        <trans-unit id="15" resname="theValueIsRequired.">
+          <source>A value for “{value}” is required.</source>
+          <target state="new">A value for “{value}” is required.</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

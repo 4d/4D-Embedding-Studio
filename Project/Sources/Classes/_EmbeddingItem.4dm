@@ -22,7 +22,7 @@ Class constructor($dataclass : 4D:C1709.DataClass; $definition : cs:C1710.Defini
 			
 		Else 
 			
-			throw:C1805({componentSignature: "4DES"; message: "Missing parameter"; deferred: True:C214})
+			throw:C1805({componentSignature: "4DES"; message: Localized string:C991("errMissingParameter"); deferred: True:C214})
 			
 		End if 
 		

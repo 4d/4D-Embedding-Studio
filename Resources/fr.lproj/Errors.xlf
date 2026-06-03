@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
+  <file datatype="x-STR#" original="Undefined" source-language="en" target-language="fr">
+    <header>
+      <prop-group name="4DPop XLIFF Pro">
+        <prop prop-type="version">3.0</prop>
+      </prop-group>
+    </header>
+    <body>
+      <group resname="Process">
+        <trans-unit id="errNullEntity" resname="errNullEntity">
+          <source>Null entity</source>
+          <target>Entité nulle</target>
+        </trans-unit>
+        <trans-unit id="errNullSelection" resname="errNullSelection">
+          <source>Null entity selection</source>
+          <target>Sélection d'entités nulle</target>
+        </trans-unit>
+        <trans-unit id="errNullDefinition" resname="errNullDefinition">
+          <source>Null definition</source>
+          <target>Définition nulle</target>
+        </trans-unit>
+        <trans-unit id="errInvalidDefinition" resname="errInvalidDefinition">
+          <source>Definition is not a valid Definition instance: {definition}</source>
+          <target>La définition n'est pas une instance valide de Definition : {definition}</target>
+        </trans-unit>
+        <trans-unit id="errModelSkipped" resname="errModelSkipped">
+          <source>Skipped: model '{model}' encountered a critical API error</source>
+          <target>Ignoré : le modèle « {model} » a rencontré une erreur API critique</target>
+        </trans-unit>
+        <trans-unit id="errVectorCountMismatch" resname="errVectorCountMismatch">
+          <source>Vector count mismatch: got {got} expected {expected}</source>
+          <target>Nombre de vecteurs incohérent : reçu {got}, attendu {expected}</target>
+        </trans-unit>
+      </group>
+      <group resname="Definition">
+        <trans-unit id="errMissingDataclassName" resname="errMissingDataclassName">
+          <source>Missing dataclassName</source>
+          <target>dataclassName manquant</target>
+        </trans-unit>
+        <trans-unit id="errMissingVectorName" resname="errMissingVectorName">
+          <source>Missing vectorName</source>
+          <target>vectorName manquant</target>
+        </trans-unit>
+        <trans-unit id="errNoModelConfigured" resname="errNoModelConfigured">
+          <source>No model configured for definition</source>
+          <target>Aucun modèle configuré pour la définition</target>
+        </trans-unit>
+        <trans-unit id="errModelNotDefined" resname="errModelNotDefined">
+          <source>Model '{model}' is not defined</source>
+          <target>Le modèle « {model} » n'est pas défini</target>
+        </trans-unit>
+        <trans-unit id="errUnknownDataclass" resname="errUnknownDataclass">
+          <source>Unknown dataclass: {dataclass}</source>
+          <target>Dataclass inconnue : {dataclass}</target>
+        </trans-unit>
+        <trans-unit id="errVectorFieldNotFound" resname="errVectorFieldNotFound">
+          <source>Vector field not found: {attribute}</source>
+          <target>Champ vecteur introuvable : {attribute}</target>
+        </trans-unit>
+        <trans-unit id="errTargetNotVector" resname="errTargetNotVector">
+          <source>Target field is not a 4D.Vector: {attribute}</source>
+          <target>Le champ cible n'est pas un 4D.Vector : {attribute}</target>
+        </trans-unit>
+        <trans-unit id="errMissingPhrase" resname="errMissingPhrase">
+          <source>Missing phrase</source>
+          <target>Phrase manquante</target>
+        </trans-unit>
+      </group>
+      <group resname="Embedder">
+        <trans-unit id="errApiUnreachable" resname="errApiUnreachable">
+          <source>Embedding API unreachable after {retries} retries</source>
+          <target>API d'embedding injoignable après {retries} tentatives</target>
+        </trans-unit>
+      </group>
+      <group resname="Playground">
+        <trans-unit id="errNoPhraseResolved" resname="errNoPhraseResolved">
+          <source>No phrase could be resolved for the given entity/context</source>
+          <target>Aucune phrase n'a pu être résolue pour l'entité ou le contexte fourni</target>
+        </trans-unit>
+        <trans-unit id="errNoModelSpecified" resname="errNoModelSpecified">
+          <source>No model specified (and none could be resolved from settings)</source>
+          <target>Aucun modèle spécifié (et aucun n'a pu être résolu depuis les paramètres)</target>
+        </trans-unit>
+      </group>
+      <group resname="EmbeddingItem">
+        <trans-unit id="errMissingParameter" resname="errMissingParameter">
+          <source>Missing parameter</source>
+          <target>Paramètre manquant</target>
+        </trans-unit>
+      </group>
+      <group resname="Phrase">
+        <trans-unit id="10" resname="theAttributeDoesn'tExistsInTheDataclass">
+          <source>The attribute "{attribute}" doesn't exists in the dataclass "{dataclass}".</source>
+          <target>L'attribut "{attribute}" n'existe pas dans la dataclasse "{dataclass}".</target>
+        </trans-unit>
+        <trans-unit id="12" resname="theAttributeIsAVector">
+          <source>The "{attribute}" attribute is a vector and cannot be used in this context.</source>
+          <target>L'attribut "{attribute}" est un vecteur et ne peut pas être utilisé dans ce contexte.</target>
+        </trans-unit>
+        <trans-unit id="19" resname="theAttributeIsNotARelation">
+          <source>The "{attribute}" attribute is not a N:1 relation.</source>
+          <target>L'attribut "{attribute}" n'est pas une relation N:1.</target>
+        </trans-unit>
+        <trans-unit id="20" resname="theAttributeIsA1NRelation">
+          <source>The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</source>
+          <target>L'attribut "{attribute}" est une relation 1:N et ne peut pas être utilisé dans ce contexte.</target>
+        </trans-unit>
+        <trans-unit id="21" resname="relationsAreNotAllowed">
+          <source>Relations are not allowed: "{attribute}" cannot be used.</source>
+          <target>Les relations ne sont pas autorisées : « {attribute} » ne peut pas être utilisé.</target>
+        </trans-unit>
+        <trans-unit id="22" resname="calculatedAttributeIsNotAllowed">
+          <source>Calculated attributes are not allowed: "{attribute}" cannot be used.</source>
+          <target>Les attributs calculés ne sont pas autorisés : « {attribute} » ne peut pas être utilisé.</target>
+        </trans-unit>
+        <trans-unit id="23" resname="aliasAttributeIsNotAllowed">
+          <source>Alias attributes are not allowed: "{attribute}" cannot be used.</source>
+          <target>Les attributs alias ne sont pas autorisés : « {attribute} » ne peut pas être utilisé.</target>
+        </trans-unit>
+        <trans-unit id="24" resname="theAttributeTypeIsNotSupportedInAPhrase">
+          <source>The "{attribute}" attribute is of type blob, object or picture and cannot be used in this context.</source>
+          <target>L'attribut "{attribute}" est de type blob, objet ou image et ne peut pas être utilisé dans ce contexte.</target>
+        </trans-unit>
+        <trans-unit id="phraseHasNoKeyField" resname="phraseHasNoKeyField">
+          <source>The phrase has no key field. At least one attribute is required so that each record generates a unique text.</source>
+          <target>La phrase ne contient aucun champ clé. Au moins un attribut est requis pour que chaque enregistrement génère un texte unique.</target>
+        </trans-unit>
+      </group>
+      <group resname="Embeddings">
+        <trans-unit id="7" resname="missingDataclass">
+          <source>Missing dataclass "{dataclass}".</source>
+          <target>Dataclasse manquante "{dataclass}".</target>
+        </trans-unit>
+        <trans-unit id="9" resname="missingVector">
+          <source>Missing vector "{attribute}" of dataclass "{dataclass}".</source>
+          <target>Vecteur "{attribute}" manquant dans la dataclasse "{dataclass}".</target>
+        </trans-unit>
+        <trans-unit id="5" resname="attributeIsNotAVector">
+          <source>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</source>
+          <target>L'attribut "{attribute}" de la dataclasse "{dataclass}" n'est pas un vecteur.</target>
+        </trans-unit>
+      </group>
+      <group resname="Model">
+        <trans-unit id="tqepk+C7nSjsmFD87VD0gA" resname="theModelIsNotDefined">
+          <source>The model is not defined</source>
+          <target>Le modèle n'est pas défini</target>
+        </trans-unit>
+        <trans-unit id="theModelIsNotAvailable" resname="theModelIsNotAvailable">
+          <source>The model "{model}" is not available.</source>
+          <target>Le modèle « {model} » n'est pas disponible.</target>
+        </trans-unit>
+        <trans-unit id="13" resname="theModelNameMustBeUnique">
+          <source>The model name "{name}" is already in use and must be unique.</source>
+          <target>Le nom du modèle "{name}" est déjà utilisé et doit être unique.</target>
+        </trans-unit>
+        <trans-unit id="17" resname="thisModelCannotBeDeletedBecauseItIsUsed">
+          <source>This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</source>
+          <target>Ce modèle ne peut pas être supprimé car il est utilisé par "{vector}" de la dataclass "{dataclass}".</target>
+        </trans-unit>
+        <trans-unit id="15" resname="theValueIsRequired.">
+          <source>A value for “{value}” is required.</source>
+          <target>Une valeur pour « {value} » est requise.</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

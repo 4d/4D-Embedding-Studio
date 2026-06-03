@@ -31,6 +31,8 @@
 			"Phrase",
 			"Playground",
 			"Process",
+			"ProcessError",
+			"ProcessErrorCode",
 			"ProcessResult",
 			"Settings"
 		]

@@ -92,7 +92,7 @@ Function embed($input : Variant; $context : Variant; $model : Text) : cs:C1710.E
 			
 			If ($phrase=Null:C1517)
 				
-				throw:C1805({componentSignature: "4DES"; message: "No phrase could be resolved for the given entity/context"})
+				throw:C1805({componentSignature: "4DES"; message: Localized string:C991("errNoPhraseResolved")})
 				
 			End if 
 			
@@ -120,7 +120,7 @@ Function embed($input : Variant; $context : Variant; $model : Text) : cs:C1710.E
 	
 	If (Length:C16($modelName)=0)
 		
-		throw:C1805({componentSignature: "4DES"; message: "No model specified (and none could be resolved from settings)"})
+		throw:C1805({componentSignature: "4DES"; message: Localized string:C991("errNoModelSpecified")})
 		
 	End if 
 	

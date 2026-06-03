@@ -8,21 +8,27 @@ var $badmodel:="badembed"
 
 var $modelAliases:=cs:C1710.AIKit.OpenAIProviders.new().modelAliases()
 var $modelAlias : Object:=$modelAliases.filter(Formula:C1597($1.value.name="embed")).first()
+var $badModelAlias : Object:=$modelAliases.filter(Formula:C1597($1.value.name=$badmodel)).first()
 
-If (($mockEmbedder) && ($modelAlias=Null:C1517))
-	// add embed model alias if not defined
+If ($mockEmbedder && (($modelAlias=Null:C1517) || ($badModelAlias=Null:C1517)))
+	// add the missing test model aliases (mock mode only, never touch real config)
 	var $file:=Folder:C1567(fk database folder:K87:14).file("Project/Sources/AIProviders.json")
 	var $data : Object:=($file.exists) ? JSON Parse:C1218($file.getText()) : {providers: {}; models: {}}
 	
-	$data.models[$model]:={model: "text-embedding-3-small"; provider: "openai"}
 	If ($data.providers["openai"]=Null:C1517)
 		$data.providers["openai"]:={}
 	End if 
-	$data.models[$badmodel]:={model: "badmodel"; provider: "openai"}
+	If ($modelAlias=Null:C1517)
+		$data.models[$model]:={model: "text-embedding-3-small"; provider: "openai"}
+	End if 
+	If ($badModelAlias=Null:C1517)
+		$data.models[$badmodel]:={model: "badmodel"; provider: "openai"}
+	End if 
 	$file.setText(JSON Stringify:C1217($data; *))
 	
 	$modelAliases:=cs:C1710.AIKit.OpenAIProviders.new().modelAliases()
 	$modelAlias:=$modelAliases.filter(Formula:C1597($1.value.name="embed")).first()
+	$badModelAlias:=$modelAliases.filter(Formula:C1597($1.value.name=$badmodel)).first()
 End if 
 
 If (Not:C34(Asserted:C1132($modelAlias#Null:C1517; "you must configure an 'embed' model aliases")))
@@ -191,14 +197,15 @@ ASSERT:C1129(Not:C34($result.success); "invalid definition should fail")
 ASSERT:C1129($result.definitionsProcessed=0; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($result.errors.length>0; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($result.errors[0].scope="definition"; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errors[0].code=cs:C1710.ProcessErrorCode.me.VALIDATION_FAILED; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129(Not:C34($result.errors[0].retryable); "validation failure should not be retryable")
+ASSERT:C1129(Not:C34($result.hasFatal); "validation failure is not fatal")
 ASSERT:C1129($errorCallbacks.success=0; JSON Stringify:C1217($errorCallbacks))
 ASSERT:C1129($errorCallbacks.error=1; JSON Stringify:C1217($errorCallbacks))
 ASSERT:C1129($errorCallbacks.terminate=1; JSON Stringify:C1217($errorCallbacks))
 
 // --- model-level critical failure skips later definitions with the same model ---
-$modelAlias:=$modelAliases.filter(Formula:C1597($1.value.name=$badmodel)).first()
-
-If (Not:C34(Asserted:C1132($modelAlias#Null:C1517; "you must configure an 'badembed' model aliases that will failed")))
+If (Not:C34(Asserted:C1132($badModelAlias#Null:C1517; "you must configure an 'badembed' model aliases that will failed")))
 	return 
 End if 
 
@@ -210,9 +217,18 @@ $proc:=cs:C1710.Process.new($settings; {embedder: $embedder})
 $result:=$proc.process([$criticalA; $criticalB])
 ASSERT:C1129(Not:C34($result.success); "critical model failure should be reported")
 ASSERT:C1129($result.entitiesSkipped=2; JSON Stringify:C1217($result.toObject()))
-ASSERT:C1129($result.errors.query("scope = :1"; "modelAlias").length=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errors.query("scope = :1"; "pipeline").length=1; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($result.errors.query("scope = :1"; "definition").length=1; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129(Position:C15("Skipped: model"; String:C10($result.errors.query("scope = :1"; "definition")[0].message))>0; JSON Stringify:C1217($result.toObject()))
+
+// structured error fields: the critical model failure is fatal, the skipped definition is a retryable error
+var $codes:=cs:C1710.ProcessErrorCode.me
+ASSERT:C1129($result.hasFatal; "critical model failure should be fatal")
+ASSERT:C1129($result.errorsByCode($codes.MODEL_UNAVAILABLE).length=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errorsByCode($codes.MODEL_UNAVAILABLE)[0].severity="fatal"; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errorsByCode($codes.MODEL_SKIPPED).length=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errorsByCode($codes.MODEL_SKIPPED)[0].scope="definition"; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.retryableErrors().length=$result.errors.length; "both critical-model errors should be retryable")
 
 // --- settings.embedder: options forwarded to cs.Embedder (maxRetries + backoffMs) ---
 $settings.embedder:={maxRetries: 1; backoffMs: 100}

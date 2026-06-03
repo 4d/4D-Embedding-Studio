@@ -73,8 +73,8 @@ Function process($definition : Variant) : cs:C1710.ProcessResult
 		
 		If (This:C1470._failedModels.includes($def.modelAlias))
 			
-			$report._addError("definition"; $defKey; \
-				"Skipped: model '"+String:C10($def.modelAlias)+"' encountered a critical API error")
+			$report._addError("definition"; cs:C1710.ProcessErrorCode.me.MODEL_SKIPPED; $defKey; \
+				Replace string:C233(Localized string:C991("errModelSkipped"); "{model}"; String:C10($def.modelAlias)))
 			$execLog.updateDefinition($defKey; $defStartTime; Timestamp:C1445; "skipped"; \
 				"Model '"+String:C10($def.modelAlias)+"' encountered a critical API error"; Null:C1517)
 			continue
@@ -112,7 +112,7 @@ Function processEntity($entity : 4D:C1709.Entity; $definition : Variant) : cs:C1
 	
 	If ($entity=Null:C1517)
 		
-		$report._addError("entity"; Null:C1517; "Null entity")
+		$report._addError("entity"; cs:C1710.ProcessErrorCode.me.NULL_INPUT; Null:C1517; Localized string:C991("errNullEntity"))
 		return This:C1470._doneWithCallbacks($report)
 		
 	End if 
@@ -131,8 +131,8 @@ Function processEntity($entity : 4D:C1709.Entity; $definition : Variant) : cs:C1
 		
 		If (This:C1470._failedModels.includes($def.modelAlias))
 			
-			$report._addError("definition"; String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
-				"Skipped: model '"+String:C10($def.modelAlias)+"' encountered a critical API error")
+			$report._addError("definition"; cs:C1710.ProcessErrorCode.me.MODEL_SKIPPED; String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
+				Replace string:C233(Localized string:C991("errModelSkipped"); "{model}"; String:C10($def.modelAlias)))
 			continue
 			
 		End if 
@@ -151,7 +151,7 @@ Function processEntitySelection($es : 4D:C1709.EntitySelection; $definition : Va
 	
 	If ($es=Null:C1517)
 		
-		$report._addError("selection"; Null:C1517; "Null entity selection")
+		$report._addError("pipeline"; cs:C1710.ProcessErrorCode.me.NULL_INPUT; Null:C1517; Localized string:C991("errNullSelection"))
 		return This:C1470._doneWithCallbacks($report)
 		
 	End if 
@@ -170,8 +170,8 @@ Function processEntitySelection($es : 4D:C1709.EntitySelection; $definition : Va
 		
 		If (This:C1470._failedModels.includes($def.modelAlias))
 			
-			$report._addError("definition"; String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
-				"Skipped: model '"+String:C10($def.modelAlias)+"' encountered a critical API error")
+			$report._addError("definition"; cs:C1710.ProcessErrorCode.me.MODEL_SKIPPED; String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
+				Replace string:C233(Localized string:C991("errModelSkipped"); "{model}"; String:C10($def.modelAlias)))
 			continue
 			
 		End if 
@@ -223,14 +223,14 @@ Function _validateDefinition($def : cs:C1710.Definition; $report : cs:C1710.Proc
 	
 	If ($def=Null:C1517)
 		
-		$report._addError("definition"; Null:C1517; "Null definition")
+		$report._addError("definition"; cs:C1710.ProcessErrorCode.me.NULL_INPUT; Null:C1517; Localized string:C991("errNullDefinition"))
 		return False:C215
 		
 	End if 
 	
 	If ($def.validate=Null:C1517)
 		
-		$report._addError("definition"; Null:C1517; "Definition seems to not be an instance of it "+JSON Stringify:C1217($def))
+		$report._addError("definition"; cs:C1710.ProcessErrorCode.me.INVALID_DEFINITION; Null:C1517; Replace string:C233(Localized string:C991("errInvalidDefinition"); "{definition}"; JSON Stringify:C1217($def)))
 		return False:C215
 		
 	End if 
@@ -242,7 +242,7 @@ Function _validateDefinition($def : cs:C1710.Definition; $report : cs:C1710.Proc
 		
 		var $error : Object
 		For each ($error; $validation.errors)
-			$report._addError("definition"; $ref; $error.message)
+			$report._addError("definition"; cs:C1710.ProcessErrorCode.me.VALIDATION_FAILED; $ref; $error.message)
 		End for each 
 		return False:C215
 		
@@ -314,7 +314,7 @@ Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.Definition; $re
 		Else 
 			
 			$report.entitiesSkipped+=1
-			$report._addError("entity"; This:C1470._entityRef($entity); String:C10($status.statusText))
+			$report._addError("entity"; cs:C1710.ProcessErrorCode.me.SAVE_FAILED; This:C1470._entityRef($entity); String:C10($status.statusText))
 			cs:C1710._Logger.me.error({\
 				event: "Local 4D error"; \
 				vector: String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
@@ -339,7 +339,7 @@ Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.Definition; $re
 		$report.entitiesSkipped+=1
 		If (Bool:C1537($entityErr.isCriticalAPIError))
 			This:C1470._failedModels.push(String:C10($def.modelAlias))
-			$report._addError("modelAlias"; String:C10($def.modelAlias); String:C10($entityErr.message))
+			$report._addError("pipeline"; cs:C1710.ProcessErrorCode.me.MODEL_UNAVAILABLE; String:C10($def.modelAlias); String:C10($entityErr.message))
 			var $entityErrorCode : Text:=String:C10($entityErr.errorCode)
 			If ((Length:C16($entityErrorCode)=0) && ($entityErr.errors#Null:C1517) && ($entityErr.errors.length>0))
 				$entityErrorCode:=String:C10($entityErr.errors[0].status)
@@ -353,7 +353,7 @@ Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.Definition; $re
 				})
 			return 
 		End if 
-		$report._addError("entity"; This:C1470._entityRef($entity); String:C10($entityErr.message))
+		$report._addError("entity"; cs:C1710.ProcessErrorCode.me.EMBED_FAILED; This:C1470._entityRef($entity); String:C10($entityErr.message))
 		cs:C1710._Logger.me.error({\
 			event: "Local 4D error"; \
 			vector: String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
@@ -510,17 +510,17 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Defini
 		var $chunkErr : Object:=Last errors:C1799[0]
 		$report.entitiesSkipped+=$chunk.length
 		If (Bool:C1537($chunkErr.isCriticalAPIError))
-			$report._addError("modelAlias"; String:C10($def.modelAlias); String:C10($chunkErr.message))
+			$report._addError("pipeline"; cs:C1710.ProcessErrorCode.me.MODEL_UNAVAILABLE; String:C10($def.modelAlias); String:C10($chunkErr.message))
 			throw:C1805($chunkErr)
 		End if 
-		$report._addError("chunk"; $def.dataclassName+"."+$def.vectorName; String:C10($chunkErr.message))
+		$report._addError("chunk"; cs:C1710.ProcessErrorCode.me.EMBED_FAILED; $def.dataclassName+"."+$def.vectorName; String:C10($chunkErr.message))
 		return $embedResult
 		
 	End try
 	
 	If (($vectors=Null:C1517) || ($vectors.length#$chunk.length))
 		
-		$report._addError("chunk"; $def.dataclassName+"."+$def.vectorName; "Vector count mismatch: got "+String:C10($vectors.length)+" expected "+String:C10($chunk.length))
+		$report._addError("chunk"; cs:C1710.ProcessErrorCode.me.VECTOR_COUNT_MISMATCH; $def.dataclassName+"."+$def.vectorName; Replace string:C233(Replace string:C233(Localized string:C991("errVectorCountMismatch"); "{got}"; String:C10($vectors.length)); "{expected}"; String:C10($chunk.length)))
 		$report.entitiesSkipped+=$chunk.length
 		return $embedResult
 		
@@ -560,7 +560,7 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Defini
 			Else 
 				
 				$report.entitiesSkipped+=1
-				$report._addError("entity"; This:C1470._entityRef($entity); String:C10($status.statusText))
+				$report._addError("entity"; cs:C1710.ProcessErrorCode.me.SAVE_FAILED; This:C1470._entityRef($entity); String:C10($status.statusText))
 				cs:C1710._Logger.me.error({\
 					event: "Local 4D error"; \
 					vector: String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
@@ -582,7 +582,7 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Defini
 		Catch
 			
 			$report.entitiesSkipped+=1
-			$report._addError("entity"; This:C1470._entityRef($entity); Last errors:C1799[0].message)
+			$report._addError("entity"; cs:C1710.ProcessErrorCode.me.SAVE_FAILED; This:C1470._entityRef($entity); Last errors:C1799[0].message)
 			cs:C1710._Logger.me.error({\
 				event: "Local 4D error"; \
 				vector: String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \

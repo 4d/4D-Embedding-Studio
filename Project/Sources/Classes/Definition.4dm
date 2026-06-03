@@ -28,17 +28,17 @@ Function validate($settings : cs:C1710.Settings) : Object
 	
 	// Fundamental identity — nothing else can be meaningfully checked without these
 	If (Length:C16(String:C10(This:C1470.dataclassName))=0)
-		return {success: False:C215; errors: [{field: "dataclassName"; message: "Missing dataclassName"}]}
+		return {success: False:C215; errors: [{field: "dataclassName"; message: Localized string:C991("errMissingDataclassName")}]}
 	End if 
 	
 	If (Length:C16(String:C10(This:C1470.vectorName))=0)
-		return {success: False:C215; errors: [{field: "vectorName"; message: "Missing vectorName"}]}
+		return {success: False:C215; errors: [{field: "vectorName"; message: Localized string:C991("errMissingVectorName")}]}
 	End if 
 	
 	// Model (independent from dataclass)
 	If (Length:C16(String:C10(This:C1470.modelAlias))=0)
 		
-		$errors.push({field: "modelAlias"; message: "No model configured for definition"})
+		$errors.push({field: "modelAlias"; message: Localized string:C991("errNoModelConfigured")})
 		
 	Else 
 		
@@ -52,7 +52,7 @@ Function validate($settings : cs:C1710.Settings) : Object
 		End for each 
 		
 		If (Not:C34($found))
-			$errors.push({field: "modelAlias"; message: "Model '"+This:C1470.modelAlias+"' is not defined"})
+			$errors.push({field: "modelAlias"; message: Replace string:C233(Localized string:C991("errModelNotDefined"); "{model}"; This:C1470.modelAlias)})
 		End if 
 		
 	End if 
@@ -62,7 +62,7 @@ Function validate($settings : cs:C1710.Settings) : Object
 	
 	If ($dc=Null:C1517)
 		
-		$errors.push({field: "dataclassName"; message: "Unknown dataclass: "+This:C1470.dataclassName})
+		$errors.push({field: "dataclassName"; message: Replace string:C233(Localized string:C991("errUnknownDataclass"); "{dataclass}"; This:C1470.dataclassName)})
 		return {success: False:C215; errors: $errors}
 		
 	End if 
@@ -72,18 +72,18 @@ Function validate($settings : cs:C1710.Settings) : Object
 	Case of 
 		: ($attr=Null:C1517)
 			
-			$errors.push({field: "vectorName"; message: "Vector field not found: "+This:C1470.vectorName})
+			$errors.push({field: "vectorName"; message: Replace string:C233(Localized string:C991("errVectorFieldNotFound"); "{attribute}"; This:C1470.vectorName)})
 			
 		: (String:C10($attr.classID)#"4D.Vector")
 			
-			$errors.push({field: "vectorName"; message: "Target field is not a 4D.Vector: "+This:C1470.vectorName})
+			$errors.push({field: "vectorName"; message: Replace string:C233(Localized string:C991("errTargetNotVector"); "{attribute}"; This:C1470.vectorName)})
 			
 	End case 
 	
 	// Phrase
 	If ((This:C1470.phrase=Null:C1517) || (Length:C16(This:C1470.phrase.template)=0))
 		
-		$errors.push({field: "phrase"; message: "Missing phrase"})
+		$errors.push({field: "phrase"; message: Localized string:C991("errMissingPhrase")})
 		
 	Else 
 		

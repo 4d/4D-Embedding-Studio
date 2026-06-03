@@ -256,6 +256,46 @@
 				],
 				"Summary": ""
 			}
+		},
+		"ProcessErrorCode": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"ProcessError": {
+			"new()": {
+				"Syntax": "**.new**( *scope* : Text; *code* : Integer; *ref* : Variant; *message* : Text; *overrides* : Object )",
+				"Params": [
+					[
+						"scope",
+						"Text",
+						"->"
+					],
+					[
+						"code",
+						"Integer",
+						"->"
+					],
+					[
+						"ref",
+						"Variant",
+						"->"
+					],
+					[
+						"message",
+						"Text",
+						"->"
+					],
+					[
+						"overrides",
+						"Object",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
 		}
 	},
 	"Embedder": {
@@ -958,6 +998,60 @@
 		},
 		"definitionsProcessed": {
 			"Syntax": "definitionsProcessed : Integer"
+		},
+		"errorsByScope()": {
+			"Syntax": "**.errorsByScope**( *scope* : Text ) : Collection",
+			"Params": [
+				[
+					"scope",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"errorsByCode()": {
+			"Syntax": "**.errorsByCode**( *code* : Integer ) : Collection",
+			"Params": [
+				[
+					"code",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get hasFatal()": {
+			"Syntax": "**.get hasFatal**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"retryableErrors()": {
+			"Syntax": "**.retryableErrors**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
 		}
 	},
 	"Settings": {
@@ -1017,6 +1111,22 @@
 		},
 		"file": {
 			"Syntax": "file : 4D.File"
+		},
+		"findAll()": {
+			"Syntax": "**.findAll**( *dataclassName* : Text ) : Collection",
+			"Params": [
+				[
+					"dataclassName",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
 		}
 	},
 	"Definition": {
@@ -2034,6 +2144,90 @@
 		},
 		"vector": {
 			"Syntax": "vector : 4D.Vector"
+		}
+	},
+	"ProcessErrorCode": {
+		"meta()": {
+			"Syntax": "**.meta**( *code* : Integer ) : Object",
+			"Params": [
+				[
+					"code",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"VECTOR_COUNT_MISMATCH": {
+			"Syntax": "VECTOR_COUNT_MISMATCH : Integer"
+		},
+		"EMBED_FAILED": {
+			"Syntax": "EMBED_FAILED : Integer"
+		},
+		"SAVE_FAILED": {
+			"Syntax": "SAVE_FAILED : Integer"
+		},
+		"INVALID_DEFINITION": {
+			"Syntax": "INVALID_DEFINITION : Integer"
+		},
+		"MODEL_UNAVAILABLE": {
+			"Syntax": "MODEL_UNAVAILABLE : Integer"
+		},
+		"MODEL_SKIPPED": {
+			"Syntax": "MODEL_SKIPPED : Integer"
+		},
+		"VALIDATION_FAILED": {
+			"Syntax": "VALIDATION_FAILED : Integer"
+		},
+		"NULL_INPUT": {
+			"Syntax": "NULL_INPUT : Integer"
+		}
+	},
+	"ProcessError": {
+		"toObject()": {
+			"Syntax": "**.toObject**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get isFatal()": {
+			"Syntax": "**.get isFatal**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"retryable": {
+			"Syntax": "retryable : Boolean"
+		},
+		"message": {
+			"Syntax": "message : Text"
+		},
+		"code": {
+			"Syntax": "code : Integer"
+		},
+		"ref": {
+			"Syntax": "ref : Variant"
+		},
+		"severity": {
+			"Syntax": "severity : Text"
+		},
+		"scope": {
+			"Syntax": "scope : Text"
 		}
 	}
 }
