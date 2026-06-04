@@ -1,0 +1,19 @@
+Project/Sources/Methods/test_settings.4dm
+  s_3896decb23381f::t_8a1758aefd61db 68-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.4",
+  "base_commit_sha": "594da88a6cdf36f46666a670d370726748964e9c",
+  "prompts": {},
+  "sessions": {
+    "s_3896decb23381f": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "78ad6a2c-924b-46e3-94c0-bf5fbcfe43ec",
+        "model": "gpt-5-mini"
+      },
+      "human_author": "Eric Marchand <eric.marchand@4d.com>"
+    }
+  }
+}
