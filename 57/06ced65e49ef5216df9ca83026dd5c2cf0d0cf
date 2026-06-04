@@ -1,0 +1,14 @@
+Project/Sources/Methods/test_settings.4dm
+  h_3877e81599a6f5 75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.4",
+  "base_commit_sha": "5706ced65e49ef5216df9ca83026dd5c2cf0d0cf",
+  "prompts": {},
+  "humans": {
+    "h_3877e81599a6f5": {
+      "author": "Eric Marchand <eric.marchand@4d.com>"
+    }
+  }
+}
