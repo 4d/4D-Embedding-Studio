@@ -1,0 +1,29 @@
+Project/Sources/Methods/test_processError.4dm
+  s_683b632edea833::t_22467c9aa9660d 1-192
+Project/Sources/Methods/test_settings.4dm
+  s_3896decb23381f::t_8a1758aefd61db 68-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.4",
+  "base_commit_sha": "33532cf9e62c50fe16caea574a4bb5469091afc9",
+  "prompts": {},
+  "sessions": {
+    "s_3896decb23381f": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "78ad6a2c-924b-46e3-94c0-bf5fbcfe43ec",
+        "model": "gpt-5-mini"
+      },
+      "human_author": "Eric Marchand <eric.marchand@4d.com>"
+    },
+    "s_683b632edea833": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "744a5e4c-ba07-43ad-834a-b33c10adb129",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Eric Marchand <eric.marchand@4d.com>"
+    }
+  }
+}
