@@ -1,0 +1,24 @@
+Project/Sources/Methods/test_processError.4dm
+  s_683b632edea833::t_22467c9aa9660d 1-192
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.4",
+  "base_commit_sha": "e012d9d86dc65a54d0275c8aa39fc231596832f1",
+  "prompts": {},
+  "humans": {
+    "h_3877e81599a6f5": {
+      "author": "Eric Marchand <eric.marchand@4d.com>"
+    }
+  },
+  "sessions": {
+    "s_683b632edea833": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "744a5e4c-ba07-43ad-834a-b33c10adb129",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Eric Marchand <eric.marchand@4d.com>"
+    }
+  }
+}
