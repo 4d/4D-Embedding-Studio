@@ -65,6 +65,14 @@ ASSERT:C1129($s.phrase.allowRelations=True:C214; "phrase: allowRelations expecte
 ASSERT:C1129($s.phrase.allowCalculated=True:C214; "phrase: allowCalculated expected true")
 ASSERT:C1129($s.phrase.allowAlias=False:C215; "phrase: allowAlias expected false")
 
+// --- Phrase allowObject round-trip ---
+$tmpFile.setText(JSON Stringify:C1217({phrase: {allowObject: True:C214}; definitions: []}))
+$s:=cs:C1710.Settings.new($tmpFile)
+ASSERT:C1129($s.phrase.allowObject=True:C214; "phrase: allowObject expected true")
+$s.save()
+var $savedRaw : Object:=JSON Parse:C1218($tmpFile.getText())
+ASSERT:C1129($savedRaw.phrase.allowObject=True:C214; "phrase: allowObject should persist on save")
+
 // --- Malformed JSON → silent, defaults ---
 $tmpFile.setText("not valid json {{{")
 $s:=cs:C1710.Settings.new($tmpFile)
