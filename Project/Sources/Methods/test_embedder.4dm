@@ -1,5 +1,5 @@
 //%attributes = {}
-// Automated tests for cs.EmbeddingStudio.Embedder against the 4DAIKitTest embeddings mock.
+// Automated tests for cs.Embedder against the 4DAIKitTest embeddings mock.
 
 var $client:=cs:C1710.AIKit.OpenAI.new()
 var $mockBased:=Position:C15("127.0.0.1"; $client.baseURL)>0

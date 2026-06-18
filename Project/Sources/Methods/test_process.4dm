@@ -53,7 +53,7 @@ ASSERT:C1129($schoolDef#Null:C1517; "school test definition missing")
 // Seed a deterministic fixture set inside the temporary child base.
 ds:C1482.Cities.all().drop()
 ds:C1482.School.all().drop()
-ds:C1482.Students.all().drop()
+ds:C1482._Students.all().drop()
 var $cityParis:=ds:C1482.Cities.new()
 $cityParis.name:="Paris"
 $cityParis.state:="Ile-de-France"
@@ -76,13 +76,13 @@ $schoolLyon.university:="Lyon University"
 $schoolLyon.city_ID:=$cityLyon.ID
 ASSERT:C1129($schoolLyon.save().success; "failed to save ENS Lyon")
 
-var $studentAlice:=ds:C1482.Students.new()
+var $studentAlice:=ds:C1482._Students.new()
 $studentAlice.firstName:="Alice"
 $studentAlice.lastName:="Durand"
 $studentAlice.school_ID:=$schoolParis.ID
 ASSERT:C1129($studentAlice.save().success; "failed to save Alice")
 
-var $studentBob:=ds:C1482.Students.new()
+var $studentBob:=ds:C1482._Students.new()
 $studentBob.firstName:="Bob"
 $studentBob.lastName:="Martin"
 $studentBob.school_ID:=$schoolLyon.ID
@@ -118,8 +118,8 @@ ASSERT:C1129($result.apiCalls=1; JSON Stringify:C1217($result.toObject()))
 
 // --- dryRun skips writes and API calls ---
 ASSERT:C1129($studentsDef.invalidateVectors().errors.length=0; "failed to invalidate student vectors")
-$studentAlice:=ds:C1482.Students.get($studentAlice.ID)
-$studentBob:=ds:C1482.Students.get($studentBob.ID)
+$studentAlice:=ds:C1482._Students.get($studentAlice.ID)
+$studentBob:=ds:C1482._Students.get($studentBob.ID)
 ASSERT:C1129($studentAlice.student_vector_1=Null:C1517; "Alice vector should be reset before dryRun")
 ASSERT:C1129($studentBob.student_vector_1=Null:C1517; "Bob vector should be reset before dryRun")
 
@@ -129,8 +129,8 @@ ASSERT:C1129($result.success; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($result.entitiesConsidered=2; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($result.entitiesUpdated=0; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($result.apiCalls=0; JSON Stringify:C1217($result.toObject()))
-$studentAlice:=ds:C1482.Students.get($studentAlice.ID)
-$studentBob:=ds:C1482.Students.get($studentBob.ID)
+$studentAlice:=ds:C1482._Students.get($studentAlice.ID)
+$studentBob:=ds:C1482._Students.get($studentBob.ID)
 ASSERT:C1129($studentAlice.student_vector_1=Null:C1517; "dryRun should not write Alice vector")
 ASSERT:C1129($studentBob.student_vector_1=Null:C1517; "dryRun should not write Bob vector")
 
@@ -145,7 +145,7 @@ ASSERT:C1129($result.apiCalls=1; JSON Stringify:C1217($result.toObject()))
 
 // --- processEntitySelection entry point ---
 ASSERT:C1129($studentsDef.invalidateVectors().errors.length=0; "failed to invalidate vectors before selection test")
-var $selection : 4D:C1709.EntitySelection:=ds:C1482.Students.query("lastName = :1"; "Martin")
+var $selection : 4D:C1709.EntitySelection:=ds:C1482._Students.query("lastName = :1"; "Martin")
 $proc:=cs:C1710.Process.new($settings; {embedder: $embedder})
 $result:=$proc.processEntitySelection($selection; {vectorName: "student_vector_1"})
 ASSERT:C1129($result.success; JSON Stringify:C1217($result.toObject()))
@@ -177,7 +177,7 @@ onProgress: Formula:C1597($callbacks.progress+=1); \
 onSuccess: Formula:C1597($callbacks.success+=1); \
 onError: Formula:C1597($callbacks.error+=1); \
 onTerminate: Formula:C1597($callbacks.terminate+=1)})
-$result:=$proc.processEntitySelection(ds:C1482.Students.all(); $studentsDef)
+$result:=$proc.processEntitySelection(ds:C1482._Students.all(); $studentsDef)
 ASSERT:C1129($result.success; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($callbacks.progress=2; JSON Stringify:C1217($callbacks))
 ASSERT:C1129($callbacks.success=1; JSON Stringify:C1217($callbacks))
@@ -264,8 +264,8 @@ ASSERT:C1129($result.entitiesConsidered=2; JSON Stringify:C1217($result.toObject
 ASSERT:C1129($result.entitiesUpdated=2; JSON Stringify:C1217($result.toObject()))
 
 ASSERT:C1129($studentsDef2.invalidateVectors().errors.length=0; "failed to invalidate student_vector_2")
-$studentAlice:=ds:C1482.Students.get($studentAlice.ID)
-$studentBob:=ds:C1482.Students.get($studentBob.ID)
+$studentAlice:=ds:C1482._Students.get($studentAlice.ID)
+$studentBob:=ds:C1482._Students.get($studentBob.ID)
 ASSERT:C1129($studentAlice.student_vector_2#Null:C1517; "dirty path: Alice vector_2 should NOT be nulled")
 ASSERT:C1129(Bool:C1537($studentAlice.student_vector_2_dirty); "dirty path: Alice student_vector_2_dirty should be True")
 ASSERT:C1129($studentBob.student_vector_2#Null:C1517; "dirty path: Bob vector_2 should NOT be nulled")
@@ -276,8 +276,8 @@ $result:=$proc.process($studentsDef2)
 ASSERT:C1129($result.success; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($result.entitiesConsidered=2; "dirty entities should be picked up for recompute")
 ASSERT:C1129($result.entitiesUpdated=2; JSON Stringify:C1217($result.toObject()))
-$studentAlice:=ds:C1482.Students.get($studentAlice.ID)
-$studentBob:=ds:C1482.Students.get($studentBob.ID)
+$studentAlice:=ds:C1482._Students.get($studentAlice.ID)
+$studentBob:=ds:C1482._Students.get($studentBob.ID)
 ASSERT:C1129(Not:C34($studentAlice.student_vector_2_dirty); "after recompute: Alice student_vector_2_dirty should be cleared")
 ASSERT:C1129(Not:C34($studentBob.student_vector_2_dirty); "after recompute: Bob student_vector_2_dirty should be cleared")
 

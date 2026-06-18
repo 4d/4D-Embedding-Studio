@@ -20,7 +20,7 @@ Class constructor()
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Records a structured error scoped to the pipeline, a definition, a chunk, or a single entity.
 	// $scope    : "pipeline" | "definition" | "chunk" | "entity"
-	// $code     : machine-readable code — see cs.EmbeddingStudio.ProcessErrorCode
+	// $code     : machine-readable code — see cs.ProcessErrorCode
 	// $ref      : caller-defined identifier (dataclass/vectorName, entity primary key, …)
 	// $overrides: optional {severity; retryable} overriding the code defaults
 Function _addError($scope : Text; $code : Integer; $ref : Variant; $message : Text; $overrides : Object) : cs:C1710.ProcessResult
@@ -67,7 +67,7 @@ Function errorsByScope($scope : Text) : Collection
 	return This:C1470.errors.query("scope = :1"; $scope)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Errors filtered by machine-readable code (see cs.EmbeddingStudio.ProcessErrorCode).
+	// Errors filtered by machine-readable code (see cs.ProcessErrorCode).
 Function errorsByCode($code : Integer) : Collection
 	
 	return This:C1470.errors.query("code = :1"; $code)

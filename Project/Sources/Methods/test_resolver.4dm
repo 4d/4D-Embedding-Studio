@@ -1,7 +1,7 @@
 //%attributes = {}
-// Unit tests for cs.EmbeddingStudio._Resolver
+// Unit tests for cs._Resolver
 
-// Build a cs.EmbeddingStudio.Settings pointing at a file that does not exist,
+// Build a cs.Settings pointing at a file that does not exist,
 // so constructor/load does no I/O. We then populate .vectors manually.
 var $noFile : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).file("Settings/__test_resolver_nonexistent.json")
 var $settings : cs:C1710.Settings:=cs:C1710.Settings.new($noFile)
@@ -49,7 +49,7 @@ $out.pop()
 ASSERT:C1129($settings.definitions.length=3; "resolveForProcess(Null): result must be a copy")
 
 // --- DataClass → every saved definition for that dataclass (expands to many) ---
-$out:=$resolver.resolveForProcess(ds:C1482.Students)
+$out:=$resolver.resolveForProcess(ds:C1482._Students)
 ASSERT:C1129($out.length=2; "resolveForProcess(DataClass Students): expected 2, got "+String:C10($out.length))
 ASSERT:C1129($out.query("dataclassName # Students").length=0; "resolveForProcess(DataClass Students): all must be Students")
 
@@ -74,13 +74,13 @@ ASSERT:C1129($out[0].modelAlias="text-embedding-3-large"; "resolveForProcess(stu
 ASSERT:C1129($out[0].phrase.template="{name}"; "resolveForProcess(stub new): phrase template")
 
 // --- Collection containing a DataClass → flat-mapped/expanded ---
-$out:=$resolver.resolveForProcess([ds:C1482.Students])
+$out:=$resolver.resolveForProcess([ds:C1482._Students])
 ASSERT:C1129($out.length=2; "resolveForProcess([DataClass]): expected 2, got "+String:C10($out.length))
 
 // --- Collection of mixed shapes: Definition + DataClass + stub → flattened ---
 $out:=$resolver.resolveForProcess([\
 $defSchoolV1; \
-ds:C1482.Students; \
+ds:C1482._Students; \
 {dataclassName: "School"; vectorName: "school_vector_1"}\
 ])
 ASSERT:C1129($out.length=4; "resolveForProcess(mixed collection): expected 1+2+1=4, got "+String:C10($out.length))
@@ -177,11 +177,11 @@ ASSERT:C1129($resolver.dataclassNameFromEntity(Null:C1517)=""; "dataclassNameFro
 // --- Null entity selection → empty string ---
 ASSERT:C1129($resolver.dataclassNameFromSelection(Null:C1517)=""; "dataclassNameFromSelection(Null): expected ''")
 
-// --- Real entity selection from ds.Students ---
-var $sel : 4D:C1709.EntitySelection:=ds:C1482.Students.all()
+// --- Real entity selection from ds._Students ---
+var $sel : 4D:C1709.EntitySelection:=ds:C1482._Students.all()
 ASSERT:C1129($resolver.dataclassNameFromSelection($sel)="Students"; "dataclassNameFromSelection: expected 'Students'")
 
-// --- Real entity from ds.Students (only if there is at least one row) ---
+// --- Real entity from ds._Students (only if there is at least one row) ---
 If ($sel.length>0)
 	
 	var $e : 4D:C1709.Entity:=$sel.first()

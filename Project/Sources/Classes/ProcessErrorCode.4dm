@@ -1,5 +1,5 @@
 /**
- Machine-readable error codes for cs.EmbeddingStudio.ProcessError.
+ Machine-readable error codes for cs.ProcessError.
 
  Exposes stable integer constants so callers can react programmatically
  (e.g. retry on transient failures, abort on fatal model outages) without
@@ -10,7 +10,7 @@
  contextual and supplied by the caller, not derived here.
 
  Usage:
-   var $codes : cs.EmbeddingStudio.ProcessErrorCode:=cs.EmbeddingStudio.ProcessErrorCode.me
+   var $codes : cs.ProcessErrorCode:=cs.ProcessErrorCode.me
    If ($error.code=$codes.SAVE_FAILED)
        …
    End if

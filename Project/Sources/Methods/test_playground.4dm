@@ -1,5 +1,5 @@
 //%attributes = {}
-// Automated tests for cs.EmbeddingStudio.Playground (render + embed).
+// Automated tests for cs.Playground (render + embed).
 
 var $mockEmbedder:=Not:C34(Shift down:C543)
 
@@ -40,7 +40,7 @@ ASSERT:C1129($studentsDef#Null:C1517; "students test definition missing")
 // Seed fixtures
 ds:C1482.Cities.all().drop()
 ds:C1482.School.all().drop()
-ds:C1482.Students.all().drop()
+ds:C1482._Students.all().drop()
 
 var $cityParis:=ds:C1482.Cities.new()
 $cityParis.name:="Paris"
@@ -53,7 +53,7 @@ $schoolParis.university:="Paris University"
 $schoolParis.city_ID:=$cityParis.ID
 ASSERT:C1129($schoolParis.save().success; "failed to save Sorbonne")
 
-var $studentAlice:=ds:C1482.Students.new()
+var $studentAlice:=ds:C1482._Students.new()
 $studentAlice.firstName:="Alice"
 $studentAlice.lastName:="Durand"
 $studentAlice.school_ID:=$schoolParis.ID
@@ -137,6 +137,6 @@ ASSERT:C1129($threw; "embed with no model should throw")
 
 ds:C1482.Cities.all().drop()
 ds:C1482.School.all().drop()
-ds:C1482.Students.all().drop()
+ds:C1482._Students.all().drop()
 $settingsFile.delete()
 

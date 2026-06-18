@@ -1,5 +1,5 @@
 //%attributes = {}
-// Unit tests for cs.EmbeddingStudio._dataclassAttributes
+// Unit tests for cs._dataclassAttributes
 
 var $dca : cs:C1710._dataclassAttributes:=cs:C1710._dataclassAttributes.me
 $dca.reset()
@@ -11,7 +11,7 @@ var $attrs : Collection
 // ══════════════════════════════════════════════════════════════════════
 
 // --- Simple storage fields returned ---
-$attrs:=$dca.forDataclass(ds:C1482.Students)
+$attrs:=$dca.forDataclass(ds:C1482._Students)
 ASSERT:C1129($attrs.query("name = :1"; "ID").length=1; "default: ID must be included")
 ASSERT:C1129($attrs.query("name = :1"; "firstName").length=1; "default: firstName must be included")
 ASSERT:C1129($attrs.query("name = :1"; "lastName").length=1; "default: lastName must be included")
@@ -37,7 +37,7 @@ ASSERT:C1129($attrs.query("name = :1"; "town").length=0; "default: alias 'town' 
 // forDataclass — allowRelations
 // ══════════════════════════════════════════════════════════════════════
 
-$attrs:=$dca.forDataclass(ds:C1482.Students; {allowRelations: True:C214})
+$attrs:=$dca.forDataclass(ds:C1482._Students; {allowRelations: True:C214})
 // relation is now {name; fields} object, not a flat attribute object
 var $schoolEntry:=$attrs.query("name = :1"; "school").first()
 ASSERT:C1129($schoolEntry#Null:C1517; "allowRelations: 'school' must be present in result")
@@ -53,7 +53,7 @@ ASSERT:C1129($attrs.query("name = :1"; "town").length=0; "allowRelations: alias 
 // forDataclass — allowCalculated
 // ══════════════════════════════════════════════════════════════════════
 
-$attrs:=$dca.forDataclass(ds:C1482.Students; {allowCalculated: True:C214})
+$attrs:=$dca.forDataclass(ds:C1482._Students; {allowCalculated: True:C214})
 ASSERT:C1129($attrs.query("name = :1"; "fullName").length=1; "allowCalculated: 'fullName' must be included")
 ASSERT:C1129($attrs.query("name = :1"; "firstName").length=1; "allowCalculated: simple fields still present")
 ASSERT:C1129($attrs.query("name = :1"; "school").length=0; "allowCalculated: relatedEntity still excluded")
@@ -63,7 +63,7 @@ ASSERT:C1129($attrs.query("name = :1"; "town").length=0; "allowCalculated: alias
 // forDataclass — allowAlias
 // ══════════════════════════════════════════════════════════════════════
 
-$attrs:=$dca.forDataclass(ds:C1482.Students; {allowAlias: True:C214})
+$attrs:=$dca.forDataclass(ds:C1482._Students; {allowAlias: True:C214})
 ASSERT:C1129($attrs.query("name = :1"; "town").length=1; "allowAlias: 'town' alias must be included")
 ASSERT:C1129($attrs.query("name = :1"; "firstName").length=1; "allowAlias: simple fields still present")
 ASSERT:C1129($attrs.query("name = :1"; "school").length=0; "allowAlias: relatedEntity still excluded")
@@ -73,7 +73,7 @@ ASSERT:C1129($attrs.query("name = :1"; "fullName").length=0; "allowAlias: calcul
 // forDataclass — all options True
 // ══════════════════════════════════════════════════════════════════════
 
-$attrs:=$dca.forDataclass(ds:C1482.Students; {allowRelations: True:C214; allowCalculated: True:C214; allowAlias: True:C214})
+$attrs:=$dca.forDataclass(ds:C1482._Students; {allowRelations: True:C214; allowCalculated: True:C214; allowAlias: True:C214})
 var $schoolEntry2:=$attrs.query("name = :1"; "school").first()
 ASSERT:C1129(Value type:C1509($schoolEntry2.fields)=Is collection:K8:32; "all options: relatedEntity 'school' must have a fields Collection")
 ASSERT:C1129($attrs.query("name = :1"; "fullName").length=1; "all options: calculated included")
@@ -104,40 +104,40 @@ ASSERT:C1129($attrs.query("name = :1"; "strudents").length=0; "School allowRelat
 // ══════════════════════════════════════════════════════════════════════
 
 // --- Known simple fields ---
-ASSERT:C1129($dca.hasField(ds:C1482.Students; "firstName"); "hasField: 'firstName' must return True")
-ASSERT:C1129($dca.hasField(ds:C1482.Students; "lastName"); "hasField: 'lastName' must return True")
-ASSERT:C1129($dca.hasField(ds:C1482.Students; "ID"); "hasField: 'ID' must return True")
+ASSERT:C1129($dca.hasField(ds:C1482._Students; "firstName"); "hasField: 'firstName' must return True")
+ASSERT:C1129($dca.hasField(ds:C1482._Students; "lastName"); "hasField: 'lastName' must return True")
+ASSERT:C1129($dca.hasField(ds:C1482._Students; "ID"); "hasField: 'ID' must return True")
 
 // --- Relation attribute names found ---
-ASSERT:C1129($dca.hasField(ds:C1482.Students; "school"); "hasField: relation 'school' must return True")
+ASSERT:C1129($dca.hasField(ds:C1482._Students; "school"); "hasField: relation 'school' must return True")
 
 // --- Vector attribute names found (hasField does not filter by kind) ---
-ASSERT:C1129($dca.hasField(ds:C1482.Students; "student_vector_1"); "hasField: vector attribute must return True")
+ASSERT:C1129($dca.hasField(ds:C1482._Students; "student_vector_1"); "hasField: vector attribute must return True")
 
 // --- Non-existent field ---
-ASSERT:C1129(Not:C34($dca.hasField(ds:C1482.Students; "nonExistent")); "hasField: 'nonExistent' must return False")
-ASSERT:C1129(Not:C34($dca.hasField(ds:C1482.Students; "")); "hasField: empty string must return False")
+ASSERT:C1129(Not:C34($dca.hasField(ds:C1482._Students; "nonExistent")); "hasField: 'nonExistent' must return False")
+ASSERT:C1129(Not:C34($dca.hasField(ds:C1482._Students; "")); "hasField: empty string must return False")
 
 // ══════════════════════════════════════════════════════════════════════
 // reset
 // ══════════════════════════════════════════════════════════════════════
 
 // Prime the cache
-$dca.forDataclass(ds:C1482.Students)
+$dca.forDataclass(ds:C1482._Students)
 $dca.forDataclass(ds:C1482.School)
-$dca.hasField(ds:C1482.Students; "firstName")
+$dca.hasField(ds:C1482._Students; "firstName")
 $dca.hasField(ds:C1482.School; "name")
 
 // --- reset(name) only drops that dataclass; results remain correct ---
 $dca.reset("Students")
-$attrs:=$dca.forDataclass(ds:C1482.Students)
+$attrs:=$dca.forDataclass(ds:C1482._Students)
 ASSERT:C1129($attrs.query("name = :1"; "firstName").length=1; "reset(Students): forDataclass still returns correct results")
 $attrs:=$dca.forDataclass(ds:C1482.School)
 ASSERT:C1129($attrs.query("name = :1"; "name").length=1; "reset(Students): School cache still valid")
 
 // --- reset() clears all; results remain correct after rebuild ---
 $dca.reset()
-$attrs:=$dca.forDataclass(ds:C1482.Students)
+$attrs:=$dca.forDataclass(ds:C1482._Students)
 ASSERT:C1129($attrs.query("name = :1"; "firstName").length=1; "reset(): Students forDataclass correct after full reset")
 $attrs:=$dca.forDataclass(ds:C1482.School)
 ASSERT:C1129($attrs.query("name = :1"; "name").length=1; "reset(): School forDataclass correct after full reset")

@@ -97,14 +97,14 @@ ASSERT:C1129($studentsDef#Null:C1517; "students definition missing")
 // Seed 6 students to guarantee multiple batches at batchSize=2
 ds:C1482.Cities.all().drop()
 ds:C1482.School.all().drop()
-ds:C1482.Students.all().drop()
+ds:C1482._Students.all().drop()
 var $school:=ds:C1482.School.new()
 $school.name:="Test School"
 ASSERT:C1129($school.save().success; "failed to save school")
 var $names : Collection:=["Alice Durand"; "Bob Martin"; "Claire Dupont"; "David Blanc"; "Emma Leroy"; "Frank Moreau"]
 var $n : Text
 For each ($n; $names)
-	var $student:=ds:C1482.Students.new()
+	var $student:=ds:C1482._Students.new()
 	$student.firstName:=Substring:C12($n; 1; Position:C15(" "; $n)-1)
 	$student.lastName:=Substring:C12($n; Position:C15(" "; $n)+1)
 	$student.school_ID:=$school.ID
@@ -161,6 +161,6 @@ ASSERT:C1129($embedderC.embedBatchCalls[1].texts.length=2; "no ratelimit: second
 ASSERT:C1129($embedderC.embedBatchCalls[2].texts.length=2; "no ratelimit: third batch should be 2")
 
 // --- Cleanup ---
-ds:C1482.Students.all().drop()
+ds:C1482._Students.all().drop()
 ds:C1482.School.all().drop()
 $settingsFile.delete()
