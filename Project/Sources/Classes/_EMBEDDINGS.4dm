@@ -229,7 +229,7 @@ Function listMetaInfo($me : cs:C1710._EmbeddingItem) : Object
 			
 			If ($me.errors.length>0)
 				
-				$meta.stroke:=FORM Get color scheme:C1761="dark" ? "#ea7979" : "red"
+				$meta.stroke:=_errorColor()
 				
 			End if 
 		End if 
@@ -638,7 +638,7 @@ Function modelUpdateDropdown($item : cs:C1710._EmbeddingItem)
 	Else 
 		
 		$dropDown.index:=-1
-		OBJECT SET RGB COLORS:C628(*; "models"; Length:C16(String:C10($model))>0 ? "red" : Foreground color:K23:1)
+		OBJECT SET RGB COLORS:C628(*; "models"; Length:C16(String:C10($model))>0 ? _errorColor() : Foreground color:K23:1)
 		
 	End if 
 	

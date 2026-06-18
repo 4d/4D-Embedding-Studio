@@ -296,6 +296,20 @@
 				],
 				"Summary": ""
 			}
+		},
+		"_Settings": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_Env": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
 		}
 	},
 	"_dataclassAttributes": {
@@ -1104,8 +1118,16 @@
 		"batchSize": {
 			"Syntax": "batchSize : Integer"
 		},
-		"file": {
-			"Syntax": "file : 4D.File"
+		"get file()": {
+			"Syntax": "**.get file**() : 4D.File",
+			"Params": [
+				[
+					"",
+					"4D.File",
+					"<-"
+				]
+			],
+			"Summary": ""
 		}
 	},
 	"Definition": {
@@ -2229,5 +2251,52 @@
 		"settings": {
 			"Syntax": "settings : cs.EmbeddingStudio.Settings"
 		}
-	}
+	},
+	"_Settings": {
+		"set file()": {
+			"Syntax": "**.set file**( *file* : 4D.File )",
+			"Params": [
+				[
+					"file",
+					"4D.File",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get file()": {
+			"Syntax": "**.get file**() : 4D.File",
+			"Params": [
+				[
+					"",
+					"4D.File",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set()": {
+			"Syntax": "**.set**( *value* : Object )",
+			"Params": [
+				[
+					"value",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get()": {
+			"Syntax": "**.get**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
+	"_Env": {}
 }

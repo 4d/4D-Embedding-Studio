@@ -6,12 +6,12 @@
 	},
 	"DEV": {
 		"tables": [
+			"_Students",
 			"AllTypes",
 			"Cities",
 			"No Primary Key",
 			"No vector",
-			"School",
-			"Students"
+			"School"
 		],
 		"methods": [
 			"_computeVectors",
@@ -20,7 +20,7 @@
 			"_statVectors"
 		],
 		"classes": [
-			"StudentsEntity"
+			"_StudentsEntity"
 		]
 	},
 	"NAMESPACE": {
@@ -69,14 +69,19 @@
 		]
 	},
 	"UTILS": {
+		"methods": [
+			"_errorColor"
+		],
 		"classes": [
 			"_dataclassAttributes",
+			"_Env",
 			"_ExecutionLog",
 			"_Logger",
 			"_menu",
 			"_ProcessBase",
 			"_RateLimiter",
 			"_Resolver",
+			"_Settings",
 			"_typeMedia"
 		]
 	},

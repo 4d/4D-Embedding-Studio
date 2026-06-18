@@ -1,4 +1,4 @@
-property file : 4D:C1709.File
+
 property definitions : Collection  // of cs:C1710.Definition
 property batchSize : Integer
 property phrase : Object  // optionnal { allowRelations, allowCalculated, allowAlias, allowObject }
@@ -8,8 +8,13 @@ property _isDev : Boolean
 Class constructor($file : 4D:C1709.File)
 	
 	This:C1470[""]:={raw: {}}
-	This:C1470.file:=$file || Folder:C1567(fk database folder:K87:14; *).file("Settings/vectors.json")
 	This:C1470.definitions:=[]
+	
+	If ($file#Null:C1517)
+		If (Asserted:C1132(Application type:C494#4D Remote mode:K5:5; "Cannot propose settings file if remote. Execute the code on server"))
+			cs:C1710._Settings.me.file:=$file
+		End if 
+	End if 
 	
 	This:C1470.load()
 	
@@ -26,15 +31,9 @@ Function load()
 	This:C1470.embedder:=Null:C1517
 	This:C1470._isDev:=(Structure file:C489=Structure file:C489(*))
 	
-	If (Not:C34(This:C1470.file.exists))
-		
-		return 
-		
-	End if 
+	var $raw:=cs:C1710._Settings.me.get()
 	
-	var $raw : Variant:=Try(JSON Parse:C1218(This:C1470.file.getText()))
-	
-	If (Value type:C1509($raw)#Is object:K8:27)
+	If ($raw=Null:C1517)
 		
 		return 
 		
@@ -121,7 +120,12 @@ Function save()
 	End if 
 	
 	This:C1470[""].raw:=$out
-	This:C1470.file.setText(JSON Stringify:C1217($out; *))
+	
+	cs:C1710._Settings.me.set($out)
+	
+	// Return the file used 
+Function get file : 4D:C1709.File
+	return cs:C1710._Settings.me.file
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the saved Definition for the given dataclass/vector, or Null.
@@ -154,6 +158,8 @@ Function invalidateVectors() : Object
 	End for each 
 	
 	return {updated: $updated; skipped: $skipped; errors: $errors}
+	
+	
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _defaultPhraseOptions() : Object

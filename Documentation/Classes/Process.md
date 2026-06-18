@@ -31,7 +31,7 @@ Create an instance of the orchestrator.
 
 | Argument Name | Type                                      | Description                                                         |
 |---------------|-------------------------------------------|---------------------------------------------------------------------|
-| *settings*    | [Settings](Settings.md) | Optional. If omitted, settings are loaded from the default `Settings/vectors.json`. |
+| *settings*    | [Settings](Settings.md) | Optional. If omitted, settings are loaded from the default `Settings/embeddings.json`. |
 | *options*     | Object                                    | Optional runtime options (see table above).                         |
 
 ```4d

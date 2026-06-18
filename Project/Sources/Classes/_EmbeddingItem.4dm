@@ -110,7 +110,7 @@ and show a tooltip with an error message when the developer hovers over it.
 	This:C1470._phraseErrors:=[]
 	
 	var $err : Object
-	var $errorColor:=FORM Get color scheme:C1761="dark" ? "#ea7979" : "red"
+	var $errorColor:=_errorColor()
 	For each ($err; $validation.errors)
 		
 		This:C1470._phraseErrors.push($err.message)

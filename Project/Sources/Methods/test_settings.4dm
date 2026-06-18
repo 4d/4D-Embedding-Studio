@@ -124,8 +124,8 @@ ASSERT:C1129($found=Null:C1517; "find: unknown names → Null")
 // ══════════════════════════════════════════════════════════════════════
 
 // --- Round-trip: vectors, batchSize, phrase options ---
-$s:=cs:C1710.Settings.new($noFile)  // start clean (no file → raw={})
-$s.file:=$tmpFile
+$tmpFile.delete()
+$s:=cs:C1710.Settings.new($tmpFile)  // start clean (no file → raw={})
 $s.definitions:=[cs:C1710.Definition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName} {lastName}")]
 $s.definitions[0].autoInvalidate:=False:C215
 $s.batchSize:=20
@@ -143,8 +143,8 @@ ASSERT:C1129($s2.batchSize=20; "save round-trip: batchSize mismatch")
 ASSERT:C1129($s2.phrase.allowRelations=True:C214; "save round-trip: allowRelations mismatch")
 
 // --- Default batchSize and phrase not written ---
-$s:=cs:C1710.Settings.new($noFile)
-$s.file:=$tmpFile
+$tmpFile.delete()
+$s:=cs:C1710.Settings.new($tmpFile)
 $s.save()
 var $raw : Object:=JSON Parse:C1218($tmpFile.getText())
 ASSERT:C1129(Not:C34(OB Is defined:C1231($raw; "batchSize")); "save: default batchSize should not be written")
@@ -160,8 +160,8 @@ ASSERT:C1129(OB Is defined:C1231($raw; "models"); "save: unknown key 'models' sh
 ASSERT:C1129($raw.models.myModel="text-embedding-3-small"; "save: preserved key value mismatch")
 
 // --- Definition without model and phrase filtered out (hasDefinition=false) ---
-$s:=cs:C1710.Settings.new($noFile)
-$s.file:=$tmpFile
+$tmpFile.delete()
+$s:=cs:C1710.Settings.new($tmpFile)
 $s.definitions:=[\
 cs:C1710.Definition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName}"); \
 cs:C1710.Definition.new("Students"; "student_vector_2"; ""; "")]

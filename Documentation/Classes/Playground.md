@@ -16,7 +16,7 @@ For the full batch pipeline that persists vectors on entities, see [Process](Pro
 
 | Argument Name | Type                                      | Description                                                         |
 |---------------|-------------------------------------------|---------------------------------------------------------------------|
-| *settings*    | [Settings](Settings.md) | Optional. If omitted, settings are loaded from the default `Settings/vectors.json`. |
+| *settings*    | [Settings](Settings.md) | Optional. If omitted, settings are loaded from the default `Settings/embeddings.json`. |
 | *options*     | Object                                    | Optional runtime options. Supports `embedder` for injection. |
 
 ```4d

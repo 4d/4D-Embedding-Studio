@@ -35,7 +35,7 @@ Preferences/
 
 Settings/
 !buildApp.4DSettings
-!Vectors.json
+!embeddings.json
 
 userPreferences.*/
 

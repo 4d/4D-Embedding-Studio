@@ -1,15 +1,12 @@
 # Settings
 
-The `Settings` class is the persisted configuration for the embedding pipeline. It loads and saves a JSON file (default: `Settings/vectors.json`) containing a list of [Definition](Definition.md) entries, a batch size, and phrase-validation options.
-
-Unknown top-level keys found in the JSON (e.g. `"models"`) are preserved on load and re-emitted on save.
+The `Settings` class is the persisted configuration for the embedding pipeline. It loads and saves a JSON file (default: `Settings/embeddings.json`, overridable with the `EMBEDDINGS_SETTINGS_PATH` environment variable) containing a list of [Definition](Definition.md) entries, a batch size, and phrase-validation options.
 
 ## Properties
 
 | Property Name | Type                                                     | Description                                                                 |
 |---------------|----------------------------------------------------------|-----------------------------------------------------------------------------|
-| `file`        | 4D.File                                                  | The backing JSON file.                                                      |
-| `vectors`     | Collection of [Definition](Definition.md) | The configured definitions.                                                 |
+| `definitions` | Collection of [Definition](Definition.md) | The configured definitions.                                                 |
 | `batchSize`   | Integer                                                  | Chunk size used by [Process.processEntitySelection](Process.md#processentityselection). Default: `50`. |
 | `phrase`      | Object                                                   | Phrase-validation options (see below).                                      |
 | `embedder`    | Object                                                   | Optional embedder configuration (see below).                                |
@@ -82,17 +79,19 @@ With a custom embedder class:
 
 ## Class constructor
 
-Create a settings instance. The backing file is loaded immediately.
+Create a settings instance. The configuration file is loaded immediately.
 
 | Argument Name | Type    | Description                                                                  |
 |---------------|---------|------------------------------------------------------------------------------|
-| *file*        | 4D.File | Optional. Defaults to `<project>/Settings/vectors.json`.                    |
+| *file*        | 4D.File | Optional. A file to use instead of the default location. The override applies process-wide for subsequent settings access. **Not supported in 4D Remote mode** — pass it only when running locally or on the server. |
+
+When *file* is omitted, the default location is used: `Settings/embeddings.json`, or the path given by the `EMBEDDINGS_SETTINGS_PATH` environment variable.
 
 ```4d
 // Default location
 var $settings:=cs.EmbeddingStudio.Settings.new()
 
-// Custom file
+// Custom file (server / mono only)
 var $settings:=cs.EmbeddingStudio.Settings.new(File("/some/path/custom.json"))
 ```
 
@@ -152,7 +151,7 @@ var $defs:=$settings.findAll("Students")
 
 **invalidateVectors**() : Object
 
-Calls [`invalidateVectors()`](Definition.md#invalidatevectors) on every definition in `vectors` and merges the results into a single status object.
+Calls [`invalidateVectors()`](Definition.md#invalidatevectors) on every definition in `definitions` and merges the results into a single status object.
 
 | Argument        | Type   | Description                                                                 |
 |-----------------|--------|-----------------------------------------------------------------------------|
