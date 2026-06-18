@@ -1,0 +1,18 @@
+Project/Sources/Methods/test_dataclassAttributes.4dm
+  h_3877e81599a6f5 132
+Project/Sources/Methods/test_resolver.4dm
+  h_3877e81599a6f5 9-10,62,97-98,116,121,126,128,132,140,144-145,155,159,163,167,182,188,204,207,212
+Project/Sources/Methods/test_settings.4dm
+  h_3877e81599a6f5 25,30,41,93-94,101,106,129,137,155,166-167
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.4",
+  "base_commit_sha": "5d7ff23739dcfd87b1332f98e7ce1bb33412160b",
+  "prompts": {},
+  "humans": {
+    "h_3877e81599a6f5": {
+      "author": "Eric Marchand <eric.marchand@4d.com>"
+    }
+  }
+}
