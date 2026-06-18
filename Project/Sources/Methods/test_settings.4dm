@@ -22,12 +22,12 @@ ASSERT:C1129($s.phrase.allowAlias=False:C215; "defaults: allowAlias should be fa
 // --- Two definitions ---
 $tmpFile.setText(JSON Stringify:C1217({\
 definitions: [\
-{dataclassName: "Students"; vectorName: "student_vector_1"; modelAlias: "text-embedding-3-small"; phrase: "{firstName}"}; \
+{dataclassName: "_Students"; vectorName: "student_vector_1"; modelAlias: "text-embedding-3-small"; phrase: "{firstName}"}; \
 {dataclassName: "School"; vectorName: "school_vector_1"; modelAlias: "text-embedding-3-large"; phrase: "{name}"}]}))
 
 $s:=cs:C1710.Settings.new($tmpFile)
 ASSERT:C1129($s.definitions.length=2; "load: expected 2 vectors, got "+String:C10($s.definitions.length))
-ASSERT:C1129($s.definitions[0].dataclassName="Students"; "load[0]: dataclassName mismatch")
+ASSERT:C1129($s.definitions[0].dataclassName="_Students"; "load[0]: dataclassName mismatch")
 ASSERT:C1129($s.definitions[0].vectorName="student_vector_1"; "load[0]: vectorName mismatch")
 ASSERT:C1129($s.definitions[0].modelAlias="text-embedding-3-small"; "load[0]: modelAlias mismatch")
 ASSERT:C1129($s.definitions[0].autoInvalidate=True:C214; "load[0]: autoInvalidate default should be true")
@@ -38,7 +38,7 @@ ASSERT:C1129(OB Instance of:C1731($s.definitions[0]; cs:C1710.Definition); "load
 // --- Explicit autoInvalidate=false ---
 $tmpFile.setText(JSON Stringify:C1217({\
 definitions: [\
-{dataclassName: "Students"; vectorName: "student_vector_1"; modelAlias: "text-embedding-3-small"; phrase: "{firstName}"; autoInvalidate: False:C215}]}))
+{dataclassName: "_Students"; vectorName: "student_vector_1"; modelAlias: "text-embedding-3-small"; phrase: "{firstName}"; autoInvalidate: False:C215}]}))
 
 $s:=cs:C1710.Settings.new($tmpFile)
 ASSERT:C1129($s.definitions[0].autoInvalidate=False:C215; "load[0]: autoInvalidate should be loaded from file")
@@ -90,20 +90,20 @@ ASSERT:C1129($s.batchSize=10; "missing vectors key: batchSize still loaded")
 // ══════════════════════════════════════════════════════════════════════
 
 $tmpFile.setText(JSON Stringify:C1217({definitions: [\
-{dataclassName: "Students"; vectorName: "student_vector_1"; modelAlias: "m1"; phrase: "{firstName}"}; \
-{dataclassName: "Students"; vectorName: "student_vector_2"; modelAlias: "m2"; phrase: "{lastName}"}; \
+{dataclassName: "_Students"; vectorName: "student_vector_1"; modelAlias: "m1"; phrase: "{firstName}"}; \
+{dataclassName: "_Students"; vectorName: "student_vector_2"; modelAlias: "m2"; phrase: "{lastName}"}; \
 {dataclassName: "School"; vectorName: "school_vector_1"; modelAlias: "m3"; phrase: "{name}"}]}))
 $s:=cs:C1710.Settings.new($tmpFile)
 
 var $found : cs:C1710.Definition
 
 // --- Exact match ---
-$found:=$s.find("Students"; "student_vector_1")
+$found:=$s.find("_Students"; "student_vector_1")
 ASSERT:C1129($found#Null:C1517; "find: expected match for Students/student_vector_1")
 ASSERT:C1129($found.modelAlias="m1"; "find: expected modelAlias m1, got '"+String:C10($found.modelAlias)+"'")
 
 // --- Second definition ---
-$found:=$s.find("Students"; "student_vector_2")
+$found:=$s.find("_Students"; "student_vector_2")
 ASSERT:C1129($found#Null:C1517; "find: expected match for Students/student_vector_2")
 ASSERT:C1129($found.modelAlias="m2"; "find: expected modelAlias m2")
 
@@ -126,7 +126,7 @@ ASSERT:C1129($found=Null:C1517; "find: unknown names → Null")
 // --- Round-trip: vectors, batchSize, phrase options ---
 $tmpFile.delete()
 $s:=cs:C1710.Settings.new($tmpFile)  // start clean (no file → raw={})
-$s.definitions:=[cs:C1710.Definition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName} {lastName}")]
+$s.definitions:=[cs:C1710.Definition.new("_Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName} {lastName}")]
 $s.definitions[0].autoInvalidate:=False:C215
 $s.batchSize:=20
 $s.phrase.allowRelations:=True:C214
@@ -134,7 +134,7 @@ $s.save()
 
 var $s2 : cs:C1710.Settings:=cs:C1710.Settings.new($tmpFile)
 ASSERT:C1129($s2.definitions.length=1; "save round-trip: expected 1 vector")
-ASSERT:C1129($s2.definitions[0].dataclassName="Students"; "save round-trip: dataclassName mismatch")
+ASSERT:C1129($s2.definitions[0].dataclassName="_Students"; "save round-trip: dataclassName mismatch")
 ASSERT:C1129($s2.definitions[0].vectorName="student_vector_1"; "save round-trip: vectorName mismatch")
 ASSERT:C1129($s2.definitions[0].modelAlias="text-embedding-3-small"; "save round-trip: modelAlias mismatch")
 ASSERT:C1129($s2.definitions[0].phrase.template="{firstName} {lastName}"; "save round-trip: phrase mismatch")
@@ -152,7 +152,7 @@ ASSERT:C1129(Not:C34(OB Is defined:C1231($raw; "phrase")); "save: default phrase
 
 // --- Unknown top-level keys preserved ---
 $tmpFile.setText(JSON Stringify:C1217({models: {myModel: "text-embedding-3-small"}; definitions: [\
-{dataclassName: "Students"; vectorName: "student_vector_1"; modelAlias: "m"; phrase: "{firstName}"}]}))
+{dataclassName: "_Students"; vectorName: "student_vector_1"; modelAlias: "m"; phrase: "{firstName}"}]}))
 $s:=cs:C1710.Settings.new($tmpFile)
 $s.save()
 $raw:=JSON Parse:C1218($tmpFile.getText())
@@ -163,8 +163,8 @@ ASSERT:C1129($raw.models.myModel="text-embedding-3-small"; "save: preserved key 
 $tmpFile.delete()
 $s:=cs:C1710.Settings.new($tmpFile)
 $s.definitions:=[\
-cs:C1710.Definition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName}"); \
-cs:C1710.Definition.new("Students"; "student_vector_2"; ""; "")]
+cs:C1710.Definition.new("_Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName}"); \
+cs:C1710.Definition.new("_Students"; "student_vector_2"; ""; "")]
 $s.save()
 $raw:=JSON Parse:C1218($tmpFile.getText())
 ASSERT:C1129($raw.definitions.length=1; "save: empty definition (no model/phrase) should be filtered out")

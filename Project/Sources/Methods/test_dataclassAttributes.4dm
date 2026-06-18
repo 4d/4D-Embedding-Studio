@@ -129,7 +129,7 @@ $dca.hasField(ds:C1482._Students; "firstName")
 $dca.hasField(ds:C1482.School; "name")
 
 // --- reset(name) only drops that dataclass; results remain correct ---
-$dca.reset("Students")
+$dca.reset("_Students")
 $attrs:=$dca.forDataclass(ds:C1482._Students)
 ASSERT:C1129($attrs.query("name = :1"; "firstName").length=1; "reset(Students): forDataclass still returns correct results")
 $attrs:=$dca.forDataclass(ds:C1482.School)

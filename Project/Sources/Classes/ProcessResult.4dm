@@ -93,5 +93,5 @@ Function toObject() : Object
 		duration: This:C1470.duration; \
 		success: This:C1470.success; \
 		hasFatal: This:C1470.hasFatal; \
-		errors: This:C1470.errors.extract("scope,severity,code,ref,message,retryable")}
+		errors: This:C1470.errors.extract("scope"; "scope"; "severity"; "severity"; "code"; "code"; "ref"; "ref"; "message"; "message"; "retryable"; "retryable")}
 	

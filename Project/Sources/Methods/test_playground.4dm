@@ -31,10 +31,10 @@ End if
 var $settingsFile : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).file("Settings/__test_playground_tmp.json")
 
 $settingsFile.setText(JSON Stringify:C1217({batchSize: 50; definitions: [\
-{dataclassName: "Students"; vectorName: "student_vector_1"; modelAlias: $model; phrase: "{firstName} {lastName}"}]}))
+{dataclassName: "_Students"; vectorName: "student_vector_1"; modelAlias: $model; phrase: "{firstName} {lastName}"}]}))
 
 var $settings : cs:C1710.Settings:=cs:C1710.Settings.new($settingsFile)
-var $studentsDef : cs:C1710.Definition:=$settings.find("Students"; "student_vector_1")
+var $studentsDef : cs:C1710.Definition:=$settings.find("_Students"; "student_vector_1")
 ASSERT:C1129($studentsDef#Null:C1517; "students test definition missing")
 
 // Seed fixtures
@@ -130,6 +130,7 @@ Catch
 	$threw:=True:C214
 End try
 ASSERT:C1129($threw; "embed with no model should throw")
+Try(1)
 
 // =====================================================
 // Cleanup

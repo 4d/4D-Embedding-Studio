@@ -40,11 +40,11 @@ End if
 var $settingsFile : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).file("Settings/__test_process_tmp.json")
 
 $settingsFile.setText(JSON Stringify:C1217({batchSize: 50; definitions: [\
-{dataclassName: "Students"; vectorName: "student_vector_1"; modelAlias: $model; phrase: "{firstName} {lastName}"}; \
+{dataclassName: "_Students"; vectorName: "student_vector_1"; modelAlias: $model; phrase: "{firstName} {lastName}"}; \
 {dataclassName: "School"; vectorName: "school_vector_1"; modelAlias: $model; phrase: "{name}"}]}))
 
 var $settings : cs:C1710.Settings:=cs:C1710.Settings.new($settingsFile)
-var $studentsDef : cs:C1710.Definition:=$settings.find("Students"; "student_vector_1")
+var $studentsDef : cs:C1710.Definition:=$settings.find("_Students"; "student_vector_1")
 var $schoolDef : cs:C1710.Definition:=$settings.find("School"; "school_vector_1")
 
 ASSERT:C1129($studentsDef#Null:C1517; "students test definition missing")
@@ -186,7 +186,7 @@ ASSERT:C1129($callbacks.terminate=1; JSON Stringify:C1217($callbacks))
 $settings.batchSize:=50
 
 // --- invalid definition reporting + error callback ---
-var $badDef:=cs:C1710.Definition.new("Students"; "missing_vector"; "text-embedding-3-small"; "{firstName}")
+var $badDef:=cs:C1710.Definition.new("_Students"; "missing_vector"; "text-embedding-3-small"; "{firstName}")
 var $errorCallbacks:={success: 0; error: 0; terminate: 0}
 $proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new(); \
 onSuccess: Formula:C1597($errorCallbacks.success+=1); \
@@ -256,7 +256,7 @@ ASSERT:C1129(OB Instance of:C1731($proc.embedder; cs:C1710.Embedder); "unknown c
 $settings.embedder:=Null:C1517
 
 // --- invalidateVectors with dirty companion field (student_vector_2 has student_vector_2_dirty) ---
-var $studentsDef2:=cs:C1710.Definition.new("Students"; "student_vector_2"; $model; "{firstName} {lastName}")
+var $studentsDef2:=cs:C1710.Definition.new("_Students"; "student_vector_2"; $model; "{firstName} {lastName}")
 $proc:=cs:C1710.Process.new($settings; {embedder: $embedder})
 $result:=$proc.process($studentsDef2)
 ASSERT:C1129($result.success; JSON Stringify:C1217($result.toObject()))

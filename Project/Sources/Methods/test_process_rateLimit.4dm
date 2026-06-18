@@ -88,10 +88,10 @@ var $settingsFile : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).fi
 // batchSize=2 so we need >2 entities to get multiple batches
 $settingsFile.setText(JSON Stringify:C1217({\
 batchSize: 2; \
-definitions: [{dataclassName: "Students"; vectorName: "student_vector_1"; modelAlias: $model; phrase: "{firstName} {lastName}"}]}))
+definitions: [{dataclassName: "_Students"; vectorName: "student_vector_1"; modelAlias: $model; phrase: "{firstName} {lastName}"}]}))
 
 var $settings : cs:C1710.Settings:=cs:C1710.Settings.new($settingsFile)
-var $studentsDef : cs:C1710.Definition:=$settings.find("Students"; "student_vector_1")
+var $studentsDef : cs:C1710.Definition:=$settings.find("_Students"; "student_vector_1")
 ASSERT:C1129($studentsDef#Null:C1517; "students definition missing")
 
 // Seed 6 students to guarantee multiple batches at batchSize=2
