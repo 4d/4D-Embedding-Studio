@@ -1,0 +1,32 @@
+Documentation/Classes/Process.md
+  s_76c038b728c2a1::t_1f979d7c174ef4 34
+Documentation/Classes/Playground.md
+  s_76c038b728c2a1::t_1f979d7c174ef4 19
+Documentation/Classes/Settings.md
+  s_76c038b728c2a1::t_28cef54f0fccae 3,9,154
+  s_76c038b728c2a1::t_1c73f2adf42a9f 82,88
+  h_3877e81599a6f5 86,94
+.gitignore
+  h_3877e81599a6f5 38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.4",
+  "base_commit_sha": "49fccc19b8ddcab5a3e738b2dface3da7d4449b2",
+  "prompts": {},
+  "humans": {
+    "h_3877e81599a6f5": {
+      "author": "Eric Marchand <eric.marchand@4d.com>"
+    }
+  },
+  "sessions": {
+    "s_76c038b728c2a1": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "990252ec-6ca1-4113-93df-523e9651df42",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "Eric Marchand <eric.marchand@4d.com>"
+    }
+  }
+}
