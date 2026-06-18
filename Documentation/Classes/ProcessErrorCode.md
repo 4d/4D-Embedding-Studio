@@ -5,7 +5,7 @@ A `singleton` exposing the stable, machine-readable error codes carried by [Proc
 Access the shared instance via `.me`:
 
 ```4d
-var $codes:=cs.embed.ProcessErrorCode.me
+var $codes:=cs.EmbeddingStudio.ProcessErrorCode.me
 If ($error.code=$codes.SAVE_FAILED)
 	// …
 End if
@@ -40,7 +40,7 @@ Returns the `severity` and `retryable` flag associated with a code — the same 
 | Function result | Object  | `{severity : Text; retryable : Boolean; label : Text}`. |
 
 ```4d
-var $m:=cs.embed.ProcessErrorCode.me.meta(cs.embed.ProcessErrorCode.me.MODEL_UNAVAILABLE)
+var $m:=cs.EmbeddingStudio.ProcessErrorCode.me.meta(cs.EmbeddingStudio.ProcessErrorCode.me.MODEL_UNAVAILABLE)
 // $m = {severity: "fatal"; retryable: True; label: "MODEL_UNAVAILABLE"}
 ```
 

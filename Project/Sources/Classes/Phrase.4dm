@@ -5,7 +5,7 @@
  Supports dot-notation for related attributes: {relation.field}
  
  Usage:
-   var $tpl:=cs.embed.Phrase.new("Hello {firstName}, you study at {school.name}.")
+   var $tpl:=cs.EmbeddingStudio.Phrase.new("Hello {firstName}, you study at {school.name}.")
    $tpl.render($entity)  // "Hello Alice, you study at MIT."
    $tpl.keys             // ["firstName", "school.name"]
 **/

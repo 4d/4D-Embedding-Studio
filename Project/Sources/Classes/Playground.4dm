@@ -2,8 +2,8 @@
  Ad-hoc, non-persisting helpers for rendering phrases and computing embeddings.
 
  Usage:
-   var $pg:=cs.embed.Playground.new()
-   var $pg:=cs.embed.Playground.new($settings; $options)
+   var $pg:=cs.EmbeddingStudio.Playground.new()
+   var $pg:=cs.EmbeddingStudio.Playground.new($settings; $options)
 
    $pg.render($entity)                                  // auto-resolve phrase
    $pg.render($entity; $phrase)                         // explicit phrase
@@ -24,8 +24,8 @@ Class constructor($settings : cs:C1710.Settings; $options : Object)
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Render the phrase for an entity and return the resulting text. No API call, no persistence.
 	// $definitionOrPhrase may be:
-	//   - cs.embed.Phrase                  → used directly
-	//   - cs.embed.Definition     → uses $definition.phrase
+	//   - cs.EmbeddingStudio.Phrase                  → used directly
+	//   - cs.EmbeddingStudio.Definition     → uses $definition.phrase
 	//   - Text                       → compiled on the fly as a new Phrase
 	//   - Null                       → auto-resolved from settings (requires a unique match for $entity's dataclass)
 Function render($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) : Text

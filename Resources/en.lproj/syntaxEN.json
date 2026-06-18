@@ -1,19 +1,6 @@
 {
 	"_method_": {},
-	"cs.embed": {
-		"Embedder": {
-			"new()": {
-				"Syntax": "**.new**( *options* : Object )",
-				"Params": [
-					[
-						"options",
-						"Object",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
+	"cs.EmbeddingStudio": {
 		"_dataclassAttributes": {
 			"new()": {
 				"Syntax": "**.new**()",
@@ -51,7 +38,7 @@
 		},
 		"_EmbeddingItem": {
 			"new()": {
-				"Syntax": "**.new**( *dataclass* : 4D.DataClass; *definition* : cs.embed.Definition; *settings* : cs.embed.Settings )",
+				"Syntax": "**.new**( *dataclass* : 4D.DataClass; *definition* : cs.EmbeddingStudio.Definition; *settings* : cs.EmbeddingStudio.Settings )",
 				"Params": [
 					[
 						"dataclass",
@@ -60,12 +47,30 @@
 					],
 					[
 						"definition",
-						"cs.embed.Definition",
+						"cs.EmbeddingStudio.Definition",
 						"->"
 					],
 					[
 						"settings",
-						"cs.embed.Settings",
+						"cs.EmbeddingStudio.Settings",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"EmbedderResult": {
+			"new()": {
+				"Syntax": "**.new**( *result* : Object; *isBatch* : Boolean )",
+				"Params": [
+					[
+						"result",
+						"Object",
+						"->"
+					],
+					[
+						"isBatch",
+						"Boolean",
 						"->"
 					]
 				],
@@ -148,11 +153,11 @@
 		},
 		"Playground": {
 			"new()": {
-				"Syntax": "**.new**( *settings* : cs.embed.Settings; *options* : Object )",
+				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings; *options* : Object )",
 				"Params": [
 					[
 						"settings",
-						"cs.embed.Settings",
+						"cs.EmbeddingStudio.Settings",
 						"->"
 					],
 					[
@@ -164,13 +169,20 @@
 				"Summary": ""
 			}
 		},
+		"ProcessErrorCode": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
 		"_Resolver": {
 			"new()": {
-				"Syntax": "**.new**( *settings* : cs.embed.Settings )",
+				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings )",
 				"Params": [
 					[
 						"settings",
-						"cs.embed.Settings",
+						"cs.EmbeddingStudio.Settings",
 						"->"
 					]
 				],
@@ -179,11 +191,11 @@
 		},
 		"Process": {
 			"new()": {
-				"Syntax": "**.new**( *settings* : cs.embed.Settings; *options* : Object )",
+				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings; *options* : Object )",
 				"Params": [
 					[
 						"settings",
-						"cs.embed.Settings",
+						"cs.EmbeddingStudio.Settings",
 						"->"
 					],
 					[
@@ -208,59 +220,16 @@
 				"Summary": ""
 			}
 		},
-		"_ProcessBase": {
+		"Embedder": {
 			"new()": {
-				"Syntax": "**.new**( *settings* : cs.embed.Settings; *options* : Object )",
+				"Syntax": "**.new**( *options* : Object )",
 				"Params": [
-					[
-						"settings",
-						"cs.embed.Settings",
-						"->"
-					],
 					[
 						"options",
 						"Object",
 						"->"
 					]
 				],
-				"Summary": ""
-			}
-		},
-		"_menu": {
-			"new()": {
-				"Syntax": "**.new**( *data* : Variant )",
-				"Params": [
-					[
-						"data",
-						"Variant",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"EmbedderResult": {
-			"new()": {
-				"Syntax": "**.new**( *result* : Object; *isBatch* : Boolean )",
-				"Params": [
-					[
-						"result",
-						"Object",
-						"->"
-					],
-					[
-						"isBatch",
-						"Boolean",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"ProcessErrorCode": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
 				"Summary": ""
 			}
 		},
@@ -296,59 +265,37 @@
 				],
 				"Summary": ""
 			}
-		}
-	},
-	"Embedder": {
-		"embedBatch()": {
-			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.embed.EmbedderResult",
-			"Params": [
-				[
-					"texts",
-					"Collection",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.embed.EmbedderResult",
-					"<-"
-				]
-			],
-			"Summary": ""
 		},
-		"embed()": {
-			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.embed.EmbedderResult",
-			"Params": [
-				[
-					"text",
-					"Text",
-					"->"
+		"_menu": {
+			"new()": {
+				"Syntax": "**.new**( *data* : Variant )",
+				"Params": [
+					[
+						"data",
+						"Variant",
+						"->"
+					]
 				],
-				[
-					"model",
-					"Text",
-					"->"
+				"Summary": ""
+			}
+		},
+		"_ProcessBase": {
+			"new()": {
+				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings; *options* : Object )",
+				"Params": [
+					[
+						"settings",
+						"cs.EmbeddingStudio.Settings",
+						"->"
+					],
+					[
+						"options",
+						"Object",
+						"->"
+					]
 				],
-				[
-					"",
-					"cs.embed.EmbedderResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"backoffMs": {
-			"Syntax": "backoffMs : Integer"
-		},
-		"maxRetries": {
-			"Syntax": "maxRetries : Integer"
-		},
-		"client": {
-			"Syntax": "client : cs.AIKit.OpenAI"
+				"Summary": ""
+			}
 		}
 	},
 	"_dataclassAttributes": {
@@ -483,11 +430,11 @@
 			"Summary": ""
 		},
 		"modelUpdateDropdown()": {
-			"Syntax": "**.modelUpdateDropdown**( *item* : cs.embed._EmbeddingItem )",
+			"Syntax": "**.modelUpdateDropdown**( *item* : cs.EmbeddingStudio._EmbeddingItem )",
 			"Params": [
 				[
 					"item",
-					"cs.embed._EmbeddingItem",
+					"cs.EmbeddingStudio._EmbeddingItem",
 					"->"
 				]
 			],
@@ -538,11 +485,11 @@
 			"Summary": ""
 		},
 		"listMetaInfo()": {
-			"Syntax": "**.listMetaInfo**( *me* : cs.embed._EmbeddingItem ) : Object",
+			"Syntax": "**.listMetaInfo**( *me* : cs.EmbeddingStudio._EmbeddingItem ) : Object",
 			"Params": [
 				[
 					"me",
-					"cs.embed._EmbeddingItem",
+					"cs.EmbeddingStudio._EmbeddingItem",
 					"->"
 				],
 				[
@@ -559,11 +506,11 @@
 			"Summary": ""
 		},
 		"insertInput()": {
-			"Syntax": "**.insertInput**( *item* : cs.embed._EmbeddingItem; *input* : Text )",
+			"Syntax": "**.insertInput**( *item* : cs.EmbeddingStudio._EmbeddingItem; *input* : Text )",
 			"Params": [
 				[
 					"item",
-					"cs.embed._EmbeddingItem",
+					"cs.EmbeddingStudio._EmbeddingItem",
 					"->"
 				],
 				[
@@ -598,10 +545,10 @@
 			"Syntax": "list : Text"
 		},
 		"catalog": {
-			"Syntax": "catalog : cs.embed.DataStore"
+			"Syntax": "catalog : cs.EmbeddingStudio.DataStore"
 		},
 		"settings": {
-			"Syntax": "settings : cs.embed.Settings"
+			"Syntax": "settings : cs.EmbeddingStudio.Settings"
 		}
 	},
 	"_Logger": {
@@ -819,11 +766,11 @@
 			"Summary": ""
 		},
 		"parsePhrase()": {
-			"Syntax": "**.parsePhrase**( *phrase* : cs.embed.Phrase ) : Text",
+			"Syntax": "**.parsePhrase**( *phrase* : cs.EmbeddingStudio.Phrase ) : Text",
 			"Params": [
 				[
 					"phrase",
-					"cs.embed.Phrase",
+					"cs.EmbeddingStudio.Phrase",
 					"->"
 				],
 				[
@@ -840,11 +787,11 @@
 			"Summary": ""
 		},
 		"get inputsMenu()": {
-			"Syntax": "**.get inputsMenu**() : cs.embed._menu",
+			"Syntax": "**.get inputsMenu**() : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
@@ -860,7 +807,7 @@
 			"Syntax": "phrase : Text"
 		},
 		"settings": {
-			"Syntax": "settings : cs.embed.Settings"
+			"Syntax": "settings : cs.EmbeddingStudio.Settings"
 		},
 		"touched": {
 			"Syntax": "touched : Boolean"
@@ -869,7 +816,39 @@
 			"Syntax": "version : Integer"
 		},
 		"definition": {
-			"Syntax": "definition : cs.embed.Definition"
+			"Syntax": "definition : cs.EmbeddingStudio.Definition"
+		}
+	},
+	"EmbedderResult": {
+		"resetTokens": {
+			"Syntax": "resetTokens : Text"
+		},
+		"limitTokens": {
+			"Syntax": "limitTokens : Integer"
+		},
+		"remainingTokens": {
+			"Syntax": "remainingTokens : Integer"
+		},
+		"resetRequests": {
+			"Syntax": "resetRequests : Text"
+		},
+		"promptTokens": {
+			"Syntax": "promptTokens : Integer"
+		},
+		"totalTokens": {
+			"Syntax": "totalTokens : Integer"
+		},
+		"limitRequests": {
+			"Syntax": "limitRequests : Integer"
+		},
+		"remainingRequests": {
+			"Syntax": "remainingRequests : Integer"
+		},
+		"vectors": {
+			"Syntax": "vectors : Collection"
+		},
+		"vector": {
+			"Syntax": "vector : 4D.Vector"
 		}
 	},
 	"Phrase": {
@@ -950,55 +929,6 @@
 		}
 	},
 	"ProcessResult": {
-		"toObject()": {
-			"Syntax": "**.toObject**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get success()": {
-			"Syntax": "**.get success**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"duration": {
-			"Syntax": "duration : Integer"
-		},
-		"apiCalls": {
-			"Syntax": "apiCalls : Integer"
-		},
-		"totalTokens": {
-			"Syntax": "totalTokens : Integer"
-		},
-		"promptTokens": {
-			"Syntax": "promptTokens : Integer"
-		},
-		"entitiesSkipped": {
-			"Syntax": "entitiesSkipped : Integer"
-		},
-		"entitiesUpdated": {
-			"Syntax": "entitiesUpdated : Integer"
-		},
-		"errors": {
-			"Syntax": "errors : Collection"
-		},
-		"entitiesConsidered": {
-			"Syntax": "entitiesConsidered : Integer"
-		},
-		"definitionsProcessed": {
-			"Syntax": "definitionsProcessed : Integer"
-		},
 		"errorsByScope()": {
 			"Syntax": "**.errorsByScope**( *scope* : Text ) : Collection",
 			"Params": [
@@ -1042,6 +972,17 @@
 			],
 			"Summary": ""
 		},
+		"toObject()": {
+			"Syntax": "**.toObject**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"retryableErrors()": {
 			"Syntax": "**.retryableErrors**() : Collection",
 			"Params": [
@@ -1052,11 +993,65 @@
 				]
 			],
 			"Summary": ""
+		},
+		"get success()": {
+			"Syntax": "**.get success**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"duration": {
+			"Syntax": "duration : Integer"
+		},
+		"apiCalls": {
+			"Syntax": "apiCalls : Integer"
+		},
+		"totalTokens": {
+			"Syntax": "totalTokens : Integer"
+		},
+		"promptTokens": {
+			"Syntax": "promptTokens : Integer"
+		},
+		"entitiesSkipped": {
+			"Syntax": "entitiesSkipped : Integer"
+		},
+		"entitiesUpdated": {
+			"Syntax": "entitiesUpdated : Integer"
+		},
+		"errors": {
+			"Syntax": "errors : Collection"
+		},
+		"entitiesConsidered": {
+			"Syntax": "entitiesConsidered : Integer"
+		},
+		"definitionsProcessed": {
+			"Syntax": "definitionsProcessed : Integer"
 		}
 	},
 	"Settings": {
+		"findAll()": {
+			"Syntax": "**.findAll**( *dataclassName* : Text ) : Collection",
+			"Params": [
+				[
+					"dataclassName",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"find()": {
-			"Syntax": "**.find**( *dataclassName* : Text; *vectorName* : Text ) : cs.embed.Definition",
+			"Syntax": "**.find**( *dataclassName* : Text; *vectorName* : Text ) : cs.EmbeddingStudio.Definition",
 			"Params": [
 				[
 					"dataclassName",
@@ -1070,7 +1065,7 @@
 				],
 				[
 					"",
-					"cs.embed.Definition",
+					"cs.EmbeddingStudio.Definition",
 					"<-"
 				]
 			],
@@ -1111,22 +1106,6 @@
 		},
 		"file": {
 			"Syntax": "file : 4D.File"
-		},
-		"findAll()": {
-			"Syntax": "**.findAll**( *dataclassName* : Text ) : Collection",
-			"Params": [
-				[
-					"dataclassName",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
 		}
 	},
 	"Definition": {
@@ -1153,11 +1132,11 @@
 			"Summary": ""
 		},
 		"validate()": {
-			"Syntax": "**.validate**( *settings* : cs.embed.Settings ) : Object",
+			"Syntax": "**.validate**( *settings* : cs.EmbeddingStudio.Settings ) : Object",
 			"Params": [
 				[
 					"settings",
-					"cs.embed.Settings",
+					"cs.EmbeddingStudio.Settings",
 					"->"
 				],
 				[
@@ -1183,7 +1162,7 @@
 			"Syntax": "autoInvalidate : Boolean"
 		},
 		"phrase": {
-			"Syntax": "phrase : cs.embed.Phrase"
+			"Syntax": "phrase : cs.EmbeddingStudio.Phrase"
 		},
 		"modelAlias": {
 			"Syntax": "modelAlias : Text"
@@ -1219,11 +1198,11 @@
 			"Summary": ""
 		},
 		"update()": {
-			"Syntax": "**.update**( *embedderResult* : cs.embed.EmbedderResult; *chunkSize* : Integer )",
+			"Syntax": "**.update**( *embedderResult* : cs.EmbeddingStudio.EmbedderResult; *chunkSize* : Integer )",
 			"Params": [
 				[
 					"embedderResult",
-					"cs.embed.EmbedderResult",
+					"cs.EmbeddingStudio.EmbedderResult",
 					"->"
 				],
 				[
@@ -1258,7 +1237,7 @@
 	},
 	"Playground": {
 		"embed()": {
-			"Syntax": "**.embed**( *input* : Variant; *context* : Variant; *model* : Text ) : cs.embed.EmbedderResult",
+			"Syntax": "**.embed**( *input* : Variant; *context* : Variant; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
 			"Params": [
 				[
 					"input",
@@ -1277,7 +1256,7 @@
 				],
 				[
 					"",
-					"cs.embed.EmbedderResult",
+					"cs.EmbeddingStudio.EmbedderResult",
 					"<-"
 				]
 			],
@@ -1306,7 +1285,65 @@
 		},
 		"_inheritedFrom_": "_ProcessBase"
 	},
+	"ProcessErrorCode": {
+		"meta()": {
+			"Syntax": "**.meta**( *code* : Integer ) : Object",
+			"Params": [
+				[
+					"code",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"VECTOR_COUNT_MISMATCH": {
+			"Syntax": "VECTOR_COUNT_MISMATCH : Integer"
+		},
+		"EMBED_FAILED": {
+			"Syntax": "EMBED_FAILED : Integer"
+		},
+		"SAVE_FAILED": {
+			"Syntax": "SAVE_FAILED : Integer"
+		},
+		"INVALID_DEFINITION": {
+			"Syntax": "INVALID_DEFINITION : Integer"
+		},
+		"MODEL_UNAVAILABLE": {
+			"Syntax": "MODEL_UNAVAILABLE : Integer"
+		},
+		"MODEL_SKIPPED": {
+			"Syntax": "MODEL_SKIPPED : Integer"
+		},
+		"VALIDATION_FAILED": {
+			"Syntax": "VALIDATION_FAILED : Integer"
+		},
+		"NULL_INPUT": {
+			"Syntax": "NULL_INPUT : Integer"
+		}
+	},
 	"_Resolver": {
+		"resolveForProcess()": {
+			"Syntax": "**.resolveForProcess**( *definition* : Variant ) : Collection",
+			"Params": [
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"dataclassNameFromEntity()": {
 			"Syntax": "**.dataclassNameFromEntity**( *entity* : 4D.Entity ) : Text",
 			"Params": [
@@ -1360,29 +1397,13 @@
 			],
 			"Summary": ""
 		},
-		"resolveForProcess()": {
-			"Syntax": "**.resolveForProcess**( *definition* : Variant ) : Collection",
-			"Params": [
-				[
-					"definition",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"settings": {
-			"Syntax": "settings : cs.embed.Settings"
+			"Syntax": "settings : cs.EmbeddingStudio.Settings"
 		}
 	},
 	"Process": {
 		"processEntitySelection()": {
-			"Syntax": "**.processEntitySelection**( *es* : 4D.EntitySelection; *definition* : Variant ) : cs.embed.ProcessResult",
+			"Syntax": "**.processEntitySelection**( *es* : 4D.EntitySelection; *definition* : Variant ) : cs.EmbeddingStudio.ProcessResult",
 			"Params": [
 				[
 					"es",
@@ -1396,14 +1417,14 @@
 				],
 				[
 					"",
-					"cs.embed.ProcessResult",
+					"cs.EmbeddingStudio.ProcessResult",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"processEntity()": {
-			"Syntax": "**.processEntity**( *entity* : 4D.Entity; *definition* : Variant ) : cs.embed.ProcessResult",
+			"Syntax": "**.processEntity**( *entity* : 4D.Entity; *definition* : Variant ) : cs.EmbeddingStudio.ProcessResult",
 			"Params": [
 				[
 					"entity",
@@ -1417,14 +1438,14 @@
 				],
 				[
 					"",
-					"cs.embed.ProcessResult",
+					"cs.EmbeddingStudio.ProcessResult",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"process()": {
-			"Syntax": "**.process**( *definition* : Variant ) : cs.embed.ProcessResult",
+			"Syntax": "**.process**( *definition* : Variant ) : cs.EmbeddingStudio.ProcessResult",
 			"Params": [
 				[
 					"definition",
@@ -1433,7 +1454,7 @@
 				],
 				[
 					"",
-					"cs.embed.ProcessResult",
+					"cs.EmbeddingStudio.ProcessResult",
 					"<-"
 				]
 			],
@@ -1443,7 +1464,7 @@
 	},
 	"_TestProcessEmbedder": {
 		"embedBatch()": {
-			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.embed.EmbedderResult",
+			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
 			"Params": [
 				[
 					"texts",
@@ -1457,14 +1478,14 @@
 				],
 				[
 					"",
-					"cs.embed.EmbedderResult",
+					"cs.EmbeddingStudio.EmbedderResult",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"embed()": {
-			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.embed.EmbedderResult",
+			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
 			"Params": [
 				[
 					"text",
@@ -1478,7 +1499,7 @@
 				],
 				[
 					"",
-					"cs.embed.EmbedderResult",
+					"cs.EmbeddingStudio.EmbedderResult",
 					"<-"
 				]
 			],
@@ -1503,23 +1524,104 @@
 			"Syntax": "embedCalls : Collection"
 		}
 	},
-	"_ProcessBase": {
-		"options": {
-			"Syntax": "options : Object"
+	"Embedder": {
+		"embedBatch()": {
+			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
+			"Params": [
+				[
+					"texts",
+					"Collection",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.EmbedderResult",
+					"<-"
+				]
+			],
+			"Summary": ""
 		},
-		"resolver": {
-			"Syntax": "resolver : cs.embed._Resolver"
+		"embed()": {
+			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
+			"Params": [
+				[
+					"text",
+					"Text",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.EmbedderResult",
+					"<-"
+				]
+			],
+			"Summary": ""
 		},
-		"embedder": {
-			"Syntax": "embedder : cs.embed.Embedder"
+		"backoffMs": {
+			"Syntax": "backoffMs : Integer"
 		},
-		"settings": {
-			"Syntax": "settings : cs.embed.Settings"
+		"maxRetries": {
+			"Syntax": "maxRetries : Integer"
+		},
+		"client": {
+			"Syntax": "client : cs.AIKit.OpenAI"
+		}
+	},
+	"ProcessError": {
+		"toObject()": {
+			"Syntax": "**.toObject**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get isFatal()": {
+			"Syntax": "**.get isFatal**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"retryable": {
+			"Syntax": "retryable : Boolean"
+		},
+		"message": {
+			"Syntax": "message : Text"
+		},
+		"code": {
+			"Syntax": "code : Integer"
+		},
+		"ref": {
+			"Syntax": "ref : Variant"
+		},
+		"severity": {
+			"Syntax": "severity : Text"
+		},
+		"scope": {
+			"Syntax": "scope : Text"
 		}
 	},
 	"_menu": {
 		"fonts()": {
-			"Syntax": "**.fonts**( *withStyle* : Variant; *callback* : Text ) : cs.embed._menu",
+			"Syntax": "**.fonts**( *withStyle* : Variant; *callback* : Text ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"withStyle",
@@ -1533,14 +1635,14 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"edit()": {
-			"Syntax": "**.edit**( *contextual* : Boolean ) : cs.embed._menu",
+			"Syntax": "**.edit**( *contextual* : Boolean ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"contextual",
@@ -1549,14 +1651,14 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"windows()": {
-			"Syntax": "**.windows**( *callback* : Text ) : cs.embed._menu",
+			"Syntax": "**.windows**( *callback* : Text ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"callback",
@@ -1565,14 +1667,14 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"popup()": {
-			"Syntax": "**.popup**( *where* : Variant; *x* : Variant; *y* : Integer ) : cs.embed._menu",
+			"Syntax": "**.popup**( *where* : Variant; *x* : Variant; *y* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"where",
@@ -1591,7 +1693,7 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
@@ -1619,7 +1721,7 @@
 			"Summary": ""
 		},
 		"icon()": {
-			"Syntax": "**.icon**( *proxy* : Text; *index* : Integer ) : cs.embed._menu",
+			"Syntax": "**.icon**( *proxy* : Text; *index* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"proxy",
@@ -1633,14 +1735,14 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"disable()": {
-			"Syntax": "**.disable**( *index* : Integer ) : cs.embed._menu",
+			"Syntax": "**.disable**( *index* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"index",
@@ -1649,7 +1751,7 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
@@ -1704,7 +1806,7 @@
 			"Summary": ""
 		},
 		"setData()": {
-			"Syntax": "**.setData**( *name* : Text; *value* : Variant; *index* : Integer ) : cs.embed._menu",
+			"Syntax": "**.setData**( *name* : Text; *value* : Variant; *index* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"name",
@@ -1723,14 +1825,14 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"enable()": {
-			"Syntax": "**.enable**( *enabled* : Boolean; *index* : Integer ) : cs.embed._menu",
+			"Syntax": "**.enable**( *enabled* : Boolean; *index* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"enabled",
@@ -1744,7 +1846,7 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
@@ -1772,7 +1874,7 @@
 			"Summary": ""
 		},
 		"property()": {
-			"Syntax": "**.property**( *property* : Text; *value* : Variant; *index* : Integer ) : cs.embed._menu",
+			"Syntax": "**.property**( *property* : Text; *value* : Variant; *index* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"property",
@@ -1791,14 +1893,14 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"indent()": {
-			"Syntax": "**.indent**( *index* : Integer; *number* : Integer ) : cs.embed._menu",
+			"Syntax": "**.indent**( *index* : Integer; *number* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"index",
@@ -1812,14 +1914,14 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"parameter()": {
-			"Syntax": "**.parameter**( *param* : Text; *index* : Integer ) : cs.embed._menu",
+			"Syntax": "**.parameter**( *param* : Text; *index* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"param",
@@ -1833,14 +1935,14 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"mark()": {
-			"Syntax": "**.mark**( *checked* : Boolean; *index* : Integer ) : cs.embed._menu",
+			"Syntax": "**.mark**( *checked* : Boolean; *index* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"checked",
@@ -1854,14 +1956,14 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"method()": {
-			"Syntax": "**.method**( *method* : Text; *index* : Integer ) : cs.embed._menu",
+			"Syntax": "**.method**( *method* : Text; *index* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"method",
@@ -1875,7 +1977,7 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
@@ -1914,7 +2016,7 @@
 			"Summary": ""
 		},
 		"setStyle()": {
-			"Syntax": "**.setStyle**( *tyle* : Integer; *index* : Integer ) : cs.embed._menu",
+			"Syntax": "**.setStyle**( *tyle* : Integer; *index* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"tyle",
@@ -1928,14 +2030,14 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"delete()": {
-			"Syntax": "**.delete**( *index* : Integer ) : cs.embed._menu",
+			"Syntax": "**.delete**( *index* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"index",
@@ -1944,25 +2046,25 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"file()": {
-			"Syntax": "**.file**() : cs.embed._menu",
+			"Syntax": "**.file**() : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"shortcut()": {
-			"Syntax": "**.shortcut**( *key* : Variant; *modifier* : Integer; *index* : Integer ) : cs.embed._menu",
+			"Syntax": "**.shortcut**( *key* : Variant; *modifier* : Integer; *index* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"key",
@@ -1981,7 +2083,7 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
@@ -2019,7 +2121,7 @@
 			"Summary": ""
 		},
 		"action()": {
-			"Syntax": "**.action**( *action* : Variant; *index* : Integer ) : cs.embed._menu",
+			"Syntax": "**.action**( *action* : Variant; *index* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"action",
@@ -2033,14 +2135,14 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"line()": {
-			"Syntax": "**.line**( *afterItem* : Integer ) : cs.embed._menu",
+			"Syntax": "**.line**( *afterItem* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"afterItem",
@@ -2049,14 +2151,14 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
 		"append()": {
-			"Syntax": "**.append**( *item* : Variant; *param* : Variant; *mark* : Variant; *afterItem* : Integer ) : cs.embed._menu",
+			"Syntax": "**.append**( *item* : Variant; *param* : Variant; *mark* : Variant; *afterItem* : Integer ) : cs.EmbeddingStudio._menu",
 			"Params": [
 				[
 					"item",
@@ -2080,7 +2182,7 @@
 				],
 				[
 					"",
-					"cs.embed._menu",
+					"cs.EmbeddingStudio._menu",
 					"<-"
 				]
 			],
@@ -2114,120 +2216,18 @@
 			"Syntax": "data : Collection"
 		}
 	},
-	"EmbedderResult": {
-		"resetTokens": {
-			"Syntax": "resetTokens : Text"
+	"_ProcessBase": {
+		"options": {
+			"Syntax": "options : Object"
 		},
-		"limitTokens": {
-			"Syntax": "limitTokens : Integer"
+		"resolver": {
+			"Syntax": "resolver : cs.EmbeddingStudio._Resolver"
 		},
-		"remainingTokens": {
-			"Syntax": "remainingTokens : Integer"
+		"embedder": {
+			"Syntax": "embedder : cs.EmbeddingStudio.Embedder"
 		},
-		"resetRequests": {
-			"Syntax": "resetRequests : Text"
-		},
-		"promptTokens": {
-			"Syntax": "promptTokens : Integer"
-		},
-		"totalTokens": {
-			"Syntax": "totalTokens : Integer"
-		},
-		"limitRequests": {
-			"Syntax": "limitRequests : Integer"
-		},
-		"remainingRequests": {
-			"Syntax": "remainingRequests : Integer"
-		},
-		"vectors": {
-			"Syntax": "vectors : Collection"
-		},
-		"vector": {
-			"Syntax": "vector : 4D.Vector"
-		}
-	},
-	"ProcessErrorCode": {
-		"meta()": {
-			"Syntax": "**.meta**( *code* : Integer ) : Object",
-			"Params": [
-				[
-					"code",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"VECTOR_COUNT_MISMATCH": {
-			"Syntax": "VECTOR_COUNT_MISMATCH : Integer"
-		},
-		"EMBED_FAILED": {
-			"Syntax": "EMBED_FAILED : Integer"
-		},
-		"SAVE_FAILED": {
-			"Syntax": "SAVE_FAILED : Integer"
-		},
-		"INVALID_DEFINITION": {
-			"Syntax": "INVALID_DEFINITION : Integer"
-		},
-		"MODEL_UNAVAILABLE": {
-			"Syntax": "MODEL_UNAVAILABLE : Integer"
-		},
-		"MODEL_SKIPPED": {
-			"Syntax": "MODEL_SKIPPED : Integer"
-		},
-		"VALIDATION_FAILED": {
-			"Syntax": "VALIDATION_FAILED : Integer"
-		},
-		"NULL_INPUT": {
-			"Syntax": "NULL_INPUT : Integer"
-		}
-	},
-	"ProcessError": {
-		"toObject()": {
-			"Syntax": "**.toObject**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get isFatal()": {
-			"Syntax": "**.get isFatal**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"retryable": {
-			"Syntax": "retryable : Boolean"
-		},
-		"message": {
-			"Syntax": "message : Text"
-		},
-		"code": {
-			"Syntax": "code : Integer"
-		},
-		"ref": {
-			"Syntax": "ref : Variant"
-		},
-		"severity": {
-			"Syntax": "severity : Text"
-		},
-		"scope": {
-			"Syntax": "scope : Text"
+		"settings": {
+			"Syntax": "settings : cs.EmbeddingStudio.Settings"
 		}
 	}
 }

@@ -1,7 +1,7 @@
 //%attributes = {}
-// Unit tests for cs.embed._Resolver
+// Unit tests for cs.EmbeddingStudio._Resolver
 
-// Build a cs.embed.Settings pointing at a file that does not exist,
+// Build a cs.EmbeddingStudio.Settings pointing at a file that does not exist,
 // so constructor/load does no I/O. We then populate .vectors manually.
 var $noFile : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).file("Settings/__test_resolver_nonexistent.json")
 var $settings : cs:C1710.Settings:=cs:C1710.Settings.new($noFile)

@@ -26,7 +26,7 @@ Create a definition.
 | *phraseTemplate*  | Text | Phrase template with `{field}` placeholders — compiled into a [Phrase](Phrase.md). |
 
 ```4d
-var $def:=cs.embed.Definition.new(\
+var $def:=cs.EmbeddingStudio.Definition.new(\
 	"Students"; \
 	"student_vector_1"; \
 	"text-embedding-3-small"; \
@@ -76,7 +76,7 @@ Checked in order:
 The first two checks (identity) return immediately on failure; the remaining checks accumulate so all problems are reported in one pass.
 
 ```4d
-var $result:=$def.validate(cs.embed.Settings.new())
+var $result:=$def.validate(cs.EmbeddingStudio.Settings.new())
 
 If (Not($result.success))
     var $err : Object

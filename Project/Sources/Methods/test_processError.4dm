@@ -1,6 +1,6 @@
 //%attributes = {}
-// Unit tests for the structured error API: cs.embed.ProcessErrorCode,
-// cs.embed.ProcessError and the error/usage helpers on cs.embed.ProcessResult.
+// Unit tests for the structured error API: cs.EmbeddingStudio.ProcessErrorCode,
+// cs.ProcessError and the error/usage helpers on cs.EmbeddingStudio.ProcessResult.
 // Pure (no mock server) — exercises severity/retryable derivation, overrides,
 // success/fatal logic and the query helpers directly.
 

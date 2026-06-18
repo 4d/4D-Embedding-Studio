@@ -20,9 +20,9 @@ For the full batch pipeline that persists vectors on entities, see [Process](Pro
 | *options*     | Object                                    | Optional runtime options. Supports `embedder` for injection. |
 
 ```4d
-var $pg:=cs.embed.Playground.new()
-var $pg:=cs.embed.Playground.new($settings)
-var $pg:=cs.embed.Playground.new($settings; {embedder: $mockEmbedder})
+var $pg:=cs.EmbeddingStudio.Playground.new()
+var $pg:=cs.EmbeddingStudio.Playground.new($settings)
+var $pg:=cs.EmbeddingStudio.Playground.new($settings; {embedder: $mockEmbedder})
 ```
 
 ## Functions
@@ -36,21 +36,21 @@ Render a phrase for an entity and return the resulting text. No API call, no per
 | Argument              | Type                                                                        | Description                                                                 |
 |-----------------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | *entity*              | 4D.Entity                                                                   | The entity to render against.                                               |
-| *definitionOrPhrase*  | `Null`, [Phrase](Phrase.md), [Definition](Definition.md), or Text | `Null` → auto-resolve via settings (requires a unique match). Text → compiled as a throwaway `cs.embed.Phrase`. |
+| *definitionOrPhrase*  | `Null`, [Phrase](Phrase.md), [Definition](Definition.md), or Text | `Null` → auto-resolve via settings (requires a unique match). Text → compiled as a throwaway `cs.EmbeddingStudio.Phrase`. |
 | Function result       | Text                                                                        | The rendered text.                                                          |
 
 ```4d
-var $pg:=cs.embed.Playground.new()
+var $pg:=cs.EmbeddingStudio.Playground.new()
 var $text: Text
 $text:=$pg.render($student; $def)                        // use def's phrase
-$text:=$pg.render($student; cs.embed.Phrase.new("Hi {firstName}"))
+$text:=$pg.render($student; cs.EmbeddingStudio.Phrase.new("Hi {firstName}"))
 $text:=$pg.render($student; "Student: {lastName}")       // raw template
 $text:=$pg.render($student)                              // auto-resolve
 ```
 
 ### embed()
 
-**embed**(*input* : Variant ; *context* : Variant ; *model* : Text) : [cs.embed.EmbedderResult](EmbedderResult.md)
+**embed**(*input* : Variant ; *context* : Variant ; *model* : Text) : [cs.EmbeddingStudio.EmbedderResult](EmbedderResult.md)
 
 Compute a vector for an arbitrary input, without persisting anywhere.
 
@@ -64,7 +64,7 @@ Compute a vector for an arbitrary input, without persisting anywhere.
 Throws if no model can be determined.
 
 ```4d
-var $pg:=cs.embed.Playground.new()
+var $pg:=cs.EmbeddingStudio.Playground.new()
 var $vector: 4D.Vector
 
 // Text + model

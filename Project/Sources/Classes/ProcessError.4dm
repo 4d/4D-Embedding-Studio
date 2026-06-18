@@ -1,5 +1,5 @@
 /**
- Typed error recorded on a cs.embed.ProcessResult.
+ Typed error recorded on a cs.EmbeddingStudio.ProcessResult.
 
  Replaces the former flat {scope, ref, message} object with a structured shape
  that lets callers distinguish failure modes programmatically instead of parsing
@@ -9,12 +9,12 @@
  | --------- | ------- | ------------------------------------------------------------------ |
  | scope     | Text    | "entity" \| "chunk" \| "definition" \| "pipeline"                  |
  | severity  | Text    | "warning" \| "error" \| "fatal"                                    |
- | code      | Integer | machine-readable code — see cs.embed.ProcessErrorCode              |
+ | code      | Integer | machine-readable code — see cs.EmbeddingStudio.ProcessErrorCode              |
  | ref       | Variant | contextual identifier (entity primary key, "Dataclass.vector", …)  |
  | message   | Text    | human-readable description                                          |
  | retryable | Boolean | True when re-running the operation could plausibly succeed         |
 
- severity and retryable default from the code (cs.embed.ProcessErrorCode.meta),
+ severity and retryable default from the code (cs.EmbeddingStudio.ProcessErrorCode.meta),
  and can be overridden via the $overrides object.
 **/
 

@@ -1,5 +1,5 @@
 //%attributes = {}
-// Automated tests for cs.embed.Playground (render + embed).
+// Automated tests for cs.EmbeddingStudio.Playground (render + embed).
 
 var $mockEmbedder:=Not:C34(Shift down:C543)
 

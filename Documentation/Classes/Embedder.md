@@ -22,18 +22,18 @@ Create a embedder. All options are optional.
 
 ```4d
 // Default — uses cs.AIKit.OpenAI.new() internally
-var $proc:=cs.embed.Embedder.new()
+var $proc:=cs.EmbeddingStudio.Embedder.new()
 
 // Provide a pre-configured AIKit client (custom API key, base URL, etc.)
 var $client:=cs.AIKit.OpenAI.new({apiKey: "…"; baseURL: "https://server.ai"})
-var $proc:=cs.embed.Embedder.new({client: $client; maxRetries: 5; backoffMs: 1000})
+var $proc:=cs.EmbeddingStudio.Embedder.new({client: $client; maxRetries: 5; backoffMs: 1000})
 ```
 
 ## Functions
 
 ### embed()
 
-**embed**(*text* : Text ; *model* : Text) : [cs.embed.EmbedderResult](EmbedderResult.md)
+**embed**(*text* : Text ; *model* : Text) : [cs.EmbeddingStudio.EmbedderResult](EmbedderResult.md)
 
 Embed a single text. Returns a typed result with the embedding vector, token usage, and rate-limit state.
 
@@ -41,7 +41,7 @@ Embed a single text. Returns a typed result with the embedding vector, token usa
 |-----------------|--------|-----------------------------------------------------------------------------|
 | *text*          | Text   | The text to vectorize.                                                      |
 | *model*         | Text   | The embedding model to use (e.g. `"text-embedding-3-small"`).              |
-| Function result | [cs.embed.EmbedderResult](EmbedderResult.md) | Typed wrapper — `.vector` holds the embedding, `.promptTokens` / `.totalTokens` hold usage, rate-limit fields are flat camelCase. |
+| Function result | [cs.EmbeddingStudio.EmbedderResult](EmbedderResult.md) | Typed wrapper — `.vector` holds the embedding, `.promptTokens` / `.totalTokens` hold usage, rate-limit fields are flat camelCase. |
 
 Throws if retries are exhausted or the API returns a non-retryable error.
 

@@ -1,5 +1,5 @@
 //%attributes = {}
-// Unit tests for cs.embed.Settings
+// Unit tests for cs.EmbeddingStudio.Settings
 
 var $noFile : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).file("Settings/__test_settings_nonexistent.json")
 var $tmpFile : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).file("Settings/__test_settings_tmp.json")

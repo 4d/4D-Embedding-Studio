@@ -36,13 +36,13 @@ Create an instance of the orchestrator.
 
 ```4d
 // Simplest — uses defaults
-var $p:=cs.embed.Process.new()
+var $p:=cs.EmbeddingStudio.Process.new()
 
 // With explicit settings
-var $p:=cs.embed.Process.new($settings)
+var $p:=cs.EmbeddingStudio.Process.new($settings)
 
 // With options
-var $p:=cs.embed.Process.new($settings; {\
+var $p:=cs.EmbeddingStudio.Process.new($settings; {\
 	force: True; \
 	onProgress: Formula(ALERT("chunk done: "+String($1.report.entitiesUpdated)))})
 ```

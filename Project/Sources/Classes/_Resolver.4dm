@@ -1,7 +1,7 @@
 /**
  Private helper for Process.
  Turns the polymorphic $definition parameter (Null | single | collection | vectorName-only stub)
- into a concrete Collection of cs.embed.Definition, using the provided Settings
+ into a concrete Collection of cs.EmbeddingStudio.Definition, using the provided Settings
  and optionally an entity/entitySelection to infer dataclassName.
 **/
 

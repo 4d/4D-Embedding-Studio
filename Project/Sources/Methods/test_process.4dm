@@ -1,5 +1,5 @@
 //%attributes = {}
-// Automated tests for cs.embed.Process using dedicated fixtures and a controlled embedder.
+// Automated tests for cs.Process using dedicated fixtures and a controlled embedder.
 
 var $mockEmbedder:=Not:C34(Shift down:C543)  // if false will use real configured provider and model, else we mock
 

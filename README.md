@@ -29,7 +29,7 @@ A 4D component for defining, computing, and maintaining AI embedding vectors dir
 **2. Run the full pipeline** (all definitions, all records):
 
 ```4d
-var $p:=cs.embed.Process.new()
+var $p:=cs.EmbeddingStudio.Process.new()
 var $r:=$p.process()
 
 If ($r.success)
@@ -40,7 +40,7 @@ End if
 **3. Process a single entity on save** (e.g. in a trigger or REST hook):
 
 ```4d
-var $p:=cs.embed.Process.new()
+var $p:=cs.EmbeddingStudio.Process.new()
 $p.processEntity($entity)
 ```
 

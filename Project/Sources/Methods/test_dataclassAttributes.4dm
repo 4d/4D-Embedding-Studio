@@ -1,5 +1,5 @@
 //%attributes = {}
-// Unit tests for cs.embed._dataclassAttributes
+// Unit tests for cs.EmbeddingStudio._dataclassAttributes
 
 var $dca : cs:C1710._dataclassAttributes:=cs:C1710._dataclassAttributes.me
 $dca.reset()

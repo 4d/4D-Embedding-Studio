@@ -63,7 +63,7 @@ If (Not($r.success))
 		ALERT("A model became unavailable — aborting until it recovers.")
 	End if
 
-	var $codes:=cs.embed.ProcessErrorCode.me
+	var $codes:=cs.EmbeddingStudio.ProcessErrorCode.me
 	var $saveFailures:=$r.errorsByCode($codes.SAVE_FAILED)
 	If ($saveFailures.length>0)
 		ALERT(String($saveFailures.length)+" entities failed to save.")

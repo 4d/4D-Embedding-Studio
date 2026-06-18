@@ -90,10 +90,10 @@ Create a settings instance. The backing file is loaded immediately.
 
 ```4d
 // Default location
-var $settings:=cs.embed.Settings.new()
+var $settings:=cs.EmbeddingStudio.Settings.new()
 
 // Custom file
-var $settings:=cs.embed.Settings.new(File("/some/path/custom.json"))
+var $settings:=cs.EmbeddingStudio.Settings.new(File("/some/path/custom.json"))
 ```
 
 ## Functions
@@ -111,7 +111,7 @@ Reload the backing file into memory, overwriting in-memory state. Missing or mal
 Serialize the current in-memory state to the backing file. Preserves unknown top-level keys that were present on load.
 
 ```4d
-$settings.definitions.push(cs.embed.Definition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName}"))
+$settings.definitions.push(cs.EmbeddingStudio.Definition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName}"))
 $settings.batchSize:=100
 $settings.save()
 ```
@@ -159,7 +159,7 @@ Calls [`invalidateVectors()`](Definition.md#invalidatevectors) on every definiti
 | Function result | Object | `{updated: Integer, skipped: Integer, errors: Collection of Text}` — accumulated across all definitions. |
 
 ```4d
-var $result:=cs.embed.Settings.new().invalidateVectors()
+var $result:=cs.EmbeddingStudio.Settings.new().invalidateVectors()
 // → { updated: 120; skipped: 0; errors: [] }
 ```
 

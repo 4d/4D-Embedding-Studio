@@ -60,6 +60,7 @@
 			"test_playground",
 			"test_process",
 			"test_process_rateLimit",
+			"test_processError",
 			"test_resolver",
 			"test_settings"
 		],

@@ -2,8 +2,8 @@
  Orchestrator for computing and storing embeddings on 4D entities.
  
  Usage:
-   var $p:=cs.embed.Process.new()              // uses defaults
-   var $p:=cs.embed.Process.new($settings; $options)
+   var $p:=cs.EmbeddingStudio.Process.new()              // uses defaults
+   var $p:=cs.EmbeddingStudio.Process.new($settings; $options)
 
    $p.process()                                    // all definitions in settings
    $p.process($def)                                // one or a collection of definitions
@@ -11,9 +11,9 @@
    $p.processEntity($entity; $def)
    $p.processEntitySelection($es; $def)
  
- All entry points return a cs.embed.ProcessResult.
+ All entry points return a cs.EmbeddingStudio.ProcessResult.
 
- For ad-hoc rendering and embedding without persistence, see cs.embed.Playground.
+ For ad-hoc rendering and embedding without persistence, see cs.EmbeddingStudio.Playground.
 
  Options object ($options)
 
@@ -26,7 +26,7 @@
  | dryRun | Boolean | False | If true, computes filtering/progress only and skips writes/API calls. |
  | force | Boolean | False | If true, bypasses "already embedded / not dirty" filtering and recomputes all targeted rows. |
  | debug | Boolean | False | If true, emits extra diagnostic log entries. |
- | embedder | cs.embed.Embedder | New embedder instance | Optional embedder override, mainly for tests or custom providers. |
+ | embedder | cs.EmbeddingStudio.Embedder | New embedder instance | Optional embedder override, mainly for tests or custom providers. |
 **/
 
 Class extends _ProcessBase

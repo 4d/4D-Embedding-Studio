@@ -18,7 +18,7 @@ Compile a template. Compilation walks the template once and extracts static part
 | *template*    | Text | Template string with `{variable}` markers.  |
 
 ```4d
-var $tpl:=cs.embed.Phrase.new("Hello {firstName}, you study at {schoolName}.")
+var $tpl:=cs.EmbeddingStudio.Phrase.new("Hello {firstName}, you study at {schoolName}.")
 $tpl.keys // → ["firstName"; "schoolName"]
 ```
 
@@ -64,7 +64,7 @@ Validate that all keys in the phrase can be resolved against the given dataclass
 | `allowAlias`       | Boolean | `False` | Allow alias attributes.                                    |
 
 ```4d
-var $tpl:=cs.embed.Phrase.new("{firstName} at {school.name}")
+var $tpl:=cs.EmbeddingStudio.Phrase.new("{firstName} at {school.name}")
 
 // Storage-only validation — fails because {school.name} uses a relation
 var $v:=$tpl.validate(ds.Students)
@@ -99,7 +99,7 @@ Resolves each phrase key against *dataclass* and returns an ordered Collection o
 Each resolved entry is an ORDA attribute descriptor with `.name`, `.kind`, and more — see [DataClass.attributeName](https://developer.4d.com/docs/API/DataClassClass#attributename).
 
 ```4d
-var $tpl:=cs.embed.Phrase.new("{firstName} graduated from {school.name}")
+var $tpl:=cs.EmbeddingStudio.Phrase.new("{firstName} graduated from {school.name}")
 var $attrs:=$tpl.attributes(ds.Students)
 // $attrs[0].name → "firstName"   $attrs[0].type → "string"
 // $attrs[1].name → "name"        $attrs[1].type → "string"   (from School dataclass)
