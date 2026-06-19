@@ -244,17 +244,16 @@ Function moreManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
+	GOTO OBJECT:C206(*; "phrase")
+	
 	var $item : cs:C1710._EmbeddingItem:=This:C1470.currentItem
 	var $menu:=cs:C1710._menu.new()
 	
-	If (OBJECT Get name:C1087(Object with focus:K67:3)="phrase")
-		
-		$menu.edit(True:C214).line()
-		This:C1470._embeddedAttributesMenu($item; $menu)
-		
-	End if 
+	$menu.edit(True:C214).line()
+	This:C1470._embeddedAttributesMenu($item; $menu)
 	
 	If (This:C1470.settings._isDev)
+		$menu.line()
 		var $workerBusy : Boolean:=(Process number:C372("EmbeddingStudio")>0)
 		$menu.append("🚧 Insert All Attributes"; "insertAllAttributes")
 		$menu.append("🚧 AI Generated Phrase"; "aiGeneratedPhrase")
