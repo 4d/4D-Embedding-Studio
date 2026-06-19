@@ -72,6 +72,8 @@ Function manager($e : Object)
 				// ______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
+				This:C1470.catalog:=ds:C1482
+				
 				If (Length:C16(OBJECT Get name:C1087(Object with focus:K67:3))=0)
 					
 					GOTO OBJECT:C206(*; This:C1470.list)
@@ -229,7 +231,7 @@ Function listMetaInfo($me : cs:C1710._EmbeddingItem) : Object
 			
 			If ($me.errors.length>0)
 				
-				$meta.stroke:=_errorColor()
+				$meta.stroke:=_errorColor
 				
 			End if 
 		End if 
@@ -638,7 +640,7 @@ Function modelUpdateDropdown($item : cs:C1710._EmbeddingItem)
 	Else 
 		
 		$dropDown.index:=-1
-		OBJECT SET RGB COLORS:C628(*; "models"; Length:C16(String:C10($model))>0 ? _errorColor() : Foreground color:K23:1)
+		OBJECT SET RGB COLORS:C628(*; "models"; Length:C16(String:C10($model))>0 ? _errorColor : Foreground color:K23:1)
 		
 	End if 
 	
@@ -653,6 +655,7 @@ Function refresh()
 	If (This:C1470._catalogModified())
 		
 		This:C1470._cacheCatalog()  // Update cache
+		This:C1470.readEmbeddingItems()  // Update list
 		
 	End if 
 	
