@@ -9,10 +9,19 @@
    $pg.render($entity; $phrase)                         // explicit phrase
    $pg.render($entity; $definition)                     // from definition
    $pg.render($entity; "template with {field}")         // compile on the fly
+   $pg.render($entity; {vectorName: "embedding"})       // stub → saved definition (deduces phrase)
+   $pg.render($entity; {phrase: "tpl {field}"})         // ad-hoc stub → inline template
 
    $pg.embed("some text"; "text-embedding-3-small")     // direct embed
    $pg.embed($entity; $definition)                      // render + embed
    $pg.embed($entity)                                   // auto-resolve everything
+   $pg.embed($entity; {vectorName: "embedding"})        // stub → saved definition (deduces phrase + model)
+   $pg.embed($entity; {phrase: "tpl {x}"; modelAlias: "m"})  // ad-hoc stub (deduces nothing, all given)
+   $pg.embed("some text"; {modelAlias: "m"})            // stub supplies the model
+
+ Untyped stubs are resolved the same way cs.Process resolves its definition argument: a
+ {vectorName: …} (optionally with {dataclassName}) is matched against the saved
+ definitions, deducing its phrase and model from the entity's dataclass.
 **/
 
 Class extends _ProcessBase
@@ -27,6 +36,8 @@ Class constructor($settings : cs:C1710.Settings; $options : Object)
 	//   - cs.Phrase                  → used directly
 	//   - cs.Definition     → uses $definition.phrase
 	//   - Text                       → compiled on the fly as a new Phrase
+	//   - Object stub                → {vectorName[; dataclassName]} looked up in settings (deduces the phrase),
+	//                                  or {phrase|template: Text} compiled inline
 	//   - Null                       → auto-resolved from settings (requires a unique match for $entity's dataclass)
 Function render($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) : Text
 	
@@ -57,6 +68,13 @@ Function render($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) : Text
 	//   embed($entity; $phrase; "text-embedding-3-small")      → renders $phrase, embeds with given model
 	//   embed($entity; "template with {field}"; "model")       → compiles template on the fly
 	//   embed($entity)                                         → auto-resolve definition from settings (unique match required)
+	//   embed($entity; {vectorName: "v"})                      → stub → saved definition (deduces phrase + model)
+	//   embed($entity; {phrase: "tpl {x}"; modelAlias: "m"})   → ad-hoc stub, phrase compiled inline, model taken from stub
+	//   embed("some text"; {modelAlias: "m"})                  → stub supplies the model only
+	//
+	// $context stubs are resolved exactly like cs.Process resolves its definition argument — a
+	// {vectorName} stub is matched against the saved definitions for the (entity's) dataclass; an
+	// explicit {modelAlias} on the stub always wins over a deduced one.
 	//
 	// Throws if no model can be determined.
 Function embed($input : Variant; $context : Variant; $model : Text) : cs:C1710.EmbedderResult
@@ -82,6 +100,11 @@ Function embed($input : Variant; $context : Variant; $model : Text) : cs:C1710.E
 					
 					$modelName:=String:C10($context.modelAlias)
 					
+					// Plain object stub → its modelAlias, or the model of a stub-matched saved definition
+				: (Value type:C1509($context)=Is object:K8:27)
+					
+					$modelName:=This:C1470._modelFromStub(""; $context; $modelName)
+					
 			End case 
 			
 			// ______________________________________________________
@@ -98,12 +121,17 @@ Function embed($input : Variant; $context : Variant; $model : Text) : cs:C1710.E
 			
 			$text:=$phrase.render($input)
 			
-			// Pick model from $context if it's a definition, otherwise rely on $model, otherwise auto-resolve
-			If ((Value type:C1509($context)=Is object:K8:27) && (OB Instance of:C1731($context; cs:C1710.Definition)))
-				
-				$modelName:=String:C10($context.modelAlias)
-				
-			End if 
+			// Pick the model from $context (a Definition or a stub), else rely on $model, else auto-resolve
+			Case of 
+				: ((Value type:C1509($context)=Is object:K8:27) && (OB Instance of:C1731($context; cs:C1710.Definition)))
+					
+					$modelName:=String:C10($context.modelAlias)
+					
+				: ((Value type:C1509($context)=Is object:K8:27) && Not:C34(OB Instance of:C1731($context; cs:C1710.Phrase)))
+					
+					$modelName:=This:C1470._modelFromStub(This:C1470.resolver.dataclassNameFromEntity($input); $context; $modelName)
+					
+			End case 
 			
 			If (Length:C16($modelName)=0)
 				
@@ -130,7 +158,7 @@ Function embed($input : Variant; $context : Variant; $model : Text) : cs:C1710.E
 	// MARK:-[PRIVATE]
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-	// Polymorphic phrase extraction: Phrase | Definition | Text template | Null (auto-resolve).
+	// Polymorphic phrase extraction: Phrase | Definition | Text template | object stub | Null (auto-resolve).
 Function _phraseFrom($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) : cs:C1710.Phrase
 	
 	Case of 
@@ -163,7 +191,8 @@ Function _phraseFrom($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) :
 			// ______________________________________________________
 	End case 
 	
-	return Null:C1517
+	// Plain object stub (e.g. {vectorName: "x"} or {phrase: "tpl {field}"}) → deduce like cs.Process does.
+	return This:C1470._phraseFromStub($entity; $definitionOrPhrase)
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Best-effort resolution of a single definition for an entity's dataclass.
@@ -181,4 +210,55 @@ Function _resolveDefinitionFromEntity($entity : 4D:C1709.Entity) : cs:C1710.Defi
 	
 	return ($matches.length=1) ? $matches[0] : Null:C1517
 	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Resolves a plain object stub to a Phrase: an inline {phrase|template} compiles directly;
+	// otherwise a {vectorName[; dataclassName]} stub is matched against the saved definitions
+	// (the same way cs.Process resolves its definition argument) and its phrase is returned.
+Function _phraseFromStub($entity : 4D:C1709.Entity; $stub : Object) : cs:C1710.Phrase
 	
+	// Inline ad-hoc template wins — no lookup needed.
+	Case of 
+			// ______________________________________________________
+		: (Value type:C1509($stub.phrase)=Is text:K8:3)
+			
+			return cs:C1710.Phrase.new($stub.phrase)
+			
+			// ______________________________________________________
+		: ((Value type:C1509($stub.phrase)=Is object:K8:27) && (OB Instance of:C1731($stub.phrase; cs:C1710.Phrase)))
+			
+			return $stub.phrase
+			
+			// ______________________________________________________
+		: (Value type:C1509($stub.template)=Is text:K8:3)
+			
+			return cs:C1710.Phrase.new($stub.template)
+			
+			// ______________________________________________________
+	End case 
+	
+	// Identity stub → resolve against the entity's dataclass, the same path cs.Process uses.
+	var $dcName : Text:=This:C1470.resolver.dataclassNameFromEntity($entity)
+	var $def : cs:C1710.Definition:=This:C1470.resolver.resolveForEntity($stub; $dcName).first()
+	
+	return ($def=Null:C1517) ? Null:C1517 : $def.phrase
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Deduces a model name from a plain object stub: an explicit {modelAlias} wins; otherwise the
+	// model of a {vectorName[; dataclassName]} stub matched against the saved definitions; else $fallback.
+Function _modelFromStub($contextDataclassName : Text; $stub : Object; $fallback : Text) : Text
+	
+	If (Length:C16(String:C10($stub.modelAlias))>0)
+		
+		return String:C10($stub.modelAlias)
+		
+	End if 
+	
+	var $def : cs:C1710.Definition:=This:C1470.resolver.resolveForEntity($stub; $contextDataclassName).first()
+	
+	If ($def#Null:C1517)
+		
+		return String:C10($def.modelAlias)
+		
+	End if 
+	
+	return $fallback

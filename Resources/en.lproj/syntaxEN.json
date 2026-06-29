@@ -1,13 +1,6 @@
 {
 	"_method_": {},
 	"cs.EmbeddingStudio": {
-		"_dataclassAttributes": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
 		"_typeMedia": {
 			"new()": {
 				"Syntax": "**.new**()",
@@ -16,20 +9,6 @@
 			}
 		},
 		"_EMBEDDINGS": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
-		"_Logger": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
-		"_ExecutionLog": {
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
@@ -59,21 +38,17 @@
 				"Summary": ""
 			}
 		},
-		"EmbedderResult": {
+		"_Logger": {
 			"new()": {
-				"Syntax": "**.new**( *result* : Object; *isBatch* : Boolean )",
-				"Params": [
-					[
-						"result",
-						"Object",
-						"->"
-					],
-					[
-						"isBatch",
-						"Boolean",
-						"->"
-					]
-				],
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_ExecutionLog": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
 				"Summary": ""
 			}
 		},
@@ -97,16 +72,75 @@
 				"Summary": ""
 			}
 		},
-		"Settings": {
+		"_dataclassAttributes": {
 			"new()": {
-				"Syntax": "**.new**( *file* : 4D.File )",
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_RateLimiter": {
+			"new()": {
+				"Syntax": "**.new**( *configBatchSize* : Integer )",
 				"Params": [
 					[
-						"file",
-						"4D.File",
+						"configBatchSize",
+						"Integer",
 						"->"
 					]
 				],
+				"Summary": ""
+			}
+		},
+		"ProcessErrorCode": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"EmbedderResult": {
+			"new()": {
+				"Syntax": "**.new**( *result* : Object; *isBatch* : Boolean )",
+				"Params": [
+					[
+						"result",
+						"Object",
+						"->"
+					],
+					[
+						"isBatch",
+						"Boolean",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_Env": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"Embedder": {
+			"new()": {
+				"Syntax": "**.new**( *options* : Object )",
+				"Params": [
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_Settings": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
 				"Summary": ""
 			}
 		},
@@ -138,20 +172,7 @@
 				"Summary": ""
 			}
 		},
-		"_RateLimiter": {
-			"new()": {
-				"Syntax": "**.new**( *configBatchSize* : Integer )",
-				"Params": [
-					[
-						"configBatchSize",
-						"Integer",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"Playground": {
+		"_ProcessBase": {
 			"new()": {
 				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings; *options* : Object )",
 				"Params": [
@@ -169,64 +190,13 @@
 				"Summary": ""
 			}
 		},
-		"ProcessErrorCode": {
+		"Settings": {
 			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
-		"_Resolver": {
-			"new()": {
-				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings )",
+				"Syntax": "**.new**( *file* : 4D.File )",
 				"Params": [
 					[
-						"settings",
-						"cs.EmbeddingStudio.Settings",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"Process": {
-			"new()": {
-				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings; *options* : Object )",
-				"Params": [
-					[
-						"settings",
-						"cs.EmbeddingStudio.Settings",
-						"->"
-					],
-					[
-						"options",
-						"Object",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"_TestProcessEmbedder": {
-			"new()": {
-				"Syntax": "**.new**( *options* : Object )",
-				"Params": [
-					[
-						"options",
-						"Object",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"Embedder": {
-			"new()": {
-				"Syntax": "**.new**( *options* : Object )",
-				"Params": [
-					[
-						"options",
-						"Object",
+						"file",
+						"4D.File",
 						"->"
 					]
 				],
@@ -266,20 +236,7 @@
 				"Summary": ""
 			}
 		},
-		"_menu": {
-			"new()": {
-				"Syntax": "**.new**( *data* : Variant )",
-				"Params": [
-					[
-						"data",
-						"Variant",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"_ProcessBase": {
+		"Process": {
 			"new()": {
 				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings; *options* : Object )",
 				"Params": [
@@ -297,95 +254,62 @@
 				"Summary": ""
 			}
 		},
-		"_Settings": {
+		"Playground": {
 			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
+				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings; *options* : Object )",
+				"Params": [
+					[
+						"settings",
+						"cs.EmbeddingStudio.Settings",
+						"->"
+					],
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
 				"Summary": ""
 			}
 		},
-		"_Env": {
+		"_TestProcessEmbedder": {
 			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
+				"Syntax": "**.new**( *options* : Object )",
+				"Params": [
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
 				"Summary": ""
 			}
-		}
-	},
-	"_dataclassAttributes": {
-		"reset()": {
-			"Syntax": "**.reset**( *dataclassName* : Text )",
-			"Params": [
-				[
-					"dataclassName",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
 		},
-		"isExcludedStorageType()": {
-			"Syntax": "**.isExcludedStorageType**( *attribute* : Object; *allowObject* : Boolean ) : Boolean",
-			"Params": [
-				[
-					"attribute",
-					"Object",
-					"->"
+		"_Resolver": {
+			"new()": {
+				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings )",
+				"Params": [
+					[
+						"settings",
+						"cs.EmbeddingStudio.Settings",
+						"->"
+					]
 				],
-				[
-					"allowObject",
-					"Boolean",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
+				"Summary": ""
+			}
 		},
-		"hasField()": {
-			"Syntax": "**.hasField**( *dataclass* : 4D.DataClass; *fieldName* : Text ) : Boolean",
-			"Params": [
-				[
-					"dataclass",
-					"4D.DataClass",
-					"->"
+		"_menu": {
+			"new()": {
+				"Syntax": "**.new**( *data* : Variant )",
+				"Params": [
+					[
+						"data",
+						"Variant",
+						"->"
+					]
 				],
-				[
-					"fieldName",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"forDataclass()": {
-			"Syntax": "**.forDataclass**( *dataclass* : 4D.DataClass; *options* : Object ) : Collection",
-			"Params": [
-				[
-					"dataclass",
-					"4D.DataClass",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
+				"Summary": ""
+			}
 		}
 	},
 	"_typeMedia": {
@@ -565,6 +489,137 @@
 			"Syntax": "settings : cs.EmbeddingStudio.Settings"
 		}
 	},
+	"_EmbeddingItem": {
+		"createDirtyAssociatedAttributeIndex()": {
+			"Syntax": "**.createDirtyAssociatedAttributeIndex**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"get errors()": {
+			"Syntax": "**.get errors**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"hasDirtyAssociatedAttribute()": {
+			"Syntax": "**.hasDirtyAssociatedAttribute**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get defined()": {
+			"Syntax": "**.get defined**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"createDirtyAssociatedAttribute()": {
+			"Syntax": "**.createDirtyAssociatedAttribute**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"get helptip()": {
+			"Syntax": "**.get helptip**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"dirtyAssociatedAttributeIndexed()": {
+			"Syntax": "**.dirtyAssociatedAttributeIndexed**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get supportedAttributes()": {
+			"Syntax": "**.get supportedAttributes**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"parsePhrase()": {
+			"Syntax": "**.parsePhrase**( *phrase* : cs.EmbeddingStudio.Phrase ) : Text",
+			"Params": [
+				[
+					"phrase",
+					"cs.EmbeddingStudio.Phrase",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"validate()": {
+			"Syntax": "**.validate**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"get inputsMenu()": {
+			"Syntax": "**.get inputsMenu**() : cs.EmbeddingStudio._menu",
+			"Params": [
+				[
+					"",
+					"cs.EmbeddingStudio._menu",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"original": {
+			"Syntax": "original : Object"
+		},
+		"embedded": {
+			"Syntax": "embedded : Collection"
+		},
+		"phrase": {
+			"Syntax": "phrase : Text"
+		},
+		"settings": {
+			"Syntax": "settings : cs.EmbeddingStudio.Settings"
+		},
+		"touched": {
+			"Syntax": "touched : Boolean"
+		},
+		"version": {
+			"Syntax": "version : Integer"
+		},
+		"definition": {
+			"Syntax": "definition : cs.EmbeddingStudio.Definition"
+		}
+	},
 	"_Logger": {
 		"error()": {
 			"Syntax": "**.error**( *payload* : Variant )",
@@ -700,169 +755,6 @@
 				]
 			],
 			"Summary": ""
-		}
-	},
-	"_EmbeddingItem": {
-		"createDirtyAssociatedAttributeIndex()": {
-			"Syntax": "**.createDirtyAssociatedAttributeIndex**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"get errors()": {
-			"Syntax": "**.get errors**() : Collection",
-			"Params": [
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"hasDirtyAssociatedAttribute()": {
-			"Syntax": "**.hasDirtyAssociatedAttribute**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get defined()": {
-			"Syntax": "**.get defined**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"createDirtyAssociatedAttribute()": {
-			"Syntax": "**.createDirtyAssociatedAttribute**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"get helptip()": {
-			"Syntax": "**.get helptip**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"dirtyAssociatedAttributeIndexed()": {
-			"Syntax": "**.dirtyAssociatedAttributeIndexed**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get supportedAttributes()": {
-			"Syntax": "**.get supportedAttributes**() : Collection",
-			"Params": [
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"parsePhrase()": {
-			"Syntax": "**.parsePhrase**( *phrase* : cs.EmbeddingStudio.Phrase ) : Text",
-			"Params": [
-				[
-					"phrase",
-					"cs.EmbeddingStudio.Phrase",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"validate()": {
-			"Syntax": "**.validate**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"get inputsMenu()": {
-			"Syntax": "**.get inputsMenu**() : cs.EmbeddingStudio._menu",
-			"Params": [
-				[
-					"",
-					"cs.EmbeddingStudio._menu",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"original": {
-			"Syntax": "original : Object"
-		},
-		"embedded": {
-			"Syntax": "embedded : Collection"
-		},
-		"phrase": {
-			"Syntax": "phrase : Text"
-		},
-		"settings": {
-			"Syntax": "settings : cs.EmbeddingStudio.Settings"
-		},
-		"touched": {
-			"Syntax": "touched : Boolean"
-		},
-		"version": {
-			"Syntax": "version : Integer"
-		},
-		"definition": {
-			"Syntax": "definition : cs.EmbeddingStudio.Definition"
-		}
-	},
-	"EmbedderResult": {
-		"resetTokens": {
-			"Syntax": "resetTokens : Text"
-		},
-		"limitTokens": {
-			"Syntax": "limitTokens : Integer"
-		},
-		"remainingTokens": {
-			"Syntax": "remainingTokens : Integer"
-		},
-		"resetRequests": {
-			"Syntax": "resetRequests : Text"
-		},
-		"promptTokens": {
-			"Syntax": "promptTokens : Integer"
-		},
-		"totalTokens": {
-			"Syntax": "totalTokens : Integer"
-		},
-		"limitRequests": {
-			"Syntax": "limitRequests : Integer"
-		},
-		"remainingRequests": {
-			"Syntax": "remainingRequests : Integer"
-		},
-		"vectors": {
-			"Syntax": "vectors : Collection"
-		},
-		"vector": {
-			"Syntax": "vector : 4D.Vector"
 		}
 	},
 	"Phrase": {
@@ -1047,13 +939,71 @@
 			"Syntax": "definitionsProcessed : Integer"
 		}
 	},
-	"Settings": {
-		"findAll()": {
-			"Syntax": "**.findAll**( *dataclassName* : Text ) : Collection",
+	"_dataclassAttributes": {
+		"reset()": {
+			"Syntax": "**.reset**( *dataclassName* : Text )",
 			"Params": [
 				[
 					"dataclassName",
 					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"isExcludedStorageType()": {
+			"Syntax": "**.isExcludedStorageType**( *attribute* : Object; *allowObject* : Boolean ) : Boolean",
+			"Params": [
+				[
+					"attribute",
+					"Object",
+					"->"
+				],
+				[
+					"allowObject",
+					"Boolean",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"hasField()": {
+			"Syntax": "**.hasField**( *dataclass* : 4D.DataClass; *fieldName* : Text ) : Boolean",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"fieldName",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"forDataclass()": {
+			"Syntax": "**.forDataclass**( *dataclass* : 4D.DataClass; *options* : Object ) : Collection",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"options",
+					"Object",
 					"->"
 				],
 				[
@@ -1063,31 +1013,78 @@
 				]
 			],
 			"Summary": ""
-		},
-		"find()": {
-			"Syntax": "**.find**( *dataclassName* : Text; *vectorName* : Text ) : cs.EmbeddingStudio.Definition",
+		}
+	},
+	"_RateLimiter": {
+		"nextBatchSize()": {
+			"Syntax": "**.nextBatchSize**() : Integer",
 			"Params": [
 				[
-					"dataclassName",
-					"Text",
-					"->"
-				],
-				[
-					"vectorName",
-					"Text",
-					"->"
-				],
-				[
 					"",
-					"cs.EmbeddingStudio.Definition",
+					"Integer",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"invalidateVectors()": {
-			"Syntax": "**.invalidateVectors**() : Object",
+		"waitIfNeeded()": {
+			"Syntax": "**.waitIfNeeded**( *estimatedTokens* : Integer )",
 			"Params": [
+				[
+					"estimatedTokens",
+					"Integer",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"update()": {
+			"Syntax": "**.update**( *embedderResult* : cs.EmbeddingStudio.EmbedderResult; *chunkSize* : Integer )",
+			"Params": [
+				[
+					"embedderResult",
+					"cs.EmbeddingStudio.EmbedderResult",
+					"->"
+				],
+				[
+					"chunkSize",
+					"Integer",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"configBatchSize": {
+			"Syntax": "configBatchSize : Integer"
+		},
+		"tokensPerEntity": {
+			"Syntax": "tokensPerEntity : Real"
+		},
+		"remainingTokens": {
+			"Syntax": "remainingTokens : Integer"
+		},
+		"resetRequestsSeconds": {
+			"Syntax": "resetRequestsSeconds : Integer"
+		},
+		"resetTokensSeconds": {
+			"Syntax": "resetTokensSeconds : Integer"
+		},
+		"limitTokens": {
+			"Syntax": "limitTokens : Integer"
+		},
+		"remainingRequests": {
+			"Syntax": "remainingRequests : Integer"
+		}
+	},
+	"ProcessErrorCode": {
+		"meta()": {
+			"Syntax": "**.meta**( *code* : Integer ) : Object",
+			"Params": [
+				[
+					"code",
+					"Integer",
+					"->"
+				],
 				[
 					"",
 					"Object",
@@ -1096,27 +1093,128 @@
 			],
 			"Summary": ""
 		},
-		"save()": {
-			"Syntax": "**.save**()",
-			"Params": [],
+		"VECTOR_COUNT_MISMATCH": {
+			"Syntax": "VECTOR_COUNT_MISMATCH : Integer"
+		},
+		"EMBED_FAILED": {
+			"Syntax": "EMBED_FAILED : Integer"
+		},
+		"SAVE_FAILED": {
+			"Syntax": "SAVE_FAILED : Integer"
+		},
+		"INVALID_DEFINITION": {
+			"Syntax": "INVALID_DEFINITION : Integer"
+		},
+		"MODEL_UNAVAILABLE": {
+			"Syntax": "MODEL_UNAVAILABLE : Integer"
+		},
+		"MODEL_SKIPPED": {
+			"Syntax": "MODEL_SKIPPED : Integer"
+		},
+		"VALIDATION_FAILED": {
+			"Syntax": "VALIDATION_FAILED : Integer"
+		},
+		"NULL_INPUT": {
+			"Syntax": "NULL_INPUT : Integer"
+		}
+	},
+	"EmbedderResult": {
+		"resetTokens": {
+			"Syntax": "resetTokens : Text"
+		},
+		"limitTokens": {
+			"Syntax": "limitTokens : Integer"
+		},
+		"remainingTokens": {
+			"Syntax": "remainingTokens : Integer"
+		},
+		"resetRequests": {
+			"Syntax": "resetRequests : Text"
+		},
+		"promptTokens": {
+			"Syntax": "promptTokens : Integer"
+		},
+		"totalTokens": {
+			"Syntax": "totalTokens : Integer"
+		},
+		"limitRequests": {
+			"Syntax": "limitRequests : Integer"
+		},
+		"remainingRequests": {
+			"Syntax": "remainingRequests : Integer"
+		},
+		"vectors": {
+			"Syntax": "vectors : Collection"
+		},
+		"vector": {
+			"Syntax": "vector : 4D.Vector"
+		}
+	},
+	"_Env": {},
+	"Embedder": {
+		"embedBatch()": {
+			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
+			"Params": [
+				[
+					"texts",
+					"Collection",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.EmbedderResult",
+					"<-"
+				]
+			],
 			"Summary": ""
 		},
-		"load()": {
-			"Syntax": "**.load**()",
-			"Params": [],
+		"embed()": {
+			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
+			"Params": [
+				[
+					"text",
+					"Text",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.EmbedderResult",
+					"<-"
+				]
+			],
 			"Summary": ""
 		},
-		"embedder": {
-			"Syntax": "embedder : Object"
+		"backoffMs": {
+			"Syntax": "backoffMs : Integer"
 		},
-		"phrase": {
-			"Syntax": "phrase : Object"
+		"maxRetries": {
+			"Syntax": "maxRetries : Integer"
 		},
-		"definitions": {
-			"Syntax": "definitions : Collection"
-		},
-		"batchSize": {
-			"Syntax": "batchSize : Integer"
+		"client": {
+			"Syntax": "client : cs.AIKit.OpenAI"
+		}
+	},
+	"_Settings": {
+		"set file()": {
+			"Syntax": "**.set file**( *file* : 4D.File )",
+			"Params": [
+				[
+					"file",
+					"4D.File",
+					"->"
+				]
+			],
+			"Summary": ""
 		},
 		"get file()": {
 			"Syntax": "**.get file**() : 4D.File",
@@ -1124,6 +1222,28 @@
 				[
 					"",
 					"4D.File",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set()": {
+			"Syntax": "**.set**( *value* : Object )",
+			"Params": [
+				[
+					"value",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get()": {
+			"Syntax": "**.get**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
 					"<-"
 				]
 			],
@@ -1196,66 +1316,205 @@
 			"Syntax": "dataclassName : Text"
 		}
 	},
-	"_RateLimiter": {
-		"nextBatchSize()": {
-			"Syntax": "**.nextBatchSize**() : Integer",
+	"_ProcessBase": {
+		"options": {
+			"Syntax": "options : Object"
+		},
+		"resolver": {
+			"Syntax": "resolver : cs.EmbeddingStudio._Resolver"
+		},
+		"embedder": {
+			"Syntax": "embedder : cs.EmbeddingStudio.Embedder"
+		},
+		"settings": {
+			"Syntax": "settings : cs.EmbeddingStudio.Settings"
+		}
+	},
+	"Settings": {
+		"invalidateVectors()": {
+			"Syntax": "**.invalidateVectors**() : Object",
 			"Params": [
 				[
 					"",
-					"Integer",
+					"Object",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"waitIfNeeded()": {
-			"Syntax": "**.waitIfNeeded**( *estimatedTokens* : Integer )",
+		"findAll()": {
+			"Syntax": "**.findAll**( *dataclassName* : Text ) : Collection",
 			"Params": [
 				[
-					"estimatedTokens",
-					"Integer",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"update()": {
-			"Syntax": "**.update**( *embedderResult* : cs.EmbeddingStudio.EmbedderResult; *chunkSize* : Integer )",
-			"Params": [
-				[
-					"embedderResult",
-					"cs.EmbeddingStudio.EmbedderResult",
+					"dataclassName",
+					"Text",
 					"->"
 				],
 				[
-					"chunkSize",
-					"Integer",
-					"->"
+					"",
+					"Collection",
+					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"configBatchSize": {
-			"Syntax": "configBatchSize : Integer"
+		"find()": {
+			"Syntax": "**.find**( *dataclassName* : Text; *vectorName* : Text ) : cs.EmbeddingStudio.Definition",
+			"Params": [
+				[
+					"dataclassName",
+					"Text",
+					"->"
+				],
+				[
+					"vectorName",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.Definition",
+					"<-"
+				]
+			],
+			"Summary": ""
 		},
-		"tokensPerEntity": {
-			"Syntax": "tokensPerEntity : Real"
+		"get file()": {
+			"Syntax": "**.get file**() : 4D.File",
+			"Params": [
+				[
+					"",
+					"4D.File",
+					"<-"
+				]
+			],
+			"Summary": ""
 		},
-		"remainingTokens": {
-			"Syntax": "remainingTokens : Integer"
+		"save()": {
+			"Syntax": "**.save**()",
+			"Params": [],
+			"Summary": ""
 		},
-		"resetRequestsSeconds": {
-			"Syntax": "resetRequestsSeconds : Integer"
+		"load()": {
+			"Syntax": "**.load**()",
+			"Params": [],
+			"Summary": ""
 		},
-		"resetTokensSeconds": {
-			"Syntax": "resetTokensSeconds : Integer"
+		"embedder": {
+			"Syntax": "embedder : Object"
 		},
-		"limitTokens": {
-			"Syntax": "limitTokens : Integer"
+		"phrase": {
+			"Syntax": "phrase : Object"
 		},
-		"remainingRequests": {
-			"Syntax": "remainingRequests : Integer"
+		"batchSize": {
+			"Syntax": "batchSize : Integer"
+		},
+		"definitions": {
+			"Syntax": "definitions : Collection"
 		}
+	},
+	"ProcessError": {
+		"toObject()": {
+			"Syntax": "**.toObject**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get isFatal()": {
+			"Syntax": "**.get isFatal**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"retryable": {
+			"Syntax": "retryable : Boolean"
+		},
+		"message": {
+			"Syntax": "message : Text"
+		},
+		"code": {
+			"Syntax": "code : Integer"
+		},
+		"ref": {
+			"Syntax": "ref : Variant"
+		},
+		"severity": {
+			"Syntax": "severity : Text"
+		},
+		"scope": {
+			"Syntax": "scope : Text"
+		}
+	},
+	"Process": {
+		"processEntitySelection()": {
+			"Syntax": "**.processEntitySelection**( *es* : 4D.EntitySelection; *definition* : Variant ) : cs.EmbeddingStudio.ProcessResult",
+			"Params": [
+				[
+					"es",
+					"4D.EntitySelection",
+					"->"
+				],
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.ProcessResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"processEntity()": {
+			"Syntax": "**.processEntity**( *entity* : 4D.Entity; *definition* : Variant ) : cs.EmbeddingStudio.ProcessResult",
+			"Params": [
+				[
+					"entity",
+					"4D.Entity",
+					"->"
+				],
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.ProcessResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"process()": {
+			"Syntax": "**.process**( *definition* : Variant ) : cs.EmbeddingStudio.ProcessResult",
+			"Params": [
+				[
+					"definition",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.ProcessResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"_inheritedFrom_": "_ProcessBase"
 	},
 	"Playground": {
 		"embed()": {
@@ -1307,46 +1566,66 @@
 		},
 		"_inheritedFrom_": "_ProcessBase"
 	},
-	"ProcessErrorCode": {
-		"meta()": {
-			"Syntax": "**.meta**( *code* : Integer ) : Object",
+	"_TestProcessEmbedder": {
+		"embedBatch()": {
+			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
 			"Params": [
 				[
-					"code",
-					"Integer",
+					"texts",
+					"Collection",
+					"->"
+				],
+				[
+					"model",
+					"Text",
 					"->"
 				],
 				[
 					"",
-					"Object",
+					"cs.EmbeddingStudio.EmbedderResult",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"VECTOR_COUNT_MISMATCH": {
-			"Syntax": "VECTOR_COUNT_MISMATCH : Integer"
+		"embed()": {
+			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
+			"Params": [
+				[
+					"text",
+					"Text",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.EmbedderResult",
+					"<-"
+				]
+			],
+			"Summary": ""
 		},
-		"EMBED_FAILED": {
-			"Syntax": "EMBED_FAILED : Integer"
+		"counter": {
+			"Syntax": "counter : Integer"
 		},
-		"SAVE_FAILED": {
-			"Syntax": "SAVE_FAILED : Integer"
+		"rateLimits": {
+			"Syntax": "rateLimits : Collection"
 		},
-		"INVALID_DEFINITION": {
-			"Syntax": "INVALID_DEFINITION : Integer"
+		"nonCriticalTexts": {
+			"Syntax": "nonCriticalTexts : Collection"
 		},
-		"MODEL_UNAVAILABLE": {
-			"Syntax": "MODEL_UNAVAILABLE : Integer"
+		"criticalModels": {
+			"Syntax": "criticalModels : Collection"
 		},
-		"MODEL_SKIPPED": {
-			"Syntax": "MODEL_SKIPPED : Integer"
+		"embedBatchCalls": {
+			"Syntax": "embedBatchCalls : Collection"
 		},
-		"VALIDATION_FAILED": {
-			"Syntax": "VALIDATION_FAILED : Integer"
-		},
-		"NULL_INPUT": {
-			"Syntax": "NULL_INPUT : Integer"
+		"embedCalls": {
+			"Syntax": "embedCalls : Collection"
 		}
 	},
 	"_Resolver": {
@@ -1421,224 +1700,6 @@
 		},
 		"settings": {
 			"Syntax": "settings : cs.EmbeddingStudio.Settings"
-		}
-	},
-	"Process": {
-		"processEntitySelection()": {
-			"Syntax": "**.processEntitySelection**( *es* : 4D.EntitySelection; *definition* : Variant ) : cs.EmbeddingStudio.ProcessResult",
-			"Params": [
-				[
-					"es",
-					"4D.EntitySelection",
-					"->"
-				],
-				[
-					"definition",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.EmbeddingStudio.ProcessResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"processEntity()": {
-			"Syntax": "**.processEntity**( *entity* : 4D.Entity; *definition* : Variant ) : cs.EmbeddingStudio.ProcessResult",
-			"Params": [
-				[
-					"entity",
-					"4D.Entity",
-					"->"
-				],
-				[
-					"definition",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.EmbeddingStudio.ProcessResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"process()": {
-			"Syntax": "**.process**( *definition* : Variant ) : cs.EmbeddingStudio.ProcessResult",
-			"Params": [
-				[
-					"definition",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.EmbeddingStudio.ProcessResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"_inheritedFrom_": "_ProcessBase"
-	},
-	"_TestProcessEmbedder": {
-		"embedBatch()": {
-			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
-			"Params": [
-				[
-					"texts",
-					"Collection",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.EmbeddingStudio.EmbedderResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"embed()": {
-			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
-			"Params": [
-				[
-					"text",
-					"Text",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.EmbeddingStudio.EmbedderResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"counter": {
-			"Syntax": "counter : Integer"
-		},
-		"rateLimits": {
-			"Syntax": "rateLimits : Collection"
-		},
-		"nonCriticalTexts": {
-			"Syntax": "nonCriticalTexts : Collection"
-		},
-		"criticalModels": {
-			"Syntax": "criticalModels : Collection"
-		},
-		"embedBatchCalls": {
-			"Syntax": "embedBatchCalls : Collection"
-		},
-		"embedCalls": {
-			"Syntax": "embedCalls : Collection"
-		}
-	},
-	"Embedder": {
-		"embedBatch()": {
-			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
-			"Params": [
-				[
-					"texts",
-					"Collection",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.EmbeddingStudio.EmbedderResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"embed()": {
-			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
-			"Params": [
-				[
-					"text",
-					"Text",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.EmbeddingStudio.EmbedderResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"backoffMs": {
-			"Syntax": "backoffMs : Integer"
-		},
-		"maxRetries": {
-			"Syntax": "maxRetries : Integer"
-		},
-		"client": {
-			"Syntax": "client : cs.AIKit.OpenAI"
-		}
-	},
-	"ProcessError": {
-		"toObject()": {
-			"Syntax": "**.toObject**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get isFatal()": {
-			"Syntax": "**.get isFatal**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"retryable": {
-			"Syntax": "retryable : Boolean"
-		},
-		"message": {
-			"Syntax": "message : Text"
-		},
-		"code": {
-			"Syntax": "code : Integer"
-		},
-		"ref": {
-			"Syntax": "ref : Variant"
-		},
-		"severity": {
-			"Syntax": "severity : Text"
-		},
-		"scope": {
-			"Syntax": "scope : Text"
 		}
 	},
 	"_menu": {
@@ -2237,66 +2298,5 @@
 		"data": {
 			"Syntax": "data : Collection"
 		}
-	},
-	"_ProcessBase": {
-		"options": {
-			"Syntax": "options : Object"
-		},
-		"resolver": {
-			"Syntax": "resolver : cs.EmbeddingStudio._Resolver"
-		},
-		"embedder": {
-			"Syntax": "embedder : cs.EmbeddingStudio.Embedder"
-		},
-		"settings": {
-			"Syntax": "settings : cs.EmbeddingStudio.Settings"
-		}
-	},
-	"_Settings": {
-		"set file()": {
-			"Syntax": "**.set file**( *file* : 4D.File )",
-			"Params": [
-				[
-					"file",
-					"4D.File",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get file()": {
-			"Syntax": "**.get file**() : 4D.File",
-			"Params": [
-				[
-					"",
-					"4D.File",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set()": {
-			"Syntax": "**.set**( *value* : Object )",
-			"Params": [
-				[
-					"value",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get()": {
-			"Syntax": "**.get**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		}
-	},
-	"_Env": {}
+	}
 }

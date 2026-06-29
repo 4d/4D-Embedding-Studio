@@ -36,7 +36,7 @@ Render a phrase for an entity and return the resulting text. No API call, no per
 | Argument              | Type                                                                        | Description                                                                 |
 |-----------------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | *entity*              | 4D.Entity                                                                   | The entity to render against.                                               |
-| *definitionOrPhrase*  | `Null`, [Phrase](Phrase.md), [Definition](Definition.md), or Text | `Null` → auto-resolve via settings (requires a unique match). Text → compiled as a throwaway `cs.EmbeddingStudio.Phrase`. |
+| *definitionOrPhrase*  | `Null`, [Phrase](Phrase.md), [Definition](Definition.md), Text, or plain object stub | `Null` → auto-resolve via settings (requires a unique match). Text → compiled as a throwaway `cs.EmbeddingStudio.Phrase`. Object stub → see [stub resolution](#stub-resolution). |
 | Function result       | Text                                                                        | The rendered text.                                                          |
 
 ```4d
@@ -46,6 +46,8 @@ $text:=$pg.render($student; $def)                        // use def's phrase
 $text:=$pg.render($student; cs.EmbeddingStudio.Phrase.new("Hi {firstName}"))
 $text:=$pg.render($student; "Student: {lastName}")       // raw template
 $text:=$pg.render($student)                              // auto-resolve
+$text:=$pg.render($student; {vectorName: "student_vector_1"})  // stub → saved definition's phrase
+$text:=$pg.render($student; {phrase: "Hi {firstName}"})        // ad-hoc stub → inline template
 ```
 
 ### embed()
@@ -57,7 +59,7 @@ Compute a vector for an arbitrary input, without persisting anywhere.
 | Argument        | Type                                                                                     | Description                                                                 |
 |-----------------|------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | *input*         | Text or 4D.Entity                                                                        | Text → embedded directly. Entity → phrase rendered then embedded.          |
-| *context*       | Text, [Phrase](Phrase.md), [Definition](Definition.md), Text template, or `Null` | Provides phrase and/or model depending on *input*.                          |
+| *context*       | Text, [Phrase](Phrase.md), [Definition](Definition.md), Text template, plain object stub, or `Null` | Provides phrase and/or model depending on *input*. Object stub → see [stub resolution](#stub-resolution). |
 | *model*         | Text                                                                                     | Optional explicit model name. Used when *context* does not carry one.      |
 | Function result | [EmbedderResult](EmbedderResult.md)                                                      | The embedding result (use `.vector` to get the 4D.Vector).                 |
 
@@ -84,7 +86,29 @@ $vector:=$pg.embed($student; "Profile: {firstName} {lastName}"; "text-embedding-
 
 // Entity alone (auto-resolve, only when exactly one def matches the dataclass)
 $vector:=$pg.embed($student).vector
+
+// Entity + stub (deduces phrase + model from the matching saved definition)
+$vector:=$pg.embed($student; {vectorName: "student_vector_1"}).vector
+
+// Entity + ad-hoc stub (phrase compiled inline, model taken from the stub)
+$vector:=$pg.embed($student; {phrase: "Hi {firstName}"; modelAlias: "text-embedding-3-small"}).vector
+
+// Text + stub that only supplies the model
+$vector:=$pg.embed("some text"; {modelAlias: "text-embedding-3-small"}).vector
 ```
+
+## Stub resolution
+
+Both `render()` and `embed()` accept a plain object in place of a `Phrase`/`Definition`. A stub is resolved the same way [`Process`](Process.md#definition-resolution-entity-context) resolves its `definition` argument, so the behavior matches. Two flavors are supported:
+
+| Stub                                                       | Resolves to                                                                                          |
+|------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| `{vectorName: "..."}` (optionally `{dataclassName: "..."}`) | The matching **saved definition** for the entity's dataclass — deducing its phrase (and, for `embed`, its model). Resolves to nothing when there is no unique match. |
+| `{phrase: "tpl {field}"}` or `{template: "tpl {field}"}`   | An **ad-hoc** `Phrase` compiled inline; nothing is looked up. Pair with `{modelAlias: "..."}` to give `embed()` a model. |
+
+For `embed()`, the model is deduced in this order: an explicit `{modelAlias}` on the stub → the model of a stub-matched saved definition → the *model* argument → the entity's unique definition. An explicit `{modelAlias}` always wins.
+
+Unlike [`Process.process()`](Process.md#process-resolution), a stub is **not** turned into a brand-new `Definition` from its fields — `Playground` is ad-hoc, so use `{phrase}`/`{template}` for one-off templates.
 
 ## See also
 
