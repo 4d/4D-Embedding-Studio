@@ -1,0 +1,47 @@
+Resources/ja.lproj/studio.xlf
+  s_fc9e77d296cadd::t_4fbcac4e400056 62-63,65-67
+Resources/cs.lproj/Errors.xlf
+  s_fc9e77d296cadd::t_4fbcac4e400056 31-46,71-125,127-129,131-151
+Resources/en.lproj/studio.xlf
+  h_3877e81599a6f5 62-63,66-67
+Resources/es.lproj/Errors.xlf
+  s_fc9e77d296cadd::t_4fbcac4e400056 31-46,71-125,127-129,131-151
+Resources/fr.lproj/studio.xlf
+  h_3877e81599a6f5 63,67
+  s_fc9e77d296cadd::t_4fbcac4e400056 62,66
+Resources/es.lproj/studio.xlf
+  s_fc9e77d296cadd::t_4fbcac4e400056 62-63,65-67
+Resources/cs.lproj/studio.xlf
+  s_fc9e77d296cadd::t_4fbcac4e400056 62-63,65-67
+Resources/de.lproj/Errors.xlf
+  s_fc9e77d296cadd::t_4fbcac4e400056 31-46,71-125,127-129,131-151
+Resources/pt.lproj/Errors.xlf
+  s_fc9e77d296cadd::t_4fbcac4e400056 31-46,71-125,127-129,131-151
+Resources/ja.lproj/Errors.xlf
+  s_fc9e77d296cadd::t_4fbcac4e400056 31-46,71-125,127-129,131-151
+Resources/pt.lproj/studio.xlf
+  s_fc9e77d296cadd::t_4fbcac4e400056 62-63,65-67
+Resources/de.lproj/studio.xlf
+  s_fc9e77d296cadd::t_4fbcac4e400056 62-63,65-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.4",
+  "base_commit_sha": "8b7575aaf4e66307c93626c3321c970c15dbbf1b",
+  "prompts": {},
+  "humans": {
+    "h_3877e81599a6f5": {
+      "author": "Eric Marchand <eric.marchand@4d.com>"
+    }
+  },
+  "sessions": {
+    "s_fc9e77d296cadd": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "80b9f643-bde3-4d74-a011-aabde2c15038",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "Eric Marchand <eric.marchand@4d.com>"
+    }
+  }
+}
