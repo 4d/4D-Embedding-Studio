@@ -36,14 +36,6 @@
           <source>Embedding Studio</source>
           <target>Embedding Studio</target>
         </trans-unit>
-        <trans-unit id="53" resname="modelManagement">
-          <source>Model Management</source>
-          <target>Gestion des modèles</target>
-        </trans-unit>
-        <trans-unit id="47" resname="editModel">
-          <source>Edit the model…</source>
-          <target>Modifier le modèle…</target>
-        </trans-unit>
       </group>
       <group resname="Models">
         <trans-unit id="29" resname="name">
@@ -62,73 +54,17 @@
           <source>Base URL</source>
           <target>URL de base</target>
         </trans-unit>
-        <trans-unit id="34" resname="organization">
-          <source>Organization</source>
-          <target>Organisation</target>
-        </trans-unit>
         <trans-unit id="36" resname="project">
           <source>Project</source>
           <target>Projet</target>
         </trans-unit>
-        <trans-unit id="33" resname="newModelItem">
-          <source>New model…</source>
-          <target>Nouveau modèle…</target>
-        </trans-unit>
         <trans-unit id="37" resname="selectAModel">
-          <source>Select a model</source>
-          <target>Sélectionnez un modèle</target>
+          <source>Select a model alias</source>
+          <target>Sélectionnez un alias de modèle</target>
         </trans-unit>
         <trans-unit id="59" resname="createAModel">
-          <source>Create a model…</source>
-          <target>Créer un modèle…</target>
-        </trans-unit>
-        <trans-unit id="26" resname="informations">
-          <source>Informations</source>
-          <target>Informations</target>
-        </trans-unit>
-        <trans-unit id="31" resname="newModel">
-          <source>Model</source>
-          <target>Modèle</target>
-        </trans-unit>
-        <trans-unit id="39" resname="yourOpenaiApiKey">
-          <source>Your API Key.</source>
-          <target>Votre clé API OpenAI.</target>
-        </trans-unit>
-        <trans-unit id="22" resname="baseUrlForOpenaiApiRequests">
-          <source>The openAI endpoint will be used by default</source>
-          <target>L’interface OpenAI sera utilisée par défaut</target>
-        </trans-unit>
-        <trans-unit id="40" resname="yourOpenaiOrganizationId">
-          <source>Your Organization ID.</source>
-          <target>Votre identifiant d'organisation OpenAI.</target>
-        </trans-unit>
-        <trans-unit id="42" resname="yourOpenaiProjectId">
-          <source>Your Project ID.</source>
-          <target>Votre identifiant de projet OpenAI.</target>
-        </trans-unit>
-        <trans-unit id="24" resname="idDisplayedInTheDropdownList">
-          <source>ID displayed in the drop-down list</source>
-          <target>ID affiché dans la liste déroulante</target>
-        </trans-unit>
-        <trans-unit id="19" resname="areYouSureYouWantToDeleteThisModel">
-          <source>Are you sure you want to delete this model?</source>
-          <target>Voulez vous vraiment supprimer ce modèle ?</target>
-        </trans-unit>
-        <trans-unit id="43" resname="anEmbeddingModelIsRequired">
-          <source>An embedding model is required to create vectors.
-Click + to add your first model.</source>
-          <target>Un modèle d’embedding est nécessaire pour créer des vecteurs.
-Cliquez sur + pour ajouter votre premier modèle.</target>
-        </trans-unit>
-        <trans-unit id="WrP015w+QTmuBtuYxl+9xw" resname="theModelIsUsedByOneOrMoreVectors">
-          <source>The model “{name}” is used by one or more vectors. 
-Would you like to update them?</source>
-          <target>Le modèle "{name}" est utilisé par un ou plusieurs vecteurs. 
-Souhaitez-vous les mettre à jour ?</target>
-        </trans-unit>
-        <trans-unit id="1" resname="manageProviders">
-          <source>Manage Providers</source>
-          <target>Gérer les fournisseurs</target>
+          <source>Create a model alias…</source>
+          <target>Créer un alias de modèle…</target>
         </trans-unit>
       </group>
       <group resname="Common">

@@ -28,6 +28,22 @@
           <source>The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</source>
           <target state="new">The "{attribute}" attribute is a 1:N relation and cannot be used in this context.</target>
         </trans-unit>
+        <trans-unit id="19" resname="theAttributeIsNotARelation">
+          <source>The "{attribute}" attribute is not a N:1 relation.</source>
+          <target state="new">The "{attribute}" attribute is not a N:1 relation.</target>
+        </trans-unit>
+        <trans-unit id="21" resname="relationsAreNotAllowed">
+          <source>Relations are not allowed: "{attribute}" cannot be used.</source>
+          <target state="new">Relations are not allowed: "{attribute}" cannot be used.</target>
+        </trans-unit>
+        <trans-unit id="22" resname="calculatedAttributeIsNotAllowed">
+          <source>Calculated attributes are not allowed: "{attribute}" cannot be used.</source>
+          <target state="new">Calculated attributes are not allowed: "{attribute}" cannot be used.</target>
+        </trans-unit>
+        <trans-unit id="24" resname="theAttributeTypeIsNotSupportedInAPhrase">
+          <source>The "{attribute}" attribute is of type blob, object or picture and cannot be used in this context.</source>
+          <target state="new">The "{attribute}" attribute is of type blob, object or picture and cannot be used in this context.</target>
+        </trans-unit>
       </group>
       <group resname="Embeddings">
         <trans-unit id="7" resname="missingDataclass">
@@ -52,17 +68,87 @@
           <source>The model "{model}" is not available.</source>
           <target state="new">The model "{model}" is not available.</target>
         </trans-unit>
-        <trans-unit id="13" resname="theModelNameMustBeUnique">
-          <source>The model name "{name}" is already in use and must be unique.</source>
-          <target state="new">The model name "{name}" is already in use and must be unique.</target>
+      </group>
+      <group resname="Process">
+        <trans-unit id="errNullEntity" resname="errNullEntity">
+          <source>Null entity</source>
+          <target state="new">Null entity</target>
         </trans-unit>
-        <trans-unit id="17" resname="thisModelCannotBeDeletedBecauseItIsUsed">
-          <source>This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</source>
-          <target state="new">This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</target>
+        <trans-unit id="errNullSelection" resname="errNullSelection">
+          <source>Null entity selection</source>
+          <target state="new">Null entity selection</target>
         </trans-unit>
-        <trans-unit id="15" resname="theValueIsRequired.">
-          <source>A value for “{value}” is required.</source>
-          <target state="new">A value for “{value}” is required.</target>
+        <trans-unit id="errNullDefinition" resname="errNullDefinition">
+          <source>Null definition</source>
+          <target state="new">Null definition</target>
+        </trans-unit>
+        <trans-unit id="errInvalidDefinition" resname="errInvalidDefinition">
+          <source>Definition is not a valid Definition instance: {definition}</source>
+          <target state="new">Definition is not a valid Definition instance: {definition}</target>
+        </trans-unit>
+        <trans-unit id="errModelSkipped" resname="errModelSkipped">
+          <source>Skipped: model '{model}' encountered a critical API error</source>
+          <target state="new">Skipped: model '{model}' encountered a critical API error</target>
+        </trans-unit>
+        <trans-unit id="errVectorCountMismatch" resname="errVectorCountMismatch">
+          <source>Vector count mismatch: got {got} expected {expected}</source>
+          <target state="new">Vector count mismatch: got {got} expected {expected}</target>
+        </trans-unit>
+      </group>
+      <group resname="Definition">
+        <trans-unit id="errMissingDataclassName" resname="errMissingDataclassName">
+          <source>Missing dataclassName</source>
+          <target state="new">Missing dataclassName</target>
+        </trans-unit>
+        <trans-unit id="errMissingVectorName" resname="errMissingVectorName">
+          <source>Missing vectorName</source>
+          <target state="new">Missing vectorName</target>
+        </trans-unit>
+        <trans-unit id="errNoModelConfigured" resname="errNoModelConfigured">
+          <source>No model configured for definition</source>
+          <target state="new">No model configured for definition</target>
+        </trans-unit>
+        <trans-unit id="errModelNotDefined" resname="errModelNotDefined">
+          <source>Model '{model}' is not defined</source>
+          <target state="new">Model '{model}' is not defined</target>
+        </trans-unit>
+        <trans-unit id="errUnknownDataclass" resname="errUnknownDataclass">
+          <source>Unknown dataclass: {dataclass}</source>
+          <target state="new">Unknown dataclass: {dataclass}</target>
+        </trans-unit>
+        <trans-unit id="errVectorFieldNotFound" resname="errVectorFieldNotFound">
+          <source>Vector field not found: {attribute}</source>
+          <target state="new">Vector field not found: {attribute}</target>
+        </trans-unit>
+        <trans-unit id="errTargetNotVector" resname="errTargetNotVector">
+          <source>Target field is not a 4D.Vector: {attribute}</source>
+          <target state="new">Target field is not a 4D.Vector: {attribute}</target>
+        </trans-unit>
+        <trans-unit id="errMissingPhrase" resname="errMissingPhrase">
+          <source>Missing phrase</source>
+          <target state="new">Missing phrase</target>
+        </trans-unit>
+      </group>
+      <group resname="Embedder">
+        <trans-unit id="errApiUnreachable" resname="errApiUnreachable">
+          <source>Embedding API unreachable after {retries} retries</source>
+          <target state="new">Embedding API unreachable after {retries} retries</target>
+        </trans-unit>
+      </group>
+      <group resname="Playground">
+        <trans-unit id="errNoPhraseResolved" resname="errNoPhraseResolved">
+          <source>No phrase could be resolved for the given entity/context</source>
+          <target state="new">No phrase could be resolved for the given entity/context</target>
+        </trans-unit>
+        <trans-unit id="errNoModelSpecified" resname="errNoModelSpecified">
+          <source>No model specified (and none could be resolved from settings)</source>
+          <target state="new">No model specified (and none could be resolved from settings)</target>
+        </trans-unit>
+      </group>
+      <group resname="EmbeddingItem">
+        <trans-unit id="errMissingParameter" resname="errMissingParameter">
+          <source>Missing parameter</source>
+          <target state="new">Missing parameter</target>
         </trans-unit>
       </group>
     </body>

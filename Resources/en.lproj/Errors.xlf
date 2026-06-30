@@ -150,18 +150,6 @@
           <source>The model "{model}" is not available.</source>
           <target>The model "{model}" is not available.</target>
         </trans-unit>
-        <trans-unit id="13" resname="theModelNameMustBeUnique">
-          <source>The model name "{name}" is already in use and must be unique.</source>
-          <target>The model name "{name}" is already in use and must be unique.</target>
-        </trans-unit>
-        <trans-unit id="17" resname="thisModelCannotBeDeletedBecauseItIsUsed">
-          <source>This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</source>
-          <target>This model cannot be deleted because it is used by “{vector}” of the dataclass "{dataclass}".</target>
-        </trans-unit>
-        <trans-unit id="15" resname="theValueIsRequired.">
-          <source>A value for “{value}” is required.</source>
-          <target>A value for “{value}” is required.</target>
-        </trans-unit>
       </group>
     </body>
   </file>
