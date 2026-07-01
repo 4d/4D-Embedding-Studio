@@ -417,7 +417,7 @@ Function moreManager($e : Object)
 			SET DATABASE PARAMETER:C642(Diagnostic log level:K37:108; Num:C11(Substring:C12($menu.choice; Length:C16("diagLevel:")+1)))
 			// ______________________________________________________
 		: ($menu.choice="openDiagosticLog")
-			var $file:=Folder:C1567(fk logs folder:K87:17).files().filter(Formula:C1597(Position:C15("4DDiagnosticLog_"; $1.value.name)=1)).sort().first()
+			var $file:=Folder:C1567(fk logs folder:K87:17; *).files().filter(Formula:C1597(Position:C15("4DDiagnosticLog_"; $1.value.name)=1)).sort().first()
 			If ($file=Null:C1517)
 				ALERT:C41("No log")
 			Else 
