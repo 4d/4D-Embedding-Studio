@@ -315,13 +315,6 @@ Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.Definition; $re
 			
 			$report.entitiesSkipped+=1
 			$report._addError("entity"; cs:C1710.ProcessErrorCode.me.SAVE_FAILED; This:C1470._entityRef($entity); String:C10($status.statusText))
-			cs:C1710._Logger.me.error({\
-				event: "Local 4D error"; \
-				vector: String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
-				entityID: This:C1470._entityRef($entity); \
-				message: String:C10($status.statusText); \
-				timestamp: String:C10(Current date:C33)+"T"+String:C10(Current time:C178)\
-				})
 			If ($hasDirty)
 				cs:C1710._Logger.me.info({\
 					event: "Vector still dirty after save during recomputation"; \
@@ -354,13 +347,6 @@ Function _runOnEntity($entity : 4D:C1709.Entity; $def : cs:C1710.Definition; $re
 			return 
 		End if 
 		$report._addError("entity"; cs:C1710.ProcessErrorCode.me.EMBED_FAILED; This:C1470._entityRef($entity); String:C10($entityErr.message))
-		cs:C1710._Logger.me.error({\
-			event: "Local 4D error"; \
-			vector: String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
-			entityID: This:C1470._entityRef($entity); \
-			message: String:C10($entityErr.message); \
-			timestamp: String:C10(Current date:C33)+"T"+String:C10(Current time:C178)\
-			})
 		
 	End try
 	
@@ -561,13 +547,6 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Defini
 				
 				$report.entitiesSkipped+=1
 				$report._addError("entity"; cs:C1710.ProcessErrorCode.me.SAVE_FAILED; This:C1470._entityRef($entity); String:C10($status.statusText))
-				cs:C1710._Logger.me.error({\
-					event: "Local 4D error"; \
-					vector: String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
-					entityID: This:C1470._entityRef($entity); \
-					message: String:C10($status.statusText); \
-					timestamp: String:C10(Current date:C33)+"T"+String:C10(Current time:C178)\
-					})
 				If ($hasDirty)
 					cs:C1710._Logger.me.info({\
 						event: "Vector still dirty after save during recomputation"; \
@@ -583,13 +562,6 @@ Function _processChunk($chunk : 4D:C1709.EntitySelection; $def : cs:C1710.Defini
 			
 			$report.entitiesSkipped+=1
 			$report._addError("entity"; cs:C1710.ProcessErrorCode.me.SAVE_FAILED; This:C1470._entityRef($entity); Last errors:C1799[0].message)
-			cs:C1710._Logger.me.error({\
-				event: "Local 4D error"; \
-				vector: String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
-				entityID: This:C1470._entityRef($entity); \
-				message: String:C10(Last errors:C1799[0].message); \
-				timestamp: String:C10(Current date:C33)+"T"+String:C10(Current time:C178)\
-				})
 			If ($hasDirty)
 				cs:C1710._Logger.me.info({\
 					event: "Vector still dirty after save during recomputation"; \

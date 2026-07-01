@@ -13,6 +13,7 @@
  | ref       | Variant | contextual identifier (entity primary key, "Dataclass.vector", …)  |
  | message   | Text    | human-readable description                                          |
  | retryable | Boolean | True when re-running the operation could plausibly succeed         |
+ | timestamp | Text    | ISO timestamp captured when the error was created                  |
 
  severity and retryable default from the code (cs.ProcessErrorCode.meta),
  and can be overridden via the $overrides object.
@@ -24,6 +25,7 @@ property code : Integer
 property ref : Variant
 property message : Text
 property retryable : Boolean
+property timestamp : Text
 
 // $overrides (optional): {severity; retryable} to override the code defaults.
 Class constructor($scope : Text; $code : Integer; $ref : Variant; $message : Text; $overrides : Object)
@@ -36,6 +38,7 @@ Class constructor($scope : Text; $code : Integer; $ref : Variant; $message : Tex
 	This:C1470.message:=$message
 	This:C1470.severity:=$meta.severity
 	This:C1470.retryable:=$meta.retryable
+	This:C1470.timestamp:=Timestamp:C1445
 	
 	If ($overrides#Null:C1517)
 		If ($overrides.severity#Null:C1517)
@@ -62,5 +65,6 @@ Function toObject() : Object
 		code: This:C1470.code; \
 		ref: This:C1470.ref; \
 		message: This:C1470.message; \
-		retryable: This:C1470.retryable}
+		retryable: This:C1470.retryable; \
+		timestamp: This:C1470.timestamp}
 	

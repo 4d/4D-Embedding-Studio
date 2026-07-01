@@ -192,7 +192,10 @@ $proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.
 onSuccess: Formula:C1597($errorCallbacks.success+=1); \
 onError: Formula:C1597($errorCallbacks.error+=1); \
 onTerminate: Formula:C1597($errorCallbacks.terminate+=1)})
+cs:C1710._Logger.me._capture:=[]  // capture diagnostic log entries emitted during this run
 $result:=$proc.process($badDef)
+var $loggedErrors : Collection:=cs:C1710._Logger.me._capture
+cs:C1710._Logger.me._capture:=Null:C1517  // stop capturing so later tests are unaffected
 ASSERT:C1129(Not:C34($result.success); "invalid definition should fail")
 ASSERT:C1129($result.definitionsProcessed=0; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($result.errors.length>0; JSON Stringify:C1217($result.toObject()))
@@ -204,6 +207,16 @@ ASSERT:C1129($errorCallbacks.success=0; JSON Stringify:C1217($errorCallbacks))
 ASSERT:C1129($errorCallbacks.error=1; JSON Stringify:C1217($errorCallbacks))
 ASSERT:C1129($errorCallbacks.terminate=1; JSON Stringify:C1217($errorCallbacks))
 
+// every recorded error must also be mirrored into the diagnostic log (centralized in ProcessResult._addError)
+ASSERT:C1129($result.errors.length>0; "expected at least one recorded error to check logging")
+var $repErr : Object
+For each ($repErr; $result.errors)
+	var $logged : Collection:=$loggedErrors.query("message = :1 AND message = :2"; \
+		"@\"event\":\"Process error\"@"; "@\"code\":"+String:C10($repErr.code)+"@")
+	ASSERT:C1129($logged.length>0; "recorded error code "+String:C10($repErr.code)+" is missing from the diagnostic log: "+JSON Stringify:C1217($loggedErrors))
+End for each 
+
+
 // --- model-level critical failure skips later definitions with the same model ---
 If (Not:C34(Asserted:C1132($badModelAlias#Null:C1517; "you must configure an 'badembed' model aliases that will failed")))
 	return 
@@ -214,12 +227,23 @@ var $criticalA:=cs:C1710.Definition.new("School"; "school_vector_1"; $badmodel; 
 var $criticalB:=cs:C1710.Definition.new("School"; "vector_with_error"; $badmodel; "{name}")
 
 $proc:=cs:C1710.Process.new($settings; {embedder: $embedder})
+cs:C1710._Logger.me._capture:=[]  // capture diagnostic log entries emitted during this run
 $result:=$proc.process([$criticalA; $criticalB])
+var $criticalLogged : Collection:=cs:C1710._Logger.me._capture
+cs:C1710._Logger.me._capture:=Null:C1517  // stop capturing so later tests are unaffected
 ASSERT:C1129(Not:C34($result.success); "critical model failure should be reported")
 ASSERT:C1129($result.entitiesSkipped=2; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($result.errors.query("scope = :1"; "pipeline").length=1; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($result.errors.query("scope = :1"; "definition").length=1; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129(Position:C15("Skipped: model"; String:C10($result.errors.query("scope = :1"; "definition")[0].message))>0; JSON Stringify:C1217($result.toObject()))
+
+// pipeline-level errors raised outside of _validateDefinition must also reach the diagnostic log
+var $critErr : Object
+For each ($critErr; $result.errors)
+	var $critMatch : Collection:=$criticalLogged.query("message = :1 AND message = :2"; \
+		"@\"event\":\"Process error\"@"; "@\"code\":"+String:C10($critErr.code)+"@")
+	ASSERT:C1129($critMatch.length>0; "recorded error code "+String:C10($critErr.code)+" is missing from the diagnostic log: "+JSON Stringify:C1217($criticalLogged))
+End for each 
 
 // structured error fields: the critical model failure is fatal, the skipped definition is a retryable error
 var $codes:=cs:C1710.ProcessErrorCode.me

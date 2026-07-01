@@ -1,6 +1,10 @@
 property prefix : Text:="[4DES]"
 property outputType : Integer:=Into 4D diagnostic log:K38:8
 
+// Test seam: when non-Null, every emitted entry is also pushed here as
+// {level; message}. Left Null in production so it has no effect.
+property _capture : Collection
+
 singleton Class constructor
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -15,6 +19,10 @@ Function _log($level : Integer; $payload : Variant)
 	
 	If (Position:C15(This:C1470.prefix; $message)#1)
 		$message:=This:C1470.prefix+" "+$message
+	End if 
+	
+	If (This:C1470._capture#Null:C1517)
+		This:C1470._capture.push({level: $level; message: $message})
 	End if 
 	
 	LOG EVENT:C667(This:C1470.outputType; $message; $level)

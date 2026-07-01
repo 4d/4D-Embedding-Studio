@@ -25,7 +25,19 @@ Class constructor()
 	// $overrides: optional {severity; retryable} overriding the code defaults
 Function _addError($scope : Text; $code : Integer; $ref : Variant; $message : Text; $overrides : Object) : cs:C1710.ProcessResult
 	
-	This:C1470.errors.push(cs:C1710.ProcessError.new($scope; $code; $ref; $message; $overrides))
+	var $error : cs:C1710.ProcessError:=cs:C1710.ProcessError.new($scope; $code; $ref; $message; $overrides)
+	This:C1470.errors.push($error)
+	
+	// Every recorded error is mirrored to the diagnostic log, so no failure path can stay silent.
+	// This is the single source of truth for error logging — callers must not log errors separately.
+	// toObject() already carries the error's timestamp captured at construction.
+	var $logPayload : Object:=$error.toObject()
+	$logPayload.event:="Process error"
+	If ($error.severity="warning")
+		cs:C1710._Logger.me.warn($logPayload)
+	Else 
+		cs:C1710._Logger.me.error($logPayload)
+	End if 
 	
 	return This:C1470
 	
