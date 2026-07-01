@@ -1,0 +1,36 @@
+Resources/en.lproj/syntaxEN.json
+  s_979d92edd1ef8c::t_702c6190fabbd8 1439-1441
+Project/Sources/Classes/ProcessError.4dm
+  s_979d92edd1ef8c::t_7dd5c7aebc68a2 28,41,68-69
+  s_979d92edd1ef8c::t_ab3190db510d4f 16
+Project/Sources/Methods/test_process.4dm
+  s_979d92edd1ef8c::t_2ecf40a2b2754e 230,232-233,240-246
+  s_979d92edd1ef8c::t_f67cc1693500cc 195,197-198,218
+  s_979d92edd1ef8c::t_140ab460feec56 210-217
+Project/Sources/Classes/_Logger.4dm
+  s_979d92edd1ef8c::t_a24380f27c23cd 4-7,24-25
+Project/Sources/Classes/ProcessResult.4dm
+  s_979d92edd1ef8c::t_e51afee6d9c669 33
+  s_979d92edd1ef8c::t_8dca9d92753124 28-32,34-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.4",
+  "base_commit_sha": "c3d945c86c442e982c2f91bb445649dc1fa97587",
+  "prompts": {},
+  "humans": {
+    "h_3877e81599a6f5": {
+      "author": "Eric Marchand <eric.marchand@4d.com>"
+    }
+  },
+  "sessions": {
+    "s_979d92edd1ef8c": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "28635977-912e-4501-a6c5-ebba55307777",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "Eric Marchand <eric.marchand@4d.com>"
+    }
+  }
+}
