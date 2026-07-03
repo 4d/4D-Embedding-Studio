@@ -47,7 +47,7 @@ Function embedBatch($texts : Collection; $model : Text) : cs:C1710.EmbedderResul
 Function _shouldRetry($result : cs:C1710.AIKit.OpenAIEmbeddingsResult) : Boolean
 	ASSERT:C1129(Not:C34($result.success))
 	
-	return $result.errors.reduce(Formula:C1597($1.accumulate:=$1.accumulate || Bool:C1537($1.value.isRateLimitError)); False:C215)
+	return $result.errors.reduce(Formula:C1597($1.accumulator:=$1.accumulator || Bool:C1537($1.value.isRateLimitError)); False:C215)
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Calls embeddings.create with retry on transient errors.

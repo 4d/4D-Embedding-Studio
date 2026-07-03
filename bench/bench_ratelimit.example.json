@@ -1,0 +1,23 @@
+{
+    "baseURL": "http://127.0.0.1:8080/v1/",
+    "apiKey": "none",
+    "model": "perf-zero-1536",
+    "alias": "benchmock",
+    "providerName": "benchmock",
+    "phrase": "{firstName} {lastName}",
+    "dataclassName": "_Students",
+    "vectorName": "student_vector_1",
+    "maxRetries": 5,
+    "backoffMs": 500,
+    "scenarios": [
+        { "name": "warmup", "entities": 50, "batchSize": 50 },
+        { "name": "many-records-large-batch", "entities": 500, "batchSize": 50 },
+        { "name": "many-records-small-batch", "entities": 500, "batchSize": 10 },
+        { "name": "bulk-2k-batch-100", "entities": 2000, "batchSize": 100 },
+        { "name": "bulk-2k-batch-25", "entities": 2000, "batchSize": 25 },
+        { "name": "bulk-5k-batch-200", "entities": 5000, "batchSize": 200 },
+        { "name": "bulk-5k-batch-50", "entities": 5000, "batchSize": 50 },
+        { "name": "stress-10k-batch-250", "entities": 10000, "batchSize": 250 },
+        { "name": "stress-10k-batch-20", "entities": 10000, "batchSize": 20 }
+    ]
+}

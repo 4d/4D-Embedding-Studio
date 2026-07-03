@@ -14,6 +14,7 @@
 			"School"
 		],
 		"methods": [
+			"_bench_rateLimit",
 			"_computeVectors",
 			"_invalidateVectors",
 			"_runInWorker",
