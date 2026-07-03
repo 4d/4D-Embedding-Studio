@@ -1,0 +1,15 @@
+{
+    "apiKey": "none",
+    "model": "perf-zero-1536",
+    "alias": "benchmock",
+    "providerName": "benchmock",
+    "phrase": "{firstName} {lastName}",
+    "dataclassName": "_Students",
+    "vectorName": "student_vector_1",
+    "maxRetries": 5,
+    "backoffMs": 500,
+    "scenarios": [
+        { "name": "batch-50", "entities": 1000, "batchSize": 50 },
+        { "name": "batch-10", "entities": 1000, "batchSize": 10 }
+    ]
+}

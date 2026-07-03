@@ -83,3 +83,4 @@ Logs/
 BUILD/
 Project/Sources/AIProviders.json
 /bench/results
+/bench/sweep
