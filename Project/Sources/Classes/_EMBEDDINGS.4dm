@@ -565,6 +565,7 @@ Function modelsDropdownManager($e : Object)
 			This:C1470.currentItem.version+=1
 			This:C1470.currentItem.validate()  // refresh _modelErrors
 			This:C1470.saveEmbeddingItems()
+			This:C1470.modelUpdateDropdown()
 			This:C1470._promptInvalidate(This:C1470.currentItem)
 			
 			Form:C1466.items:=Form:C1466.items  // update UI
@@ -635,6 +636,7 @@ Function modelUpdateDropdown($item : cs:C1710._EmbeddingItem)
 	If ($dropDown.values.includes($model))
 		
 		$dropDown.index:=$dropDown.values.indexOf($model)
+		OBJECT SET RGB COLORS:C628(*; "models"; Foreground color:K23:1)
 		
 	Else 
 		
