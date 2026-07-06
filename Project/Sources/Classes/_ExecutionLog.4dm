@@ -113,7 +113,7 @@ Function updateDefinition($defKey : Text; $startTime : Text; $endTime : Text; $s
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _file() : 4D:C1709.File
 	
-	return Folder:C1567(fk logs folder:K87:17; *).file("vectors_execution.json")
+	return Folder:C1567(fk logs folder:K87:17; *).file("embeddingHistory.json")
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _read() : Object
