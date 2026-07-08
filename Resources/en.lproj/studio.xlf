@@ -8,6 +8,10 @@
     </header>
     <body>
       <group resname="Studio">
+        <trans-unit id="aliasChangeConfirm" resname="aliasChangeConfirm">
+          <source>The AI model behind {count} embedding definition(s) with existing data has changed. Reset these embeddings now so they are recomputed on the next run?</source>
+          <target>The AI model behind {count} embedding definition(s) with existing data has changed. Reset these embeddings now so they are recomputed on the next run?</target>
+        </trans-unit>
         <trans-unit id="45" resname="dataclass">
           <source>Dataclass</source>
           <target>Dataclass</target>

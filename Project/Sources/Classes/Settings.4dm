@@ -159,6 +159,45 @@ Function invalidateVectors() : Object
 	
 	return {updated: $updated; skipped: $skipped; errors: $errors}
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the definitions whose resolved model (provider+model) changed between the two alias
+	// maps AND that already hold computed vectors. Used to warn before invalidating on alias edits.
+	// $beforeModels / $afterModels : alias maps { aliasName: { provider; model } }.
+Function _affectedByAliasChange($beforeModels : Object; $afterModels : Object) : Collection
+	
+	var $before : Object:=$beforeModels || {}
+	var $after : Object:=$afterModels || {}
+	var $affected : Collection:=[]
+	
+	var $def : cs:C1710.Definition
+	For each ($def; This:C1470.definitions)
+		
+		var $alias : Text:=String:C10($def.modelAlias)
+		If (Length:C16($alias)=0)
+			continue
+		End if 
+		
+		var $b : Object:=$before[$alias]
+		var $a : Object:=$after[$alias]
+		
+		// Rename-away or brand-new alias => not a silent model change, skip.
+		If (($b=Null:C1517) || ($a=Null:C1517))
+			continue
+		End if 
+		
+		// Same resolved provider+model => nothing changed for this alias.
+		If ((String:C10($a.provider)=String:C10($b.provider)) && (String:C10($a.model)=String:C10($b.model)))
+			continue
+		End if 
+		
+		// Only warn when there is at least one computed vector to protect.
+		If ($def._hasVectorComputed())
+			$affected.push($def)
+		End if 
+		
+	End for each 
+	
+	return $affected
 	
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***

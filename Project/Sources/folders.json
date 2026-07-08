@@ -1,6 +1,7 @@
 {
 	"API": {
 		"methods": [
+			"_EMBEDDINGS_DEF_CHANGES",
 			"_EMBEDDINGS_WIZARD"
 		]
 	},
