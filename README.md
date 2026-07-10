@@ -53,6 +53,7 @@ Declare a Boolean field named `<vectorName>_dirty` on your dataclass. When the f
 | Class | Description |
 |---|---|
 | [Process](Documentation/Classes/Process.md) | Main orchestrator — entry point for all batch and entity operations. |
+| [Scheduler](Documentation/Classes/Scheduler.md) | Automated recalculation scheduler — background task, force/cancel, and runtime status. |
 | [Playground](Documentation/Classes/Playground.md) | Ad-hoc, non-persisting helpers for rendering phrases and computing one-off vectors. |
 | [Settings](Documentation/Classes/Settings.md) | Loads and saves the `vectors.json` configuration file. |
 | [Definition](Documentation/Classes/Definition.md) | Describes one vector field: dataclass, field name, model alias, and phrase template. |

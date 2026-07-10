@@ -19,6 +19,7 @@ Function startFullRun($startTimestamp : Text)
 			$log.startTime:=$startTimestamp
 			$log.endTime:=Null:C1517
 			$log.status:="running"
+			$log.trigger:="started"
 			$log.error:=Null:C1517
 			$log.nextComputeDate:=Null:C1517
 			This:C1470._write($log)
@@ -43,6 +44,7 @@ Function endFullRun($startTimestamp : Text; $endTimestamp : Text; $status : Text
 			$log.startTime:=$startTimestamp
 			$log.endTime:=$endTimestamp
 			$log.status:=$status
+			$log.trigger:=$status
 			$log.error:=$error
 			$log.nextComputeDate:=($nextComputeDate#Null:C1517) ? $nextComputeDate : Null:C1517
 			If ($usage#Null:C1517)
@@ -109,6 +111,70 @@ Function updateDefinition($defKey : Text; $startTime : Text; $endTime : Text; $s
 		CLEAR SEMAPHORE:C144(This:C1470._semaphoreName)
 		
 	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Records a skipped scheduler trigger with its timestamp (AC-4.1.4).
+Function logSkipped($timestamp : Text)
+	
+	If (Not:C34(Semaphore:C143(This:C1470._semaphoreName; 300)))
+		
+		Try
+			
+			var $log : Object:=This:C1470._read()
+			$log.trigger:="skipped"
+			
+			If (Value type:C1509($log.skipped)#Is collection:K8:32)
+				$log.skipped:=[]
+			End if 
+			$log.skipped.push($timestamp)
+			
+			If ($log.skipped.length>50)
+				$log.skipped:=$log.skipped.slice($log.skipped.length-50)
+			End if 
+			
+			This:C1470._write($log)
+			
+		Catch
+			cs:C1710._Logger.me.error("Execution log write failed: "+String:C10(Last errors:C1799[0].message))
+		End try
+		
+		CLEAR SEMAPHORE:C144(This:C1470._semaphoreName)
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Updates the top-level next scheduled recalculation date.
+Function setNextComputeDate($value : Text)
+	
+	If (Not:C34(Semaphore:C143(This:C1470._semaphoreName; 300)))
+		
+		Try
+			
+			var $log : Object:=This:C1470._read()
+			$log.nextComputeDate:=(Length:C16(String:C10($value))>0) ? $value : Null:C1517
+			This:C1470._write($log)
+			
+		Catch
+			cs:C1710._Logger.me.error("Execution log write failed: "+String:C10(Last errors:C1799[0].message))
+		End try
+		
+		CLEAR SEMAPHORE:C144(This:C1470._semaphoreName)
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns a read-only snapshot of the top-level run state (for status reporting).
+Function status() : Object
+	
+	var $log : Object:=This:C1470._read()
+	
+	return {\
+		startTime: $log.startTime; \
+		endTime: $log.endTime; \
+		status: $log.status; \
+		trigger: $log.trigger; \
+		error: $log.error; \
+		nextComputeDate: $log.nextComputeDate}
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _file() : 4D:C1709.File

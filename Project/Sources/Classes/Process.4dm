@@ -397,8 +397,20 @@ Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Definit
 	var $limiter : cs:C1710._RateLimiter:=cs:C1710._RateLimiter.new($configBatchSize)
 	var $batchSize : Integer:=$configBatchSize
 	
+	var $shouldCancel : 4D:C1709.Function:=This:C1470.options.shouldCancel
 	var $i : Integer:=0
 	While ($i<$pending.length)
+		
+		// Cooperative cancel between chunks (a running batch is never force-killed).
+		If (($shouldCancel#Null:C1517) && Bool:C1537($shouldCancel.call()))
+			cs:C1710._Logger.me.info({\
+				event: "Recalculation cancelled"; \
+				vector: String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
+				processed: $i; \
+				timestamp: String:C10(Current date:C33)+"T"+String:C10(Current time:C178)\
+				})
+			break
+		End if 
 		
 		$limiter.waitIfNeeded(Int:C8($batchSize*$limiter.tokensPerEntity))
 		$batchSize:=$limiter.nextBatchSize()

@@ -19,6 +19,7 @@
 			"_computeVectors",
 			"_invalidateVectors",
 			"_runInWorker",
+			"_scheduler_integration",
 			"_statVectors"
 		],
 		"classes": [
@@ -36,7 +37,18 @@
 			"ProcessError",
 			"ProcessErrorCode",
 			"ProcessResult",
+			"Scheduler",
 			"Settings"
+		]
+	},
+	"SCHEDULER": {
+		"methods": [
+			"_SCHEDULER_LOOP",
+			"_SCHEDULER_RUN"
+		],
+		"classes": [
+			"_ScheduleCalc",
+			"_SchedulerState"
 		]
 	},
 	"STUDIO": {
@@ -64,6 +76,8 @@
 			"test_process_rateLimit",
 			"test_processError",
 			"test_resolver",
+			"test_scheduleCalc",
+			"test_scheduler",
 			"test_settings"
 		],
 		"classes": [

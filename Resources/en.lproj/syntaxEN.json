@@ -310,6 +310,27 @@
 				],
 				"Summary": ""
 			}
+		},
+		"_ScheduleCalc": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"Scheduler": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_SchedulerState": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
 		}
 	},
 	"_typeMedia": {
@@ -750,6 +771,39 @@
 			"Params": [
 				[
 					"startTimestamp",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"status()": {
+			"Syntax": "**.status**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"setNextComputeDate()": {
+			"Syntax": "**.setNextComputeDate**( *value* : Text )",
+			"Params": [
+				[
+					"value",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"logSkipped()": {
+			"Syntax": "**.logSkipped**( *timestamp* : Text )",
+			"Params": [
+				[
+					"timestamp",
 					"Text",
 					"->"
 				]
@@ -2300,6 +2354,250 @@
 		},
 		"data": {
 			"Syntax": "data : Collection"
+		}
+	},
+	"_ScheduleCalc": {
+		"slotAfter()": {
+			"Syntax": "**.slotAfter**( *config* : Object; *after* : Text ) : Text",
+			"Params": [
+				[
+					"config",
+					"Object",
+					"->"
+				],
+				[
+					"after",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"secondsUntil()": {
+			"Syntax": "**.secondsUntil**( *timestamp* : Text ) : Integer",
+			"Params": [
+				[
+					"timestamp",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"nextRun()": {
+			"Syntax": "**.nextRun**( *config* : Object; *lastExecution* : Text; *anchor* : Text ) : Object",
+			"Params": [
+				[
+					"config",
+					"Object",
+					"->"
+				],
+				[
+					"lastExecution",
+					"Text",
+					"->"
+				],
+				[
+					"anchor",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
+	"Scheduler": {
+		"status()": {
+			"Syntax": "**.status**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"nextRun()": {
+			"Syntax": "**.nextRun**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"config()": {
+			"Syntax": "**.config**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"force()": {
+			"Syntax": "**.force**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"stop()": {
+			"Syntax": "**.stop**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"reload()": {
+			"Syntax": "**.reload**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"cancel()": {
+			"Syntax": "**.cancel**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"start()": {
+			"Syntax": "**.start**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
+	"_SchedulerState": {
+		"markSkipped()": {
+			"Syntax": "**.markSkipped**( *key* : Text )",
+			"Params": [
+				[
+					"key",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"requestCancel()": {
+			"Syntax": "**.requestCancel**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"endBatch()": {
+			"Syntax": "**.endBatch**( *result* : Text; *error* : Text; *endTimestamp* : Text )",
+			"Params": [
+				[
+					"result",
+					"Text",
+					"->"
+				],
+				[
+					"error",
+					"Text",
+					"->"
+				],
+				[
+					"endTimestamp",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"beginBatch()": {
+			"Syntax": "**.beginBatch**( *startTimestamp* : Text ) : Boolean",
+			"Params": [
+				[
+					"startTimestamp",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"disarm()": {
+			"Syntax": "**.disarm**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"arm()": {
+			"Syntax": "**.arm**( *anchor* : Text )",
+			"Params": [
+				[
+					"anchor",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"skipLoggedFor": {
+			"Syntax": "skipLoggedFor : Text"
+		},
+		"lastError": {
+			"Syntax": "lastError : Text"
+		},
+		"lastResult": {
+			"Syntax": "lastResult : Text"
+		},
+		"lastRun": {
+			"Syntax": "lastRun : Text"
+		},
+		"cancelRequested": {
+			"Syntax": "cancelRequested : Boolean"
+		},
+		"batchStart": {
+			"Syntax": "batchStart : Text"
+		},
+		"running": {
+			"Syntax": "running : Boolean"
+		},
+		"armedAt": {
+			"Syntax": "armedAt : Text"
+		},
+		"checkInterval": {
+			"Syntax": "checkInterval : Integer"
+		},
+		"armed": {
+			"Syntax": "armed : Boolean"
 		}
 	}
 }

@@ -185,6 +185,25 @@ ASSERT:C1129($callbacks.error=0; JSON Stringify:C1217($callbacks))
 ASSERT:C1129($callbacks.terminate=1; JSON Stringify:C1217($callbacks))
 $settings.batchSize:=50
 
+// --- cooperative cancel (shouldCancel option) stops between chunks ---
+ASSERT:C1129($studentsDef.invalidateVectors().errors.length=0; "failed to invalidate students before cancel test")
+$settings.batchSize:=1  // 2 students -> 2 chunks of 1
+var $cancelFlag:={cancel: False:C215}
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new(); \
+onProgress: Formula:C1597($cancelFlag.cancel:=True:C214); \
+shouldCancel: Formula:C1597($cancelFlag.cancel)})
+$result:=$proc.process($studentsDef)
+ASSERT:C1129($result.entitiesConsidered=2; "cancel: expected 2 considered, got "+String:C10($result.entitiesConsidered))
+ASSERT:C1129($result.entitiesUpdated=1; "cancel: expected only first chunk (1) updated, got "+String:C10($result.entitiesUpdated))
+ASSERT:C1129(ds:C1482._Students.query("student_vector_1 = null").length=1; "cancel: one student should remain unembedded")
+$settings.batchSize:=50
+
+// --- shouldCancel that never fires completes fully ---
+ASSERT:C1129($studentsDef.invalidateVectors().errors.length=0; "failed to invalidate students before no-cancel test")
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new(); shouldCancel: Formula:C1597(False:C215)})
+$result:=$proc.process($studentsDef)
+ASSERT:C1129($result.entitiesUpdated=2; "no-cancel: expected 2 updated, got "+String:C10($result.entitiesUpdated))
+
 // --- invalid definition reporting + error callback ---
 var $badDef:=cs:C1710.Definition.new("_Students"; "missing_vector"; "text-embedding-3-small"; "{firstName}")
 var $errorCallbacks:={success: 0; error: 0; terminate: 0}
