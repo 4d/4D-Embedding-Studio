@@ -23,6 +23,8 @@ For ad-hoc, non-persisting helpers (previewing rendered phrases, computing one-o
 | `dryRun`     | Boolean   | If `True`, runs selection/filter logic but skips API calls and entity saves. |
 | `force`      | Boolean   | If `True`, recomputes every entity ignoring null-vector / dirty-flag filter. |
 | `debug`      | Boolean   | If `True`, emits additional diagnostic log entries.                        |
+| `pauseIndexes` | Boolean | If `True` (default), index maintenance on the target table is paused for the duration of a `processEntitySelection` batch run, then resumed right after (or on early exit/critical error). Speeds up large writes. |
+| `waitForIndexes` | Boolean | If `True`, resuming indexes (after `pauseIndexes`) blocks until recomputation finishes. Default `False` — resume is asynchronous (indexes recomputed in the background). |
 | `embedder`   | [Embedder](Embedder.md) | Inject a custom embedder (otherwise a default one is created). |
 
 ## Class constructor

@@ -27,6 +27,9 @@
  | force | Boolean | False | If true, bypasses "already embedded / not dirty" filtering and recomputes all targeted rows. |
  | debug | Boolean | False | If true, emits extra diagnostic log entries. |
  | embedder | cs.Embedder | New embedder instance | Optional embedder override, mainly for tests or custom providers. |
+ | shouldCancel | 4D.Function | Null | Optional predicate called between chunks; if it returns True, selection processing stops gracefully (cooperative cancel). |
+ | pauseIndexes | Boolean | True | If true, index maintenance on the target table is paused for the duration of a selection's batch run (and resumed right after), to speed up large writes. |
+ | waitForIndexes | Boolean | False | If true, resuming indexes (after pauseIndexes) blocks until recomputation is complete; by default resume is asynchronous. |
 **/
 
 Class extends _ProcessBase
@@ -384,6 +387,8 @@ Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Definit
 		timestamp: String:C10(Current date:C33)+"T"+String:C10(Current time:C178)\
 		})
 	
+	This:C1470._setIndexesPaused($dc; True:C214)
+	
 	var $configBatchSize : Integer:=Num:C11(This:C1470.settings.batchSize)
 	If ($configBatchSize<=0)
 		$configBatchSize:=50
@@ -421,6 +426,7 @@ Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Definit
 					affectedVectorCount: $chunk.length; \
 					message: String:C10($chunkCriticalErr.message)\
 					})
+				This:C1470._setIndexesPaused($dc; False:C215)
 				return 
 			End if 
 			
@@ -433,6 +439,8 @@ Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Definit
 		
 	End while 
 	
+	This:C1470._setIndexesPaused($dc; False:C215)
+	
 	cs:C1710._Logger.me.info({\
 		event: "Recalculation completed"; \
 		vector: String:C10($def.dataclassName)+"."+String:C10($def.vectorName); \
@@ -440,6 +448,31 @@ Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Definit
 		success: $report.entitiesUpdated-$updatedBefore; \
 		failure: $report.entitiesSkipped-$skippedBefore\
 		})
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Pauses (or resumes) index maintenance on a table, guarded by the pauseIndexes
+	// option (default True). Meant to speed up large batch writes on a selection.
+	// Resume is asynchronous (indexes recomputed in the background) unless the
+	// waitForIndexes option is true, in which case resume blocks until done.
+Function _setIndexesPaused($dc : 4D:C1709.DataClass; $paused : Boolean)
+	
+	var $enabled : Boolean:=(This:C1470.options.pauseIndexes=Null:C1517) ? True:C214 : Bool:C1537(This:C1470.options.pauseIndexes)
+	
+	If (Not:C34($enabled))
+		return 
+	End if 
+	
+	var $tablePtr : Pointer:=Table:C252($dc.getInfo().tableNumber)
+	
+	If ($paused)
+		PAUSE INDEXES:C1293($tablePtr->)
+	Else 
+		If (Bool:C1537(This:C1470.options.waitForIndexes))
+			RESUME INDEXES:C1294($tablePtr->)
+		Else 
+			RESUME INDEXES:C1294($tablePtr->; *)
+		End if 
+	End if 
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Filter an entity selection down to rows that need (re)computation.
