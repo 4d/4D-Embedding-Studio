@@ -40,14 +40,49 @@ The configuration lives under the `scheduler` key of `Settings/embeddings.json`:
 
 The effective configuration is read from the file on **every loop cycle**, so changes take effect without restarting the scheduler.
 
-## Access
+## Starting the scheduler
+
+Configuring a `mode` is **not enough**: nothing runs until the scheduler is started. There are two ways to get there, and which one applies depends on a single option of your host database.
+
+### 1. Automatic — let the host database start it
+
+In the host database, open **Settings > Security** and check **"Execute 'On Host Database Event' method of the components"** (it is *unchecked* by default, for security reasons).
+
+With this option on, 4D Embedding Studio starts the scheduler by itself when the host database opens, and stops it when the host database closes. There is nothing else to write.
+
+Use [`autoStart()`](#autostart) to check whether the option is on:
 
 ```4d
-// From a host database, e.g. its "On Server Startup" method:
-cs.EmbeddingStudio.Scheduler.me.start()
+If (Not(cs.EmbeddingStudio.Scheduler.me.autoStart()))
+	// the option is off — I must start the scheduler myself
+	cs.EmbeddingStudio.Scheduler.me.start()
+End if
 ```
 
-The component does not arm itself inside a host; the host is responsible for calling `start()` (see [Lifecycle](#lifecycle)).
+### 2. Manual — start it from your own code
+
+If you prefer to leave the option off, the scheduler never starts on its own. Call [`start()`](#start) from wherever it suits you — typically the host `On Startup` or `On Server Startup` database method — and [`stop()`](#stop) when the database closes (`On Exit` / `On Server Shutdown`):
+
+```4d
+// Host "On Server Startup"
+cs.EmbeddingStudio.Scheduler.me.start()
+
+// Host "On Server Shutdown"
+cs.EmbeddingStudio.Scheduler.me.stop()
+```
+
+`start()` is idempotent, so calling it from several places is harmless.
+
+### Checking that it really runs
+
+[`isStarted()`](#isstarted) tells you whether the background loop is alive right now — the answer to "is my schedule actually being watched?":
+
+```4d
+var $s:=cs.EmbeddingStudio.Scheduler.me.status()
+If ($s.enabled && Not($s.started))
+	ALERT("A schedule is configured but the scheduler is not started.")
+End if
+```
 
 ## Functions
 
@@ -129,6 +164,43 @@ End if
 | `nextRun`       | Text \| Null  | ISO timestamp of the next scheduled run (`Null` when disabled).                 |
 | `lastResult`    | Text \| Null  | Result of the last trigger: `started` \| `skipped` \| `completed` \| `failed`.  |
 | `error`         | Text \| Null  | Error summary when the last run failed (safe for admin display), else `Null`.   |
+| `started`       | Boolean       | `True` when the background loop is really alive (see [`isStarted()`](#isstarted)). |
+| `autoStart`     | Boolean       | `True` when the host database starts the scheduler by itself (see [`autoStart()`](#autostart)). |
+
+### isStarted()
+
+**isStarted**() : Boolean
+
+Tells whether the scheduler is **effectively running**, i.e. whether its background loop is alive at this very moment. Unlike the `armed` flag of the [status](#status-object), it reflects reality: if the loop was never started, or was killed, the result is `False`.
+
+| Result  | Type    | Description                                    |
+|---------|---------|------------------------------------------------|
+| result  | Boolean | `True` when the background loop is alive.      |
+
+```4d
+If (Not(cs.EmbeddingStudio.Scheduler.me.isStarted()))
+	cs.EmbeddingStudio.Scheduler.me.start()
+End if
+```
+
+### autoStart()
+
+**autoStart**() : Boolean
+
+Tells whether the host database authorizes 4D Embedding Studio to start itself, i.e. whether the **"Execute 'On Host Database Event' method of the components"** option is checked in the host **Settings > Security** (see [Starting the scheduler](#starting-the-scheduler)).
+
+- `True` — the scheduler starts with the host database and stops with it. You have nothing to call.
+- `False` — nothing starts automatically: your code must call [`start()`](#start) and [`stop()`](#stop).
+
+The answer is read from the host structure settings. When they cannot be read, the result is `False` — the safe answer, since starting an already-started scheduler is harmless.
+
+| Result  | Type    | Description                                                       |
+|---------|---------|-------------------------------------------------------------------|
+| result  | Boolean | `True` when the host starts the scheduler by itself.              |
+
+```4d
+var $auto:=cs.EmbeddingStudio.Scheduler.me.autoStart()
+```
 
 ### config()
 
@@ -177,18 +249,20 @@ No-op convenience: the configuration is re-read automatically on each loop cycle
 
 ## Lifecycle
 
-The scheduler is armed explicitly. When 4D Embedding Studio runs standalone (or as the host), its `On Server Startup` database method arms it automatically. When loaded as a **component** inside another host, that host must arm it from its own startup code:
+| Host setting | What happens | What you must do |
+|--------------|--------------|------------------|
+| **"Execute 'On Host Database Event' method of the components"** checked | The scheduler starts when the host database opens and stops when it closes. | Nothing. |
+| Option unchecked (default) | The scheduler never starts by itself. | Call [`start()`](#start) at startup and [`stop()`](#stop) at shutdown. |
 
-```4d
-// Host "On Server Startup"
-cs.EmbeddingStudio.Scheduler.me.start()
-```
+Ask [`autoStart()`](#autostart) which case you are in, and [`isStarted()`](#isstarted) whether the loop is currently alive. Stopping the scheduler never interrupts a batch in progress — it finishes normally.
 
 ## Example
 
 ```4d
-// --- Arm at server startup ---
-cs.EmbeddingStudio.Scheduler.me.start()
+// --- Start at server startup, unless the host does it for us ---
+If (Not(cs.EmbeddingStudio.Scheduler.me.autoStart()))
+	cs.EmbeddingStudio.Scheduler.me.start()
+End if
 
 // --- Admin panel: force a recalculation and read status ---
 var $status:=cs.EmbeddingStudio.Scheduler.me.force()

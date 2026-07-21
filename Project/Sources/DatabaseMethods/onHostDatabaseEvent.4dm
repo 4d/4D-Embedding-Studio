@@ -1,5 +1,6 @@
-// The host must call cs.EmbeddingStudio.Scheduler.me.start() from its own startup code,
-// if do not accept activate in security settings  the "On Host Database Event" feature.
+// Only called when the host checked "Execute 'On Host Database Event' method of the components"
+// in its Settings > Security. Otherwise the host must call cs.EmbeddingStudio.Scheduler.me.start()
+// and .stop() from its own startup/shutdown code — see Scheduler.autoStart().
 #DECLARE($event : Integer)
 Case of 
 	: ($event=On after host database startup:K74:4)

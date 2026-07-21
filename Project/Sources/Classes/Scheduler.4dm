@@ -8,6 +8,8 @@
    cs.EmbeddingStudio.Scheduler.me.force()    // force a recalculation now (skipped if one runs)
    cs.EmbeddingStudio.Scheduler.me.status()   // runtime status object
    cs.EmbeddingStudio.Scheduler.me.reload()   // no-op: config is re-read on each loop cycle
+   cs.EmbeddingStudio.Scheduler.me.isStarted() // True when the background loop is alive
+   cs.EmbeddingStudio.Scheduler.me.autoStart() // True when the host arms us through On Host Database Event
 
  The scheduler config lives under the "scheduler" key of Settings/embeddings.json:
    { "mode": "disabled|interval|daily",
@@ -22,6 +24,12 @@
 property _loopWorker : Text:="EmbeddingStudioScheduler"
 property _execWorker : Text:="EmbeddingStudio"
 
+// Where 4D stores the "Execute 'On Host Database Event' method of the components"
+// option of the Settings > Security page.
+property _hostSettings : Text:="/SOURCES/settings.4DSettings"
+property _hostEventPath : Text:="/preferences/com.4d/general"
+property _hostEventName : Text:="execute_host_database_event"
+
 singleton Class constructor
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -31,7 +39,7 @@ Function start() : Boolean
 	
 	cs:C1710._SchedulerState.me.arm(cs:C1710._ScheduleCalc.me._nowISO())
 	
-	If (Not:C34(This:C1470._loopRunning()))
+	If (Not:C34(This:C1470.isStarted()))
 		CALL WORKER:C1389(This:C1470._loopWorker; "_SCHEDULER_LOOP")
 	End if 
 	
@@ -43,7 +51,7 @@ Function stop()
 	
 	cs:C1710._SchedulerState.me.disarm()
 	
-	If (This:C1470._loopRunning())
+	If (This:C1470.isStarted())
 		KILL WORKER:C1390(This:C1470._loopWorker)
 	End if 
 	
@@ -115,11 +123,75 @@ Function status() : Object
 		lastExecution: (Length:C16($state.lastRun)>0) ? $state.lastRun : Null:C1517; \
 		nextRun: ($next#Null:C1517) ? $next.timestamp : Null:C1517; \
 		lastResult: (Length:C16($state.lastResult)>0) ? $state.lastResult : Null:C1517; \
-		error: (Length:C16($state.lastError)>0) ? $state.lastError : $log.error}
+		error: (Length:C16($state.lastError)>0) ? $state.lastError : $log.error; \
+		started: This:C1470.isStarted(); \
+		autoStart: This:C1470.autoStart()}
 	
-	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-	// True when the background loop worker currently exists.
-Function _loopRunning() : Boolean
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// True when the background loop worker is alive, i.e. the scheduler really runs.
+Function isStarted() : Boolean
 	
 	var $activity : Object:=Process activity:C1495(Processes only:K5:35)
 	return ($activity.processes.findIndex(Formula:C1597($1.value.name=$2); This:C1470._loopWorker)#-1)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// True when the host database authorizes the component "On Host Database Event" method
+	// (Settings > Security), in which case the scheduler arms and disarms itself with the host.
+	// False means the host is responsible for calling start() and stop().
+Function autoStart() : Boolean
+	
+	// the * targets the host structure settings, the only place the option can be set
+	return Bool:C1537(This:C1470._hostEventSetting(File:C1566(This:C1470._hostSettings; *)))
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Reads the "execute_host_database_event" attribute of the settings.4DSettings file.
+	// Returns Null when the file is missing, is not readable XML, or does not carry the attribute.
+Function _hostEventSetting($file : 4D:C1709.File) : Variant
+	
+	If (($file=Null:C1517) || (Not:C34($file.exists)))
+		return Null:C1517
+	End if 
+	
+	var $xml : Text:=String:C10(Try($file.getText()))
+	If (Length:C16($xml)=0)
+		return Null:C1517
+	End if 
+	
+	// on a malformed document the parser returns a null reference and sets OK to 0
+	var $root : Text:=String:C10(Try(DOM Parse XML variable:C720($xml)))
+	If ((OK=0) || (Length:C16($root)=0))
+		return Null:C1517
+	End if 
+	
+	var $value : Variant:=Try(This:C1470._hostEventAttribute($root))
+	DOM CLOSE XML:C722($root)
+	
+	return (Value type:C1509($value)=Is boolean:K8:9) ? $value : Null:C1517
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Attribute lookup inside an already parsed settings document, Null when not declared.
+Function _hostEventAttribute($root : Text) : Variant
+	
+	var $element : Text:=String:C10(Try(DOM Find XML element:C864($root; This:C1470._hostEventPath)))
+	If ((OK=0) || (Length:C16($element)=0))
+		return Null:C1517
+	End if 
+	
+	// enumerated rather than read by name: a host that never checked the option simply has no
+	// such attribute, and DOM GET XML ATTRIBUTE BY NAME would log error -9930 on every call
+	var $name : Text
+	var $value : Text
+	var $index : Integer
+	
+	For ($index; 1; DOM Count XML attributes:C727($element))
+	
+		DOM GET XML ATTRIBUTE BY INDEX:C729($element; $index; $name; $value)
+		If ($name=This:C1470._hostEventName)
+			$value:=Lowercase:C14($value)
+			return (($value="true") || ($value="1"))  // XML booleans
+		End if 
+	
+	End for 
+	
+	return Null:C1517
+	

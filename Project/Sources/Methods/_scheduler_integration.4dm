@@ -76,7 +76,7 @@ ASSERT:C1129(ds:C1482._Students.query("student_vector_1 = null").length=0; "IT: 
 // --- Stop and verify the loop worker is gone ---
 cs:C1710.Scheduler.me.stop()
 DELAY PROCESS:C323(Current process:C322; 60)
-ASSERT:C1129(Not:C34(cs:C1710.Scheduler.me._loopRunning()); "IT: the scheduler loop worker should be stopped")
+ASSERT:C1129(Not:C34(cs:C1710.Scheduler.me.isStarted()); "IT: the scheduler loop worker should be stopped")
 
 // --- Cleanup ---
 cs:C1710._SchedulerState.me.endBatch(""; ""; "")
