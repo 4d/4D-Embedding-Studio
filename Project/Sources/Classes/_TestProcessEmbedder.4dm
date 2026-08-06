@@ -1,14 +1,17 @@
 property embedCalls : Collection:=[]
 property embedBatchCalls : Collection:=[]
 property criticalModels : Collection:=[]
+property criticalAfterCalls : Object:={}  // { modelAlias: N } -> allow first N calls for that model to succeed, then throw critical on call N+1
 property nonCriticalTexts : Collection:=[]
 property rateLimits : Collection:=[]
 property _rateLimitIndex : Integer:=0
+property _modelCallCounts : Object:={}
 property counter : Integer:=0
 
 Class constructor($options : Object)
 	$options:=$options || {}
 	This:C1470.criticalModels:=$options.criticalModels || []
+	This:C1470.criticalAfterCalls:=$options.criticalAfterCalls || {}
 	This:C1470.nonCriticalTexts:=$options.nonCriticalTexts || []
 	This:C1470.rateLimits:=$options.rateLimits || []
 
@@ -41,6 +44,13 @@ Function embedBatch($texts : Collection; $model : Text) : cs:C1710.EmbedderResul
 Function _maybeThrow($texts : Collection; $model : Text)
 	If (This:C1470.criticalModels.includes($model))
 		throw:C1805({componentSignature: "4DES"; isCriticalAPIError: True:C214; model: $model; message: "Critical test failure for "+$model; errors: [{status: 400; message: "Critical test failure for "+$model}]})
+	End if
+
+	If (This:C1470.criticalAfterCalls[$model]#Null:C1517)
+		This:C1470._modelCallCounts[$model]:=Num:C11(This:C1470._modelCallCounts[$model])+1
+		If (This:C1470._modelCallCounts[$model]>Num:C11(This:C1470.criticalAfterCalls[$model]))
+			throw:C1805({componentSignature: "4DES"; isCriticalAPIError: True:C214; model: $model; message: "Critical test failure for "+$model+" after "+String:C10(This:C1470.criticalAfterCalls[$model])+" calls"; errors: [{status: 400; message: "Critical test failure for "+$model}]})
+		End if
 	End if
 
 	var $text : Text
