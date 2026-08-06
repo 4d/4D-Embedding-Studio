@@ -10,6 +10,13 @@
 var $prevFile : 4D:C1709.File:=cs:C1710._Settings.me.file  // save to restore afterwards
 var $tmp : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).file("Settings/__test_scheduler_cfg.json")
 
+// The single-batch-guard section below calls _ExecutionLog.logSkipped(), which writes
+// embeddingHistory.json — back it up so it can be restored in Cleanup.
+var $execLog:=cs:C1710._ExecutionLog.me
+var $histFile : 4D:C1709.File:=$execLog._file()
+var $histExisted : Boolean:=$histFile.exists
+var $histBackup : Text:=($histExisted) ? $histFile.getText() : ""
+
 cs:C1710._SchedulerState.me.endBatch(""; ""; "")  // reset runtime baseline
 
 // ══════════════════════════════════════════════════════════════════════
@@ -81,9 +88,65 @@ ASSERT:C1129(OB Is defined:C1231($status; "batchStart"); "status should expose b
 ASSERT:C1129(OB Is defined:C1231($status; "nextRun"); "status should expose nextRun")
 
 // ══════════════════════════════════════════════════════════════════════
+// Single-batch guard : skip a trigger fired while a batch is running/paused.
+// A batch paused mid-run (e.g. inside cs.Embedder's rate-limit retry) is still "running"
+// from the scheduler's point of view, so _SCHEDULER_RUN skips any trigger fired meanwhile.
+// ══════════════════════════════════════════════════════════════════════
+
+var $state:=cs:C1710._SchedulerState.me
+$state.endBatch(""; ""; "")  // clean baseline
+
+//MARK:- test_pro_noDupBatchWhileP
+var $ts1 : Text:=cs:C1710._ScheduleCalc.me._nowISO()
+ASSERT:C1129($state.beginBatch($ts1); "the first batch should be allowed to start")
+ASSERT:C1129($state.running; "state should report running=true once a batch has started")
+
+// A second scheduled trigger fires while the first is still running/paused — it must be skipped.
+var $ts2 : Text:=cs:C1710._ScheduleCalc.me._nowISO()
+ASSERT:C1129(Not:C34($state.beginBatch($ts2)); "a duplicate batch must not start while one is running/paused for rate limiting")
+
+//MARK:- test_pro_histSkippedOnC
+$execLog.logSkipped($ts2)
+var $skipStatus : Object:=$execLog.status()
+ASSERT:C1129($skipStatus.trigger="skipped"; "the skipped trigger should be logged, got "+String:C10($skipStatus.trigger))
+
+var $skipLog : Object:=$execLog._read()
+ASSERT:C1129($skipLog.trigger="skipped"; "expected trigger skipped, got "+String:C10($skipLog.trigger))
+ASSERT:C1129(Value type:C1509($skipLog.skipped)=Is collection:K8:32; "skipped timestamps should be recorded as a collection")
+ASSERT:C1129($skipLog.skipped.length>0; "skipped timestamps collection should not be empty")
+ASSERT:C1129($skipLog.skipped[$skipLog.skipped.length-1]=$ts2; "the last skipped entry should be the skipped trigger's timestamp")
+
+// The original (still-running/paused) batch is unaffected and can complete normally.
+ASSERT:C1129($state.running; "the original batch should still be marked running after the duplicate was skipped")
+$state.endBatch("completed"; ""; cs:C1710._ScheduleCalc.me._nowISO())
+
+// ══════════════════════════════════════════════════════════════════════
+// nextComputeDate persistence (config -> nextRun -> _ExecutionLog.setNextComputeDate)
+//MARK:- test_pro_histNCDateCalc
+// ══════════════════════════════════════════════════════════════════════
+
+$state.endBatch(""; ""; "")  // reset runtime baseline
+$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "interval"; intervalHours: 2; startFrom: "now"}}))
+cs:C1710._Settings.me.file:=$tmp
+$state.arm(cs:C1710._ScheduleCalc.me._nowISO())  // anchor for "start from now"
+
+var $expectedNext : Object:=cs:C1710.Scheduler.me.nextRun()
+ASSERT:C1129($expectedNext#Null:C1517; "setup: nextRun should not be null for an interval schedule")
+$execLog.setNextComputeDate($expectedNext.timestamp)
+ASSERT:C1129($execLog._read().nextComputeDate=$expectedNext.timestamp; "nextComputeDate should match the schedule's computed next run")
+ASSERT:C1129(cs:C1710.Scheduler.me.status().nextRun=$expectedNext.timestamp; "Scheduler.status().nextRun should match the persisted nextComputeDate")
+
+// ══════════════════════════════════════════════════════════════════════
 // Cleanup
 // ══════════════════════════════════════════════════════════════════════
 
 cs:C1710._SchedulerState.me.endBatch(""; ""; "")
 cs:C1710._Settings.me.file:=$prevFile
 $tmp.delete()
+If ($histExisted)
+	$histFile.setText($histBackup)
+Else
+	If ($histFile.exists)
+		$histFile.delete()
+	End if
+End if

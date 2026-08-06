@@ -164,3 +164,78 @@ ASSERT:C1129($embedderC.embedBatchCalls[2].texts.length=2; "no ratelimit: third 
 ds:C1482._Students.all().drop()
 ds:C1482.School.all().drop()
 $settingsFile.delete()
+
+// =====================================================================================
+// PART 3 — Embedder retry/backoff on 429 (cs.Embedder + fake AIKit client, no network)
+// A different layer than PART 1/2 (which drive _RateLimiter): here the REAL cs.Embedder
+// handles the pause/resume, backoff and Retry-After logic against a deterministic mock.
+// =====================================================================================
+
+//MARK:- test_pro_rateLimitRetryAfterHdr
+// Resume after the delay specified by the Retry-After header. backoffMs is deliberately
+// tiny so the observed delay can only be explained by the Retry-After hint being honored.
+var $clientHdr:=cs:C1710._TestAIKitClient.new({rateLimitCount: 1; retryAfterSec: 1})
+var $embedderHdr:=cs:C1710.Embedder.new({client: $clientHdr; backoffMs: 50; maxRetries: 3})
+
+var $startHdr : Integer:=Milliseconds:C459
+var $resHdr : cs:C1710.EmbedderResult:=$embedderHdr.embed("hello world"; "embed")
+var $elapsedHdr : Integer:=Milliseconds:C459-$startHdr
+
+ASSERT:C1129($resHdr.vector#Null:C1517; "embed should eventually succeed after the rate-limited attempt")
+ASSERT:C1129($clientHdr.embeddings.callCount=2; "expected exactly 2 calls (1 rate-limited + 1 success), got "+String:C10($clientHdr.embeddings.callCount))
+ASSERT:C1129($elapsedHdr>=900; "expected the Retry-After delay (~1000ms) to have elapsed, got "+String:C10($elapsedHdr)+"ms")
+ASSERT:C1129($elapsedHdr<4000; "Retry-After delay took suspiciously long: "+String:C10($elapsedHdr)+"ms")
+
+//MARK:- test_pro_rateLimitPauseDefault
+// Resume with default delay when no Retry-After hint is present: cs.Embedder falls back to
+// exponential backoff (backoffMs * 2^attempt).
+var $clientDef:=cs:C1710._TestAIKitClient.new({rateLimitCount: 1; backoffMs: 300})
+var $embedderDef:=cs:C1710.Embedder.new({client: $clientDef; backoffMs: 300; maxRetries: 3})
+
+var $startDef : Integer:=Milliseconds:C459
+var $resDef : cs:C1710.EmbedderResult:=$embedderDef.embed("hello world"; "embed")
+var $elapsedDef : Integer:=Milliseconds:C459-$startDef
+
+ASSERT:C1129($resDef.vector#Null:C1517; "embed should eventually succeed after the rate-limited attempt")
+ASSERT:C1129($clientDef.embeddings.callCount=2; "expected exactly 2 calls (1 rate-limited + 1 success), got "+String:C10($clientDef.embeddings.callCount))
+ASSERT:C1129($elapsedDef>=250; "expected the default backoff delay (~300ms) to have elapsed, got "+String:C10($elapsedDef)+"ms")
+ASSERT:C1129($elapsedDef<3000; "default backoff delay took suspiciously long: "+String:C10($elapsedDef)+"ms")
+
+//MARK:- test_pro_rateLimitLogged
+// The "Rate limit hit" warning must carry enough detail (model, delay, attempt, timestamp)
+// to diagnose a pause/resume cycle after the fact.
+var $clientLog:=cs:C1710._TestAIKitClient.new({rateLimitCount: 1; retryAfterSec: 1})
+var $embedderLog:=cs:C1710.Embedder.new({client: $clientLog; backoffMs: 10; maxRetries: 3})
+
+cs:C1710._Logger.me._capture:=[]
+var $resLog : cs:C1710.EmbedderResult:=$embedderLog.embed("hello world"; "embed")
+ASSERT:C1129($resLog.vector#Null:C1517; "embed should eventually succeed after the rate-limited attempt")
+
+var $logsRL : Collection:=cs:C1710._Logger.me._capture
+var $rateLimitLogs : Collection:=$logsRL.query("level = :1 AND message = :2"; Warning message:K38:2; "@\"event\":\"Rate limit hit\"@")
+ASSERT:C1129($rateLimitLogs.length=1; "expected exactly 1 rate-limit log entry, got "+String:C10($rateLimitLogs.length))
+
+var $rlMessage : Text:=$rateLimitLogs[0].message
+ASSERT:C1129(Position:C15("\"model\":\"embed\""; $rlMessage)>0; "log should include the model: "+$rlMessage)
+ASSERT:C1129(Position:C15("\"delay\":\"1000ms\""; $rlMessage)>0; "log should include the Retry-After delay: "+$rlMessage)
+ASSERT:C1129(Position:C15("\"attempt\":\"1/3\""; $rlMessage)>0; "log should include the attempt counter: "+$rlMessage)
+ASSERT:C1129(Position:C15("\"timestamp\":\""; $rlMessage)>0; "log should include a timestamp: "+$rlMessage)
+cs:C1710._Logger.me._capture:=Null:C1517
+
+//MARK:- test_pro_multiRateLimitCycles
+// 3 consecutive 429s before the 4th call succeeds: one "Rate limit hit" warning per cycle
+// with an incrementing attempt counter.
+var $clientMulti:=cs:C1710._TestAIKitClient.new({rateLimitCount: 3; backoffMs: 5})
+var $embedderMulti:=cs:C1710.Embedder.new({client: $clientMulti; backoffMs: 5; maxRetries: 3})
+
+cs:C1710._Logger.me._capture:=[]
+var $resMulti : cs:C1710.EmbedderResult:=$embedderMulti.embed("hello world"; "embed")
+ASSERT:C1129($resMulti.vector#Null:C1517; "embed should eventually succeed after 3 consecutive rate-limit cycles")
+ASSERT:C1129($clientMulti.embeddings.callCount=4; "expected 4 calls (3 rate-limited + 1 success), got "+String:C10($clientMulti.embeddings.callCount))
+
+var $logsMulti : Collection:=cs:C1710._Logger.me._capture
+ASSERT:C1129($logsMulti.query("message = :1"; "@\"event\":\"Rate limit hit\"@").length=3; "expected 3 pause/resume cycles logged, got "+String:C10($logsMulti.query("message = :1"; "@\"event\":\"Rate limit hit\"@").length))
+ASSERT:C1129($logsMulti.query("message = :1 AND message = :2"; "@\"event\":\"Rate limit hit\"@"; "@\"attempt\":\"1/3\"@").length=1; "1st cycle should log attempt 1/3")
+ASSERT:C1129($logsMulti.query("message = :1 AND message = :2"; "@\"event\":\"Rate limit hit\"@"; "@\"attempt\":\"2/3\"@").length=1; "2nd cycle should log attempt 2/3")
+ASSERT:C1129($logsMulti.query("message = :1 AND message = :2"; "@\"event\":\"Rate limit hit\"@"; "@\"attempt\":\"3/3\"@").length=1; "3rd cycle should log attempt 3/3")
+cs:C1710._Logger.me._capture:=Null:C1517
