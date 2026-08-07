@@ -73,14 +73,23 @@
 			"test_phrase",
 			"test_playground",
 			"test_process",
+			"test_process_criticalModels",
+			"test_process_history",
+			"test_process_localErrors",
+			"test_process_logging",
+			"test_process_optimisticLock",
 			"test_process_rateLimit",
 			"test_processError",
 			"test_resolver",
 			"test_scheduleCalc",
 			"test_scheduler",
+			"test_scheduler_asyncSave",
 			"test_settings"
 		],
 		"classes": [
+			"_TestAIKitClient",
+			"_TestAIKitEmbeddingsAPI",
+			"_TestFixtures",
 			"_TestProcessEmbedder"
 		]
 	},

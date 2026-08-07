@@ -331,6 +331,39 @@
 				"Params": [],
 				"Summary": ""
 			}
+		},
+		"_TestAIKitEmbeddingsAPI": {
+			"new()": {
+				"Syntax": "**.new**( *options* : Object )",
+				"Params": [
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_TestFixtures": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_TestAIKitClient": {
+			"new()": {
+				"Syntax": "**.new**( *options* : Object )",
+				"Params": [
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
 		}
 	},
 	"_typeMedia": {
@@ -1683,6 +1716,30 @@
 		},
 		"embedCalls": {
 			"Syntax": "embedCalls : Collection"
+		},
+		"touchErrors": {
+			"Syntax": "touchErrors : Collection"
+		},
+		"touchField": {
+			"Syntax": "touchField : Text"
+		},
+		"touchSuffix": {
+			"Syntax": "touchSuffix : Text"
+		},
+		"entityKey": {
+			"Syntax": "entityKey : Variant"
+		},
+		"touchCount": {
+			"Syntax": "touchCount : Integer"
+		},
+		"dataclassName": {
+			"Syntax": "dataclassName : Text"
+		},
+		"delaySeconds": {
+			"Syntax": "delaySeconds : Real"
+		},
+		"criticalAfterCalls": {
+			"Syntax": "criticalAfterCalls : Object"
 		}
 	},
 	"_Resolver": {
@@ -2497,6 +2554,28 @@
 				]
 			],
 			"Summary": ""
+		},
+		"autoStart()": {
+			"Syntax": "**.autoStart**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"isStarted()": {
+			"Syntax": "**.isStarted**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
 		}
 	},
 	"_SchedulerState": {
@@ -2598,6 +2677,86 @@
 		},
 		"armed": {
 			"Syntax": "armed : Boolean"
+		}
+	},
+	"_TestAIKitEmbeddingsAPI": {
+		"create()": {
+			"Syntax": "**.create**( *input* : Variant; *model* : Text ) : Object",
+			"Params": [
+				[
+					"input",
+					"Variant",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"callTimestampsMs": {
+			"Syntax": "callTimestampsMs : Collection"
+		},
+		"failOnCallNumbers": {
+			"Syntax": "failOnCallNumbers : Collection"
+		},
+		"alwaysFail": {
+			"Syntax": "alwaysFail : Boolean"
+		},
+		"retryAfterSec": {
+			"Syntax": "retryAfterSec : Integer"
+		},
+		"rateLimitCount": {
+			"Syntax": "rateLimitCount : Integer"
+		},
+		"callCount": {
+			"Syntax": "callCount : Integer"
+		}
+	},
+	"_TestFixtures": {
+		"seedStudents()": {
+			"Syntax": "**.seedStudents**( *count* : Integer ) : Object",
+			"Params": [
+				[
+					"count",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"ensureAliases()": {
+			"Syntax": "**.ensureAliases**( *names* : Collection ) : Boolean",
+			"Params": [
+				[
+					"names",
+					"Collection",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
+	"_TestAIKitClient": {
+		"embeddings": {
+			"Syntax": "embeddings : cs.EmbeddingStudio._TestAIKitEmbeddingsAPI"
 		}
 	}
 }
