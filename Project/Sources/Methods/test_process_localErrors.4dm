@@ -115,6 +115,46 @@ $sB:=ds:C1482._Students.get($sB.ID)
 ASSERT:C1129(Not:C34($sA.student_vector_2_dirty); "first failed vector should be clean after retry")
 ASSERT:C1129(Not:C34($sB.student_vector_2_dirty); "second failed vector should be clean after retry")
 
+//MARK:- test_pro_lastLocalErrInBatch
+// A local error on the LAST vector of a batch (batchSize=1 -> its own chunk, run
+// last) must not roll back the prior successful vectors saved in earlier chunks;
+// only the failing entity stays dirty, and a later run retries just that one.
+$seed:=cs:C1710._TestFixtures.me.seedStudents(3)
+$sA:=$seed.students[0]
+$sB:=$seed.students[1]
+$sC:=$seed.students[2]
+
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new()})
+$result:=$proc.process($def)
+ASSERT:C1129($result.success; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.entitiesUpdated=3; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($def.invalidateVectors().errors.length=0; "failed to invalidate vectors")
+
+// With batchSize=1, students A and B are each processed and saved in their own
+// prior chunk before the failing chunk for C ever runs, so their success cannot
+// depend on, or be rolled back by, C's failure.
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new({nonCriticalTexts: ["Chloe Bernard"]})})
+$result:=$proc.process($def)
+ASSERT:C1129($result.entitiesConsidered=3; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129(Not:C34($result.success); "batch should report failure for last vector local error")
+ASSERT:C1129($result.entitiesUpdated=2; "prior vectors should still be processed successfully")
+ASSERT:C1129($result.entitiesSkipped=1; "last vector should fail locally")
+ASSERT:C1129($result.errors.query("code = :1"; $EMBED_FAILED).length=1; "exact scenario required: expected one local EMBED_FAILED on last vector")
+$sA:=ds:C1482._Students.get($sA.ID)
+$sB:=ds:C1482._Students.get($sB.ID)
+$sC:=ds:C1482._Students.get($sC.ID)
+ASSERT:C1129(Not:C34($sA.student_vector_2_dirty); "first prior vector should be saved and clean")
+ASSERT:C1129(Not:C34($sB.student_vector_2_dirty); "second prior vector should be saved and clean")
+ASSERT:C1129(Bool:C1537($sC.student_vector_2_dirty); "the specific failed entity (last vector) must remain dirty")
+
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new()})
+$result:=$proc.process($def)  // retry path
+ASSERT:C1129($result.success; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.entitiesConsidered=1; "only the failed last dirty vector should be retried")
+ASSERT:C1129($result.entitiesUpdated=1; JSON Stringify:C1217($result.toObject()))
+$sC:=ds:C1482._Students.get($sC.ID)
+ASSERT:C1129(Not:C34($sC.student_vector_2_dirty); "all vectors should be clean after retry")
+
 If ($settingsFile.exists)
 	$settingsFile.delete()
 End if 
