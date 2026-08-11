@@ -62,13 +62,13 @@ Function process($definition : Variant) : cs:C1710.ProcessResult
 	For each ($def; $defs)
 		
 		var $defKey : Text:=String:C10($def.dataclassName)+"."+String:C10($def.vectorName)
-		var $defStartTime : Text:=Timestamp:C1445
+		var $defStartTime : Text:=cs:C1710._ScheduleCalc.me._nowISO()
 		var $errCountBefore : Integer:=$report.errors.length
 		var $tokensBefore : Object:={prompt_tokens: $report.promptTokens; total_tokens: $report.totalTokens}
 		
 		If (Not:C34(This:C1470._validateDefinition($def; $report)))
 			
-			$execLog.updateDefinition($defKey; $defStartTime; Timestamp:C1445; "failed"; \
+			$execLog.updateDefinition($defKey; $defStartTime; cs:C1710._ScheduleCalc.me._nowISO(); "failed"; \
 				This:C1470._buildErrorSummary($report.errors.slice($errCountBefore)); Null:C1517)
 			continue
 			
@@ -78,7 +78,7 @@ Function process($definition : Variant) : cs:C1710.ProcessResult
 			
 			$report._addError("definition"; cs:C1710.ProcessErrorCode.me.MODEL_SKIPPED; $defKey; \
 				Replace string:C233(Localized string:C991("errModelSkipped"); "{model}"; String:C10($def.modelAlias)))
-			$execLog.updateDefinition($defKey; $defStartTime; Timestamp:C1445; "skipped"; \
+			$execLog.updateDefinition($defKey; $defStartTime; cs:C1710._ScheduleCalc.me._nowISO(); "skipped"; \
 				"Model '"+String:C10($def.modelAlias)+"' encountered a critical API error"; Null:C1517)
 			continue
 			
@@ -89,7 +89,7 @@ Function process($definition : Variant) : cs:C1710.ProcessResult
 		
 		var $defErrors : Collection:=$report.errors.slice($errCountBefore)
 		var $defUsage : Object:={prompt_tokens: $report.promptTokens-$tokensBefore.prompt_tokens; total_tokens: $report.totalTokens-$tokensBefore.total_tokens}
-		$execLog.updateDefinition($defKey; $defStartTime; Timestamp:C1445; \
+		$execLog.updateDefinition($defKey; $defStartTime; cs:C1710._ScheduleCalc.me._nowISO(); \
 			($defErrors.length=0) ? "completed" : "failed"; \
 			This:C1470._buildErrorSummary($defErrors); $defUsage)
 		
@@ -98,7 +98,7 @@ Function process($definition : Variant) : cs:C1710.ProcessResult
 	var $result : cs:C1710.ProcessResult:=This:C1470._doneWithCallbacks($report)
 	
 	If ($isFullRun)
-		$execLog.endFullRun($result._startTimestamp; Timestamp:C1445; \
+		$execLog.endFullRun($result._startTimestamp; cs:C1710._ScheduleCalc.me._nowISO(); \
 			$result.success ? "completed" : "failed"; \
 			This:C1470._buildErrorSummary($result.errors); \
 			This:C1470.options.nextComputeDate; \

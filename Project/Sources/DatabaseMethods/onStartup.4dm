@@ -1,3 +1,6 @@
+
+cs:C1710.Scheduler.me.start()  // dev purpose (see host database event for studio as component)
+
 If (Not:C34(Is compiled mode:C492))
 	
 	ARRAY TEXT:C222($componentsArray; 0)
@@ -33,3 +36,4 @@ If (Not:C34(Is compiled mode:C492))
 		End if 
 	End if 
 End if 
+

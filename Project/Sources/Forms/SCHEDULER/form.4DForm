@@ -1,0 +1,383 @@
+{
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onClick",
+		"onDataChange",
+		"onTimer",
+		"onActivate"
+	],
+	"windowTitle": ":xliff:schedulerWindowTitle",
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {}
+		},
+		{
+			"objects": {
+				"mode.label": {
+					"type": "text",
+					"text": ":xliff:schedulerMode",
+					"top": 16,
+					"left": 20,
+					"width": 420,
+					"height": 16,
+					"class": "title"
+				},
+				"modeDisabled": {
+					"type": "radio",
+					"text": ":xliff:schedulerModeDisabled",
+					"top": 44,
+					"left": 24,
+					"width": 96,
+					"height": 20,
+					"dataSource": "Form:C1466.modeDisabled",
+					"radioGroup": "mode",
+					"events": [
+						"onClick"
+					]
+				},
+				"modeInterval": {
+					"type": "radio",
+					"text": ":xliff:schedulerModeInterval",
+					"top": 44,
+					"left": 126,
+					"width": 182,
+					"height": 20,
+					"dataSource": "Form:C1466.modeInterval",
+					"radioGroup": "mode",
+					"events": [
+						"onClick"
+					]
+				},
+				"modeDaily": {
+					"type": "radio",
+					"text": ":xliff:schedulerModeDaily",
+					"top": 44,
+					"left": 318,
+					"width": 120,
+					"height": 20,
+					"dataSource": "Form:C1466.modeDaily",
+					"radioGroup": "mode",
+					"events": [
+						"onClick"
+					]
+				},
+				"schedulerConfigPanel": {
+					"type": "rectangle",
+					"top": 76,
+					"left": 20,
+					"width": 440,
+					"height": 128,
+					"borderRadius": 8,
+					"class": "schedulerPanel"
+				},
+				"intervalHours.label": {
+					"type": "text",
+					"text": ":xliff:schedulerEveryHours",
+					"top": 100,
+					"left": 40,
+					"width": 80,
+					"height": 20
+				},
+				"intervalHours": {
+					"type": "input",
+					"top": 98,
+					"left": 124,
+					"width": 56,
+					"height": 17,
+					"dataSource": "Form:C1466.intervalHours",
+					"dataSourceTypeHint": "integer",
+					"textAlign": "center",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"schedulerHoursLabel": {
+					"type": "text",
+					"text": ":xliff:schedulerHoursCountingFrom",
+					"top": 100,
+					"left": 190,
+					"width": 250,
+					"height": 20
+				},
+				"startFromNow": {
+					"type": "radio",
+					"text": ":xliff:schedulerStartFromNow",
+					"top": 148,
+					"left": 40,
+					"width": 400,
+					"height": 20,
+					"dataSource": "Form:C1466.startFromNow",
+					"radioGroup": "startFrom",
+					"events": [
+						"onClick"
+					]
+				},
+				"startFromLast": {
+					"type": "radio",
+					"text": ":xliff:schedulerStartFromLast",
+					"top": 172,
+					"left": 40,
+					"width": 400,
+					"height": 20,
+					"dataSource": "Form:C1466.startFromLast",
+					"radioGroup": "startFrom",
+					"events": [
+						"onClick"
+					]
+				},
+				"dailyTime.label": {
+					"type": "text",
+					"text": ":xliff:schedulerAtTime",
+					"top": 112,
+					"left": 40,
+					"width": 130,
+					"height": 20
+				},
+				"dailyTime": {
+					"type": "input",
+					"top": 110,
+					"left": 176,
+					"width": 70,
+					"height": 17,
+					"dataSource": "Form:C1466.dailyTime",
+					"dataSourceTypeHint": "text",
+					"textAlign": "center",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"schedulerStatusPanel": {
+					"type": "rectangle",
+					"top": 218,
+					"left": 20,
+					"width": 440,
+					"height": 118,
+					"borderRadius": 8,
+					"class": "schedulerPanel"
+				},
+				"schedulerDot": {
+					"type": "oval",
+					"top": 240,
+					"left": 40,
+					"width": 11,
+					"height": 11,
+					"class": "schedulerDot"
+				},
+				"stateText": {
+					"type": "input",
+					"enterable": false,
+					"focusable": false,
+					"borderStyle": "none",
+					"events": [
+						"onClick"
+					],
+					"contextMenu": "none",
+					"top": 236,
+					"left": 58,
+					"width": 190,
+					"height": 20,
+					"dataSource": "Form:C1466.stateText",
+					"fontWeight": "bold",
+					"fill": "transparent"
+				},
+				"spinner": {
+					"type": "spinner",
+					"top": 239,
+					"left": 39,
+					"width": 13,
+					"height": 13,
+					"visibility": "hidden"
+				},
+				"forceNow": {
+					"type": "button",
+					"text": ":xliff:schedulerForceNow",
+					"top": 234,
+					"left": 230,
+					"width": 90,
+					"height": 26,
+					"style": "regular",
+					"events": [
+						"onClick"
+					]
+				},
+				"start": {
+					"type": "button",
+					"text": ":xliff:schedulerStart",
+					"top": 233,
+					"left": 335,
+					"width": 116,
+					"height": 26,
+					"style": "regular",
+					"events": [
+						"onClick"
+					]
+				},
+				"stop": {
+					"type": "button",
+					"text": ":xliff:schedulerStop",
+					"top": 233,
+					"left": 335,
+					"width": 116,
+					"height": 26,
+					"style": "regular",
+					"events": [
+						"onClick"
+					]
+				},
+				"nextRun.label": {
+					"type": "text",
+					"text": ":xliff:schedulerNextRun",
+					"top": 278,
+					"left": 40,
+					"width": 100,
+					"height": 18,
+					"class": "title"
+				},
+				"nextRunText": {
+					"type": "input",
+					"enterable": false,
+					"focusable": false,
+					"borderStyle": "none",
+					"events": [
+						"onClick"
+					],
+					"contextMenu": "none",
+					"top": 278,
+					"left": 150,
+					"width": 290,
+					"height": 18,
+					"dataSource": "Form:C1466.nextRunText",
+					"fill": "transparent"
+				},
+				"lastRun.label": {
+					"type": "text",
+					"text": ":xliff:schedulerLastRun",
+					"top": 304,
+					"left": 40,
+					"width": 100,
+					"height": 18,
+					"class": "title"
+				},
+				"lastRunText": {
+					"type": "input",
+					"enterable": false,
+					"focusable": false,
+					"borderStyle": "none",
+					"events": [
+						"onClick"
+					],
+					"contextMenu": "none",
+					"top": 304,
+					"left": 150,
+					"width": 290,
+					"height": 18,
+					"dataSource": "Form:C1466.lastRunText",
+					"fill": "transparent"
+				},
+				"schedulerErrorBox": {
+					"type": "rectangle",
+					"top": 389,
+					"left": 20,
+					"width": 440,
+					"height": 96,
+					"borderRadius": 8,
+					"class": "schedulerErrorBox",
+					"visibility": "hidden"
+				},
+				"error": {
+					"type": "input",
+					"enterable": false,
+					"focusable": false,
+					"borderStyle": "none",
+					"events": [
+						"onClick"
+					],
+					"contextMenu": "none",
+					"top": 397,
+					"left": 30,
+					"width": 416,
+					"height": 80,
+					"dataSource": "Form:C1466.errorText",
+					"multiline": "yes",
+					"wordwrap": "normal",
+					"verticalAlign": "top",
+					"visibility": "hidden",
+					"class": "schedulerErrorMsg"
+				},
+				"close": {
+					"type": "button",
+					"text": ":xliff:schedulerClose",
+					"top": 558,
+					"left": 295,
+					"width": 76,
+					"height": 26,
+					"style": "regular",
+					"sizingX": "move",
+					"events": [
+						"onClick"
+					]
+				},
+				"save": {
+					"type": "button",
+					"text": ":xliff:schedulerSave",
+					"top": 558,
+					"left": 384,
+					"width": 76,
+					"height": 26,
+					"style": "regular",
+					"sizingX": "move",
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/save.4dm"
+				},
+				"startFromReference": {
+					"type": "radio",
+					"text": "",
+					"top": 124,
+					"left": 40,
+					"width": 400,
+					"height": 20,
+					"dataSource": "Form:C1466.startFromReference",
+					"radioGroup": "startFrom",
+					"events": [
+						"onClick"
+					]
+				}
+			}
+		}
+	],
+	"geometryStamp": 287,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	},
+	"formClass": "_SCHEDULER",
+	"rightMargin": 20,
+	"bottomMargin": 20,
+	"windowMinHeight": 240,
+	"method": "FORM_MANAGER",
+	"windowMinWidth": 480,
+	"css": [
+		{
+			"path": "SCHEDULER.css",
+			"media": "mac"
+		},
+		{
+			"path": "SCHEDULER.css",
+			"media": "windows"
+		}
+	],
+	"windowSizingX": "fixed",
+	"width": 480,
+	"height": 600
+}

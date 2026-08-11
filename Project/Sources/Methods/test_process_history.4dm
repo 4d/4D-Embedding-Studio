@@ -89,8 +89,11 @@ $proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.
 $result:=$proc.process()
 ASSERT:C1129($result.success; JSON Stringify:C1217($result.toObject()))
 var $log2 : Object:=$execLog._read()
-ASSERT:C1129(String:C10($log2.startTime)#$startTime1; "startTime should have advanced to the latest run")
-ASSERT:C1129(String:C10($log2.endTime)#$endTime1; "endTime should have advanced to the latest run")
+// The prior run rolls into "previous"; assert on that rather than a bare inequality, which
+// would be flaky now that timestamps are local ISO at second precision (two back-to-back
+// runs can share a second — the rollover into previous is the real invariant here).
+ASSERT:C1129(String:C10($log2.previous.startTime)=$startTime1; "the prior run's startTime should roll into previous")
+ASSERT:C1129(String:C10($log2.previous.endTime)=$endTime1; "the prior run's endTime should roll into previous")
 ASSERT:C1129($log2.status="completed"; "expected latest status completed, got "+String:C10($log2.status))
 ASSERT:C1129(Value type:C1509($log2)=Is object:K8:27; "history file root should be a single object, not a list of entries")
 ASSERT:C1129(Value type:C1509($log2.previous)=Is object:K8:27; "previous run snapshot should be a single object")

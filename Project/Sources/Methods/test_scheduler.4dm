@@ -37,12 +37,12 @@ ASSERT:C1129($status.nextRun=Null:C1517; "disabled: status.nextRun should be Nul
 // INTERVAL
 // ══════════════════════════════════════════════════════════════════════
 
-$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "interval"; intervalHours: 2; startFrom: "now"}}))
+$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "interval"; intervalHours: 2; startFrom: "reference"}}))
 
 var $cfg : Object:=cs:C1710.Scheduler.me.config()
 ASSERT:C1129($cfg.mode="interval"; "config: expected interval")
 ASSERT:C1129($cfg.intervalHours=2; "config: expected intervalHours 2, got "+String:C10($cfg.intervalHours))
-ASSERT:C1129($cfg.startFrom="now"; "config: expected startFrom now")
+ASSERT:C1129($cfg.startFrom="reference"; "config: expected startFrom reference")
 
 cs:C1710._SchedulerState.me.arm(cs:C1710._ScheduleCalc.me._nowISO())  // anchor for "start from now"
 var $next : Object:=cs:C1710.Scheduler.me.nextRun()
@@ -126,7 +126,7 @@ $state.endBatch("completed"; ""; cs:C1710._ScheduleCalc.me._nowISO())
 // ══════════════════════════════════════════════════════════════════════
 
 $state.endBatch(""; ""; "")  // reset runtime baseline
-$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "interval"; intervalHours: 2; startFrom: "now"}}))
+$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "interval"; intervalHours: 2; startFrom: "reference"}}))
 cs:C1710._Settings.me.file:=$tmp
 $state.arm(cs:C1710._ScheduleCalc.me._nowISO())  // anchor for "start from now"
 

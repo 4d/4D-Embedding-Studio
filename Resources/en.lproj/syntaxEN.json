@@ -364,6 +364,13 @@
 				],
 				"Summary": ""
 			}
+		},
+		"_SCHEDULER": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
 		}
 	},
 	"_typeMedia": {
@@ -541,6 +548,30 @@
 		},
 		"settings": {
 			"Syntax": "settings : cs.EmbeddingStudio.Settings"
+		},
+		"schedulerManager()": {
+			"Syntax": "**.schedulerManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"paintSchedulerStatus()": {
+			"Syntax": "**.paintSchedulerStatus**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"openHelp()": {
+			"Syntax": "**.openHelp**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"schedulerStatusText": {
+			"Syntax": "schedulerStatusText : Text"
 		}
 	},
 	"_EmbeddingItem": {
@@ -839,6 +870,17 @@
 					"timestamp",
 					"Text",
 					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"lastRun()": {
+			"Syntax": "**.lastRun**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
 				]
 			],
 			"Summary": ""
@@ -2576,6 +2618,22 @@
 				]
 			],
 			"Summary": ""
+		},
+		"saveConfig()": {
+			"Syntax": "**.saveConfig**( *cfg* : Object ) : Object",
+			"Params": [
+				[
+					"cfg",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
 		}
 	},
 	"_SchedulerState": {
@@ -2677,6 +2735,30 @@
 		},
 		"armed": {
 			"Syntax": "armed : Boolean"
+		},
+		"restore()": {
+			"Syntax": "**.restore**( *lastRun* : Text; *lastResult* : Text; *lastError* : Text )",
+			"Params": [
+				[
+					"lastRun",
+					"Text",
+					"->"
+				],
+				[
+					"lastResult",
+					"Text",
+					"->"
+				],
+				[
+					"lastError",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"lastRunRestored": {
+			"Syntax": "lastRunRestored : Boolean"
 		}
 	},
 	"_TestAIKitEmbeddingsAPI": {
@@ -2757,6 +2839,102 @@
 	"_TestAIKitClient": {
 		"embeddings": {
 			"Syntax": "embeddings : cs.EmbeddingStudio._TestAIKitEmbeddingsAPI"
+		}
+	},
+	"_SCHEDULER": {
+		"onLoad()": {
+			"Syntax": "**.onLoad**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"manager()": {
+			"Syntax": "**.manager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"currentConfig()": {
+			"Syntax": "**.currentConfig**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"save()": {
+			"Syntax": "**.save**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"paint()": {
+			"Syntax": "**.paint**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"preview()": {
+			"Syntax": "**.preview**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"onConfigEdit()": {
+			"Syntax": "**.onConfigEdit**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"load()": {
+			"Syntax": "**.load**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"errorText": {
+			"Syntax": "errorText : Text"
+		},
+		"stateText": {
+			"Syntax": "stateText : Text"
+		},
+		"nextRunText": {
+			"Syntax": "nextRunText : Text"
+		},
+		"intervalHours": {
+			"Syntax": "intervalHours : Integer"
+		},
+		"startReference": {
+			"Syntax": "startReference : Text"
+		},
+		"lastRunText": {
+			"Syntax": "lastRunText : Text"
+		},
+		"startFromNow": {
+			"Syntax": "startFromNow : Boolean"
+		},
+		"startFromLast": {
+			"Syntax": "startFromLast : Boolean"
+		},
+		"dailyTime": {
+			"Syntax": "dailyTime : Text"
+		},
+		"startFromReference": {
+			"Syntax": "startFromReference : Boolean"
+		},
+		"modeDaily": {
+			"Syntax": "modeDaily : Boolean"
+		},
+		"modeInterval": {
+			"Syntax": "modeInterval : Boolean"
+		},
+		"modeDisabled": {
+			"Syntax": "modeDisabled : Boolean"
+		},
+		"scheduler": {
+			"Syntax": "scheduler : cs.EmbeddingStudio.Scheduler"
 		}
 	}
 }

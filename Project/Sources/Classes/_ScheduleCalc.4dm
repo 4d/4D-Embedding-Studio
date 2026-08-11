@@ -5,7 +5,7 @@
  $config : { mode; intervalHours; startFrom; dailyTime }
    mode      : "disabled" | "interval" | "daily"
    intervalHours : Integer 1..24 (interval mode)
-   startFrom : "now" | "lastExecution" (interval mode)
+   startFrom : "reference" | "lastExecution" (interval mode; "reference" uses config.startReference)
    dailyTime : "HH:MM" (daily mode)
 
  nextRun() returns { date : Date; time : Time; timestamp : Text; immediate : Boolean }
@@ -29,7 +29,7 @@ Function nextRun($config : Object; $lastExecution : Text; $anchor : Text) : Obje
 		: (String:C10($config.mode)="interval")
 			return This:C1470._interval($config; String:C10($lastExecution); String:C10($anchor))
 		: (String:C10($config.mode)="daily")
-			return This:C1470._daily($config)
+			return This:C1470._daily($config; String:C10($lastExecution))
 		Else 
 			return Null:C1517  // disabled or unknown
 	End case 
@@ -66,8 +66,12 @@ Function _interval($config : Object; $lastExecution : Text; $anchor : Text) : Ob
 		
 	End if 
 	
-	// startFrom = "now": AC-4.2.5, anchor on the arm time (survives across the loop).
-	var $anchorStamp : Text:=(Length:C16($anchor)>0) ? $anchor : $nowStamp
+	// startFrom = "reference": anchor on the stored start reference (the instant captured when the
+	// user chose "now"). Falls back to the arm time, then to now, for legacy configs without one.
+	var $anchorStamp : Text:=String:C10($config.startReference)
+	If (Length:C16($anchorStamp)=0)
+		$anchorStamp:=(Length:C16($anchor)>0) ? $anchor : $nowStamp
+	End if
 	var $slot : Object:=This:C1470._parse($anchorStamp)
 	$slot:=This:C1470._addSeconds($slot; $stepSeconds)
 	
@@ -81,20 +85,34 @@ Function _interval($config : Object; $lastExecution : Text; $anchor : Text) : Ob
 	return $slot
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Daily mode: next occurrence of dailyTime, today or tomorrow.
-Function _daily($config : Object) : Object
+	// Daily mode: next occurrence of dailyTime.
+	// While today's slot is still ahead, return it. Once it has arrived/passed, keep
+	// returning today's slot (so the loop fires it: timestamp<=now) until it has actually
+	// been run today; only then advance to tomorrow. Anchoring on $lastExecution — not on
+	// the "$target<=now -> tomorrow" shortcut — is what lets the run at HH:MM actually fire.
+Function _daily($config : Object; $lastExecution : Text) : Object
 	
 	var $parts : Collection:=Split string:C1554(String:C10($config.dailyTime); ":")
 	var $h : Integer:=Num:C11($parts[0])
 	var $m : Integer:=($parts.length>=2) ? Num:C11($parts[1]) : 0
 	var $target : Time:=?00:00:00?+($h*3600)+($m*60)
 	
-	var $date : Date:=Current date:C33
-	If ($target<=Current time:C178)
-		$date:=$date+1
+	var $today : Date:=Current date:C33
+	var $todaySlot : Object:=This:C1470._result($today; $target)
+	var $nowStamp : Text:=This:C1470._nowISO()
+	
+	// Slot still in the future today — wait for it.
+	If ($todaySlot.timestamp>$nowStamp)
+		return $todaySlot
 	End if 
 	
-	return This:C1470._result($date; $target)
+	// Slot has arrived/passed. Fire it once if we have not already run at/after it today;
+	// otherwise the next occurrence is tomorrow.
+	If ((Length:C16($lastExecution)=0) || ($lastExecution<$todaySlot.timestamp))
+		return $todaySlot
+	End if 
+	
+	return This:C1470._result($today+1; $target)
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Immediate run (now).

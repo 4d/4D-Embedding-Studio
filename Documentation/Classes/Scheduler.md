@@ -160,7 +160,8 @@ End if
 | `armed`         | Boolean       | `True` when the background loop is armed (after `start()`, until `stop()`).      |
 | `running`       | Boolean       | `True` while a recalculation batch is in progress.                              |
 | `batchStart`    | Text \| Null  | ISO timestamp of the running batch start (`Null` when idle).                    |
-| `lastExecution` | Text \| Null  | ISO timestamp of the last completed run (`Null` if none yet).                   |
+| `lastExecution` | Text \| Null  | ISO timestamp of the last completed run (`Null` if none yet). Restored from the persisted history after a restart, so it survives the loss of in-memory state. |
+| `lastRunBeforeRestart` | Boolean | `True` when `lastExecution` was recovered from the history after a restart rather than produced by a run in the current session. |
 | `nextRun`       | Text \| Null  | ISO timestamp of the next scheduled run (`Null` when disabled).                 |
 | `lastResult`    | Text \| Null  | Result of the last trigger: `started` \| `skipped` \| `completed` \| `failed`.  |
 | `error`         | Text \| Null  | Error summary when the last run failed (safe for admin display), else `Null`.   |

@@ -8,6 +8,9 @@ property currentItem : Object
 property itemPosition : Integer
 property selectedItems : Collection
 
+// Footer scheduler status bar (see EMBEDDINGS/form.4DForm)
+property schedulerStatusText : Text
+
 // Details panel
 property _detailFields:=[\
 "phrase"; \
@@ -29,7 +32,8 @@ Class constructor
 			
 			Storage:C1525.studio:=New shared object:C1526(\
 				"EMBEDDINGS"; 0; \
-				"MODELS"; 0)
+				"MODELS"; 0; \
+				"SCHEDULER"; 0)
 			
 		End use 
 	End if 
@@ -69,6 +73,8 @@ Function manager($e : Object)
 				// TODO: Use the new vector icon when ready
 				OBJECT SET FORMAT:C236(*; "Header2"; "path:/.PRODUCT_RESOURCES/Images/StructureEditor/Field_14.png")
 				
+				This:C1470.paintSchedulerStatus()
+				
 				// ______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
@@ -87,10 +93,13 @@ Function manager($e : Object)
 				// TODO: Visual indicator
 				CALL FORM:C1391(Current form window:C827; Formula:C1597(Form:C1466.refresh()))
 				
+				This:C1470.paintSchedulerStatus()
+				
 				// ______________________________________________________
 			: ($e.code=On Timer:K2:25)
 				
-				SET TIMER:C645(0)
+				This:C1470.paintSchedulerStatus()
+				SET TIMER:C645(600)  // keep the footer status fresh (~10s)
 				
 				// ______________________________________________________
 			: ($e.code=On Unload:K2:2)
@@ -173,6 +182,126 @@ Function manager($e : Object)
 			This:C1470.autoInvalidateManager($e)
 			
 			//______________________________________________________
+		: ($e.objectName="schedulerGear") || ($e.objectName="schedulerStatus") || ($e.objectName="schedulerStatusError")
+			
+			This:C1470.schedulerManager($e)
+			//______________________________________________________
+		: ($e.objectName="help")
+
+			This:C1470.openHelp()
+
+			//______________________________________________________
+	End case
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Opens the project's GitHub repository in the default browser (footer help button).
+Function openHelp()
+
+	OPEN URL:C673("https://github.com/4d/4D-Embedding-Studio")
+
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Footer status bar: repaints the one-line scheduler summary and the running spinner.
+Function paintSchedulerStatus()
+	
+	var $status : Object:=cs:C1710.Scheduler.me.status()
+	var $error : Text:=($status.error#Null:C1517) ? String:C10($status.error) : ""
+	var $hasError : Boolean:=(Length:C16($error)>0)
+	
+	// One line, scheduling info then the last error if any. Two elements bound to the same
+	// variable share it — only their CSS class (color) differs; we show the matching one.
+	var $summary : Text:=This:C1470._schedulerSummary($status)
+	If ($hasError)
+		$summary:=$summary+"   •   "+$error
+	End if 
+	Form:C1466.schedulerStatusText:=$summary
+	
+	OBJECT SET VISIBLE:C603(*; "schedulerStatus"; Not:C34($hasError))
+	OBJECT SET VISIBLE:C603(*; "schedulerStatusError"; $hasError)
+	OBJECT SET VISIBLE:C603(*; "schedulerSpinner"; Bool:C1537($status.running))
+	
+	// Full line on the help tip since it may be truncated with an ellipsis.
+	OBJECT SET HELP TIP:C1181(*; "schedulerStatus"; $summary)
+	OBJECT SET HELP TIP:C1181(*; "schedulerStatusError"; $summary)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Context menu behind the footer gear button / status click: configure + quick runtime actions.
+Function schedulerManager($e : Object)
+	
+	$e:=$e || FORM Event:C1606
+	
+	var $scheduler : cs:C1710.Scheduler:=cs:C1710.Scheduler.me
+	var $status : Object:=$scheduler.status()
+	
+	var $menu:=cs:C1710._menu.new()
+	$menu.append(Localized string:C991("schedulerConfigure"); "configure")
+	$menu.line()
+	$menu.append(Localized string:C991("schedulerForceNow"); "forceNow").enable(Not:C34(Bool:C1537($status.running)))
+	If (Bool:C1537($status.started))
+		$menu.append(Localized string:C991("schedulerStop"); "stop")
+	Else 
+		$menu.append(Localized string:C991("schedulerStart"); "start")
+	End if 
+	$menu.append(Localized string:C991("schedulerCancel"); "cancel").enable(Bool:C1537($status.running))
+	
+	// In dev mode the same button also carries the global dev actions.
+	If (This:C1470.settings._isDev)
+		$menu.line()
+		This:C1470._appendDevMenu($menu)
+	End if 
+	
+	If (Not:C34($menu.popup().selected))
+		return 
+	End if 
+	
+	Case of 
+		: ($menu.choice="configure")
+			_SCHEDULER_WIZARD
+		: ($menu.choice="forceNow")
+			$scheduler.force()
+		: ($menu.choice="start")
+			$scheduler.start()
+		: ($menu.choice="stop")
+			$scheduler.stop()
+		: ($menu.choice="cancel")
+			$scheduler.cancel()
+		Else 
+			This:C1470._handleDevChoice($menu.choice)
+	End case 
+	
+	This:C1470.paintSchedulerStatus()
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Builds the one-line footer summary: state • next run • last run.
+Function _schedulerSummary($status : Object) : Text
+	
+	var $parts : Collection:=[]
+	$parts.push(This:C1470._schedulerStateLabel($status))
+	
+	If ($status.nextRun#Null:C1517)
+		$parts.push(Localized string:C991("schedulerNextRun")+" "+_schedulerFormatDate(String:C10($status.nextRun)))
+	End if 
+	
+	If ($status.lastExecution#Null:C1517)
+		$parts.push(Localized string:C991("schedulerLastRun")+" "+_schedulerFormatDate(String:C10($status.lastExecution)))
+	End if 
+	
+	// The state labels ("No schedule", "Schedule idle", "Scheduled") already say this is the
+	// scheduler, so no prefix is needed.
+	return $parts.join("   •   ")
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Maps a scheduler status object to a localized state label.
+Function _schedulerStateLabel($status : Object) : Text
+	
+	Case of 
+		: (Bool:C1537($status.running))
+			return Localized string:C991("schedulerStateRunning")
+		: (Not:C34(Bool:C1537($status.enabled)))
+			return Localized string:C991("schedulerStateDisabled")
+		: (Bool:C1537($status.started))
+			return Localized string:C991("schedulerStateArmed")
+		Else 
+			return Localized string:C991("schedulerStateIdle")
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -260,45 +389,6 @@ Function moreManager($e : Object)
 		$menu.line().append($workerBusy ? "⏳ Compute Vectors" : "🚧 Compute Vectors"; "computeVectors").enable(Not:C34($workerBusy))
 		$menu.append($workerBusy ? "⏳ Invalid Vectors" : "🚧 Invalid Vectors"; "invalidVectors").enable(Not:C34($workerBusy))
 		$menu.append($workerBusy ? "⏳ Stat Vectors" : "🚧 Stat Vectors"; "statVectors").enable(Not:C34($workerBusy))
-		$menu.line().append($workerBusy ? "⏳ Compute All Vectors" : "🚧 Compute All Vectors"; "computeAllVectors").enable(Not:C34($workerBusy))
-		$menu.append($workerBusy ? "⏳ Invalid All Vectors" : "🚧 Invalid All Vectors"; "invalidAllVectors").enable(Not:C34($workerBusy))
-		$menu.append($workerBusy ? "⏳ Stat All Vectors" : "🚧 Stat All Vectors"; "statAllVectors").enable(Not:C34($workerBusy))
-		var $modelAliases : Collection:=This:C1470._getModelDropdownValues()
-		If ($modelAliases.length>0)
-			var $allSameModel : Text
-			var $defs : Collection:=This:C1470.settings.definitions
-			If (($defs.length>0) && ($defs.distinct("modelAlias").length=1))
-				$allSameModel:=String:C10($defs[0].modelAlias)
-			End if 
-			var $modelSubmenu:=cs:C1710._menu.new("no-localization")
-			var $alias : Text
-			For each ($alias; $modelAliases)
-				$modelSubmenu.append($alias; "setAllModels:"+$alias; ($alias=$allSameModel))
-			End for each 
-			$menu.append("🚧 Set All Vectors To"; $modelSubmenu)
-		End if 
-		$menu.line().append("🚧 Open AI Setting"; "openAISetting")
-		$menu.append("🚧 Open Setting File"; "openSettingFile")
-		$menu.append("🚧 Open Execution Log"; "openExecutionLog")
-		var $phraseOpts : Object:=This:C1470.settings.phrase
-		var $phraseSubmenu:=cs:C1710._menu.new("no-localization")
-		$phraseSubmenu.append("Allow Relations"; "phraseOption:allowRelations"; Bool:C1537($phraseOpts.allowRelations))
-		$phraseSubmenu.append("Allow Calculated"; "phraseOption:allowCalculated"; Bool:C1537($phraseOpts.allowCalculated))
-		$phraseSubmenu.append("Allow Alias"; "phraseOption:allowAlias"; Bool:C1537($phraseOpts.allowAlias))
-		$phraseSubmenu.append("Allow Object"; "phraseOption:allowObject"; Bool:C1537($phraseOpts.allowObject))
-		$menu.append("🚧 Phrase Settings"; $phraseSubmenu)
-		var $diagEnabled : Integer:=Get database parameter:C643(Diagnostic log recording:K37:69)
-		$menu.line().append("🚧 Toggle Diagnostic Log"; "toggleDiagnosticLogRecording"; ($diagEnabled=1))
-		var $diagLevel : Integer:=Get database parameter:C643(Diagnostic log level:K37:108)
-		var $levelSubmenu:=cs:C1710._menu.new("no-localization")
-		var $levelNames:=["Trace"; "Debug"; "Info"; "Warning"; "Error"]
-		var $levelConsts:=[Log trace:K37:109; Log debug:K37:110; Log info:K37:111; Log warn:K37:112; Log error:K37:113]
-		var $i : Integer
-		For ($i; 0; $levelNames.length-1)
-			$levelSubmenu.append($levelNames[$i]; "diagLevel:"+String:C10($levelConsts[$i]); ($diagLevel=$levelConsts[$i]))
-		End for 
-		$menu.append("🚧 Diagnostic Log Level"; $levelSubmenu)
-		$menu.append("🚧 Open Diagnostic Log"; "openDiagosticLog")
 		Case of 
 			: (Not:C34($item.hasDirtyAssociatedAttribute()))
 				$menu.line().append("🚧 Create dirty attribute"; "createDirtyAttribute")
@@ -321,20 +411,6 @@ Function moreManager($e : Object)
 			This:C1470.saveEmbeddingItems()
 			This:C1470._promptInvalidate($item)
 			
-			// ______________________________________________________
-		: ($menu.choice="openAISetting")
-			OPEN SETTINGS WINDOW:C903("/Database/AI")
-			// ______________________________________________________
-		: ($menu.choice="openSettingFile")
-			OPEN URL:C673(This:C1470.settings.file.platformPath)
-			// ______________________________________________________
-		: ($menu.choice="openExecutionLog")
-			var $execFile : 4D:C1709.File:=cs:C1710._ExecutionLog.me._file()
-			If ($execFile.exists)
-				OPEN URL:C673($execFile.platformPath)
-			Else 
-				ALERT:C41("No execution log file found.")
-			End if 
 			// ______________________________________________________
 		: ($menu.choice="insertAllAttributes")
 			var $plainText:=$item.supportedAttributes.map(Formula:C1597($1.value.name+"={"+$1.value.name+"}")).join(",")
@@ -382,47 +458,8 @@ Function moreManager($e : Object)
 		: ($menu.choice="invalidVectors")
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1; $2)); Formula:C1597(_invalidateVectors($1)); $item.definition)
 			// ______________________________________________________
-		: ($menu.choice="computeAllVectors")
-			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1)); Formula:C1597(_computeVectors))
-			// ______________________________________________________
-		: ($menu.choice="invalidAllVectors")
-			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1)); Formula:C1597(_invalidateVectors))
-			// ______________________________________________________
 		: ($menu.choice="statVectors")
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1; $2)); Formula:C1597(_statVectors($1)); $item.definition)
-			// ______________________________________________________
-		: ($menu.choice="statAllVectors")
-			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1)); Formula:C1597(_statVectors))
-			// ______________________________________________________
-		: (Position:C15("setAllModels:"; $menu.choice)=1)
-			var $chosenAlias : Text:=Substring:C12($menu.choice; Length:C16("setAllModels:")+1)
-			var $def : cs:C1710.Definition
-			For each ($def; This:C1470.settings.definitions)
-				$def.modelAlias:=$chosenAlias
-			End for each 
-			This:C1470.settings.save()
-			This:C1470.readEmbeddingItems()
-			This:C1470.modelUpdateDropdown()
-			// ______________________________________________________
-		: (Position:C15("phraseOption:"; $menu.choice)=1)
-			var $optKey : Text:=Substring:C12($menu.choice; Length:C16("phraseOption:")+1)
-			This:C1470.settings.phrase[$optKey]:=Not:C34(Bool:C1537(This:C1470.settings.phrase[$optKey]))
-			This:C1470.settings.save()
-			// ______________________________________________________
-		: ($menu.choice="toggleDiagnosticLogRecording")
-			var $current : Integer:=Get database parameter:C643(Diagnostic log recording:K37:69)
-			SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69; ($current=0) ? 1 : 0)
-			// ______________________________________________________
-		: (Position:C15("diagLevel:"; $menu.choice)=1)
-			SET DATABASE PARAMETER:C642(Diagnostic log level:K37:108; Num:C11(Substring:C12($menu.choice; Length:C16("diagLevel:")+1)))
-			// ______________________________________________________
-		: ($menu.choice="openDiagosticLog")
-			var $file:=Folder:C1567(fk logs folder:K87:17; *).files().filter(Formula:C1597(Position:C15("4DDiagnosticLog_"; $1.value.name)=1)).sort().first()
-			If ($file=Null:C1517)
-				ALERT:C41("No log")
-			Else 
-				OPEN URL:C673($file.platformPath)
-			End if 
 			// ______________________________________________________
 		: ($menu.choice="createDirtyAttribute")
 			$item.createDirtyAssociatedAttribute()
@@ -431,6 +468,110 @@ Function moreManager($e : Object)
 			$item.createDirtyAssociatedAttributeIndex()
 			// ______________________________________________________
 	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Appends the global dev-only actions (all-vectors ops, diagnostic log, phrase config,
+	// opening the settings / log files) to an existing menu. Caller gates on dev mode.
+Function _appendDevMenu($menu : cs:C1710._menu)
+	
+	var $workerBusy : Boolean:=(Process number:C372("EmbeddingStudio")>0)
+	
+	$menu.append($workerBusy ? "⏳ Compute All Vectors" : "🚧 Compute All Vectors"; "computeAllVectors").enable(Not:C34($workerBusy))
+	$menu.append($workerBusy ? "⏳ Invalid All Vectors" : "🚧 Invalid All Vectors"; "invalidAllVectors").enable(Not:C34($workerBusy))
+	$menu.append($workerBusy ? "⏳ Stat All Vectors" : "🚧 Stat All Vectors"; "statAllVectors").enable(Not:C34($workerBusy))
+	
+	var $modelAliases : Collection:=This:C1470._getModelDropdownValues()
+	If ($modelAliases.length>0)
+		var $allSameModel : Text
+		var $defs : Collection:=This:C1470.settings.definitions
+		If (($defs.length>0) && ($defs.distinct("modelAlias").length=1))
+			$allSameModel:=String:C10($defs[0].modelAlias)
+		End if 
+		var $modelSubmenu:=cs:C1710._menu.new("no-localization")
+		var $alias : Text
+		For each ($alias; $modelAliases)
+			$modelSubmenu.append($alias; "setAllModels:"+$alias; ($alias=$allSameModel))
+		End for each 
+		$menu.append("🚧 Set All Vectors To"; $modelSubmenu)
+	End if 
+	
+	$menu.line().append("🚧 Open AI Setting"; "openAISetting")
+	$menu.append("🚧 Open Setting File"; "openSettingFile")
+	$menu.append("🚧 Open Execution Log"; "openExecutionLog")
+	
+	var $phraseOpts : Object:=This:C1470.settings.phrase
+	var $phraseSubmenu:=cs:C1710._menu.new("no-localization")
+	$phraseSubmenu.append("Allow Relations"; "phraseOption:allowRelations"; Bool:C1537($phraseOpts.allowRelations))
+	$phraseSubmenu.append("Allow Calculated"; "phraseOption:allowCalculated"; Bool:C1537($phraseOpts.allowCalculated))
+	$phraseSubmenu.append("Allow Alias"; "phraseOption:allowAlias"; Bool:C1537($phraseOpts.allowAlias))
+	$phraseSubmenu.append("Allow Object"; "phraseOption:allowObject"; Bool:C1537($phraseOpts.allowObject))
+	$menu.append("🚧 Phrase Settings"; $phraseSubmenu)
+	
+	var $diagEnabled : Integer:=Get database parameter:C643(Diagnostic log recording:K37:69)
+	$menu.line().append("🚧 Toggle Diagnostic Log"; "toggleDiagnosticLogRecording"; ($diagEnabled=1))
+	var $diagLevel : Integer:=Get database parameter:C643(Diagnostic log level:K37:108)
+	var $levelSubmenu:=cs:C1710._menu.new("no-localization")
+	var $levelNames:=["Trace"; "Debug"; "Info"; "Warning"; "Error"]
+	var $levelConsts:=[Log trace:K37:109; Log debug:K37:110; Log info:K37:111; Log warn:K37:112; Log error:K37:113]
+	var $i : Integer
+	For ($i; 0; $levelNames.length-1)
+		$levelSubmenu.append($levelNames[$i]; "diagLevel:"+String:C10($levelConsts[$i]); ($diagLevel=$levelConsts[$i]))
+	End for 
+	$menu.append("🚧 Diagnostic Log Level"; $levelSubmenu)
+	$menu.append("🚧 Open Diagnostic Log"; "openDiagosticLog")
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Runs a dev action for a menu choice. Returns False when the choice is not a dev action.
+Function _handleDevChoice($choice : Text) : Boolean
+	
+	Case of 
+		: ($choice="computeAllVectors")
+			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1)); Formula:C1597(_computeVectors))
+		: ($choice="invalidAllVectors")
+			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1)); Formula:C1597(_invalidateVectors))
+		: ($choice="statAllVectors")
+			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1)); Formula:C1597(_statVectors))
+		: (Position:C15("setAllModels:"; $choice)=1)
+			var $chosenAlias : Text:=Substring:C12($choice; Length:C16("setAllModels:")+1)
+			var $def : cs:C1710.Definition
+			For each ($def; This:C1470.settings.definitions)
+				$def.modelAlias:=$chosenAlias
+			End for each 
+			This:C1470.settings.save()
+			This:C1470.readEmbeddingItems()
+			This:C1470.modelUpdateDropdown()
+		: ($choice="openAISetting")
+			OPEN SETTINGS WINDOW:C903("/Database/AI")
+		: ($choice="openSettingFile")
+			OPEN URL:C673(This:C1470.settings.file.platformPath)
+		: ($choice="openExecutionLog")
+			var $execFile : 4D:C1709.File:=cs:C1710._ExecutionLog.me._file()
+			If ($execFile.exists)
+				OPEN URL:C673($execFile.platformPath)
+			Else 
+				ALERT:C41("No execution log file found.")
+			End if 
+		: (Position:C15("phraseOption:"; $choice)=1)
+			var $optKey : Text:=Substring:C12($choice; Length:C16("phraseOption:")+1)
+			This:C1470.settings.phrase[$optKey]:=Not:C34(Bool:C1537(This:C1470.settings.phrase[$optKey]))
+			This:C1470.settings.save()
+		: ($choice="toggleDiagnosticLogRecording")
+			var $current : Integer:=Get database parameter:C643(Diagnostic log recording:K37:69)
+			SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69; ($current=0) ? 1 : 0)
+		: (Position:C15("diagLevel:"; $choice)=1)
+			SET DATABASE PARAMETER:C642(Diagnostic log level:K37:108; Num:C11(Substring:C12($choice; Length:C16("diagLevel:")+1)))
+		: ($choice="openDiagosticLog")
+			var $file:=Folder:C1567(fk logs folder:K87:17; *).files().filter(Formula:C1597(Position:C15("4DDiagnosticLog_"; $1.value.name)=1)).sort().first()
+			If ($file=Null:C1517)
+				ALERT:C41("No log")
+			Else 
+				OPEN URL:C673($file.platformPath)
+			End if 
+		Else 
+			return False:C215
+	End case 
+	
+	return True:C214
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function phraseManager($e : Object)

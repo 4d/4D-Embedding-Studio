@@ -13,9 +13,10 @@
 
  The scheduler config lives under the "scheduler" key of Settings/embeddings.json:
    { "mode": "disabled|interval|daily",
-     "intervalHours": 1..24,           // interval mode
-     "startFrom": "now|lastExecution", // interval mode
-     "dailyTime": "HH:MM" }            // daily mode
+     "intervalHours": 1..24,                    // interval mode
+     "startFrom": "reference|lastExecution",    // interval mode
+     "startReference": "YYYY-MM-DDThh:mm:ss",   // interval, anchor for startFrom "reference"
+     "dailyTime": "HH:MM" }                     // daily mode
 
  Concurrency: at most one recalculation batch runs at a time (AC-4.1.1). A trigger
  fired while a batch is running is skipped and logged (AC-4.1.2/4.1.4).
@@ -37,6 +38,15 @@ singleton Class constructor
 	// Idempotent — calling it again just refreshes the "start from now" anchor.
 Function start() : Boolean
 	
+	// Rehydrate the last-run info persisted by the previous process before arming. The
+	// in-memory state is empty after a restart; without this an interval "lastExecution"
+	// schedule fires immediately and a daily one double-fires today's slot (AC-4.2.6), and
+	// status() reports "never run". No-op once an in-session run exists (restore guards it).
+	var $persisted : Object:=cs:C1710._ExecutionLog.me.lastRun()
+	var $terminal : Boolean:=($persisted.status="completed") || ($persisted.status="failed")
+	var $error : Text:=(($terminal) && (Value type:C1509($persisted.error)=Is text:K8:3)) ? String:C10($persisted.error) : ""
+	cs:C1710._SchedulerState.me.restore($persisted.timestamp; ($terminal ? $persisted.status : ""); $error)
+
 	cs:C1710._SchedulerState.me.arm(cs:C1710._ScheduleCalc.me._nowISO())
 	
 	If (Not:C34(This:C1470.isStarted()))
@@ -81,49 +91,62 @@ Function config() : Object
 	
 	var $raw : Variant:=cs:C1710._Settings.me.get()
 	var $sched : Object:=(($raw#Null:C1517) && (Value type:C1509($raw.scheduler)=Is object:K8:27)) ? $raw.scheduler : {}
-	
-	var $mode : Text:=String:C10($sched.mode)
-	If (($mode#"interval") && ($mode#"daily"))
-		$mode:="disabled"
-	End if 
-	
-	var $hours : Integer:=Num:C11($sched.intervalHours)
-	If (($hours<1) || ($hours>24))
-		$hours:=3
-	End if 
-	
-	return {\
-		mode: $mode; \
-		intervalHours: $hours; \
-		startFrom: (String:C10($sched.startFrom)="lastExecution") ? "lastExecution" : "now"; \
-		dailyTime: (Length:C16(String:C10($sched.dailyTime))>0) ? String:C10($sched.dailyTime) : "00:00"}
-	
+
+	return This:C1470._normalize($sched)
+
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Validates and persists a scheduler configuration, then returns the normalized value.
+	// Only the "scheduler" key is written; _Settings.set merges, preserving other keys.
+Function saveConfig($cfg : Object) : Object
+
+	var $normalized : Object:=This:C1470._normalize($cfg)
+
+	cs:C1710._Settings.me.set({scheduler: $normalized})
+
+	return $normalized
+
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Computes the next scheduled run, or Null when disabled.
 Function nextRun() : Object
 	
 	var $state : cs:C1710._SchedulerState:=cs:C1710._SchedulerState.me
-	return cs:C1710._ScheduleCalc.me.nextRun(This:C1470.config(); $state.lastRun; $state.armedAt)
+	return cs:C1710._ScheduleCalc.me.nextRun(This:C1470.config(); This:C1470._effectiveLastRun(); $state.armedAt)
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// The effective "last run" anchor for scheduling: the in-memory value when present, else the
+	// one persisted in the execution history (which survives a restart and is what status() shows
+	// as lastExecution). Keeps nextRun() consistent with the displayed last execution — so after a
+	// restart, daily advances to tomorrow and interval "lastExecution" counts from the real last
+	// run, instead of both anchoring on an empty value (today's passed slot / an immediate run).
+Function _effectiveLastRun() : Text
+
+	var $state : cs:C1710._SchedulerState:=cs:C1710._SchedulerState.me
+	If (Length:C16($state.lastRun)>0)
+		return $state.lastRun
+	End if
+
+	return String:C10(cs:C1710._ExecutionLog.me.lastRun().timestamp)
+
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the current scheduler status (AC-5.5).
 Function status() : Object
 	
 	var $state : cs:C1710._SchedulerState:=cs:C1710._SchedulerState.me
-	var $log : Object:=cs:C1710._ExecutionLog.me.status()
+	var $persisted : Object:=cs:C1710._ExecutionLog.me.lastRun()
 	var $cfg : Object:=This:C1470.config()
 	var $next : Object:=($cfg.mode="disabled") ? Null:C1517 : This:C1470.nextRun()
-	
+
 	return {\
 		enabled: ($cfg.mode#"disabled"); \
 		mode: $cfg.mode; \
 		armed: $state.armed; \
 		running: $state.running; \
 		batchStart: (Length:C16($state.batchStart)>0) ? $state.batchStart : Null:C1517; \
-		lastExecution: (Length:C16($state.lastRun)>0) ? $state.lastRun : Null:C1517; \
+		lastExecution: (Length:C16($state.lastRun)>0) ? $state.lastRun : ((Length:C16(String:C10($persisted.timestamp))>0) ? $persisted.timestamp : Null:C1517); \
+		lastRunBeforeRestart: $state.lastRunRestored || ((Length:C16($state.lastRun)=0) && (Length:C16(String:C10($persisted.timestamp))>0)); \
 		nextRun: ($next#Null:C1517) ? $next.timestamp : Null:C1517; \
 		lastResult: (Length:C16($state.lastResult)>0) ? $state.lastResult : Null:C1517; \
-		error: (Length:C16($state.lastError)>0) ? $state.lastError : $log.error; \
+		error: (Length:C16($state.lastError)>0) ? $state.lastError : $persisted.error; \
 		started: This:C1470.isStarted(); \
 		autoStart: This:C1470.autoStart()}
 	
@@ -143,6 +166,42 @@ Function autoStart() : Boolean
 	// the * targets the host structure settings, the only place the option can be set
 	return Bool:C1537(This:C1470._hostEventSetting(File:C1566(This:C1470._hostSettings; *)))
 	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Applies defaults and clamping to a raw scheduler config object. Shared by config() (read)
+	// and saveConfig() (write) so the stored shape and the effective shape always agree.
+Function _normalize($sched : Object) : Object
+
+	If (Value type:C1509($sched)#Is object:K8:27)
+		$sched:={}
+	End if
+
+	var $mode : Text:=String:C10($sched.mode)
+	If (($mode#"interval") && ($mode#"daily"))
+		$mode:="disabled"
+	End if
+
+	var $hours : Integer:=Num:C11($sched.intervalHours)
+	If (($hours<1) || ($hours>24))
+		$hours:=3
+	End if
+
+	// HH:MM, 00:00..23:59; anything malformed falls back to midnight
+	var $daily : Text:=String:C10($sched.dailyTime)
+	If (Not:C34(Bool:C1537(Match regex:C1019("^([01]\\d|2[0-3]):[0-5]\\d$"; $daily; 1))))
+		$daily:="00:00"
+	End if
+
+	// "lastExecution" counts from the last completed run; anything else (incl. the legacy "now")
+	// counts from the fixed startReference instant captured when the user chose "now".
+	var $startFrom : Text:=(String:C10($sched.startFrom)="lastExecution") ? "lastExecution" : "reference"
+
+	return {\
+		mode: $mode; \
+		intervalHours: $hours; \
+		startFrom: $startFrom; \
+		startReference: String:C10($sched.startReference); \
+		dailyTime: $daily}
+
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Reads the "execute_host_database_event" attribute of the settings.4DSettings file.
 	// Returns Null when the file is missing, is not readable XML, or does not carry the attribute.

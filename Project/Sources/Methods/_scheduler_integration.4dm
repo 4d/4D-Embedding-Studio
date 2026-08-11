@@ -28,9 +28,14 @@ End if
 
 LOG EVENT:C667(Into system standard outputs:K38:9; "[IT] scheduler integration starting…"+Char:C90(Line feed:K15:40))
 
-// Ensure a clean slate.
+// Ensure a clean slate — including the persisted history, from which start() now rehydrates
+// the last-run anchor; a prior run left there would defeat the immediate-fire premise below.
 cs:C1710.Scheduler.me.stop()
 cs:C1710._SchedulerState.me.endBatch(""; ""; "")
+var $hist : 4D:C1709.File:=cs:C1710._ExecutionLog.me._file()
+If ($hist.exists)
+	$hist.delete()
+End if
 
 // --- Seed 5 students without vectors ---
 ds:C1482._Students.all().drop()

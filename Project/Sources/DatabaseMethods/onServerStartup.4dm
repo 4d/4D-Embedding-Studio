@@ -1,0 +1,1 @@
+cs:C1710.Scheduler.me.start()  // dev purpose (see host database event for studio as component)

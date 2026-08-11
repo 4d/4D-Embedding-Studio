@@ -84,3 +84,4 @@ BUILD/
 Project/Sources/AIProviders.json
 /bench/results
 /bench/sweep
+results.json

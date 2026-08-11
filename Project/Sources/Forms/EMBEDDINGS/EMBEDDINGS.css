@@ -1,0 +1,39 @@
+/* Embedding Studio — scheduler footer status bar.
+   Colors follow the system appearance (light / dark) like the runtime
+   Package Manager footer, via prefers-color-scheme.
+   The status line has two skins bound to the same text, shown one at a time:
+   .schedulerStatusText (normal) and .schedulerStatusError (error). */
+
+.schedulerFooterBar {
+	fill: #ECECEC;
+	stroke: transparent;
+}
+
+.schedulerFooterSep {
+	stroke: #C8C8C8;
+}
+
+.schedulerStatusText {
+	fill: transparent;
+	stroke: #444444;
+}
+
+.schedulerStatusError {
+	fill: transparent;
+	stroke: #C0392B;
+}
+
+@media (prefers-color-scheme: dark) {
+	.schedulerFooterBar {
+		fill: #2A2B2E;
+	}
+	.schedulerFooterSep {
+		stroke: #3C3D41;
+	}
+	.schedulerStatusText {
+		stroke: #C8C8C8;
+	}
+	.schedulerStatusError {
+		stroke: #EA7979;
+	}
+}

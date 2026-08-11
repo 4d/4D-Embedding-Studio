@@ -14,7 +14,7 @@ property _startMs : Integer
 Class constructor()
 	
 	This:C1470.errors:=[]
-	This:C1470._startTimestamp:=Timestamp:C1445
+	This:C1470._startTimestamp:=cs:C1710._ScheduleCalc.me._nowISO()  // local ISO, same base as the scheduler and the rest of the history file
 	This:C1470._startMs:=Milliseconds:C459
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===

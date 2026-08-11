@@ -76,6 +76,10 @@
           <source>Done</source>
           <target state="new">Done</target>
         </trans-unit>
+        <trans-unit id="moreInformation" resname="moreInformation">
+          <source>More information</source>
+          <target state="new">More information</target>
+        </trans-unit>
       </group>
     </body>
   </file>

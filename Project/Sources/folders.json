@@ -44,11 +44,17 @@
 	"SCHEDULER": {
 		"methods": [
 			"_SCHEDULER_LOOP",
-			"_SCHEDULER_RUN"
+			"_SCHEDULER_RUN",
+			"_SCHEDULER_WIZARD",
+			"_schedulerFormatDate"
+		],
+		"forms": [
+			"SCHEDULER"
 		],
 		"classes": [
 			"_ScheduleCalc",
-			"_SchedulerState"
+			"_SchedulerState",
+			"_SCHEDULER"
 		]
 	},
 	"STUDIO": {

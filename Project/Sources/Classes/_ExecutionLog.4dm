@@ -163,6 +163,36 @@ Function setNextComputeDate($value : Text)
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the last completed run as { timestamp; status; error }, all in the scheduler's
+	// local ISO base (startTime/endTime are written in that base too). While a run is in
+	// progress the top-level endTime is Null and the last completed run sits in "previous",
+	// so fall back to it — this is what lets the scheduler rehydrate its anchor after a restart
+	// straight from the history, without persisting the timestamp a second time in its own field.
+Function lastRun() : Object
+
+	var $log : Object:=This:C1470._read()
+
+	// A run in progress leaves the top-level endTime Null (JSON null, not a Text), so the last
+	// completed run lives in "previous" — fall back to it. Guard on the value type: String(Null)
+	// yields the literal "null" here, so a bare Length(String(endTime)) check would misfire.
+	var $src : Object:=$log
+	If (Not:C34(This:C1470._hasEndTime($log)) && (Value type:C1509($log.previous)=Is object:K8:27))
+		$src:=$log.previous
+	End if
+
+	return {\
+		timestamp: This:C1470._hasEndTime($src) ? String:C10($src.endTime) : ""; \
+		status: (Value type:C1509($src.status)=Is text:K8:3) ? String:C10($src.status) : ""; \
+		error: $src.error}
+
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// True when $o carries a usable (non-empty Text) endTime — i.e. a completed run, not a
+	// null/absent one. JSON null parses to a Null value, not Text, and must not count.
+Function _hasEndTime($o : Object) : Boolean
+
+	return (Value type:C1509($o.endTime)=Is text:K8:3) && (Length:C16(String:C10($o.endTime))>0)
+
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a read-only snapshot of the top-level run state (for status reporting).
 Function status() : Object
 	

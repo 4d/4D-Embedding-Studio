@@ -40,6 +40,10 @@
           <source>Embedding Studio</source>
           <target>Embedding Studio</target>
         </trans-unit>
+        <trans-unit id="schedulerHoursCountingFrom" resname="schedulerHoursCountingFrom">
+          <source>hours, counting from</source>
+          <target>hours, counting from</target>
+        </trans-unit>
       </group>
       <group resname="Models">
         <trans-unit id="29" resname="name">
@@ -79,6 +83,102 @@
         <trans-unit id="4" resname="done">
           <source>Done</source>
           <target>Done</target>
+        </trans-unit>
+        <trans-unit id="moreInformation" resname="moreInformation">
+          <source>More information</source>
+          <target>More information</target>
+        </trans-unit>
+        <trans-unit id="schedulerWindowTitle" resname="schedulerWindowTitle">
+          <source>Embedding Scheduler</source>
+          <target>Embedding Scheduler</target>
+        </trans-unit>
+        <trans-unit id="schedulerMode" resname="schedulerMode">
+          <source>Recalculation schedule</source>
+          <target>Recalculation schedule</target>
+        </trans-unit>
+        <trans-unit id="schedulerModeDisabled" resname="schedulerModeDisabled">
+          <source>Disabled</source>
+          <target>Disabled</target>
+        </trans-unit>
+        <trans-unit id="schedulerModeInterval" resname="schedulerModeInterval">
+          <source>At a regular interval</source>
+          <target>At a regular interval</target>
+        </trans-unit>
+        <trans-unit id="schedulerModeDaily" resname="schedulerModeDaily">
+          <source>Once a day</source>
+          <target>Once a day</target>
+        </trans-unit>
+        <trans-unit id="schedulerEveryHours" resname="schedulerEveryHours">
+          <source>Run every</source>
+          <target>Run every</target>
+        </trans-unit>
+        <trans-unit id="schedulerStartFromNow" resname="schedulerStartFromNow">
+          <source>now</source>
+          <target>now</target>
+        </trans-unit>
+        <trans-unit id="schedulerStartFromLast" resname="schedulerStartFromLast">
+          <source>the last execution</source>
+          <target>the last execution</target>
+        </trans-unit>
+        <trans-unit id="schedulerAtTime" resname="schedulerAtTime">
+          <source>Run at (HH:MM)</source>
+          <target>Run at (HH:MM)</target>
+        </trans-unit>
+        <trans-unit id="schedulerNextRun" resname="schedulerNextRun">
+          <source>Next run:</source>
+          <target>Next run:</target>
+        </trans-unit>
+        <trans-unit id="schedulerState" resname="schedulerState">
+          <source>State:</source>
+          <target>State:</target>
+        </trans-unit>
+        <trans-unit id="schedulerLastRun" resname="schedulerLastRun">
+          <source>Last run:</source>
+          <target>Last run:</target>
+        </trans-unit>
+        <trans-unit id="schedulerForceNow" resname="schedulerForceNow">
+          <source>Run now</source>
+          <target>Run now</target>
+        </trans-unit>
+        <trans-unit id="schedulerStart" resname="schedulerStart">
+          <source>Start scheduler</source>
+          <target>Start scheduler</target>
+        </trans-unit>
+        <trans-unit id="schedulerStop" resname="schedulerStop">
+          <source>Stop scheduler</source>
+          <target>Stop scheduler</target>
+        </trans-unit>
+        <trans-unit id="schedulerCancel" resname="schedulerCancel">
+          <source>Cancel run</source>
+          <target>Cancel run</target>
+        </trans-unit>
+        <trans-unit id="schedulerConfigure" resname="schedulerConfigure">
+          <source>Configure scheduler…</source>
+          <target>Configure scheduler…</target>
+        </trans-unit>
+        <trans-unit id="schedulerStateRunning" resname="schedulerStateRunning">
+          <source>Running</source>
+          <target>Running</target>
+        </trans-unit>
+        <trans-unit id="schedulerStateDisabled" resname="schedulerStateDisabled">
+          <source>No schedule</source>
+          <target>No schedule</target>
+        </trans-unit>
+        <trans-unit id="schedulerStateArmed" resname="schedulerStateArmed">
+          <source>Scheduled</source>
+          <target>Scheduled</target>
+        </trans-unit>
+        <trans-unit id="schedulerStateIdle" resname="schedulerStateIdle">
+          <source>Schedule idle</source>
+          <target>Schedule idle</target>
+        </trans-unit>
+        <trans-unit id="schedulerSave" resname="schedulerSave">
+          <source>Save</source>
+          <target>Save</target>
+        </trans-unit>
+        <trans-unit id="schedulerClose" resname="schedulerClose">
+          <source>Cancel</source>
+          <target>Cancel</target>
         </trans-unit>
       </group>
     </body>

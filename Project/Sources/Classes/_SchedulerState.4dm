@@ -18,6 +18,7 @@ property lastError : Text:=""
 property cancelRequested : Boolean:=False:C215
 property skipLoggedFor : Text:=""  // dedupe key for skipped-trigger logging
 property checkInterval : Integer:=60  // loop sleep cap, in seconds
+property lastRunRestored : Boolean:=False:C215  // True when lastRun was rehydrated from persistence after a restart
 
 shared singleton Class constructor
 	
@@ -69,7 +70,8 @@ Function endBatch($result : Text; $error : Text; $endTimestamp : Text)
 		This:C1470.lastResult:=String:C10($result)
 		This:C1470.lastError:=String:C10($error)
 		This:C1470.lastRun:=String:C10($endTimestamp)
-	End use 
+		This:C1470.lastRunRestored:=False:C215  // a genuine in-session run supersedes any restored value
+	End use
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Requests a cooperative cancel of the running batch.
@@ -86,4 +88,25 @@ Function markSkipped($key : Text)
 	Use (This:C1470)
 		This:C1470.lastResult:="skipped"
 		This:C1470.skipLoggedFor:=String:C10($key)
-	End use 
+	End use
+
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Rehydrates the last-run info from persistence after a restart (this state is in-memory
+	// only, so it is empty on a fresh process). Without it, interval "lastExecution" fires
+	// immediately and daily double-fires today's slot after every restart, and status() would
+	// report "never run". $lastRun is LOCAL ISO (the scheduler's time base), not the log's UTC.
+	// No-op once an in-session run has set lastRun, so a live run is never clobbered.
+Function restore($lastRun : Text; $lastResult : Text; $lastError : Text)
+
+	If (Length:C16(String:C10($lastRun))=0)
+		return
+	End if
+
+	Use (This:C1470)
+		If (Length:C16(This:C1470.lastRun)=0)
+			This:C1470.lastRun:=String:C10($lastRun)
+			This:C1470.lastResult:=String:C10($lastResult)
+			This:C1470.lastError:=String:C10($lastError)
+			This:C1470.lastRunRestored:=True:C214
+		End if
+	End use

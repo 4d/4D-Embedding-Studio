@@ -22,6 +22,15 @@ ASSERT:C1129(Substring:C12($daily.timestamp; 11)="T23:59:00"; "daily time part s
 ASSERT:C1129($daily.timestamp>$now; "daily next run should be in the future")
 ASSERT:C1129($daily.immediate=False:C215; "daily should not be immediate")
 
+// Daily slot whose time has already passed today and was never run → due now (timestamp<=now),
+// so the loop can actually fire it instead of forever pointing at tomorrow.
+var $dueToday : Object:=$calc.nextRun({mode: "daily"; dailyTime: "00:00"}; ""; "")
+ASSERT:C1129($dueToday.timestamp<=$now; "daily past-time, never ran → due now, got "+$dueToday.timestamp)
+
+// Same slot but it was already run today (lastExecution=now) → advance to tomorrow.
+var $ranToday : Object:=$calc.nextRun({mode: "daily"; dailyTime: "00:00"}; $now; "")
+ASSERT:C1129($ranToday.timestamp>$now; "daily past-time, already ran today → tomorrow, got "+$ranToday.timestamp)
+
 // ══════════════════════════════════════════════════════════════════════
 // INTERVAL — start from last execution
 // ══════════════════════════════════════════════════════════════════════
@@ -43,9 +52,15 @@ ASSERT:C1129($recent.timestamp>$now; "recent lastExecution → next in the futur
 // INTERVAL — start from now
 // ══════════════════════════════════════════════════════════════════════
 
-var $fromNow : Object:=$calc.nextRun({mode: "interval"; intervalHours: 1; startFrom: "now"}; ""; $now)
-ASSERT:C1129($fromNow#Null:C1517; "interval start-from-now → not null")
-ASSERT:C1129($fromNow.timestamp>$now; "interval start-from-now → next in the future")
+var $fromNow : Object:=$calc.nextRun({mode: "interval"; intervalHours: 1; startFrom: "reference"}; ""; $now)
+ASSERT:C1129($fromNow#Null:C1517; "interval start-from-reference (fallback to anchor) → not null")
+ASSERT:C1129($fromNow.timestamp>$now; "interval start-from-reference → next in the future")
+
+// Explicit startReference in the past → next run is that reference advanced past now.
+var $fromRef : Object:=$calc.nextRun({mode: "interval"; intervalHours: 3; startFrom: "reference"; startReference: "2020-01-01T00:00:00"}; ""; "")
+ASSERT:C1129($fromRef#Null:C1517; "interval start-from-reference → not null")
+ASSERT:C1129($fromRef.timestamp>$calc._nowISO(); "interval start-from-reference → next in the future")
+ASSERT:C1129(Substring:C12($fromRef.timestamp; 15)="00:00"; "interval start-from-reference → aligned to the reference minutes")
 
 // ══════════════════════════════════════════════════════════════════════
 // slotAfter
