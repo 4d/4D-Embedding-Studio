@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/4d/4D-Embedding-Studio/skills/configure-embeddings/references/schemas/embeddings.schema.json",
+  "title": "4D Embedding Studio settings (embeddings.json)",
+  "description": "Vector embedding definitions and scheduler config consumed by cs.EmbeddingStudio.Settings / Scheduler.",
+  "type": "object",
+  "properties": {
+    "batchSize": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Entities processed per batch. Default 50."
+    },
+    "dev": { "type": "boolean" },
+    "phrase": { "$ref": "#/$defs/phraseOptions" },
+    "embedder": {
+      "type": "object",
+      "description": "Advanced embedder tuning (className, maxRetries, backoffMs, ...).",
+      "additionalProperties": true
+    },
+    "definitions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/definition" }
+    },
+    "scheduler": { "$ref": "#/$defs/scheduler" }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "phraseOptions": {
+      "type": "object",
+      "description": "Which attribute kinds may appear in a phrase template. All default false.",
+      "properties": {
+        "allowRelations": { "type": "boolean" },
+        "allowCalculated": { "type": "boolean" },
+        "allowAlias": { "type": "boolean" },
+        "allowObject": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "definition": {
+      "type": "object",
+      "description": "One vector field to embed.",
+      "properties": {
+        "dataclassName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Existing ORDA/table name, verbatim (may start with '_')."
+        },
+        "vectorName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A field whose class is 4D.Vector on that dataclass."
+        },
+        "modelAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A key of AIProviders.json > models (an embeddings-capable alias)."
+        },
+        "phrase": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Template with {attribute} placeholders used to build the text."
+        },
+        "autoInvalidate": { "type": "boolean" },
+        "version": { "type": "integer" }
+      },
+      "required": ["dataclassName", "vectorName", "modelAlias", "phrase"],
+      "additionalProperties": false
+    },
+    "scheduler": {
+      "type": "object",
+      "description": "Automatic recalculation schedule. See Scheduler._normalize.",
+      "properties": {
+        "mode": { "enum": ["disabled", "interval", "daily"] },
+        "intervalHours": { "type": "integer", "minimum": 1, "maximum": 24 },
+        "startFrom": { "enum": ["reference", "lastExecution"] },
+        "startReference": {
+          "type": "string",
+          "description": "ISO instant 'YYYY-MM-DDThh:mm:ss' anchoring interval mode."
+        },
+        "dailyTime": {
+          "type": "string",
+          "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "HH:MM 24h, daily mode."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

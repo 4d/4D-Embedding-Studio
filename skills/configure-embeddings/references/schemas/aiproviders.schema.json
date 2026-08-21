@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/4d/4D-Embedding-Studio/skills/configure-embeddings/references/schemas/aiproviders.schema.json",
+  "title": "4D-AIKit providers (AIProviders.json)",
+  "description": "Providers and model aliases consumed by cs.AIKit.OpenAIProviders.",
+  "type": "object",
+  "properties": {
+    "providers": {
+      "type": "object",
+      "description": "Map of provider name -> connection config.",
+      "additionalProperties": { "$ref": "#/$defs/provider" }
+    },
+    "models": {
+      "type": "object",
+      "description": "Map of model-alias name -> { provider, model }. Referenced by embeddings.json > definitions[].modelAlias.",
+      "additionalProperties": { "$ref": "#/$defs/modelAlias" }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "provider": {
+      "type": "object",
+      "properties": {
+        "baseURL": {
+          "type": "string",
+          "description": "OpenAI-compatible base URL, e.g. https://api.openai.com/v1 or http://localhost:11434/v1/"
+        },
+        "apiKey": {
+          "type": "string",
+          "description": "Secret key. Prefer leaving empty and using the <PROVIDER>_API_KEY env var."
+        },
+        "organization": { "type": "string" },
+        "project": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "modelAlias": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Must be a key of the top-level 'providers' object."
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Provider-side model name, e.g. text-embedding-3-small."
+        }
+      },
+      "required": ["provider", "model"],
+      "additionalProperties": true
+    }
+  }
+}
