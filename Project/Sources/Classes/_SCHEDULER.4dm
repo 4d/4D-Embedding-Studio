@@ -30,6 +30,7 @@ property startReference : Text
 property _layoutKey : Text  // last applied layout signature; skips relayout when unchanged
 property _buttonBar : Integer:=46  // reserved under the last section: buttons (26) + bottom margin (20)
 property _appliedH : Integer:=400  // window content height last applied; MUST match the form's design height
+property _appliedHD : Boolean:=False:C215  // to postpone resize of windows using timer, using this._appliedH value
 property _activated : Boolean  // True once the window is shown (On Activate); gates the first resize
 
 Class constructor
@@ -64,8 +65,18 @@ Function manager($e : Object)
 				//______________________________________________________
 			: ($e.code=On Timer:K2:25)
 				
-				This:C1470.paint()
-				
+				If (Bool:C1537(This:C1470._appliedHD))
+					
+					var $l; $t; $r; $b : Integer
+					GET WINDOW RECT:C443($l; $t; $r; $b; Current form window:C827)
+					
+					SET WINDOW RECT:C444($l; $t; $r; $t+This:C1470._appliedH; Current form window:C827)
+					
+					This:C1470._appliedHD:=False:C215
+					
+				Else 
+					This:C1470.paint()
+				End if 
 				//______________________________________________________
 			: ($e.code=On Unload:K2:2)
 				
@@ -312,8 +323,9 @@ Function _layout()
 	
 	var $targetH : Integer:=$y+This:C1470._buttonBar
 	If (This:C1470._activated && ($targetH#This:C1470._appliedH))
-		//RESIZE FORM WINDOW(0; $targetH-This._appliedH) // because of issue I do not resize now
 		This:C1470._appliedH:=$targetH
+		This:C1470._appliedHD:=True:C214
+		SET TIMER:C645(10)
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
