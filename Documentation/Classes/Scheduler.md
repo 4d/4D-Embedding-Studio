@@ -217,6 +217,33 @@ Returns the effective scheduler configuration with defaults applied (as resolved
 var $cfg:=cs.EmbeddingStudio.Scheduler.me.config()
 ```
 
+### saveConfig()
+
+**saveConfig**( *cfg* : Object ) : Object
+
+Validates, normalizes and **persists** a scheduler configuration to the `scheduler` key of `embeddings.json`, then returns the normalized value. This is the programmatic equivalent of the scheduler settings window: it lets you change the schedule entirely by code, without the GUI. Only the `scheduler` key is written — other keys of the settings file are preserved.
+
+The configuration is written **on the server**: in a 4D Server / 4D remote setup the file is always edited on the server machine, so a remote client can safely call this method. Because the loop re-reads the configuration on every cycle, the new schedule takes effect without restarting the scheduler.
+
+| Parameter | Type   | Description                                                                 |
+|-----------|--------|-----------------------------------------------------------------------------|
+| cfg       | Object | Raw configuration `{mode; intervalHours; startFrom; startReference; dailyTime}` (see [Configuration](#configuration)). Missing/out-of-range values are defaulted. |
+
+| Result  | Type   | Description                                                        |
+|---------|--------|--------------------------------------------------------------------|
+| result  | Object | The normalized configuration that was persisted.                   |
+
+```4d
+// Switch to a 6-hour interval counting from the last execution
+cs.EmbeddingStudio.Scheduler.me.saveConfig({mode: "interval"; intervalHours: 6; startFrom: "lastExecution"})
+
+// Switch to a daily run at 02:30
+cs.EmbeddingStudio.Scheduler.me.saveConfig({mode: "daily"; dailyTime: "02:30"})
+
+// Disable the automatic schedule
+cs.EmbeddingStudio.Scheduler.me.saveConfig({mode: "disabled"})
+```
+
 ### nextRun()
 
 **nextRun**() : Object
