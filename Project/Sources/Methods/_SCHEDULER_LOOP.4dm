@@ -61,7 +61,7 @@ Repeat
 		$sleep:=$state.checkInterval
 	End if 
 	
-	DELAY PROCESS:C323(Current process:C322; $sleep)
+	DELAY PROCESS:C323(Current process:C322; $sleep*60)  // $sleep is seconds; DELAY PROCESS takes ticks (1s=60)
 	
 Until (Not:C34($state.armed))
 
