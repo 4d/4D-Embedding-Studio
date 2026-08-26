@@ -326,6 +326,7 @@
 				"save": {
 					"type": "button",
 					"text": ":xliff:schedulerSave",
+					"defaultButton": true,
 					"top": 558,
 					"left": 384,
 					"width": 76,
