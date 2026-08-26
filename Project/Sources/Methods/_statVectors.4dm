@@ -29,10 +29,11 @@ For each ($def; $scope)
 	
 	var $stat : Object:={name: $def.dataclassName+"."+$def.vectorName; total: 0; computed: 0; dirty: 0; pending: 0; attributes: {}}
 	$stat.total:=$dc.all().length
-	$stat.pending:=$dc.query($def.vectorName+" = null").length
+	// attribute paths as placeholders: field names may contain a space or a "."
+	$stat.pending:=$dc.query(":1 = null"; $def.vectorName).length
 	
 	If ($hasDirty)
-		$stat.dirty:=$dc.query($def.vectorName+" != null AND "+$dirtyField+" = true").length
+		$stat.dirty:=$dc.query(":1 != null AND :2 = true"; $def.vectorName; $dirtyField).length
 	End if 
 	
 	$stat.computed:=$stat.total-$stat.pending-$stat.dirty
@@ -46,9 +47,9 @@ For each ($def; $scope)
 		var $attrKey : Text:=$keys[$ai]
 		If ($attr#Null:C1517)
 			If ($attr.type="string")
-				$stat.attributes[$attrKey]:=$dc.query($attrKey+" = null OR "+$attrKey+" = :1"; "").length
+				$stat.attributes[$attrKey]:=$dc.query(":1 = null OR :2 = :3"; $attrKey; $attrKey; "").length
 			Else 
-				$stat.attributes[$attrKey]:=$dc.query($attrKey+" = null").length
+				$stat.attributes[$attrKey]:=$dc.query(":1 = null"; $attrKey).length
 			End if 
 		End if 
 	End for 

@@ -122,12 +122,14 @@ Function invalidateVectors() : Object
 	var $skipped : Integer:=0
 	var $errors : Collection:=[]
 	
-	var $query:=This:C1470.vectorName+" != null"
-	If ($hasDirty)
-		$query+=" & "+$dirtyName+" = false"
-	End if 
+	// attribute paths as placeholders: a field name may contain a space or a "." that the
+	// query parser would otherwise read as part of the expression
+	var $pending : 4D:C1709.EntitySelection:=($hasDirty)\
+		 ? $dc.query(":1 != null & :2 = false"; This:C1470.vectorName; $dirtyName)\
+		 : $dc.query(":1 != null"; This:C1470.vectorName)
+	
 	var $entity : cs:C1710.Entity
-	For each ($entity; $dc.query($query))
+	For each ($entity; $pending)
 		If ($hasDirty)
 			$entity[$dirtyName]:=True:C214
 		Else 
@@ -158,11 +160,9 @@ Function _hasVectorComputed() : Boolean
 	var $dirtyName : Text:=This:C1470.vectorName+"_dirty"
 	var $hasDirty : Boolean:=($dc[$dirtyName]#Null:C1517)
 	
-	var $query:=This:C1470.vectorName+" != null"
-	If ($hasDirty)
-		$query+=" & "+$dirtyName+" = false"
-	End if 
-	var $s:=$dc.query($query)
+	var $s : 4D:C1709.EntitySelection:=($hasDirty)\
+		 ? $dc.query(":1 != null & :2 = false"; This:C1470.vectorName; $dirtyName)\
+		 : $dc.query(":1 != null"; This:C1470.vectorName)
 	
 	return $s.length>0  // is it optimized? I need not(isEmpty)
 	

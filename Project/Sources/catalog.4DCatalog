@@ -17,6 +17,10 @@
 			<field_extra class_id="4D.Vector"/>
 		</field>
 		<field name="student_vector_2_dirty" uuid="BC2E61AA44454FBEABB67AEDF6D8E7D1" type="1" id="8"/>
+		<field name="student vector 3" uuid="5829A786D60244E7A81E3638F698F58B" type="21" blob_switch_size="2147483647" id="9">
+			<field_extra class_id="4D.Vector"/>
+		</field>
+		<field name="student vector 3_dirty" uuid="6FD26D5C57304A38A72840C599D43719" type="1" id="10"/>
 		<primary_key field_name="ID" field_uuid="8C8244E61CBA42229EE02B9CE64EE77C"/>
 	</table>
 	<table name="School" uuid="459BCA81417F4262A46553B1E206CFD5" id="2">

@@ -497,17 +497,16 @@ Function _filterNeedsRecompute($es : 4D:C1709.EntitySelection; $def : cs:C1710.D
 		
 	End if 
 	
-	// Attribute names come from Definition (developer-controlled), not user input,
-	// so interpolating them into the query string is safe.
-	var $q : Text:=$def.vectorName+" = null"
-	
+	// The attribute paths go through placeholders rather than into the query string: a 4D
+	// field name may contain a space (or a "." or "="), which the query parser would read as
+	// part of the expression. Placeholders accept the full range of attribute names.
 	If ($hasDirty)
 		
-		$q:=$q+" OR "+$def.vectorName+"_dirty = true"
+		return $es.query(":1 = null OR :2 = true"; $def.vectorName; $def.vectorName+"_dirty")
 		
 	End if 
 	
-	return $es.query($q)
+	return $es.query(":1 = null"; $def.vectorName)
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Process one chunk: build texts, call API once, zip vectors back, persist each entity.
