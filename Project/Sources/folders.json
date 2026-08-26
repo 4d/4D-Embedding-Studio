@@ -53,8 +53,8 @@
 		],
 		"classes": [
 			"_ScheduleCalc",
-			"_SchedulerState",
-			"_SCHEDULER"
+			"_SCHEDULER",
+			"_SchedulerState"
 		]
 	},
 	"STUDIO": {
@@ -74,8 +74,11 @@
 			"_onTestErrors",
 			"_runTests",
 			"_runTestsCLI",
+			"_testHoldSemaphore",
 			"test_dataclassAttributes",
+			"test_definition",
 			"test_embedder",
+			"test_executionLog",
 			"test_phrase",
 			"test_playground",
 			"test_process",
@@ -85,6 +88,7 @@
 			"test_process_logging",
 			"test_process_optimisticLock",
 			"test_process_rateLimit",
+			"test_process_spacedVectorName",
 			"test_processError",
 			"test_resolver",
 			"test_scheduleCalc",

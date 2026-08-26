@@ -1,4 +1,7 @@
 property _semaphoreName : Text:="4DES_ExecutionLog"
+// In ticks. The guarded work is a small JSON read+write, i.e. milliseconds; a caller that
+// waits longer than this is waiting on something stuck, and it pays the wait on every call.
+property _semaphoreTimeout : Integer:=120
 
 singleton Class constructor
 	
@@ -6,7 +9,7 @@ singleton Class constructor
 	// Sets top-level to "running", saving current top-level as "previous".
 Function startFullRun($startTimestamp : Text)
 	
-	If (Not:C34(Semaphore:C143(This:C1470._semaphoreName; 300)))
+	If (This:C1470._acquire("startFullRun"))
 		
 		Try
 			
@@ -28,7 +31,7 @@ Function startFullRun($startTimestamp : Text)
 			cs:C1710._Logger.me.error("Execution log write failed: "+String:C10(Last errors:C1799[0].message))
 		End try
 		
-		CLEAR SEMAPHORE:C144(This:C1470._semaphoreName)
+		This:C1470._release()
 		
 	End if 
 	
@@ -36,7 +39,7 @@ Function startFullRun($startTimestamp : Text)
 	// Finalizes top-level with completed/failed status.
 Function endFullRun($startTimestamp : Text; $endTimestamp : Text; $status : Text; $error : Variant; $nextComputeDate : Variant; $usage : Object)
 	
-	If (Not:C34(Semaphore:C143(This:C1470._semaphoreName; 300)))
+	If (This:C1470._acquire("endFullRun"))
 		
 		Try
 			
@@ -59,7 +62,7 @@ Function endFullRun($startTimestamp : Text; $endTimestamp : Text; $status : Text
 			cs:C1710._Logger.me.error("Execution log write failed: "+String:C10(Last errors:C1799[0].message))
 		End try
 		
-		CLEAR SEMAPHORE:C144(This:C1470._semaphoreName)
+		This:C1470._release()
 		
 	End if 
 	
@@ -67,7 +70,7 @@ Function endFullRun($startTimestamp : Text; $endTimestamp : Text; $status : Text
 	// Updates one definition entry, saving its current state as "previous".
 Function updateDefinition($defKey : Text; $startTime : Text; $endTime : Text; $status : Text; $error : Variant; $usage : Object)
 	
-	If (Not:C34(Semaphore:C143(This:C1470._semaphoreName; 300)))
+	If (This:C1470._acquire("updateDefinition"))
 		
 		Try
 			
@@ -108,7 +111,7 @@ Function updateDefinition($defKey : Text; $startTime : Text; $endTime : Text; $s
 			cs:C1710._Logger.me.error("Execution log write failed: "+String:C10(Last errors:C1799[0].message))
 		End try
 		
-		CLEAR SEMAPHORE:C144(This:C1470._semaphoreName)
+		This:C1470._release()
 		
 	End if 
 	
@@ -116,7 +119,7 @@ Function updateDefinition($defKey : Text; $startTime : Text; $endTime : Text; $s
 	// Records a skipped scheduler trigger with its timestamp (AC-4.1.4).
 Function logSkipped($timestamp : Text)
 	
-	If (Not:C34(Semaphore:C143(This:C1470._semaphoreName; 300)))
+	If (This:C1470._acquire("logSkipped"))
 		
 		Try
 			
@@ -138,7 +141,7 @@ Function logSkipped($timestamp : Text)
 			cs:C1710._Logger.me.error("Execution log write failed: "+String:C10(Last errors:C1799[0].message))
 		End try
 		
-		CLEAR SEMAPHORE:C144(This:C1470._semaphoreName)
+		This:C1470._release()
 		
 	End if 
 	
@@ -146,7 +149,7 @@ Function logSkipped($timestamp : Text)
 	// Updates the top-level next scheduled recalculation date.
 Function setNextComputeDate($value : Text)
 	
-	If (Not:C34(Semaphore:C143(This:C1470._semaphoreName; 300)))
+	If (This:C1470._acquire("setNextComputeDate"))
 		
 		Try
 			
@@ -158,7 +161,7 @@ Function setNextComputeDate($value : Text)
 			cs:C1710._Logger.me.error("Execution log write failed: "+String:C10(Last errors:C1799[0].message))
 		End try
 		
-		CLEAR SEMAPHORE:C144(This:C1470._semaphoreName)
+		This:C1470._release()
 		
 	End if 
 	
@@ -205,6 +208,27 @@ Function status() : Object
 		trigger: $log.trigger; \
 		error: $log.error; \
 		nextComputeDate: $log.nextComputeDate}
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Takes the write semaphore. False when it could not be taken: the caller must skip its
+	// write — and it is said out loud, because a dropped write means the history (and the
+	// scheduler state rehydrated from it) is missing a run.
+Function _acquire($context : Text) : Boolean
+	
+	If (Not:C34(Semaphore:C143(This:C1470._semaphoreName; This:C1470._semaphoreTimeout)))
+		
+		return True:C214
+		
+	End if 
+	
+	cs:C1710._Logger.me.warn("Execution log is busy: "+$context+" was not written (waited "+String:C10(This:C1470._semaphoreTimeout/60)+"s)")
+	
+	return False:C215
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _release()
+	
+	CLEAR SEMAPHORE:C144(This:C1470._semaphoreName)
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _file() : 4D:C1709.File
