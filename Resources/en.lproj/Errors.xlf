@@ -136,6 +136,10 @@
           <source>Missing vector "{attribute}" of dataclass "{dataclass}".</source>
           <target>Missing vector "{attribute}" of dataclass "{dataclass}".</target>
         </trans-unit>
+        <trans-unit id="errSettingsNotSaved" resname="errSettingsNotSaved">
+          <source>Settings were not saved: the file "{file}" cannot be read. Fix or remove it, then try again.</source>
+          <target>Settings were not saved: the file "{file}" cannot be read. Fix or remove it, then try again.</target>
+        </trans-unit>
         <trans-unit id="5" resname="attributeIsNotAVector">
           <source>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</source>
           <target>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</target>

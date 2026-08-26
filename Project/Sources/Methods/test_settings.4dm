@@ -170,7 +170,137 @@ $raw:=JSON Parse:C1218($tmpFile.getText())
 ASSERT:C1129($raw.definitions.length=1; "save: empty definition (no model/phrase) should be filtered out")
 ASSERT:C1129($raw.definitions[0].vectorName="student_vector_1"; "save: correct definition kept after filter")
 
+// ══════════════════════════════════════════════════════════════════════
+// SAVE — UNREADABLE FILE IS NEVER OVERWRITTEN (R-001a)
+// ══════════════════════════════════════════════════════════════════════
+
+var $bakFile : 4D:C1709.File:=$tmpFile.parent.file($tmpFile.fullName+".bak")
+var $corruptFile : 4D:C1709.File:=$tmpFile.parent.file($tmpFile.fullName+".corrupt")
+
+//MARK:- corrupt file is left untouched
+var $corruptText : Text:="{ this is not json"
+$tmpFile.setText($corruptText)
+$s:=cs:C1710.Settings.new($tmpFile)
+ASSERT:C1129(Not:C34($s.save()); "corrupt file: save() must refuse and return False")
+ASSERT:C1129($tmpFile.getText()=$corruptText; "corrupt file: content must be left untouched")
+
+//MARK:- a readable file is backed up before being replaced
+If ($bakFile.exists)
+	$bakFile.delete()
+End if 
+$tmpFile.setText(JSON Stringify:C1217({batchSize: 7; definitions: []}))
+$s:=cs:C1710.Settings.new($tmpFile)
+$s.batchSize:=8
+ASSERT:C1129($s.save(); "backup: save() should succeed on a readable file")
+ASSERT:C1129($bakFile.exists; "backup: a .bak of the previous content should exist")
+ASSERT:C1129(JSON Parse:C1218($bakFile.getText()).batchSize=7; "backup: .bak should hold the previous content")
+ASSERT:C1129(JSON Parse:C1218($tmpFile.getText()).batchSize=8; "backup: the file should hold the new content")
+
+//MARK:- writing over an unreadable file through the setter keeps the old bytes
+If ($corruptFile.exists)
+	$corruptFile.delete()
+End if 
+$tmpFile.setText($corruptText)
+cs:C1710._Settings.me.set({scheduler: {mode: "daily"}})
+ASSERT:C1129($corruptFile.exists; "corrupt setter write: previous bytes should be kept as .corrupt")
+ASSERT:C1129($corruptFile.getText()=$corruptText; "corrupt setter write: .corrupt should hold the unreadable content")
+ASSERT:C1129(JSON Parse:C1218($tmpFile.getText()).scheduler.mode="daily"; "corrupt setter write: the new value should be written")
+
+// ══════════════════════════════════════════════════════════════════════
+// SAVE — TWO EDITORS DO NOT DROP EACH OTHER'S DEFINITIONS (R-001b)
+// ══════════════════════════════════════════════════════════════════════
+
+//MARK:- both additions survive
+$tmpFile.setText(JSON Stringify:C1217({definitions: []}))
+var $editorA : cs:C1710.Settings:=cs:C1710.Settings.new($tmpFile)
+var $editorB : cs:C1710.Settings:=cs:C1710.Settings.new($tmpFile)
+
+$editorA.definitions.push(cs:C1710.Definition.new("_Students"; "student_vector_1"; "m1"; "{firstName}"))
+ASSERT:C1129($editorA.save(); "two editors: first save should succeed")
+
+$editorB.definitions.push(cs:C1710.Definition.new("School"; "school_vector_1"; "m2"; "{name}"))
+ASSERT:C1129($editorB.save(); "two editors: second save should succeed")
+
+$raw:=JSON Parse:C1218($tmpFile.getText())
+ASSERT:C1129($raw.definitions.length=2; "two editors: both definitions should survive, got "+String:C10($raw.definitions.length))
+ASSERT:C1129($raw.definitions.query("vectorName = :1"; "student_vector_1").length=1; "two editors: the first editor's definition should survive")
+ASSERT:C1129($raw.definitions.query("vectorName = :1"; "school_vector_1").length=1; "two editors: the second editor's definition should survive")
+
+//MARK:- each editor's own edit wins on its own definition
+$tmpFile.setText(JSON Stringify:C1217({definitions: [\
+{dataclassName: "_Students"; vectorName: "student_vector_1"; modelAlias: "m1"; phrase: "{firstName}"; autoInvalidate: True:C214}; \
+{dataclassName: "School"; vectorName: "school_vector_1"; modelAlias: "m2"; phrase: "{name}"; autoInvalidate: True:C214}]}))
+
+$editorA:=cs:C1710.Settings.new($tmpFile)
+$editorB:=cs:C1710.Settings.new($tmpFile)
+
+$editorA.find("_Students"; "student_vector_1").modelAlias:="edited-by-A"
+$editorA.save()
+
+$editorB.find("School"; "school_vector_1").phrase:=cs:C1710.Phrase.new("{university}")
+$editorB.save()
+
+$raw:=JSON Parse:C1218($tmpFile.getText())
+ASSERT:C1129($raw.definitions.length=2; "concurrent edits: both definitions should remain")
+ASSERT:C1129($raw.definitions.query("vectorName = :1"; "student_vector_1").first().modelAlias="edited-by-A"; "concurrent edits: editor A's change should survive")
+ASSERT:C1129($raw.definitions.query("vectorName = :1"; "school_vector_1").first().phrase="{university}"; "concurrent edits: editor B's change should be written")
+
+//MARK:- a definition removed by an editor is removed from the file
+$editorA:=cs:C1710.Settings.new($tmpFile)
+$editorA.definitions:=$editorA.definitions.query("vectorName != :1"; "school_vector_1")
+$editorA.save()
+$raw:=JSON Parse:C1218($tmpFile.getText())
+ASSERT:C1129($raw.definitions.length=1; "removal: the dropped definition should be gone")
+ASSERT:C1129($raw.definitions[0].vectorName="student_vector_1"; "removal: the kept definition should be the other one")
+
+// ══════════════════════════════════════════════════════════════════════
+// SAVE — KEYS OWNED BY OTHERS ARE NOT REWRITTEN FROM A STALE SNAPSHOT
+// ══════════════════════════════════════════════════════════════════════
+
+//MARK:- a scheduler config saved after this instance loaded survives its save
+$tmpFile.setText(JSON Stringify:C1217({batchSize: 12; scheduler: {mode: "interval"; intervalHours: 3}; definitions: []}))
+$s:=cs:C1710.Settings.new($tmpFile)  // loads while the scheduler is still on "interval"
+
+cs:C1710._Settings.me.set({scheduler: {mode: "daily"; dailyTime: "05:00"}})  // e.g. the scheduler wizard
+
+$s.batchSize:=13
+ASSERT:C1129($s.save(); "foreign keys: save should succeed")
+
+$raw:=JSON Parse:C1218($tmpFile.getText())
+ASSERT:C1129($raw.scheduler.mode="daily"; "foreign keys: the newer scheduler config should not be rewritten, got '"+String:C10($raw.scheduler.mode)+"'")
+ASSERT:C1129($raw.scheduler.dailyTime="05:00"; "foreign keys: the newer scheduler config should be intact")
+ASSERT:C1129($raw.batchSize=13; "foreign keys: our own key should be written")
+
+// ══════════════════════════════════════════════════════════════════════
+// SAVE — RESET OPTIONS ARE PERSISTED
+// ══════════════════════════════════════════════════════════════════════
+
+//MARK:- batchSize back to the default removes the key from the file
+$tmpFile.setText(JSON Stringify:C1217({batchSize: 25; definitions: []}))
+$s:=cs:C1710.Settings.new($tmpFile)
+ASSERT:C1129($s.batchSize=25; "reset batchSize: setup should load 25")
+$s.batchSize:=$s._defaultBatchSize()
+$s.save()
+$raw:=JSON Parse:C1218($tmpFile.getText())
+ASSERT:C1129(Not:C34(OB Is defined:C1231($raw; "batchSize")); "reset batchSize: the key should be removed, so the default applies on reload")
+ASSERT:C1129(cs:C1710.Settings.new($tmpFile).batchSize=50; "reset batchSize: reload should give the default")
+
+//MARK:- phrase options back to defaults remove the key from the file
+$tmpFile.setText(JSON Stringify:C1217({phrase: {allowRelations: True:C214; allowCalculated: False:C215; allowAlias: False:C215; allowObject: False:C215}; definitions: []}))
+$s:=cs:C1710.Settings.new($tmpFile)
+ASSERT:C1129($s.phrase.allowRelations; "reset options: setup should have allowRelations true")
+$s.phrase.allowRelations:=False:C215
+$s.save()
+$raw:=JSON Parse:C1218($tmpFile.getText())
+ASSERT:C1129(Not:C34(OB Is defined:C1231($raw; "phrase")); "reset options: the phrase key should be removed from the file")
+
 // Cleanup
 $tmpFile.delete()
+If ($bakFile.exists)
+	$bakFile.delete()
+End if 
+If ($corruptFile.exists)
+	$corruptFile.delete()
+End if 
 
 // ALERT("✅ All Settings tests passed!")

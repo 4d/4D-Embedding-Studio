@@ -8,139 +8,34 @@
 				"Summary": ""
 			}
 		},
-		"_EMBEDDINGS": {
+		"Settings": {
 			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
+				"Syntax": "**.new**( *file* : 4D.File )",
+				"Params": [
+					[
+						"file",
+						"4D.File",
+						"->"
+					]
+				],
 				"Summary": ""
 			}
 		},
-		"_EmbeddingItem": {
+		"_ProcessBase": {
 			"new()": {
-				"Syntax": "**.new**( *dataclass* : 4D.DataClass; *definition* : cs.EmbeddingStudio.Definition; *settings* : cs.EmbeddingStudio.Settings )",
+				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings; *options* : Object )",
 				"Params": [
-					[
-						"dataclass",
-						"4D.DataClass",
-						"->"
-					],
-					[
-						"definition",
-						"cs.EmbeddingStudio.Definition",
-						"->"
-					],
 					[
 						"settings",
 						"cs.EmbeddingStudio.Settings",
 						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"_Logger": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
-		"_ExecutionLog": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
-		"Phrase": {
-			"new()": {
-				"Syntax": "**.new**( *template* : Text )",
-				"Params": [
-					[
-						"template",
-						"Text",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"ProcessResult": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
-		"_dataclassAttributes": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
-		"_RateLimiter": {
-			"new()": {
-				"Syntax": "**.new**( *configBatchSize* : Integer )",
-				"Params": [
-					[
-						"configBatchSize",
-						"Integer",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"ProcessErrorCode": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
-		"EmbedderResult": {
-			"new()": {
-				"Syntax": "**.new**( *result* : Object; *isBatch* : Boolean )",
-				"Params": [
-					[
-						"result",
-						"Object",
-						"->"
 					],
-					[
-						"isBatch",
-						"Boolean",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"_Env": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
-		"Embedder": {
-			"new()": {
-				"Syntax": "**.new**( *options* : Object )",
-				"Params": [
 					[
 						"options",
 						"Object",
 						"->"
 					]
 				],
-				"Summary": ""
-			}
-		},
-		"_Settings": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
 				"Summary": ""
 			}
 		},
@@ -172,15 +67,49 @@
 				"Summary": ""
 			}
 		},
-		"_ProcessBase": {
+		"_SchedulerState": {
 			"new()": {
-				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings; *options* : Object )",
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_EMBEDDINGS": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"EmbedderResult": {
+			"new()": {
+				"Syntax": "**.new**( *result* : Object; *isBatch* : Boolean )",
 				"Params": [
 					[
-						"settings",
-						"cs.EmbeddingStudio.Settings",
+						"result",
+						"Object",
 						"->"
 					],
+					[
+						"isBatch",
+						"Boolean",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_Env": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_TestAIKitEmbeddingsAPI": {
+			"new()": {
+				"Syntax": "**.new**( *options* : Object )",
+				"Params": [
 					[
 						"options",
 						"Object",
@@ -190,13 +119,104 @@
 				"Summary": ""
 			}
 		},
-		"Settings": {
+		"ProcessResult": {
 			"new()": {
-				"Syntax": "**.new**( *file* : 4D.File )",
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"Phrase": {
+			"new()": {
+				"Syntax": "**.new**( *template* : Text )",
 				"Params": [
 					[
-						"file",
-						"4D.File",
+						"template",
+						"Text",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_Logger": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_EmbeddingItem": {
+			"new()": {
+				"Syntax": "**.new**( *dataclass* : 4D.DataClass; *definition* : cs.EmbeddingStudio.Definition; *settings* : cs.EmbeddingStudio.Settings )",
+				"Params": [
+					[
+						"dataclass",
+						"4D.DataClass",
+						"->"
+					],
+					[
+						"definition",
+						"cs.EmbeddingStudio.Definition",
+						"->"
+					],
+					[
+						"settings",
+						"cs.EmbeddingStudio.Settings",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_ExecutionLog": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_SCHEDULER": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_dataclassAttributes": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_RateLimiter": {
+			"new()": {
+				"Syntax": "**.new**( *configBatchSize* : Integer )",
+				"Params": [
+					[
+						"configBatchSize",
+						"Integer",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_ScheduleCalc": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_TestProcessEmbedder": {
+			"new()": {
+				"Syntax": "**.new**( *options* : Object )",
+				"Params": [
+					[
+						"options",
+						"Object",
 						"->"
 					]
 				],
@@ -272,19 +292,6 @@
 				"Summary": ""
 			}
 		},
-		"_TestProcessEmbedder": {
-			"new()": {
-				"Syntax": "**.new**( *options* : Object )",
-				"Params": [
-					[
-						"options",
-						"Object",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
 		"_Resolver": {
 			"new()": {
 				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings )",
@@ -298,50 +305,10 @@
 				"Summary": ""
 			}
 		},
-		"_menu": {
-			"new()": {
-				"Syntax": "**.new**( *data* : Variant )",
-				"Params": [
-					[
-						"data",
-						"Variant",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
-		"_ScheduleCalc": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
 		"Scheduler": {
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
-				"Summary": ""
-			}
-		},
-		"_SchedulerState": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
-		"_TestAIKitEmbeddingsAPI": {
-			"new()": {
-				"Syntax": "**.new**( *options* : Object )",
-				"Params": [
-					[
-						"options",
-						"Object",
-						"->"
-					]
-				],
 				"Summary": ""
 			}
 		},
@@ -365,10 +332,43 @@
 				"Summary": ""
 			}
 		},
-		"_SCHEDULER": {
+		"ProcessErrorCode": {
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_Settings": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"Embedder": {
+			"new()": {
+				"Syntax": "**.new**( *options* : Object )",
+				"Params": [
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"_menu": {
+			"new()": {
+				"Syntax": "**.new**( *data* : Variant )",
+				"Params": [
+					[
+						"data",
+						"Variant",
+						"->"
+					]
+				],
 				"Summary": ""
 			}
 		}
@@ -378,14 +378,73 @@
 			"Syntax": "medias : Collection"
 		}
 	},
-	"_EMBEDDINGS": {
-		"saveEmbeddingItems()": {
-			"Syntax": "**.saveEmbeddingItems**()",
+	"Settings": {
+		"invalidateVectors()": {
+			"Syntax": "**.invalidateVectors**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"find()": {
+			"Syntax": "**.find**( *dataclassName* : Text; *vectorName* : Text ) : cs.EmbeddingStudio.Definition",
+			"Params": [
+				[
+					"dataclassName",
+					"Text",
+					"->"
+				],
+				[
+					"vectorName",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.Definition",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get file()": {
+			"Syntax": "**.get file**() : 4D.File",
+			"Params": [
+				[
+					"",
+					"4D.File",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"load()": {
+			"Syntax": "**.load**()",
 			"Params": [],
 			"Summary": ""
 		},
-		"updateUI()": {
-			"Syntax": "**.updateUI**() : Boolean",
+		"findAll()": {
+			"Syntax": "**.findAll**( *dataclassName* : Text ) : Collection",
+			"Params": [
+				[
+					"dataclassName",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"save()": {
+			"Syntax": "**.save**() : Boolean",
 			"Params": [
 				[
 					"",
@@ -395,8 +454,227 @@
 			],
 			"Summary": ""
 		},
-		"modelsDropdownManager()": {
-			"Syntax": "**.modelsDropdownManager**( *e* : Object )",
+		"embedder": {
+			"Syntax": "embedder : Object"
+		},
+		"phrase": {
+			"Syntax": "phrase : Object"
+		},
+		"batchSize": {
+			"Syntax": "batchSize : Integer"
+		},
+		"definitions": {
+			"Syntax": "definitions : Collection"
+		}
+	},
+	"_ProcessBase": {
+		"options": {
+			"Syntax": "options : Object"
+		},
+		"resolver": {
+			"Syntax": "resolver : cs.EmbeddingStudio._Resolver"
+		},
+		"embedder": {
+			"Syntax": "embedder : cs.EmbeddingStudio.Embedder"
+		},
+		"settings": {
+			"Syntax": "settings : cs.EmbeddingStudio.Settings"
+		}
+	},
+	"Definition": {
+		"toObject()": {
+			"Syntax": "**.toObject**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"invalidateVectors()": {
+			"Syntax": "**.invalidateVectors**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"validate()": {
+			"Syntax": "**.validate**( *settings* : cs.EmbeddingStudio.Settings ) : Object",
+			"Params": [
+				[
+					"settings",
+					"cs.EmbeddingStudio.Settings",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get hasDefinition()": {
+			"Syntax": "**.get hasDefinition**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"autoInvalidate": {
+			"Syntax": "autoInvalidate : Boolean"
+		},
+		"phrase": {
+			"Syntax": "phrase : cs.EmbeddingStudio.Phrase"
+		},
+		"modelAlias": {
+			"Syntax": "modelAlias : Text"
+		},
+		"vectorName": {
+			"Syntax": "vectorName : Text"
+		},
+		"dataclassName": {
+			"Syntax": "dataclassName : Text"
+		}
+	},
+	"_SchedulerState": {
+		"restore()": {
+			"Syntax": "**.restore**( *lastRun* : Text; *lastResult* : Text; *lastError* : Text )",
+			"Params": [
+				[
+					"lastRun",
+					"Text",
+					"->"
+				],
+				[
+					"lastResult",
+					"Text",
+					"->"
+				],
+				[
+					"lastError",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"markSkipped()": {
+			"Syntax": "**.markSkipped**( *key* : Text )",
+			"Params": [
+				[
+					"key",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"requestCancel()": {
+			"Syntax": "**.requestCancel**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"endBatch()": {
+			"Syntax": "**.endBatch**( *result* : Text; *error* : Text; *endTimestamp* : Text )",
+			"Params": [
+				[
+					"result",
+					"Text",
+					"->"
+				],
+				[
+					"error",
+					"Text",
+					"->"
+				],
+				[
+					"endTimestamp",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"beginBatch()": {
+			"Syntax": "**.beginBatch**( *startTimestamp* : Text ) : Boolean",
+			"Params": [
+				[
+					"startTimestamp",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"disarm()": {
+			"Syntax": "**.disarm**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"arm()": {
+			"Syntax": "**.arm**( *anchor* : Text )",
+			"Params": [
+				[
+					"anchor",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"lastRunRestored": {
+			"Syntax": "lastRunRestored : Boolean"
+		},
+		"skipLoggedFor": {
+			"Syntax": "skipLoggedFor : Text"
+		},
+		"lastError": {
+			"Syntax": "lastError : Text"
+		},
+		"lastResult": {
+			"Syntax": "lastResult : Text"
+		},
+		"lastRun": {
+			"Syntax": "lastRun : Text"
+		},
+		"cancelRequested": {
+			"Syntax": "cancelRequested : Boolean"
+		},
+		"batchStart": {
+			"Syntax": "batchStart : Text"
+		},
+		"running": {
+			"Syntax": "running : Boolean"
+		},
+		"armedAt": {
+			"Syntax": "armedAt : Text"
+		},
+		"checkInterval": {
+			"Syntax": "checkInterval : Integer"
+		},
+		"armed": {
+			"Syntax": "armed : Boolean"
+		}
+	},
+	"_EMBEDDINGS": {
+		"schedulerManager()": {
+			"Syntax": "**.schedulerManager**( *e* : Object )",
 			"Params": [
 				[
 					"e",
@@ -406,26 +684,14 @@
 			],
 			"Summary": ""
 		},
-		"moreManager()": {
-			"Syntax": "**.moreManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
+		"refresh()": {
+			"Syntax": "**.refresh**()",
+			"Params": [],
 			"Summary": ""
 		},
-		"listManager()": {
-			"Syntax": "**.listManager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
+		"saveEmbeddingItems()": {
+			"Syntax": "**.saveEmbeddingItems**()",
+			"Params": [],
 			"Summary": ""
 		},
 		"modelUpdateDropdown()": {
@@ -450,6 +716,49 @@
 			],
 			"Summary": ""
 		},
+		"paintSchedulerStatus()": {
+			"Syntax": "**.paintSchedulerStatus**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"moreManager()": {
+			"Syntax": "**.moreManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"listManager()": {
+			"Syntax": "**.listManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"modelsDropdownManager()": {
+			"Syntax": "**.modelsDropdownManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"openHelp()": {
+			"Syntax": "**.openHelp**()",
+			"Params": [],
+			"Summary": ""
+		},
 		"readEmbeddingItems()": {
 			"Syntax": "**.readEmbeddingItems**() : Collection",
 			"Params": [
@@ -461,23 +770,28 @@
 			],
 			"Summary": ""
 		},
-		"manager()": {
-			"Syntax": "**.manager**( *e* : Object )",
+		"updateUI()": {
+			"Syntax": "**.updateUI**() : Boolean",
 			"Params": [
 				[
-					"e",
-					"Object",
-					"->"
+					"",
+					"Boolean",
+					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"phraseManager()": {
-			"Syntax": "**.phraseManager**( *e* : Object )",
+		"insertInput()": {
+			"Syntax": "**.insertInput**( *item* : cs.EmbeddingStudio._EmbeddingItem; *input* : Text )",
 			"Params": [
 				[
-					"e",
-					"Object",
+					"item",
+					"cs.EmbeddingStudio._EmbeddingItem",
+					"->"
+				],
+				[
+					"input",
+					"Text",
 					"->"
 				]
 			],
@@ -499,34 +813,38 @@
 			],
 			"Summary": ""
 		},
-		"refresh()": {
-			"Syntax": "**.refresh**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"insertInput()": {
-			"Syntax": "**.insertInput**( *item* : cs.EmbeddingStudio._EmbeddingItem; *input* : Text )",
-			"Params": [
-				[
-					"item",
-					"cs.EmbeddingStudio._EmbeddingItem",
-					"->"
-				],
-				[
-					"input",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
 		"read()": {
 			"Syntax": "**.read**()",
 			"Params": [],
 			"Summary": ""
 		},
+		"phraseManager()": {
+			"Syntax": "**.phraseManager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"manager()": {
+			"Syntax": "**.manager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
 		"modelsDropdown": {
 			"Syntax": "modelsDropdown : Object"
+		},
+		"schedulerStatusText": {
+			"Syntax": "schedulerStatusText : Text"
 		},
 		"selectedItems": {
 			"Syntax": "selectedItems : Collection"
@@ -548,30 +866,314 @@
 		},
 		"settings": {
 			"Syntax": "settings : cs.EmbeddingStudio.Settings"
+		}
+	},
+	"EmbedderResult": {
+		"resetTokens": {
+			"Syntax": "resetTokens : Text"
 		},
-		"schedulerManager()": {
-			"Syntax": "**.schedulerManager**( *e* : Object )",
+		"limitTokens": {
+			"Syntax": "limitTokens : Integer"
+		},
+		"remainingTokens": {
+			"Syntax": "remainingTokens : Integer"
+		},
+		"resetRequests": {
+			"Syntax": "resetRequests : Text"
+		},
+		"promptTokens": {
+			"Syntax": "promptTokens : Integer"
+		},
+		"totalTokens": {
+			"Syntax": "totalTokens : Integer"
+		},
+		"limitRequests": {
+			"Syntax": "limitRequests : Integer"
+		},
+		"remainingRequests": {
+			"Syntax": "remainingRequests : Integer"
+		},
+		"vectors": {
+			"Syntax": "vectors : Collection"
+		},
+		"vector": {
+			"Syntax": "vector : 4D.Vector"
+		}
+	},
+	"_Env": {},
+	"_TestAIKitEmbeddingsAPI": {
+		"create()": {
+			"Syntax": "**.create**( *input* : Variant; *model* : Text ) : Object",
 			"Params": [
 				[
-					"e",
+					"input",
+					"Variant",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
 					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"callTimestampsMs": {
+			"Syntax": "callTimestampsMs : Collection"
+		},
+		"failOnCallNumbers": {
+			"Syntax": "failOnCallNumbers : Collection"
+		},
+		"alwaysFail": {
+			"Syntax": "alwaysFail : Boolean"
+		},
+		"retryAfterSec": {
+			"Syntax": "retryAfterSec : Integer"
+		},
+		"rateLimitCount": {
+			"Syntax": "rateLimitCount : Integer"
+		},
+		"callCount": {
+			"Syntax": "callCount : Integer"
+		}
+	},
+	"ProcessResult": {
+		"errorsByScope()": {
+			"Syntax": "**.errorsByScope**( *scope* : Text ) : Collection",
+			"Params": [
+				[
+					"scope",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"errorsByCode()": {
+			"Syntax": "**.errorsByCode**( *code* : Integer ) : Collection",
+			"Params": [
+				[
+					"code",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get hasFatal()": {
+			"Syntax": "**.get hasFatal**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"toObject()": {
+			"Syntax": "**.toObject**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"retryableErrors()": {
+			"Syntax": "**.retryableErrors**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get success()": {
+			"Syntax": "**.get success**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"duration": {
+			"Syntax": "duration : Integer"
+		},
+		"apiCalls": {
+			"Syntax": "apiCalls : Integer"
+		},
+		"totalTokens": {
+			"Syntax": "totalTokens : Integer"
+		},
+		"promptTokens": {
+			"Syntax": "promptTokens : Integer"
+		},
+		"entitiesSkipped": {
+			"Syntax": "entitiesSkipped : Integer"
+		},
+		"entitiesUpdated": {
+			"Syntax": "entitiesUpdated : Integer"
+		},
+		"errors": {
+			"Syntax": "errors : Collection"
+		},
+		"entitiesConsidered": {
+			"Syntax": "entitiesConsidered : Integer"
+		},
+		"definitionsProcessed": {
+			"Syntax": "definitionsProcessed : Integer"
+		}
+	},
+	"Phrase": {
+		"attributes()": {
+			"Syntax": "**.attributes**( *dataclass* : 4D.DataClass ) : Collection",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"render()": {
+			"Syntax": "**.render**( *data* : Object ) : Text",
+			"Params": [
+				[
+					"data",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"validate()": {
+			"Syntax": "**.validate**( *dataclass* : 4D.DataClass; *options* : Object ) : Object",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get keys()": {
+			"Syntax": "**.get keys**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get template()": {
+			"Syntax": "**.get template**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
+	"_Logger": {
+		"error()": {
+			"Syntax": "**.error**( *payload* : Variant )",
+			"Params": [
+				[
+					"payload",
+					"Variant",
 					"->"
 				]
 			],
 			"Summary": ""
 		},
-		"paintSchedulerStatus()": {
-			"Syntax": "**.paintSchedulerStatus**()",
-			"Params": [],
+		"debug()": {
+			"Syntax": "**.debug**( *payload* : Variant )",
+			"Params": [
+				[
+					"payload",
+					"Variant",
+					"->"
+				]
+			],
 			"Summary": ""
 		},
-		"openHelp()": {
-			"Syntax": "**.openHelp**()",
-			"Params": [],
+		"warn()": {
+			"Syntax": "**.warn**( *payload* : Variant )",
+			"Params": [
+				[
+					"payload",
+					"Variant",
+					"->"
+				]
+			],
 			"Summary": ""
 		},
-		"schedulerStatusText": {
-			"Syntax": "schedulerStatusText : Text"
+		"info()": {
+			"Syntax": "**.info**( *payload* : Variant )",
+			"Params": [
+				[
+					"payload",
+					"Variant",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"outputType": {
+			"Syntax": "outputType : Integer"
+		},
+		"prefix": {
+			"Syntax": "prefix : Text"
 		}
 	},
 	"_EmbeddingItem": {
@@ -705,59 +1307,29 @@
 			"Syntax": "definition : cs.EmbeddingStudio.Definition"
 		}
 	},
-	"_Logger": {
-		"error()": {
-			"Syntax": "**.error**( *payload* : Variant )",
-			"Params": [
-				[
-					"payload",
-					"Variant",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"debug()": {
-			"Syntax": "**.debug**( *payload* : Variant )",
-			"Params": [
-				[
-					"payload",
-					"Variant",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"warn()": {
-			"Syntax": "**.warn**( *payload* : Variant )",
-			"Params": [
-				[
-					"payload",
-					"Variant",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"info()": {
-			"Syntax": "**.info**( *payload* : Variant )",
-			"Params": [
-				[
-					"payload",
-					"Variant",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"outputType": {
-			"Syntax": "outputType : Integer"
-		},
-		"prefix": {
-			"Syntax": "prefix : Text"
-		}
-	},
 	"_ExecutionLog": {
+		"startFullRun()": {
+			"Syntax": "**.startFullRun**( *startTimestamp* : Text )",
+			"Params": [
+				[
+					"startTimestamp",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"status()": {
+			"Syntax": "**.status**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"updateDefinition()": {
 			"Syntax": "**.updateDefinition**( *defKey* : Text; *startTime* : Text; *endTime* : Text; *status* : Text; *error* : Variant; *usage* : Object )",
 			"Params": [
@@ -790,6 +1362,17 @@
 					"usage",
 					"Object",
 					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"lastRun()": {
+			"Syntax": "**.lastRun**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
 				]
 			],
 			"Summary": ""
@@ -830,28 +1413,6 @@
 			],
 			"Summary": ""
 		},
-		"startFullRun()": {
-			"Syntax": "**.startFullRun**( *startTimestamp* : Text )",
-			"Params": [
-				[
-					"startTimestamp",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"status()": {
-			"Syntax": "**.status**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"setNextComputeDate()": {
 			"Syntax": "**.setNextComputeDate**( *value* : Text )",
 			"Params": [
@@ -873,142 +1434,27 @@
 				]
 			],
 			"Summary": ""
-		},
-		"lastRun()": {
-			"Syntax": "**.lastRun**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
 		}
 	},
-	"Phrase": {
-		"attributes()": {
-			"Syntax": "**.attributes**( *dataclass* : 4D.DataClass ) : Collection",
-			"Params": [
-				[
-					"dataclass",
-					"4D.DataClass",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
+	"_SCHEDULER": {
+		"onLoad()": {
+			"Syntax": "**.onLoad**()",
+			"Params": [],
 			"Summary": ""
 		},
-		"render()": {
-			"Syntax": "**.render**( *data* : Object ) : Text",
+		"manager()": {
+			"Syntax": "**.manager**( *e* : Object )",
 			"Params": [
 				[
-					"data",
+					"e",
 					"Object",
 					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"validate()": {
-			"Syntax": "**.validate**( *dataclass* : 4D.DataClass; *options* : Object ) : Object",
-			"Params": [
-				[
-					"dataclass",
-					"4D.DataClass",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get keys()": {
-			"Syntax": "**.get keys**() : Collection",
-			"Params": [
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get template()": {
-			"Syntax": "**.get template**() : Text",
-			"Params": [
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		}
-	},
-	"ProcessResult": {
-		"errorsByScope()": {
-			"Syntax": "**.errorsByScope**( *scope* : Text ) : Collection",
-			"Params": [
-				[
-					"scope",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"errorsByCode()": {
-			"Syntax": "**.errorsByCode**( *code* : Integer ) : Collection",
-			"Params": [
-				[
-					"code",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get hasFatal()": {
-			"Syntax": "**.get hasFatal**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"toObject()": {
-			"Syntax": "**.toObject**() : Object",
+		"currentConfig()": {
+			"Syntax": "**.currentConfig**() : Object",
 			"Params": [
 				[
 					"",
@@ -1018,54 +1464,72 @@
 			],
 			"Summary": ""
 		},
-		"retryableErrors()": {
-			"Syntax": "**.retryableErrors**() : Collection",
-			"Params": [
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
+		"save()": {
+			"Syntax": "**.save**()",
+			"Params": [],
 			"Summary": ""
 		},
-		"get success()": {
-			"Syntax": "**.get success**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
+		"paint()": {
+			"Syntax": "**.paint**()",
+			"Params": [],
 			"Summary": ""
 		},
-		"duration": {
-			"Syntax": "duration : Integer"
+		"preview()": {
+			"Syntax": "**.preview**()",
+			"Params": [],
+			"Summary": ""
 		},
-		"apiCalls": {
-			"Syntax": "apiCalls : Integer"
+		"onConfigEdit()": {
+			"Syntax": "**.onConfigEdit**()",
+			"Params": [],
+			"Summary": ""
 		},
-		"totalTokens": {
-			"Syntax": "totalTokens : Integer"
+		"load()": {
+			"Syntax": "**.load**()",
+			"Params": [],
+			"Summary": ""
 		},
-		"promptTokens": {
-			"Syntax": "promptTokens : Integer"
+		"errorText": {
+			"Syntax": "errorText : Text"
 		},
-		"entitiesSkipped": {
-			"Syntax": "entitiesSkipped : Integer"
+		"stateText": {
+			"Syntax": "stateText : Text"
 		},
-		"entitiesUpdated": {
-			"Syntax": "entitiesUpdated : Integer"
+		"nextRunText": {
+			"Syntax": "nextRunText : Text"
 		},
-		"errors": {
-			"Syntax": "errors : Collection"
+		"intervalHours": {
+			"Syntax": "intervalHours : Integer"
 		},
-		"entitiesConsidered": {
-			"Syntax": "entitiesConsidered : Integer"
+		"startReference": {
+			"Syntax": "startReference : Text"
 		},
-		"definitionsProcessed": {
-			"Syntax": "definitionsProcessed : Integer"
+		"lastRunText": {
+			"Syntax": "lastRunText : Text"
+		},
+		"startFromNow": {
+			"Syntax": "startFromNow : Boolean"
+		},
+		"startFromLast": {
+			"Syntax": "startFromLast : Boolean"
+		},
+		"dailyTime": {
+			"Syntax": "dailyTime : Text"
+		},
+		"startFromReference": {
+			"Syntax": "startFromReference : Boolean"
+		},
+		"modeDaily": {
+			"Syntax": "modeDaily : Boolean"
+		},
+		"modeInterval": {
+			"Syntax": "modeInterval : Boolean"
+		},
+		"modeDisabled": {
+			"Syntax": "modeDisabled : Boolean"
+		},
+		"scheduler": {
+			"Syntax": "scheduler : cs.EmbeddingStudio.Scheduler"
 		}
 	},
 	"_dataclassAttributes": {
@@ -1205,13 +1669,60 @@
 			"Syntax": "remainingRequests : Integer"
 		}
 	},
-	"ProcessErrorCode": {
-		"meta()": {
-			"Syntax": "**.meta**( *code* : Integer ) : Object",
+	"_ScheduleCalc": {
+		"slotAfter()": {
+			"Syntax": "**.slotAfter**( *config* : Object; *after* : Text ) : Text",
 			"Params": [
 				[
-					"code",
+					"config",
+					"Object",
+					"->"
+				],
+				[
+					"after",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"secondsUntil()": {
+			"Syntax": "**.secondsUntil**( *timestamp* : Text ) : Integer",
+			"Params": [
+				[
+					"timestamp",
+					"Text",
+					"->"
+				],
+				[
+					"",
 					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"nextRun()": {
+			"Syntax": "**.nextRun**( *config* : Object; *lastExecution* : Text; *anchor* : Text ) : Object",
+			"Params": [
+				[
+					"config",
+					"Object",
+					"->"
+				],
+				[
+					"lastExecution",
+					"Text",
+					"->"
+				],
+				[
+					"anchor",
+					"Text",
 					"->"
 				],
 				[
@@ -1221,87 +1732,9 @@
 				]
 			],
 			"Summary": ""
-		},
-		"VECTOR_COUNT_MISMATCH": {
-			"Syntax": "VECTOR_COUNT_MISMATCH : Integer"
-		},
-		"EMBED_FAILED": {
-			"Syntax": "EMBED_FAILED : Integer"
-		},
-		"SAVE_FAILED": {
-			"Syntax": "SAVE_FAILED : Integer"
-		},
-		"INVALID_DEFINITION": {
-			"Syntax": "INVALID_DEFINITION : Integer"
-		},
-		"MODEL_UNAVAILABLE": {
-			"Syntax": "MODEL_UNAVAILABLE : Integer"
-		},
-		"MODEL_SKIPPED": {
-			"Syntax": "MODEL_SKIPPED : Integer"
-		},
-		"VALIDATION_FAILED": {
-			"Syntax": "VALIDATION_FAILED : Integer"
-		},
-		"NULL_INPUT": {
-			"Syntax": "NULL_INPUT : Integer"
 		}
 	},
-	"EmbedderResult": {
-		"resetTokens": {
-			"Syntax": "resetTokens : Text"
-		},
-		"limitTokens": {
-			"Syntax": "limitTokens : Integer"
-		},
-		"remainingTokens": {
-			"Syntax": "remainingTokens : Integer"
-		},
-		"resetRequests": {
-			"Syntax": "resetRequests : Text"
-		},
-		"promptTokens": {
-			"Syntax": "promptTokens : Integer"
-		},
-		"totalTokens": {
-			"Syntax": "totalTokens : Integer"
-		},
-		"limitRequests": {
-			"Syntax": "limitRequests : Integer"
-		},
-		"remainingRequests": {
-			"Syntax": "remainingRequests : Integer"
-		},
-		"vectors": {
-			"Syntax": "vectors : Collection"
-		},
-		"vector": {
-			"Syntax": "vector : 4D.Vector"
-		}
-	},
-	"_Env": {},
-	"Embedder": {
-		"embedBatch()": {
-			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
-			"Params": [
-				[
-					"texts",
-					"Collection",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.EmbeddingStudio.EmbedderResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
+	"_TestProcessEmbedder": {
 		"embed()": {
 			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
 			"Params": [
@@ -1323,223 +1756,68 @@
 			],
 			"Summary": ""
 		},
-		"backoffMs": {
-			"Syntax": "backoffMs : Integer"
-		},
-		"maxRetries": {
-			"Syntax": "maxRetries : Integer"
-		},
-		"client": {
-			"Syntax": "client : cs.AIKit.OpenAI"
-		}
-	},
-	"_Settings": {
-		"set file()": {
-			"Syntax": "**.set file**( *file* : 4D.File )",
+		"embedBatch()": {
+			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
 			"Params": [
 				[
-					"file",
-					"4D.File",
+					"texts",
+					"Collection",
 					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get file()": {
-			"Syntax": "**.get file**() : 4D.File",
-			"Params": [
+				],
 				[
-					"",
-					"4D.File",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set()": {
-			"Syntax": "**.set**( *value* : Object )",
-			"Params": [
-				[
-					"value",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get()": {
-			"Syntax": "**.get**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		}
-	},
-	"Definition": {
-		"toObject()": {
-			"Syntax": "**.toObject**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"invalidateVectors()": {
-			"Syntax": "**.invalidateVectors**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"validate()": {
-			"Syntax": "**.validate**( *settings* : cs.EmbeddingStudio.Settings ) : Object",
-			"Params": [
-				[
-					"settings",
-					"cs.EmbeddingStudio.Settings",
+					"model",
+					"Text",
 					"->"
 				],
 				[
 					"",
-					"Object",
+					"cs.EmbeddingStudio.EmbedderResult",
 					"<-"
 				]
 			],
 			"Summary": ""
 		},
-		"get hasDefinition()": {
-			"Syntax": "**.get hasDefinition**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
+		"touchErrors": {
+			"Syntax": "touchErrors : Collection"
 		},
-		"autoInvalidate": {
-			"Syntax": "autoInvalidate : Boolean"
+		"touchField": {
+			"Syntax": "touchField : Text"
 		},
-		"phrase": {
-			"Syntax": "phrase : cs.EmbeddingStudio.Phrase"
+		"touchSuffix": {
+			"Syntax": "touchSuffix : Text"
 		},
-		"modelAlias": {
-			"Syntax": "modelAlias : Text"
+		"entityKey": {
+			"Syntax": "entityKey : Variant"
 		},
-		"vectorName": {
-			"Syntax": "vectorName : Text"
+		"touchCount": {
+			"Syntax": "touchCount : Integer"
 		},
 		"dataclassName": {
 			"Syntax": "dataclassName : Text"
-		}
-	},
-	"_ProcessBase": {
-		"options": {
-			"Syntax": "options : Object"
 		},
-		"resolver": {
-			"Syntax": "resolver : cs.EmbeddingStudio._Resolver"
+		"counter": {
+			"Syntax": "counter : Integer"
 		},
-		"embedder": {
-			"Syntax": "embedder : cs.EmbeddingStudio.Embedder"
+		"delaySeconds": {
+			"Syntax": "delaySeconds : Real"
 		},
-		"settings": {
-			"Syntax": "settings : cs.EmbeddingStudio.Settings"
-		}
-	},
-	"Settings": {
-		"invalidateVectors()": {
-			"Syntax": "**.invalidateVectors**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
+		"rateLimits": {
+			"Syntax": "rateLimits : Collection"
 		},
-		"findAll()": {
-			"Syntax": "**.findAll**( *dataclassName* : Text ) : Collection",
-			"Params": [
-				[
-					"dataclassName",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
+		"criticalAfterCalls": {
+			"Syntax": "criticalAfterCalls : Object"
 		},
-		"find()": {
-			"Syntax": "**.find**( *dataclassName* : Text; *vectorName* : Text ) : cs.EmbeddingStudio.Definition",
-			"Params": [
-				[
-					"dataclassName",
-					"Text",
-					"->"
-				],
-				[
-					"vectorName",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.EmbeddingStudio.Definition",
-					"<-"
-				]
-			],
-			"Summary": ""
+		"nonCriticalTexts": {
+			"Syntax": "nonCriticalTexts : Collection"
 		},
-		"get file()": {
-			"Syntax": "**.get file**() : 4D.File",
-			"Params": [
-				[
-					"",
-					"4D.File",
-					"<-"
-				]
-			],
-			"Summary": ""
+		"criticalModels": {
+			"Syntax": "criticalModels : Collection"
 		},
-		"save()": {
-			"Syntax": "**.save**()",
-			"Params": [],
-			"Summary": ""
+		"embedBatchCalls": {
+			"Syntax": "embedBatchCalls : Collection"
 		},
-		"load()": {
-			"Syntax": "**.load**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"embedder": {
-			"Syntax": "embedder : Object"
-		},
-		"phrase": {
-			"Syntax": "phrase : Object"
-		},
-		"batchSize": {
-			"Syntax": "batchSize : Integer"
-		},
-		"definitions": {
-			"Syntax": "definitions : Collection"
+		"embedCalls": {
+			"Syntax": "embedCalls : Collection"
 		}
 	},
 	"ProcessError": {
@@ -1698,92 +1976,6 @@
 		},
 		"_inheritedFrom_": "_ProcessBase"
 	},
-	"_TestProcessEmbedder": {
-		"embedBatch()": {
-			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
-			"Params": [
-				[
-					"texts",
-					"Collection",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.EmbeddingStudio.EmbedderResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"embed()": {
-			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
-			"Params": [
-				[
-					"text",
-					"Text",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.EmbeddingStudio.EmbedderResult",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"counter": {
-			"Syntax": "counter : Integer"
-		},
-		"rateLimits": {
-			"Syntax": "rateLimits : Collection"
-		},
-		"nonCriticalTexts": {
-			"Syntax": "nonCriticalTexts : Collection"
-		},
-		"criticalModels": {
-			"Syntax": "criticalModels : Collection"
-		},
-		"embedBatchCalls": {
-			"Syntax": "embedBatchCalls : Collection"
-		},
-		"embedCalls": {
-			"Syntax": "embedCalls : Collection"
-		},
-		"touchErrors": {
-			"Syntax": "touchErrors : Collection"
-		},
-		"touchField": {
-			"Syntax": "touchField : Text"
-		},
-		"touchSuffix": {
-			"Syntax": "touchSuffix : Text"
-		},
-		"entityKey": {
-			"Syntax": "entityKey : Variant"
-		},
-		"touchCount": {
-			"Syntax": "touchCount : Integer"
-		},
-		"dataclassName": {
-			"Syntax": "dataclassName : Text"
-		},
-		"delaySeconds": {
-			"Syntax": "delaySeconds : Real"
-		},
-		"criticalAfterCalls": {
-			"Syntax": "criticalAfterCalls : Object"
-		}
-	},
 	"_Resolver": {
 		"resolveForProcess()": {
 			"Syntax": "**.resolveForProcess**( *definition* : Variant ) : Collection",
@@ -1856,6 +2048,324 @@
 		},
 		"settings": {
 			"Syntax": "settings : cs.EmbeddingStudio.Settings"
+		}
+	},
+	"Scheduler": {
+		"autoStart()": {
+			"Syntax": "**.autoStart**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"isStarted()": {
+			"Syntax": "**.isStarted**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"force()": {
+			"Syntax": "**.force**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"stop()": {
+			"Syntax": "**.stop**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"status()": {
+			"Syntax": "**.status**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"nextRun()": {
+			"Syntax": "**.nextRun**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"config()": {
+			"Syntax": "**.config**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"saveConfig()": {
+			"Syntax": "**.saveConfig**( *cfg* : Object ) : Object",
+			"Params": [
+				[
+					"cfg",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"reload()": {
+			"Syntax": "**.reload**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"cancel()": {
+			"Syntax": "**.cancel**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"start()": {
+			"Syntax": "**.start**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
+	"_TestFixtures": {
+		"seedStudents()": {
+			"Syntax": "**.seedStudents**( *count* : Integer ) : Object",
+			"Params": [
+				[
+					"count",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"ensureAliases()": {
+			"Syntax": "**.ensureAliases**( *names* : Collection ) : Boolean",
+			"Params": [
+				[
+					"names",
+					"Collection",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
+	"_TestAIKitClient": {
+		"embeddings": {
+			"Syntax": "embeddings : cs.EmbeddingStudio._TestAIKitEmbeddingsAPI"
+		}
+	},
+	"ProcessErrorCode": {
+		"meta()": {
+			"Syntax": "**.meta**( *code* : Integer ) : Object",
+			"Params": [
+				[
+					"code",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"VECTOR_COUNT_MISMATCH": {
+			"Syntax": "VECTOR_COUNT_MISMATCH : Integer"
+		},
+		"EMBED_FAILED": {
+			"Syntax": "EMBED_FAILED : Integer"
+		},
+		"SAVE_FAILED": {
+			"Syntax": "SAVE_FAILED : Integer"
+		},
+		"INVALID_DEFINITION": {
+			"Syntax": "INVALID_DEFINITION : Integer"
+		},
+		"MODEL_UNAVAILABLE": {
+			"Syntax": "MODEL_UNAVAILABLE : Integer"
+		},
+		"MODEL_SKIPPED": {
+			"Syntax": "MODEL_SKIPPED : Integer"
+		},
+		"VALIDATION_FAILED": {
+			"Syntax": "VALIDATION_FAILED : Integer"
+		},
+		"NULL_INPUT": {
+			"Syntax": "NULL_INPUT : Integer"
+		}
+	},
+	"_Settings": {
+		"get file()": {
+			"Syntax": "**.get file**() : 4D.File",
+			"Params": [
+				[
+					"",
+					"4D.File",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get backupFile()": {
+			"Syntax": "**.get backupFile**() : 4D.File",
+			"Params": [
+				[
+					"",
+					"4D.File",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set file()": {
+			"Syntax": "**.set file**( *file* : 4D.File )",
+			"Params": [
+				[
+					"file",
+					"4D.File",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"set()": {
+			"Syntax": "**.set**( *value* : Object )",
+			"Params": [
+				[
+					"value",
+					"Object",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get()": {
+			"Syntax": "**.get**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"read()": {
+			"Syntax": "**.read**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		}
+	},
+	"Embedder": {
+		"embedBatch()": {
+			"Syntax": "**.embedBatch**( *texts* : Collection; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
+			"Params": [
+				[
+					"texts",
+					"Collection",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.EmbedderResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"embed()": {
+			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
+			"Params": [
+				[
+					"text",
+					"Text",
+					"->"
+				],
+				[
+					"model",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.EmbedderResult",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"backoffMs": {
+			"Syntax": "backoffMs : Integer"
+		},
+		"maxRetries": {
+			"Syntax": "maxRetries : Integer"
+		},
+		"client": {
+			"Syntax": "client : cs.AIKit.OpenAI"
 		}
 	},
 	"_menu": {
@@ -2453,488 +2963,6 @@
 		},
 		"data": {
 			"Syntax": "data : Collection"
-		}
-	},
-	"_ScheduleCalc": {
-		"slotAfter()": {
-			"Syntax": "**.slotAfter**( *config* : Object; *after* : Text ) : Text",
-			"Params": [
-				[
-					"config",
-					"Object",
-					"->"
-				],
-				[
-					"after",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"secondsUntil()": {
-			"Syntax": "**.secondsUntil**( *timestamp* : Text ) : Integer",
-			"Params": [
-				[
-					"timestamp",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"nextRun()": {
-			"Syntax": "**.nextRun**( *config* : Object; *lastExecution* : Text; *anchor* : Text ) : Object",
-			"Params": [
-				[
-					"config",
-					"Object",
-					"->"
-				],
-				[
-					"lastExecution",
-					"Text",
-					"->"
-				],
-				[
-					"anchor",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		}
-	},
-	"Scheduler": {
-		"status()": {
-			"Syntax": "**.status**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"nextRun()": {
-			"Syntax": "**.nextRun**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"config()": {
-			"Syntax": "**.config**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"force()": {
-			"Syntax": "**.force**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"stop()": {
-			"Syntax": "**.stop**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"reload()": {
-			"Syntax": "**.reload**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"cancel()": {
-			"Syntax": "**.cancel**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"start()": {
-			"Syntax": "**.start**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"autoStart()": {
-			"Syntax": "**.autoStart**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"isStarted()": {
-			"Syntax": "**.isStarted**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"saveConfig()": {
-			"Syntax": "**.saveConfig**( *cfg* : Object ) : Object",
-			"Params": [
-				[
-					"cfg",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		}
-	},
-	"_SchedulerState": {
-		"markSkipped()": {
-			"Syntax": "**.markSkipped**( *key* : Text )",
-			"Params": [
-				[
-					"key",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"requestCancel()": {
-			"Syntax": "**.requestCancel**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"endBatch()": {
-			"Syntax": "**.endBatch**( *result* : Text; *error* : Text; *endTimestamp* : Text )",
-			"Params": [
-				[
-					"result",
-					"Text",
-					"->"
-				],
-				[
-					"error",
-					"Text",
-					"->"
-				],
-				[
-					"endTimestamp",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"beginBatch()": {
-			"Syntax": "**.beginBatch**( *startTimestamp* : Text ) : Boolean",
-			"Params": [
-				[
-					"startTimestamp",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"disarm()": {
-			"Syntax": "**.disarm**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"arm()": {
-			"Syntax": "**.arm**( *anchor* : Text )",
-			"Params": [
-				[
-					"anchor",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"skipLoggedFor": {
-			"Syntax": "skipLoggedFor : Text"
-		},
-		"lastError": {
-			"Syntax": "lastError : Text"
-		},
-		"lastResult": {
-			"Syntax": "lastResult : Text"
-		},
-		"lastRun": {
-			"Syntax": "lastRun : Text"
-		},
-		"cancelRequested": {
-			"Syntax": "cancelRequested : Boolean"
-		},
-		"batchStart": {
-			"Syntax": "batchStart : Text"
-		},
-		"running": {
-			"Syntax": "running : Boolean"
-		},
-		"armedAt": {
-			"Syntax": "armedAt : Text"
-		},
-		"checkInterval": {
-			"Syntax": "checkInterval : Integer"
-		},
-		"armed": {
-			"Syntax": "armed : Boolean"
-		},
-		"restore()": {
-			"Syntax": "**.restore**( *lastRun* : Text; *lastResult* : Text; *lastError* : Text )",
-			"Params": [
-				[
-					"lastRun",
-					"Text",
-					"->"
-				],
-				[
-					"lastResult",
-					"Text",
-					"->"
-				],
-				[
-					"lastError",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"lastRunRestored": {
-			"Syntax": "lastRunRestored : Boolean"
-		}
-	},
-	"_TestAIKitEmbeddingsAPI": {
-		"create()": {
-			"Syntax": "**.create**( *input* : Variant; *model* : Text ) : Object",
-			"Params": [
-				[
-					"input",
-					"Variant",
-					"->"
-				],
-				[
-					"model",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"callTimestampsMs": {
-			"Syntax": "callTimestampsMs : Collection"
-		},
-		"failOnCallNumbers": {
-			"Syntax": "failOnCallNumbers : Collection"
-		},
-		"alwaysFail": {
-			"Syntax": "alwaysFail : Boolean"
-		},
-		"retryAfterSec": {
-			"Syntax": "retryAfterSec : Integer"
-		},
-		"rateLimitCount": {
-			"Syntax": "rateLimitCount : Integer"
-		},
-		"callCount": {
-			"Syntax": "callCount : Integer"
-		}
-	},
-	"_TestFixtures": {
-		"seedStudents()": {
-			"Syntax": "**.seedStudents**( *count* : Integer ) : Object",
-			"Params": [
-				[
-					"count",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"ensureAliases()": {
-			"Syntax": "**.ensureAliases**( *names* : Collection ) : Boolean",
-			"Params": [
-				[
-					"names",
-					"Collection",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		}
-	},
-	"_TestAIKitClient": {
-		"embeddings": {
-			"Syntax": "embeddings : cs.EmbeddingStudio._TestAIKitEmbeddingsAPI"
-		}
-	},
-	"_SCHEDULER": {
-		"onLoad()": {
-			"Syntax": "**.onLoad**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"manager()": {
-			"Syntax": "**.manager**( *e* : Object )",
-			"Params": [
-				[
-					"e",
-					"Object",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"currentConfig()": {
-			"Syntax": "**.currentConfig**() : Object",
-			"Params": [
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"save()": {
-			"Syntax": "**.save**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"paint()": {
-			"Syntax": "**.paint**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"preview()": {
-			"Syntax": "**.preview**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"onConfigEdit()": {
-			"Syntax": "**.onConfigEdit**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"load()": {
-			"Syntax": "**.load**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"errorText": {
-			"Syntax": "errorText : Text"
-		},
-		"stateText": {
-			"Syntax": "stateText : Text"
-		},
-		"nextRunText": {
-			"Syntax": "nextRunText : Text"
-		},
-		"intervalHours": {
-			"Syntax": "intervalHours : Integer"
-		},
-		"startReference": {
-			"Syntax": "startReference : Text"
-		},
-		"lastRunText": {
-			"Syntax": "lastRunText : Text"
-		},
-		"startFromNow": {
-			"Syntax": "startFromNow : Boolean"
-		},
-		"startFromLast": {
-			"Syntax": "startFromLast : Boolean"
-		},
-		"dailyTime": {
-			"Syntax": "dailyTime : Text"
-		},
-		"startFromReference": {
-			"Syntax": "startFromReference : Boolean"
-		},
-		"modeDaily": {
-			"Syntax": "modeDaily : Boolean"
-		},
-		"modeInterval": {
-			"Syntax": "modeInterval : Boolean"
-		},
-		"modeDisabled": {
-			"Syntax": "modeDisabled : Boolean"
-		},
-		"scheduler": {
-			"Syntax": "scheduler : cs.EmbeddingStudio.Scheduler"
 		}
 	}
 }

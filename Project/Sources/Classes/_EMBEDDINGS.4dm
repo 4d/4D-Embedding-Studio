@@ -537,7 +537,7 @@ Function _handleDevChoice($choice : Text) : Boolean
 			For each ($def; This:C1470.settings.definitions)
 				$def.modelAlias:=$chosenAlias
 			End for each 
-			This:C1470.settings.save()
+			This:C1470._saveSettings()
 			This:C1470.readEmbeddingItems()
 			This:C1470.modelUpdateDropdown()
 		: ($choice="openAISetting")
@@ -554,7 +554,7 @@ Function _handleDevChoice($choice : Text) : Boolean
 		: (Position:C15("phraseOption:"; $choice)=1)
 			var $optKey : Text:=Substring:C12($choice; Length:C16("phraseOption:")+1)
 			This:C1470.settings.phrase[$optKey]:=Not:C34(Bool:C1537(This:C1470.settings.phrase[$optKey]))
-			This:C1470.settings.save()
+			This:C1470._saveSettings()
 		: ($choice="toggleDiagnosticLogRecording")
 			var $current : Integer:=Get database parameter:C643(Diagnostic log recording:K37:69)
 			SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69; ($current=0) ? 1 : 0)
@@ -927,7 +927,22 @@ Function saveEmbeddingItems()
 		.filter(Formula:C1597(Bool:C1537($1.value.defined)))\
 		.map(Formula:C1597($1.value.definition))
 	
-	This:C1470.settings.save()
+	This:C1470._saveSettings()
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Saves the settings and tells the user when the save was refused (an unreadable settings
+	// file is left untouched rather than overwritten with defaults).
+Function _saveSettings() : Boolean
+	
+	If (This:C1470.settings.save())
+		
+		return True:C214
+		
+	End if 
+	
+	ALERT:C41(Replace string:C233(Localized string:C991("errSettingsNotSaved"); "{file}"; This:C1470.settings.file.path))
+	
+	return False:C215
 	
 	// MARK: -[PRIVATE]
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***

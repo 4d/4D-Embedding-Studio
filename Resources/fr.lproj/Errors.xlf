@@ -136,6 +136,10 @@
           <source>Missing vector "{attribute}" of dataclass "{dataclass}".</source>
           <target>Vecteur "{attribute}" manquant dans la dataclasse "{dataclass}".</target>
         </trans-unit>
+        <trans-unit id="errSettingsNotSaved" resname="errSettingsNotSaved">
+          <source>Settings were not saved: the file "{file}" cannot be read. Fix or remove it, then try again.</source>
+          <target>Les paramètres n'ont pas été enregistrés : le fichier « {file} » est illisible. Corrigez-le ou supprimez-le, puis réessayez.</target>
+        </trans-unit>
         <trans-unit id="5" resname="attributeIsNotAVector">
           <source>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</source>
           <target>L'attribut "{attribute}" de la dataclasse "{dataclass}" n'est pas un vecteur.</target>
