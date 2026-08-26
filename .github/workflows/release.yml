@@ -2,6 +2,12 @@ name: Release
 on: 
   release:
     types: [published]
+
+# used by the 4D-AIKit checkout below; without it the ref is empty and the
+# default branch is silently used instead
+env:
+  DEPENDENCIES_BRANCH: main
+
 jobs:
   create:
     name: "Create"
