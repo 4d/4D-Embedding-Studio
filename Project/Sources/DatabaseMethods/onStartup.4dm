@@ -1,5 +1,13 @@
 
-cs:C1710.Scheduler.me.start()  // dev purpose (see host database event for studio as component)
+// dev purpose: this project opened directly, not as a component (a component's database
+// methods are not executed — see On Host Database Event). Remote clients run On Startup
+// too, and the scheduler state is per machine: without this guard every connected client
+// would arm its own loop worker and run its own batches.
+If (Application type:C494#4D Remote mode:K5:5)
+	
+	cs:C1710.Scheduler.me.start()
+	
+End if 
 
 If (Not:C34(Is compiled mode:C492))
 	

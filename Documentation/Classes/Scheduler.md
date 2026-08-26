@@ -71,6 +71,12 @@ cs.EmbeddingStudio.Scheduler.me.start()
 cs.EmbeddingStudio.Scheduler.me.stop()
 ```
 
+> In client/server, arm the scheduler from `On Server Startup`, not from `On Startup`:
+> `On Startup` runs on every remote client, and the scheduler state is per machine — each
+> client would arm its own loop and run its own batches. If you do call [`start()`](#start)
+> from `On Startup` (single-user setups), guard it with
+> `If (Application type#4D Remote mode)`.
+
 `start()` is idempotent, so calling it from several places is harmless.
 
 ### Checking that it really runs
