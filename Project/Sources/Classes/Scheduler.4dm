@@ -61,8 +61,16 @@ Function stop()
 	
 	cs:C1710._SchedulerState.me.disarm()
 	
-	If (This:C1470.isStarted())
+	var $process : Integer:=This:C1470._loopProcess()
+	If ($process>0)
+		
 		KILL WORKER:C1390(This:C1470._loopWorker)
+		
+		// The loop only re-reads "armed" when its sleep ends, and KILL WORKER waits for the
+		// current task — the whole loop method — to end. Cancelling the pending delay (0 ticks)
+		// wakes it now, so stop() takes effect immediately instead of up to checkInterval later.
+		DELAY PROCESS:C323($process; 0)
+		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -154,8 +162,7 @@ Function status() : Object
 	// True when the background loop worker is alive, i.e. the scheduler really runs.
 Function isStarted() : Boolean
 	
-	var $activity : Object:=Process activity:C1495(Processes only:K5:35)
-	return ($activity.processes.findIndex(Formula:C1597($1.value.name=$2); This:C1470._loopWorker)#-1)
+	return (This:C1470._loopProcess()>0)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// True when the host database authorizes the component "On Host Database Event" method
@@ -166,6 +173,16 @@ Function autoStart() : Boolean
 	// the * targets the host structure settings, the only place the option can be set
 	return Bool:C1537(This:C1470._hostEventSetting(File:C1566(This:C1470._hostSettings; *)))
 	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Process number of the background loop worker, 0 when it does not run. On a remote client the
+	// snapshot only lists the client's own processes, so a loop armed on the server reads as absent.
+Function _loopProcess() : Integer
+
+	var $activity : Object:=Process activity:C1495(Processes only:K5:35)
+	var $index : Integer:=$activity.processes.findIndex(Formula:C1597($1.value.name=$2); This:C1470._loopWorker)
+
+	return ($index#-1) ? Num:C11($activity.processes[$index].number) : 0
+
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Applies defaults and clamping to a raw scheduler config object. Shared by config() (read)
 	// and saveConfig() (write) so the stored shape and the effective shape always agree.
