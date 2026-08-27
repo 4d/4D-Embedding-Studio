@@ -93,7 +93,7 @@ Function _interval($config : Object; $lastExecution : Text; $anchor : Text) : Ob
 Function _daily($config : Object; $lastExecution : Text) : Object
 	
 	var $parts : Collection:=Split string:C1554(String:C10($config.dailyTime); ":")
-	var $h : Integer:=Num:C11($parts[0])
+	var $h : Integer:=($parts.length>=1) ? Num:C11($parts[0]) : 0
 	var $m : Integer:=($parts.length>=2) ? Num:C11($parts[1]) : 0
 	var $target : Time:=?00:00:00?+($h*3600)+($m*60)
 	
@@ -196,7 +196,7 @@ Function slotAfter($config : Object; $after : Text) : Text
 			
 			var $base : Object:=This:C1470._parse($after)
 			var $parts : Collection:=Split string:C1554(String:C10($config.dailyTime); ":")
-			var $target : Time:=?00:00:00?+(Num:C11($parts[0])*3600)+(($parts.length>=2) ? (Num:C11($parts[1])*60) : 0)
+			var $target : Time:=?00:00:00?+((($parts.length>=1) ? Num:C11($parts[0]) : 0)*3600)+(($parts.length>=2) ? (Num:C11($parts[1])*60) : 0)
 			var $date : Date:=$base.date
 			If ($target<=$base.time)
 				$date:=$date+1

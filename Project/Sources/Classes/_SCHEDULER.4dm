@@ -434,7 +434,18 @@ Function paint()
 	// A single Start/Stop toggle occupies one slot; show whichever applies.
 	OBJECT SET VISIBLE:C603(*; "start"; Not:C34(Bool:C1537($status.started)))
 	OBJECT SET VISIBLE:C603(*; "stop"; Bool:C1537($status.started))
-	OBJECT SET ENABLED:C1123(*; "forceNow"; Not:C34(Bool:C1537($status.running)))
+	var $canForceNow : Boolean:=Bool:C1537($status.started) && Not:C34(Bool:C1537($status.running))
+	OBJECT SET ENABLED:C1123(*; "forceNow"; $canForceNow)
+	
+	// Explain why the button is greyed out: scheduler not started, vs. a run already in progress.
+	Case of 
+		: ($canForceNow)
+			OBJECT SET HELP TIP:C1181(*; "forceNow"; "")
+		: (Bool:C1537($status.running))
+			OBJECT SET HELP TIP:C1181(*; "forceNow"; Localized string:C991("schedulerForceNowTipRunning"))
+		Else 
+			OBJECT SET HELP TIP:C1181(*; "forceNow"; Localized string:C991("schedulerForceNowTipStopped"))
+	End case 
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Maps a status object to a localized, human-readable state label.

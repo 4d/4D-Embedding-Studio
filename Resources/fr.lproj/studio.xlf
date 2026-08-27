@@ -140,6 +140,14 @@
           <source>Run now</source>
           <target>Exécuter maintenant</target>
         </trans-unit>
+        <trans-unit id="schedulerForceNowTipStopped" resname="schedulerForceNowTipStopped">
+          <source>Start the scheduler to run it now</source>
+          <target>Démarrez le planificateur pour l'exécuter maintenant</target>
+        </trans-unit>
+        <trans-unit id="schedulerForceNowTipRunning" resname="schedulerForceNowTipRunning">
+          <source>A run is already in progress</source>
+          <target>Une exécution est déjà en cours</target>
+        </trans-unit>
         <trans-unit id="schedulerStart" resname="schedulerStart">
           <source>Start scheduler</source>
           <target>Démarrer le planificateur</target>

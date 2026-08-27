@@ -140,6 +140,14 @@
           <source>Run now</source>
           <target>Run now</target>
         </trans-unit>
+        <trans-unit id="schedulerForceNowTipStopped" resname="schedulerForceNowTipStopped">
+          <source>Start the scheduler to run it now</source>
+          <target>Start the scheduler to run it now</target>
+        </trans-unit>
+        <trans-unit id="schedulerForceNowTipRunning" resname="schedulerForceNowTipRunning">
+          <source>A run is already in progress</source>
+          <target>A run is already in progress</target>
+        </trans-unit>
         <trans-unit id="schedulerStart" resname="schedulerStart">
           <source>Start scheduler</source>
           <target>Start scheduler</target>

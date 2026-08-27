@@ -235,7 +235,7 @@ Function schedulerManager($e : Object)
 	var $menu:=cs:C1710._menu.new()
 	$menu.append(Localized string:C991("schedulerConfigure"); "configure")
 	$menu.line()
-	$menu.append(Localized string:C991("schedulerForceNow"); "forceNow").enable(Not:C34(Bool:C1537($status.running)))
+	$menu.append(Localized string:C991("schedulerForceNow"); "forceNow").enable(Bool:C1537($status.started) && Not:C34(Bool:C1537($status.running)))
 	If (Bool:C1537($status.started))
 		$menu.append(Localized string:C991("schedulerStop"); "stop")
 	Else 
