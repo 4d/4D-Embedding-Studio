@@ -158,6 +158,29 @@ $v:=$tpl.validate(ds:C1482._Students)
 ASSERT:C1129(Not:C34($v.success); "Validate multi-error: expected failure")
 ASSERT:C1129($v.errors.length=2; "Validate multi-error: expected 2 errors, got "+String:C10($v.errors.length))
 
+// --- "_dirty" sibling of the CURRENT vector → error (would invalidate forever) ---
+// student_vector_2_dirty is the dirty flag of the student_vector_2 vector
+$tpl:=cs:C1710.Phrase.new("{firstName} {student_vector_2_dirty}")
+$v:=$tpl.validate(ds:C1482._Students; Null:C1517; "student_vector_2")
+ASSERT:C1129(Not:C34($v.success); "Validate own dirty: expected failure")
+ASSERT:C1129($v.errors.length=1; "Validate own dirty: expected 1 error")
+ASSERT:C1129($v.errors[0].key="student_vector_2_dirty"; "Validate own dirty: error key mismatch")
+ASSERT:C1129($v.warnings.length=0; "Validate own dirty: expected 0 warnings")
+
+// --- "_dirty" sibling of ANOTHER vector → warning (useless, not blocking) ---
+$tpl:=cs:C1710.Phrase.new("{firstName} {student_vector_2_dirty}")
+$v:=$tpl.validate(ds:C1482._Students; Null:C1517; "student_vector_1")
+ASSERT:C1129($v.success; "Validate other dirty: expected success (warning only)")
+ASSERT:C1129($v.errors.length=0; "Validate other dirty: expected 0 errors")
+ASSERT:C1129($v.warnings.length=1; "Validate other dirty: expected 1 warning")
+ASSERT:C1129($v.warnings[0].key="student_vector_2_dirty"; "Validate other dirty: warning key mismatch")
+
+// --- "_dirty" sibling with no current vector → warning ---
+$tpl:=cs:C1710.Phrase.new("{student_vector_2_dirty}")
+$v:=$tpl.validate(ds:C1482._Students)
+ASSERT:C1129($v.success; "Validate dirty no-vector: expected success (warning only)")
+ASSERT:C1129($v.warnings.length=1; "Validate dirty no-vector: expected 1 warning")
+
 // ══════════════════════════════════════════════════════════════════════
 // VALIDATE TESTS — AllTypes (blob, object, picture rejected)
 // ══════════════════════════════════════════════════════════════════════

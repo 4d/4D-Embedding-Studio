@@ -24,6 +24,15 @@ ASSERT:C1129($attrs.query("name = :1"; "student_not_defined").length=0; "default
 // --- FK source storage field excluded ---
 ASSERT:C1129($attrs.query("name = :1"; "school_ID").length=0; "default: FK storage 'school_ID' must be excluded")
 
+// --- Vector "_dirty" invalidation flags excluded ---
+ASSERT:C1129($attrs.query("name = :1"; "student_vector_2_dirty").length=0; "default: 'student_vector_2_dirty' flag must be excluded")
+ASSERT:C1129($attrs.query("name = :1"; "student vector 3_dirty").length=0; "default: 'student vector 3_dirty' flag must be excluded")
+
+// --- isVectorDirtySibling: only real vector dirty flags match ---
+ASSERT:C1129($dca.isVectorDirtySibling(ds:C1482._Students; "student_vector_2_dirty"); "isVectorDirtySibling: true for a vector's dirty flag")
+ASSERT:C1129(Not:C34($dca.isVectorDirtySibling(ds:C1482._Students; "firstName")); "isVectorDirtySibling: false for a plain field")
+ASSERT:C1129(Not:C34($dca.isVectorDirtySibling(ds:C1482._Students; "_dirty")); "isVectorDirtySibling: false when no vector name precedes the suffix")
+
 // --- N:1 relatedEntity excluded without allowRelations ---
 ASSERT:C1129($attrs.query("name = :1"; "school").length=0; "default: relatedEntity 'school' excluded without allowRelations")
 

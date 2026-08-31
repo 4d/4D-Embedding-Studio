@@ -1081,7 +1081,7 @@
 			"Summary": ""
 		},
 		"validate()": {
-			"Syntax": "**.validate**( *dataclass* : 4D.DataClass; *options* : Object ) : Object",
+			"Syntax": "**.validate**( *dataclass* : 4D.DataClass; *options* : Object; *vectorName* : Text ) : Object",
 			"Params": [
 				[
 					"dataclass",
@@ -1091,6 +1091,11 @@
 				[
 					"options",
 					"Object",
+					"->"
+				],
+				[
+					"vectorName",
+					"Text",
 					"->"
 				],
 				[
@@ -1555,6 +1560,27 @@
 				[
 					"allowObject",
 					"Boolean",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"isVectorDirtySibling()": {
+			"Syntax": "**.isVectorDirtySibling**( *dataclass* : 4D.DataClass; *fieldName* : Text ) : Boolean",
+			"Params": [
+				[
+					"dataclass",
+					"4D.DataClass",
+					"->"
+				],
+				[
+					"fieldName",
+					"Text",
 					"->"
 				],
 				[

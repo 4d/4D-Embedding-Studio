@@ -70,15 +70,20 @@ Function render($data : Object) : Text
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Validates that all keys in the phrase can be resolved against a DataClass.
 	// Walks dot-notation paths through relations (N:1 / 1:1).
-	// Returns {success: Boolean, errors: Collection of {key, message}}
+	// Returns {success: Boolean, errors: Collection of {key, message}, warnings: Collection of {key, message}}
 	//
 	// $options (all default to False — storage kind only):
 	//   .allowRelations  : Boolean — allow dot-notation paths through N:1 relations
 	//   .allowCalculated : Boolean — allow calculated attributes
 	//   .allowAlias      : Boolean — allow alias attributes
-Function validate($dataclass : 4D:C1709.DataClass; $options : Object) : Object
-	
+	//
+	// $vectorName : the vector being defined. Its own "<vectorName>_dirty" flag is an ERROR
+	// (embedding it feeds the phrase that recomputes the vector → invalidation loop); any other
+	// vector's "_dirty" flag is a WARNING (valid but meaningless text in the phrase).
+Function validate($dataclass : 4D:C1709.DataClass; $options : Object; $vectorName : Text) : Object
+
 	var $errors:=[]
+	var $warnings:=[]
 	var $dcName : Text:=$dataclass.getInfo().name
 	
 	// Options with defaults (all False when omitted → storage kind only)
@@ -98,8 +103,8 @@ Function validate($dataclass : 4D:C1709.DataClass; $options : Object) : Object
 	
 	If (This:C1470._keyPaths.length=0) && (Length:C16(This:C1470._template)>0)
 		$errors.push({key: ""; message: This:C1470._localizedErrorMessage("phraseHasNoKeyField"; ""; "")})
-		return {success: False:C215; errors: $errors}
-	End if 
+		return {success: False:C215; errors: $errors; warnings: $warnings}
+	End if
 	
 	var $kp : Variant
 	For each ($kp; This:C1470._keyPaths)
@@ -178,18 +183,28 @@ Function validate($dataclass : 4D:C1709.DataClass; $options : Object) : Object
 						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("aliasAttributeIsNotAllowed"; $segment)})
 						
 					: (cs:C1710._dataclassAttributes.me.isExcludedStorageType($attribute; $allowObject))
-						
+
 						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("theAttributeTypeIsNotSupportedInAPhrase"; $segment)})
-						
-				End case 
-				
-			End if 
-			
-		End for 
-		
-	End for each 
-	
-	return {success: ($errors.length=0); errors: $errors}
+
+				End case
+
+				// A "<vectorName>_dirty" flag is a valid boolean field but must not feed the phrase.
+				If (cs:C1710._dataclassAttributes.me.isVectorDirtySibling($current; $segment))
+					var $ownVector : Boolean:=($segments.length=1) && ($segment=(String:C10($vectorName)+"_dirty"))
+					If ($ownVector)
+						$errors.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("theDirtyFieldWouldLoop"; $segment)})
+					Else
+						$warnings.push({key: $segments.join("."); message: This:C1470._localizedErrorMessage("theDirtyFieldIsUseless"; $segment)})
+					End if
+				End if
+
+			End if
+
+		End for
+
+	End for each
+
+	return {success: ($errors.length=0); errors: $errors; warnings: $warnings}
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function attributes($dataclass : 4D:C1709.DataClass) : Collection
@@ -325,7 +340,7 @@ Function _resolve($path : Collection; $data : Object) : Variant
 	End for each 
 	
 	return $current
-	
+
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Returns a localized error message with {attribute} and {dataclass} placeholders replaced.
 Function _localizedErrorMessage($resname : Text; $attribute : Text; $dataclass : Text) : Text

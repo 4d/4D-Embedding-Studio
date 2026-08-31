@@ -34,11 +34,16 @@ In the embedding phrase, the supported attributes shall be:
 			
 			If (String:C10($attribute.classID)="4D.Vector")
 				continue
-			End if 
-			
+			End if
+
+			// A "<vectorName>_dirty" flag tracks vector invalidation; never propose it in a phrase.
+			If (This:C1470.isVectorDirtySibling($dataclass; $attribute.name))
+				continue
+			End if
+
 			If (This:C1470.isExcludedStorageType($attribute; True:C214))
 				continue
-			End if 
+			End if
 			
 			// 1:N relations are never valid in a phrase
 			If ($attribute.kind="relatedEntities")
@@ -126,8 +131,28 @@ Function hasField($dataclass : 4D:C1709.DataClass; $fieldName : Text) : Boolean
 	return Bool:C1537(This:C1470._fieldNameCache[$key][$fieldName])
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns True when a storage attribute should be excluded from a phrase.
-	// blob and image are always excluded; object is excluded unless $allowObject is True.
+	// Returns True when $fieldName is the "<vectorName>_dirty" invalidation flag of a 4D.Vector
+	// attribute present on $dataclass (these boolean flags are never useful inside a phrase).
+Function isVectorDirtySibling($dataclass : 4D:C1709.DataClass; $fieldName : Text) : Boolean
+
+		var $suffix : Text:="_dirty"
+
+		If (Length:C16($fieldName)<=Length:C16($suffix))
+			return False:C215
+		End if
+
+		If (Substring:C12($fieldName; Length:C16($fieldName)-Length:C16($suffix)+1)#$suffix)
+			return False:C215
+		End if
+
+		var $vectorName : Text:=Substring:C12($fieldName; 1; Length:C16($fieldName)-Length:C16($suffix))
+		var $sibling : Object:=$dataclass[$vectorName]
+
+		return ($sibling#Null:C1517) && (String:C10($sibling.classID)="4D.Vector")
+
+		// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+		// Returns True when a storage attribute should be excluded from a phrase.
+		// blob and image are always excluded; object is excluded unless $allowObject is True.
 Function isExcludedStorageType($attribute : Object; $allowObject : Boolean) : Boolean
 	
 	If ($attribute.kind#"storage")

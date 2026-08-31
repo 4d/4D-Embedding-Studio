@@ -126,6 +126,14 @@
           <source>The phrase has no key field. At least one attribute is required so that each record generates a unique text.</source>
           <target>The phrase has no key field. At least one attribute is required so that each record generates a unique text.</target>
         </trans-unit>
+        <trans-unit id="theDirtyFieldWouldLoop" resname="theDirtyFieldWouldLoop">
+          <source>The "{attribute}" field is this vector's own dirty flag; using it in the phrase would invalidate the vector forever.</source>
+          <target>The "{attribute}" field is this vector's own dirty flag; using it in the phrase would invalidate the vector forever.</target>
+        </trans-unit>
+        <trans-unit id="theDirtyFieldIsUseless" resname="theDirtyFieldIsUseless">
+          <source>The "{attribute}" field is a vector dirty flag and adds nothing useful to the phrase.</source>
+          <target>The "{attribute}" field is a vector dirty flag and adds nothing useful to the phrase.</target>
+        </trans-unit>
       </group>
       <group resname="Embeddings">
         <trans-unit id="7" resname="missingDataclass">

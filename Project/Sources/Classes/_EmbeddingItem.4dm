@@ -8,6 +8,7 @@ property touched : Boolean:=False:C215
 property original : Object
 
 property _phraseErrors : Collection:=[]
+property _phraseWarnings : Collection:=[]
 property _modelErrors : Collection:=[]
 
 property _dataclass : cs:C1710.DataClass
@@ -40,6 +41,7 @@ Class constructor($dataclass : 4D:C1709.DataClass; $definition : cs:C1710.Defini
 	
 	This:C1470.touched:=False:C215
 	This:C1470._phraseErrors:=[]
+	This:C1470._phraseWarnings:=[]
 	This:C1470._modelErrors:=[]
 	This:C1470.original:=This:C1470.definition.toObject()
 	
@@ -100,27 +102,40 @@ In the embedding phrase, if the attribute is incorrect,
 and show a tooltip with an error message when the developer hovers over it.
 */
 	var $dataclass : 4D:C1709.DataClass:=ds:C1482[This:C1470.definition.dataclassName]
-	var $validation:=$phrase.validate($dataclass; (This:C1470.settings=Null:C1517) ? Null:C1517 : This:C1470.settings.phrase)
-	
+	var $validation:=$phrase.validate($dataclass; (This:C1470.settings=Null:C1517) ? Null:C1517 : This:C1470.settings.phrase; This:C1470.definition.vectorName)
+
 	var $text : Text:=$phrase.template
 	$text:=Replace string:C233($text; "&"; "&amp;")
 	$text:=Replace string:C233($text; "<"; "&lt;")
 	$text:=Replace string:C233($text; ">"; "&gt;")
-	
+
 	This:C1470._phraseErrors:=[]
-	
-	var $err : Object
+	This:C1470._phraseWarnings:=[]
+
+	var $entry : Object
+
 	var $errorColor:=_errorColor()
-	For each ($err; $validation.errors)
-		
-		This:C1470._phraseErrors.push($err.message)
-		
-		var $styled : Text:=$err.key
+	For each ($entry; $validation.errors)
+
+		This:C1470._phraseErrors.push($entry.message)
+
+		var $styled : Text:=$entry.key
 		ST SET ATTRIBUTES:C1093($styled; ST Start text:K78:15; ST End text:K78:16; Attribute text color:K65:7; $errorColor)
-		$text:=Replace string:C233($text; "{"+$err.key+"}"; "{"+$styled+"}")
-		
-	End for each 
-	
+		$text:=Replace string:C233($text; "{"+$entry.key+"}"; "{"+$styled+"}")
+
+	End for each
+
+	var $warningColor:=_warningColor()
+	For each ($entry; $validation.warnings)
+
+		This:C1470._phraseWarnings.push($entry.message)
+
+		$styled:=$entry.key
+		ST SET ATTRIBUTES:C1093($styled; ST Start text:K78:15; ST End text:K78:16; Attribute text color:K65:7; $warningColor)
+		$text:=Replace string:C233($text; "{"+$entry.key+"}"; "{"+$styled+"}")
+
+	End for each
+
 	return "<span>"+$text+"</span>"  // In multistyle text format
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
@@ -136,9 +151,17 @@ Function get errors() : Collection
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 	// Always safe to call: returns the joined error list (empty string when none).
+	// Non-blocking warnings (e.g. another vector's "_dirty" flag) are appended below the errors.
 Function get helptip() : Text
-	
-	return This:C1470.errors.join("\r")
+
+		var $lines : Collection:=This:C1470.errors.copy()
+
+		var $warning : Text
+		For each ($warning; This:C1470._phraseWarnings)
+			$lines.push("⚠️ "+$warning)
+		End for each
+
+		return $lines.join("\r")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Re-runs phrase + model validation and refreshes _phraseErrors / _modelErrors.

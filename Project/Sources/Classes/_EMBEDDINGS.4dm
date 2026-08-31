@@ -413,6 +413,7 @@ Function moreManager($e : Object)
 			
 			// ______________________________________________________
 		: ($menu.choice="insertAllAttributes")
+			// supportedAttributes already excludes vector "_dirty" flags, so this only inserts usable fields.
 			var $plainText:=$item.supportedAttributes.map(Formula:C1597($1.value.name+"={"+$1.value.name+"}")).join(",")
 			$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
 			$item.phrase:=$item.parsePhrase($item.definition.phrase)
