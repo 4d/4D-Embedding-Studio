@@ -20,6 +20,32 @@
           <source>Vector</source>
           <target>Vecteur</target>
         </trans-unit>
+        <trans-unit id="emptyStateTitle" resname="emptyStateTitle">
+          <source>Nothing to configure yet</source>
+          <target>Rien à configurer pour l'instant</target>
+        </trans-unit>
+        <trans-unit id="emptyStateIntro" resname="emptyStateIntro">
+          <source>To get started:</source>
+          <target>Pour commencer :</target>
+        </trans-unit>
+        <trans-unit id="emptyStateStep1" resname="emptyStateStep1">
+          <source>Open the Structure Editor.</source>
+          <target>Ouvrez l'éditeur de structure.</target>
+        </trans-unit>
+        <trans-unit id="emptyStateStep2" resname="emptyStateStep2">
+          <source>Add a field to the table you want to search and set its class to 4D.Vector.</source>
+          <target>Ajoutez un champ à la table dans laquelle vous voulez rechercher et définissez sa classe sur 4D.Vector.</target>
+        </trans-unit>
+        <trans-unit id="emptyStateStep3" resname="emptyStateStep3">
+          <source>Come back here to define the field's phrase and model alias.</source>
+          <target>Revenez ici pour définir la phrase et l'alias de modèle du champ.</target>
+        </trans-unit>
+        <trans-unit id="studioIntro" resname="studioIntro">
+          <source>Embedding Studio turns each record into a vector, so your app can find records by meaning rather than by exact words.
+Pick a vector attribute, then describe a record in one sentence.</source>
+          <target>Embedding Studio transforme chaque enregistrement en vecteur, pour que votre application retrouve les enregistrements par le sens plutôt que par les mots exacts.
+Choisissez un attribut vecteur, puis décrivez un enregistrement en une phrase.</target>
+        </trans-unit>
         <trans-unit id="50" resname="explanatoryPhrase">
           <source>Descriptive Phrase</source>
           <target>Phrase descriptive</target>

@@ -2,7 +2,25 @@
    Colors follow the system appearance (light / dark) like the runtime
    Package Manager footer, via prefers-color-scheme.
    The status line has two skins bound to the same text, shown one at a time:
-   .schedulerStatusText (normal) and .schedulerStatusError (error). */
+   .schedulerStatusText (normal) and .schedulerStatusError (error).
+   .studioIntro is the dimmed header sentence, same tone as the scheduler dialog.
+   .studioEmptyTitle / .studioPanel dress the empty state shown while the structure
+   holds no vector attribute; the panel matches the scheduler settings boxes. */
+
+.studioIntro {
+	fill: transparent;
+	stroke: #6B7075;
+}
+
+.studioEmptyTitle {
+	fontSize: 18;
+	fontWeight: bold;
+}
+
+.studioPanel {
+	fill: #F2F2F2;
+	stroke: #DADADA;
+}
 
 .schedulerFooterBar {
 	fill: #ECECEC;
@@ -24,6 +42,13 @@
 }
 
 @media (prefers-color-scheme: dark) {
+	.studioIntro {
+		stroke: #9AA0A6;
+	}
+	.studioPanel {
+		fill: #26272B;
+		stroke: #3C3D41;
+	}
 	.schedulerFooterBar {
 		fill: #2A2B2E;
 	}

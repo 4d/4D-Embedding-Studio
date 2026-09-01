@@ -18,6 +18,22 @@ property _detailFields:=[\
 "autoInvalidate"; \
 "more"]
 
+// Empty state: shown instead of the whole UI while the structure has no vector attribute
+property emptyStateText : Text
+property _mainObjects:=[\
+"intro"; \
+"list"; \
+"schedulerFooterBar"; \
+"schedulerFooterSep"; \
+"schedulerGear"; \
+"schedulerSpinner"; \
+"schedulerStatus"; \
+"schedulerStatusError"]
+property _emptyStateObjects:=[\
+"empty.title"; \
+"empty.box"; \
+"empty.steps"]
+
 property modelsDropdown : Object
 property _cache : Object  // Current catalog cache
 
@@ -73,14 +89,17 @@ Function manager($e : Object)
 				// TODO: Use the new vector icon when ready
 				OBJECT SET FORMAT:C236(*; "Header2"; "path:/.PRODUCT_RESOURCES/Images/StructureEditor/Field_14.png")
 				
-				This:C1470.paintSchedulerStatus()
+				This:C1470.paintEmptyState()
+				
+				This:C1470.selectFirstItem()  // Preselect the first vector, so the details panel is visible right away
 				
 				// ______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
 				This:C1470.catalog:=ds:C1482
 				
-				If (Length:C16(OBJECT Get name:C1087(Object with focus:K67:3))=0)
+				If (Length:C16(OBJECT Get name:C1087(Object with focus:K67:3))=0)\
+					 && Not:C34(This:C1470.isEmpty())  // The list is hidden by the empty state
 					
 					GOTO OBJECT:C206(*; This:C1470.list)
 					
@@ -93,7 +112,7 @@ Function manager($e : Object)
 				// TODO: Visual indicator
 				CALL FORM:C1391(Current form window:C827; Formula:C1597(Form:C1466.refresh()))
 				
-				This:C1470.paintSchedulerStatus()
+				This:C1470.paintEmptyState()
 				
 				// ______________________________________________________
 			: ($e.code=On Timer:K2:25)
@@ -203,6 +222,12 @@ Function openHelp()
 	// Footer status bar: repaints the one-line scheduler summary and the running spinner.
 Function paintSchedulerStatus()
 	
+	If (This:C1470.isEmpty())  // The footer is hidden along with the rest of the UI
+		
+		return 
+		
+	End if 
+	
 	var $status : Object:=cs:C1710.Scheduler.me.status()
 	var $error : Text:=($status.error#Null:C1517) ? String:C10($status.error) : ""
 	var $hasError : Boolean:=(Length:C16($error)>0)
@@ -222,6 +247,59 @@ Function paintSchedulerStatus()
 	// Full line on the help tip since it may be truncated with an ellipsis.
 	OBJECT SET HELP TIP:C1181(*; "schedulerStatus"; $summary)
 	OBJECT SET HELP TIP:C1181(*; "schedulerStatusError"; $summary)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// True while the structure holds no vector attribute and no saved definition.
+Function isEmpty() : Boolean
+	
+	return (This:C1470.items=Null:C1517) || (This:C1470.items.length=0)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// There is nothing to configure until a 4D.Vector attribute exists: the list, the details
+	// and the scheduler footer are then replaced by a short "how to get started" message.
+Function paintEmptyState() : Boolean
+	
+	var $empty : Boolean:=This:C1470.isEmpty()
+	var $t : Text
+	
+	For each ($t; This:C1470._mainObjects)
+		
+		OBJECT SET VISIBLE:C603(*; $t; Not:C34($empty))
+		
+	End for each 
+	
+	For each ($t; This:C1470._emptyStateObjects)
+		
+		OBJECT SET VISIBLE:C603(*; $t; $empty)
+		
+	End for each 
+	
+	If ($empty)
+		
+		Form:C1466.emptyStateText:=This:C1470._emptyStateText()
+		
+		return True:C214
+		
+	End if 
+	
+	This:C1470.paintSchedulerStatus()  // Restores the right footer skin (normal, error, spinner)
+	
+	return False:C215
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// The numbered steps of the empty state, as a single multi-line text.
+Function _emptyStateText() : Text
+	
+	var $lines:=[Localized string:C991("emptyStateIntro"); ""]
+	var $i : Integer
+	
+	For ($i; 1; 3)
+		
+		$lines.push(String:C10($i)+". "+Localized string:C991("emptyStateStep"+String:C10($i)))
+		
+	End for 
+	
+	return $lines.join("\r")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Context menu behind the footer gear button / status click: configure + quick runtime actions.
@@ -331,6 +409,21 @@ Function updateUI() : Boolean
 	End for each 
 	
 	return True:C214
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Selects the first vector of the list, if any, so the details panel is shown at startup.
+Function selectFirstItem()
+	
+	If (This:C1470.isEmpty())
+		
+		return 
+		
+	End if 
+	
+	LISTBOX SELECT ROW:C912(*; This:C1470.list; 1)
+	This:C1470.currentItem:=This:C1470.items[0]
+	
+	This:C1470.listManager()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function listManager($e : Object)
@@ -827,6 +920,8 @@ Function refresh()
 	
 	This:C1470.modelsDropdown.values:=This:C1470._getModelDropdownValues()
 	This:C1470.modelUpdateDropdown(This:C1470.currentItem)
+	
+	This:C1470.paintEmptyState()  // A vector attribute may have just been added or removed
 	
 	// MARK:- [ITEMS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
