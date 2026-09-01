@@ -40,9 +40,9 @@
           <source>Embedding Studio</source>
           <target>Embedding Studio</target>
         </trans-unit>
-        <trans-unit id="schedulerHoursCountingFrom" resname="schedulerHoursCountingFrom">
-          <source>hours, counting from</source>
-          <target>heures, à compter de</target>
+        <trans-unit id="schedulerHoursUnit" resname="schedulerHoursUnit">
+          <source>hours</source>
+          <target>heures</target>
         </trans-unit>
       </group>
       <group resname="Models">
@@ -92,9 +92,9 @@
           <source>Embedding Scheduler</source>
           <target>Planificateur d'embeddings</target>
         </trans-unit>
-        <trans-unit id="schedulerMode" resname="schedulerMode">
-          <source>Recalculation schedule</source>
-          <target>Planification du recalcul</target>
+        <trans-unit id="schedulerIntro" resname="schedulerIntro">
+          <source>Automatically recompute the embedding vectors defined for your dataclasses. Choose when this task runs.</source>
+          <target>Recalcule automatiquement les vecteurs d'embedding définis pour vos dataclasses. Choisissez quand cette tâche s'exécute.</target>
         </trans-unit>
         <trans-unit id="schedulerModeDisabled" resname="schedulerModeDisabled">
           <source>Disabled</source>
@@ -112,17 +112,13 @@
           <source>Run every</source>
           <target>Exécuter toutes les</target>
         </trans-unit>
-        <trans-unit id="schedulerStartFromNow" resname="schedulerStartFromNow">
-          <source>now</source>
-          <target>maintenant</target>
-        </trans-unit>
         <trans-unit id="schedulerStartFromLast" resname="schedulerStartFromLast">
-          <source>the last execution</source>
-          <target>la dernière exécution</target>
+          <source>after the previous run ends</source>
+          <target>après la fin de l&apos;exécution précédente</target>
         </trans-unit>
         <trans-unit id="schedulerAtTime" resname="schedulerAtTime">
-          <source>Run at (HH:MM)</source>
-          <target>Exécuter à (HH:MM)</target>
+          <source>Run at</source>
+          <target>Exécuter à</target>
         </trans-unit>
         <trans-unit id="schedulerNextRun" resname="schedulerNextRun">
           <source>Next run:</source>
@@ -187,6 +183,66 @@
         <trans-unit id="schedulerClose" resname="schedulerClose">
           <source>Cancel</source>
           <target>Annuler</target>
+        </trans-unit>
+        <trans-unit id="schedulerStartFromFixed" resname="schedulerStartFromFixed">
+          <source>on a fixed schedule</source>
+          <target>à horaire fixe</target>
+        </trans-unit>
+        <trans-unit id="schedulerAnchorFrom" resname="schedulerAnchorFrom">
+          <source>from {date}</source>
+          <target>à partir du {date}</target>
+        </trans-unit>
+        <trans-unit id="schedulerResetAnchor" resname="schedulerResetAnchor">
+          <source>Reset to now</source>
+          <target>Repartir de maintenant</target>
+        </trans-unit>
+        <trans-unit id="schedulerSummaryPending" resname="schedulerSummaryPending">
+          <source>Not saved yet.</source>
+          <target>Pas encore enregistré.</target>
+        </trans-unit>
+        <trans-unit id="schedulerSummaryDisabled" resname="schedulerSummaryDisabled">
+          <source>No automatic recalculation.</source>
+          <target>Aucun recalcul automatique.</target>
+        </trans-unit>
+        <trans-unit id="schedulerSummaryInterval" resname="schedulerSummaryInterval">
+          <source>Recalculates every {hours}, on a fixed schedule from {anchor}.</source>
+          <target>Recalcule toutes les {hours}, à horaire fixe à partir du {anchor}.</target>
+        </trans-unit>
+        <trans-unit id="schedulerSummaryIntervalLast" resname="schedulerSummaryIntervalLast">
+          <source>Recalculates {hours} after each run ends.</source>
+          <target>Recalcule {hours} après la fin de chaque exécution.</target>
+        </trans-unit>
+        <trans-unit id="schedulerSummaryDaily" resname="schedulerSummaryDaily">
+          <source>Recalculates every day at {time}.</source>
+          <target>Recalcule chaque jour à {time}.</target>
+        </trans-unit>
+        <trans-unit id="schedulerSummaryNext" resname="schedulerSummaryNext">
+          <source>Next: {when} ({relative}).</source>
+          <target>Prochaine : {when} ({relative}).</target>
+        </trans-unit>
+        <trans-unit id="schedulerHoursOne" resname="schedulerHoursOne">
+          <source>1 hour</source>
+          <target>1 heure</target>
+        </trans-unit>
+        <trans-unit id="schedulerHoursMany" resname="schedulerHoursMany">
+          <source>{n} hours</source>
+          <target>{n} heures</target>
+        </trans-unit>
+        <trans-unit id="schedulerRelDue" resname="schedulerRelDue">
+          <source>due now</source>
+          <target>imminente</target>
+        </trans-unit>
+        <trans-unit id="schedulerRelSoon" resname="schedulerRelSoon">
+          <source>in less than a minute</source>
+          <target>dans moins d&apos;une minute</target>
+        </trans-unit>
+        <trans-unit id="schedulerRelMinutes" resname="schedulerRelMinutes">
+          <source>in {n} min</source>
+          <target>dans {n} min</target>
+        </trans-unit>
+        <trans-unit id="schedulerRelHours" resname="schedulerRelHours">
+          <source>in {h} h {m} min</source>
+          <target>dans {h} h {m} min</target>
         </trans-unit>
       </group>
     </body>

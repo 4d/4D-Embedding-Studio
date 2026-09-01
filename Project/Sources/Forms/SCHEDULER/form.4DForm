@@ -19,19 +19,19 @@
 		},
 		{
 			"objects": {
-				"mode.label": {
+				"intro": {
 					"type": "text",
-					"text": ":xliff:schedulerMode",
+					"text": ":xliff:schedulerIntro",
 					"top": 16,
 					"left": 20,
-					"width": 420,
-					"height": 16,
-					"class": "title"
+					"width": 440,
+					"height": 34,
+					"class": "schedulerMuted"
 				},
 				"modeDisabled": {
 					"type": "radio",
 					"text": ":xliff:schedulerModeDisabled",
-					"top": 44,
+					"top": 62,
 					"left": 24,
 					"width": 96,
 					"height": 20,
@@ -44,7 +44,7 @@
 				"modeInterval": {
 					"type": "radio",
 					"text": ":xliff:schedulerModeInterval",
-					"top": 44,
+					"top": 62,
 					"left": 126,
 					"width": 182,
 					"height": 20,
@@ -57,7 +57,7 @@
 				"modeDaily": {
 					"type": "radio",
 					"text": ":xliff:schedulerModeDaily",
-					"top": 44,
+					"top": 62,
 					"left": 318,
 					"width": 120,
 					"height": 20,
@@ -69,59 +69,47 @@
 				},
 				"schedulerConfigPanel": {
 					"type": "rectangle",
-					"top": 76,
+					"top": 100,
 					"left": 20,
 					"width": 440,
-					"height": 128,
+					"height": 140,
 					"borderRadius": 8,
 					"class": "schedulerPanel"
 				},
 				"intervalHours.label": {
 					"type": "text",
 					"text": ":xliff:schedulerEveryHours",
-					"top": 100,
+					"top": 124,
 					"left": 40,
 					"width": 80,
 					"height": 20
 				},
 				"intervalHours": {
 					"type": "input",
-					"top": 98,
+					"top": 122,
 					"left": 124,
 					"width": 56,
 					"height": 17,
 					"dataSource": "Form:C1466.intervalHours",
 					"dataSourceTypeHint": "integer",
-					"textAlign": "center",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"entryFilter": "&9",
+					"textAlign": "right"
 				},
 				"schedulerHoursLabel": {
 					"type": "text",
-					"text": ":xliff:schedulerHoursCountingFrom",
-					"top": 100,
+					"text": ":xliff:schedulerHoursUnit",
+					"top": 124,
 					"left": 190,
-					"width": 250,
+					"width": 60,
 					"height": 20
-				},
-				"startFromNow": {
-					"type": "radio",
-					"text": ":xliff:schedulerStartFromNow",
-					"top": 148,
-					"left": 40,
-					"width": 400,
-					"height": 20,
-					"dataSource": "Form:C1466.startFromNow",
-					"radioGroup": "startFrom",
-					"events": [
-						"onClick"
-					]
 				},
 				"startFromLast": {
 					"type": "radio",
 					"text": ":xliff:schedulerStartFromLast",
-					"top": 172,
+					"top": 204,
 					"left": 40,
 					"width": 400,
 					"height": 20,
@@ -134,36 +122,52 @@
 				"dailyTime.label": {
 					"type": "text",
 					"text": ":xliff:schedulerAtTime",
-					"top": 112,
+					"top": 136,
 					"left": 40,
-					"width": 130,
+					"width": 80,
 					"height": 20
 				},
 				"dailyTime": {
 					"type": "input",
-					"top": 110,
-					"left": 176,
-					"width": 70,
+					"top": 134,
+					"left": 130,
+					"width": 64,
 					"height": 17,
 					"dataSource": "Form:C1466.dailyTime",
 					"dataSourceTypeHint": "text",
 					"textAlign": "center",
 					"events": [
 						"onDataChange"
+					],
+					"placeholder": "HH:MM"
+				},
+				"dailyTimeStepper": {
+					"type": "stepper",
+					"dataSource": "Form:C1466.dailyTimeValue",
+					"dataSourceTypeHint": "time",
+					"top": 132,
+					"left": 198,
+					"width": 16,
+					"height": 22,
+					"min": 0,
+					"max": 86340,
+					"step": 60,
+					"events": [
+						"onDataChange"
 					]
 				},
 				"schedulerStatusPanel": {
 					"type": "rectangle",
-					"top": 218,
+					"top": 242,
 					"left": 20,
 					"width": 440,
-					"height": 118,
+					"height": 92,
 					"borderRadius": 8,
 					"class": "schedulerPanel"
 				},
 				"schedulerDot": {
 					"type": "oval",
-					"top": 240,
+					"top": 264,
 					"left": 40,
 					"width": 11,
 					"height": 11,
@@ -178,7 +182,7 @@
 						"onClick"
 					],
 					"contextMenu": "none",
-					"top": 236,
+					"top": 260,
 					"left": 58,
 					"width": 190,
 					"height": 20,
@@ -188,16 +192,15 @@
 				},
 				"spinner": {
 					"type": "spinner",
-					"top": 239,
+					"top": 263,
 					"left": 39,
 					"width": 13,
-					"height": 13,
-					"visibility": "hidden"
+					"height": 13
 				},
 				"forceNow": {
 					"type": "button",
 					"text": ":xliff:schedulerForceNow",
-					"top": 234,
+					"top": 258,
 					"left": 230,
 					"width": 90,
 					"height": 26,
@@ -209,7 +212,7 @@
 				"start": {
 					"type": "button",
 					"text": ":xliff:schedulerStart",
-					"top": 233,
+					"top": 257,
 					"left": 335,
 					"width": 116,
 					"height": 26,
@@ -221,7 +224,7 @@
 				"stop": {
 					"type": "button",
 					"text": ":xliff:schedulerStop",
-					"top": 233,
+					"top": 257,
 					"left": 335,
 					"width": 116,
 					"height": 26,
@@ -230,35 +233,10 @@
 						"onClick"
 					]
 				},
-				"nextRun.label": {
-					"type": "text",
-					"text": ":xliff:schedulerNextRun",
-					"top": 278,
-					"left": 40,
-					"width": 100,
-					"height": 18,
-					"class": "title"
-				},
-				"nextRunText": {
-					"type": "input",
-					"enterable": false,
-					"focusable": false,
-					"borderStyle": "none",
-					"events": [
-						"onClick"
-					],
-					"contextMenu": "none",
-					"top": 278,
-					"left": 150,
-					"width": 290,
-					"height": 18,
-					"dataSource": "Form:C1466.nextRunText",
-					"fill": "transparent"
-				},
 				"lastRun.label": {
 					"type": "text",
 					"text": ":xliff:schedulerLastRun",
-					"top": 304,
+					"top": 302,
 					"left": 40,
 					"width": 100,
 					"height": 18,
@@ -273,7 +251,7 @@
 						"onClick"
 					],
 					"contextMenu": "none",
-					"top": 304,
+					"top": 302,
 					"left": 150,
 					"width": 290,
 					"height": 18,
@@ -282,7 +260,7 @@
 				},
 				"schedulerErrorBox": {
 					"type": "rectangle",
-					"top": 389,
+					"top": 387,
 					"left": 20,
 					"width": 440,
 					"height": 96,
@@ -299,21 +277,21 @@
 						"onClick"
 					],
 					"contextMenu": "none",
-					"top": 397,
+					"top": 387,
 					"left": 30,
 					"width": 416,
-					"height": 80,
+					"height": 97,
 					"dataSource": "Form:C1466.errorText",
 					"multiline": "yes",
 					"wordwrap": "normal",
-					"verticalAlign": "top",
+					"verticalAlign": "middle",
 					"visibility": "hidden",
 					"class": "schedulerErrorMsg"
 				},
 				"close": {
 					"type": "button",
 					"text": ":xliff:schedulerClose",
-					"top": 558,
+					"top": 556,
 					"left": 295,
 					"width": 76,
 					"height": 26,
@@ -327,7 +305,7 @@
 					"type": "button",
 					"text": ":xliff:schedulerSave",
 					"defaultButton": true,
-					"top": 558,
+					"top": 556,
 					"left": 384,
 					"width": 76,
 					"height": 26,
@@ -340,8 +318,8 @@
 				},
 				"startFromReference": {
 					"type": "radio",
-					"text": "",
-					"top": 124,
+					"text": ":xliff:schedulerStartFromFixed",
+					"top": 152,
 					"left": 40,
 					"width": 400,
 					"height": 20,
@@ -350,11 +328,60 @@
 					"events": [
 						"onClick"
 					]
+				},
+				"anchorText": {
+					"type": "input",
+					"enterable": false,
+					"focusable": false,
+					"borderStyle": "none",
+					"events": [
+						"onClick"
+					],
+					"contextMenu": "none",
+					"fill": "transparent",
+					"top": 176,
+					"left": 62,
+					"width": 240,
+					"height": 18,
+					"dataSource": "Form:C1466.anchorText",
+					"class": "schedulerMuted"
+				},
+				"resetAnchor": {
+					"type": "button",
+					"text": ":xliff:schedulerResetAnchor",
+					"top": 172,
+					"left": 320,
+					"width": 126,
+					"height": 24,
+					"style": "regular",
+					"events": [
+						"onClick"
+					]
+				},
+				"summaryText": {
+					"type": "input",
+					"enterable": false,
+					"focusable": false,
+					"borderStyle": "none",
+					"events": [
+						"onClick"
+					],
+					"contextMenu": "none",
+					"fill": "transparent",
+					"top": 510,
+					"left": 24,
+					"width": 432,
+					"height": 34,
+					"dataSource": "Form:C1466.summaryText",
+					"multiline": "yes",
+					"wordwrap": "normal",
+					"verticalAlign": "top",
+					"class": "schedulerMuted"
 				}
 			}
 		}
 	],
-	"geometryStamp": 287,
+	"geometryStamp": 292,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -380,5 +407,5 @@
 	],
 	"windowSizingX": "fixed",
 	"width": 480,
-	"height": 600
+	"height": 598
 }

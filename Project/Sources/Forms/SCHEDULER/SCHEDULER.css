@@ -11,6 +11,11 @@
 	stroke: transparent;
 }
 
+.schedulerMuted {
+	fill: transparent;
+	stroke: #6B7075;
+}
+
 .schedulerErrorBox {
 	fill: #FBEAE9;
 	stroke: #D64541;
@@ -28,6 +33,9 @@
 	}
 	.schedulerDot {
 		fill: #6B7075;
+	}
+	.schedulerMuted {
+		stroke: #9AA0A6;
 	}
 	.schedulerErrorBox {
 		fill: #3A2A2A;

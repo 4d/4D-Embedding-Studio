@@ -106,7 +106,8 @@
 	},
 	"UTILS": {
 		"methods": [
-			"_errorColor"
+			"_errorColor",
+			"_warningColor"
 		],
 		"classes": [
 			"_dataclassAttributes",
