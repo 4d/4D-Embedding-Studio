@@ -8,7 +8,7 @@ For ad-hoc, non-persisting helpers (previewing rendered phrases, computing one-o
 
 | Property Name | Type                                                    | Description                                              |
 |---------------|---------------------------------------------------------|----------------------------------------------------------|
-| `settings`    | [Settings](Settings.md)               | The settings (vectors, batch size, phrase validation options). |
+| `settings`    | [Settings](Settings.md)               | The settings (definitions, batch size, phrase validation options). |
 | `embedder`    | [Embedder](Embedder.md)               | The API-calling engine. Stateless and swappable.         |
 | `options`     | Object                                                  | Runtime options object (see [Options object](#options-object) below). |
 
@@ -25,6 +25,7 @@ For ad-hoc, non-persisting helpers (previewing rendered phrases, computing one-o
 | `debug`      | Boolean   | If `True`, emits additional diagnostic log entries.                        |
 | `pauseIndexes` | Boolean | If `True` (default), index maintenance on the target table is paused for the duration of a `processEntitySelection` batch run, then resumed right after (or on early exit/critical error). Speeds up large writes. |
 | `waitForIndexes` | Boolean | If `True`, resuming indexes (after `pauseIndexes`) blocks until recomputation finishes. Default `False` — resume is asynchronous (indexes recomputed in the background). |
+| `shouldCancel` | 4D.Function | Predicate called between chunks during selection processing. Returning `True` stops the run gracefully (cooperative cancel) — what [`Scheduler.cancel()`](Scheduler.md#cancel) uses. |
 | `embedder`   | [Embedder](Embedder.md) | Inject a custom embedder (otherwise a default one is created). |
 
 ## Class constructor
@@ -157,27 +158,6 @@ An entity is (re)computed when **any** of these are true:
 The dirty field is optional per dataclass. If it doesn't exist, only the null-vector case triggers recomputation. Upon successful save, the pipeline clears the dirty flag (when present).
 
 For `processEntitySelection`, the filter is executed as a server-side ORDA query before any API call, so only the rows that actually need work are loaded into memory. For `processEntity`, the check is done in memory on the already-fetched entity.
-
-### _search()
-
-**_search**(*text* : Text ; *definition* : Definition ; *limit* : Integer) : Collection
-
-Search for the most similar entities by embedding a query text and running a vector similarity query (cosine metric). Returns a collection of objects ordered by similarity (best first).
-
-| Argument        | Type       | Description                                                                 |
-|-----------------|------------|-----------------------------------------------------------------------------|
-| *text*          | Text       | The search query to vectorize.                                              |
-| *definition*    | [Definition](Definition.md) | The vector definition to search against.                    |
-| *limit*         | Integer    | Maximum number of results. Default: `10`.                                   |
-| Function result | Collection | Collection of `{entity, phrase}` — entity is the matched entity, phrase is its rendered text. |
-
-```4d
-var $results:=$p._search("machine learning"; $def; 5)
-var $r : Object
-For each ($r; $results)
-    ALERT(String($r.entity.getKey())+" — "+$r.phrase)
-End for each
-```
 
 ## See also
 

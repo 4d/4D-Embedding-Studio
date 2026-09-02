@@ -9,7 +9,7 @@
 # 3. collects and correlates all logs:
 #      - mock server log (request timestamps + 429s)
 #      - 4D diagnostic log  (rate-limit / retry / adaptive-batch events)
-#      - 4D vectors execution log (Logs/vectors_execution.json)
+#      - 4D embedding history log (Logs/embeddingHistory.json)
 #      - the benchmark result (Logs/bench_ratelimit_result.json)
 #
 # Everything is copied into bench/results/<timestamp>/ with a summary.md.
@@ -219,7 +219,7 @@ if [[ -z "$NEW_DIAG" ]]; then
 fi
 
 [[ -n "$NEW_DIAG" && -f "$NEW_DIAG" ]] && cp "$NEW_DIAG" "$OUT_DIR/4DDiagnosticLog.txt"
-[[ -f "$LOGS_DIR/vectors_execution.json" ]] && cp "$LOGS_DIR/vectors_execution.json" "$OUT_DIR/vectors_execution.json"
+[[ -f "$LOGS_DIR/embeddingHistory.json" ]] && cp "$LOGS_DIR/embeddingHistory.json" "$OUT_DIR/embeddingHistory.json"
 [[ -f "$LOGS_DIR/bench_ratelimit_result.json" ]] && cp "$LOGS_DIR/bench_ratelimit_result.json" "$OUT_DIR/bench_ratelimit_result.json"
 cp "$BENCH_CONFIG" "$OUT_DIR/bench_ratelimit.config.json" 2>/dev/null || true
 
@@ -249,7 +249,7 @@ def load(n):
         return None
 
 result = load("bench_ratelimit_result.json")
-execlog = load("vectors_execution.json")
+execlog = load("embeddingHistory.json")
 
 # --- server log stats ---
 srv_requests = len(re.findall(r'"POST /v1/embeddings', server)) or server.count("POST /v1/embeddings")
@@ -308,7 +308,7 @@ lines.append(f"- adaptive batch resizes: {diag_batch_adapted}")
 lines.append(f"- critical API errors: {diag_critical}\n")
 
 if execlog:
-    lines.append("## Vectors execution log (Logs/vectors_execution.json)")
+    lines.append("## Embedding execution history (Logs/embeddingHistory.json)")
     lines.append(f"- status: {execlog.get('status')}")
     lines.append(f"- startTime: {execlog.get('startTime')}  endTime: {execlog.get('endTime')}")
     lines.append(f"- promptTokens: {execlog.get('promptTokens')}  totalTokens: {execlog.get('totalTokens')}\n")

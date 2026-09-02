@@ -952,7 +952,7 @@ Get the possible vector fields in the current catalog
 The list is displayed with:
 • table/dataclass
 • vector field
-Enriched with saved Definition entries from Settings/vectors.json.
+Enriched with saved Definition entries from Settings/embeddings.json.
 */
 	If (This:C1470.settings=Null:C1517)
 		

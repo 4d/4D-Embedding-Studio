@@ -35,7 +35,8 @@ singleton Class constructor
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Arms the scheduler: starts the background loop worker if not already running.
-	// Idempotent — calling it again just refreshes the "start from now" anchor.
+	// Idempotent — calling it again just refreshes the arm-time anchor, which interval mode
+	// only falls back to when the config carries no startReference.
 Function start() : Boolean
 	
 	// Rehydrate the last-run info persisted by the previous process before arming. The

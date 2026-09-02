@@ -58,14 +58,15 @@ Any additional keys are forwarded as-is to the constructor of the target class (
       "vectorName": "student_vector_1",
       "modelAlias": "text-embedding-3-small",
       "phrase": "Student {firstName} {lastName}",
-      "autoInvalidate": true,
-      "version": 0
+      "autoInvalidate": true
     }
   ]
 }
 ```
 
 Each definition may include `autoInvalidate` (`true` by default) to control save-time automatic invalidation.
+
+The same file also carries the `scheduler` key (see [Scheduler](Scheduler.md#configuration)) and any other top-level key you add: `Settings` reads and rewrites only the keys listed above and leaves the rest untouched.
 
 With a custom embedder class:
 
@@ -102,13 +103,21 @@ var $settings:=cs.EmbeddingStudio.Settings.new(File("/some/path/custom.json"))
 
 **load**()
 
-Reload the backing file into memory, overwriting in-memory state. Missing or malformed files reset to defaults without raising.
+Reload the backing file into memory, overwriting in-memory state. A missing file resets to defaults without raising.
+
+A file that **exists but cannot be parsed** also leaves the instance on defaults, but it is remembered: an error is logged and [`save()`](#save) then refuses to write, so a malformed file is never silently replaced by defaults.
 
 ### save()
 
-**save**()
+**save**() : Boolean
 
-Serialize the current in-memory state to the backing file. Preserves unknown top-level keys that were present on load.
+Serialize the current in-memory state to the backing file. Only the keys this class owns (`batchSize`, `phrase`, `embedder`, `definitions`) are written — every other top-level key present in the file (the `scheduler` configuration, model aliases…) is preserved as-is. A key whose value is back to its default is *removed* from the file rather than written.
+
+Definitions are merged with what the file holds at that instant, using the snapshot taken at load time as the common ancestor: two editors open at the same time no longer drop each other's definitions.
+
+| Result | Type    | Description                                                                                     |
+|--------|---------|-------------------------------------------------------------------------------------------------|
+| result | Boolean | `True` when written. `False` — nothing written — when the file could not be read at load time.  |
 
 ```4d
 $settings.definitions.push(cs.EmbeddingStudio.Definition.new("Students"; "student_vector_1"; "text-embedding-3-small"; "{firstName}"))

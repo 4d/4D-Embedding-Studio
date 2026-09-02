@@ -30,6 +30,7 @@
  | shouldCancel | 4D.Function | Null | Optional predicate called between chunks; if it returns True, selection processing stops gracefully (cooperative cancel). |
  | pauseIndexes | Boolean | True | If true, index maintenance on the target table is paused for the duration of a selection's batch run (and resumed right after), to speed up large writes. |
  | waitForIndexes | Boolean | False | If true, resuming indexes (after pauseIndexes) blocks until recomputation is complete; by default resume is asynchronous. |
+ | nextComputeDate | Text | Null | Internal. ISO timestamp of the next scheduled run, recorded verbatim in the execution history at the end of a full run. Set by the scheduler. |
 **/
 
 Class extends _ProcessBase

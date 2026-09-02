@@ -2,7 +2,7 @@
 // Unit tests for cs._Resolver
 
 // Build a cs.Settings pointing at a file that does not exist,
-// so constructor/load does no I/O. We then populate .vectors manually.
+// so constructor/load does no I/O. We then populate .definitions manually.
 var $noFile : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).file("Settings/__test_resolver_nonexistent.json")
 var $settings : cs:C1710.Settings:=cs:C1710.Settings.new($noFile)
 

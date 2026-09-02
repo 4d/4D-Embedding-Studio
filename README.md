@@ -8,7 +8,7 @@ A 4D component for defining, computing, and maintaining AI embedding vectors dir
 
 ## Quick start
 
-**1. Configure your vectors** in `Settings/vectors.json` (or via the built-in UI):
+**1. Configure your vectors** in `Settings/embeddings.json` (or via the built-in UI):
 
 ```json
 {
@@ -19,8 +19,7 @@ A 4D component for defining, computing, and maintaining AI embedding vectors dir
       "vectorName": "student_vector_1",
       "modelAlias": "text-embedding",
       "phrase": "Student {firstName} {lastName}, enrolled in {program}",
-      "autoInvalidate": true,
-      "version": 0
+      "autoInvalidate": true
     }
   ]
 }
@@ -33,7 +32,7 @@ var $p:=cs.EmbeddingStudio.Process.new()
 var $r:=$p.process()
 
 If ($r.success)
-    ALERT("Updated "+String($r.entitiesUpdated)+" entities in "+String($r.durationMs)+" ms")
+    ALERT("Updated "+String($r.entitiesUpdated)+" entities in "+String($r.duration)+" ms")
 End if
 ```
 
@@ -55,7 +54,7 @@ Declare a Boolean field named `<vectorName>_dirty` on your dataclass. When the f
 | [Process](Documentation/Classes/Process.md) | Main orchestrator — entry point for all batch and entity operations. |
 | [Scheduler](Documentation/Classes/Scheduler.md) | Automated recalculation scheduler — background task, force/cancel, and runtime status. |
 | [Playground](Documentation/Classes/Playground.md) | Ad-hoc, non-persisting helpers for rendering phrases and computing one-off vectors. |
-| [Settings](Documentation/Classes/Settings.md) | Loads and saves the `vectors.json` configuration file. |
+| [Settings](Documentation/Classes/Settings.md) | Loads and saves the `embeddings.json` configuration file. |
 | [Definition](Documentation/Classes/Definition.md) | Describes one vector field: dataclass, field name, model alias, and phrase template. |
 | [Embedder](Documentation/Classes/Embedder.md) | Thin wrapper around the AIKit embeddings API with retry/backoff logic. |
 | [EmbedderResult](Documentation/Classes/EmbedderResult.md) | Typed wrapper normalizing API responses — vectors, usage metrics, rate-limit state. |

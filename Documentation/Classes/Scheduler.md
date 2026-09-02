@@ -20,7 +20,8 @@ The configuration lives under the `scheduler` key of `Settings/embeddings.json`:
   "scheduler": {
     "mode": "interval",
     "intervalHours": 3,
-    "startFrom": "lastExecution",
+    "startFrom": "reference",
+    "startReference": "2026-09-02T14:00:00",
     "dailyTime": "00:00"
   }
 }
@@ -30,13 +31,14 @@ The configuration lives under the `scheduler` key of `Settings/embeddings.json`:
 |-----------------|---------|------------------------------------|-----------------------------------------------------------------------------|
 | `mode`          | Text    | `"disabled"` \| `"interval"` \| `"daily"` | Scheduling mode. Absent/unknown ⇒ `disabled` (no automatic run).      |
 | `intervalHours` | Integer | `1`..`24`                          | Interval mode only. Out-of-range ⇒ default `3`.                             |
-| `startFrom`     | Text    | `"now"` \| `"lastExecution"`       | Interval mode only. Anchor of the interval (see below). Default `now`.       |
+| `startFrom`     | Text    | `"reference"` \| `"lastExecution"` | Interval mode only. Anchor of the interval (see below). Anything other than `"lastExecution"` — including the legacy `"now"` — is normalized to `reference`. Default `reference`. |
+| `startReference`| Text    | `"YYYY-MM-DDThh:mm:ss"`            | Interval mode with `startFrom = "reference"`. Fixed instant the interval counts from. Absent ⇒ the moment the scheduler was armed, then the current instant. |
 | `dailyTime`     | Text    | `"HH:MM"`                          | Daily mode only. Time of day for the recalculation. Default `"00:00"`.       |
 
 **Interval anchoring (`startFrom`)**
 
-- `now` — the interval is anchored on the moment the scheduler is armed (`start()`), including after a server restart.
-- `lastExecution` — the interval is anchored on the last completed recalculation. If the elapsed time since the last run already exceeds the interval (e.g. after a restart), the run is triggered immediately. If there is no prior run, it runs immediately.
+- `reference` — **fixed rate**: the interval is anchored on the fixed `startReference` instant, so the slots do not drift whatever a run's duration is. Slots are advanced by `intervalHours` until the first one strictly after now. When `startReference` is absent (a fresh or legacy config), the anchor falls back to the moment the scheduler was armed (`start()`), then to the current instant.
+- `lastExecution` — **fixed delay**: the interval is anchored on the last completed recalculation. If the elapsed time since the last run already exceeds the interval (e.g. after a restart), the run is triggered immediately. If there is no prior run, it runs immediately.
 
 The effective configuration is read from the file on **every loop cycle**, so changes take effect without restarting the scheduler.
 
@@ -217,7 +219,7 @@ Returns the effective scheduler configuration with defaults applied (as resolved
 
 | Result  | Type   | Description                                                        |
 |---------|--------|--------------------------------------------------------------------|
-| result  | Object | `{mode; intervalHours; startFrom; dailyTime}` (see [Configuration](#configuration)). |
+| result  | Object | `{mode; intervalHours; startFrom; startReference; dailyTime}` (see [Configuration](#configuration)). |
 
 ```4d
 var $cfg:=cs.EmbeddingStudio.Scheduler.me.config()
@@ -280,6 +282,52 @@ No-op convenience: the configuration is re-read automatically on each loop cycle
 - **Skip traceability** — skipped triggers are logged with their timestamp in the execution history (`Logs/embeddingHistory.json`).
 - **Cooperative cancel** — `cancel()` stops a running batch gracefully between chunks; it is never force-killed.
 - **History** — each run records start/end timestamps, status, token usage and the computed next run date in `Logs/embeddingHistory.json` (see [ProcessResult](ProcessResult.md) for per-run details).
+
+### Execution history file
+
+`Logs/embeddingHistory.json` is written by the pipeline itself (every full `process()` run, scheduled or manual), guarded by a semaphore so concurrent processes never interleave writes. It holds the **current** run at the top level, the one before it under `previous`, and the same pair per definition under `definitions`.
+
+```json
+{
+  "startTime": "2026-09-01T14:03:00",
+  "endTime": "2026-09-01T14:03:00",
+  "status": "completed",
+  "trigger": "completed",
+  "error": null,
+  "nextComputeDate": "2026-09-02T14:03:00",
+  "promptTokens": 0,
+  "totalTokens": 0,
+  "cumulativePromptTokens": 37802,
+  "cumulativeTotalTokens": 37802,
+  "previous": { "startTime": "…", "endTime": "…", "status": "completed", "error": null,
+                "nextComputeDate": "…", "promptTokens": 12764, "totalTokens": 12764,
+                "cumulativePromptTokens": 37802, "cumulativeTotalTokens": 37802 },
+  "skipped": ["2026-09-01T12:00:00"],
+  "definitions": {
+    "Students.student_vector_1": {
+      "startTime": "…", "endTime": "…", "status": "completed", "error": null,
+      "promptTokens": 1054, "totalTokens": 1054,
+      "cumulativePromptTokens": 4210, "cumulativeTotalTokens": 4210,
+      "previous": { "…": "…" }
+    }
+  }
+}
+```
+
+| Key                      | Type          | Description                                                                                   |
+|--------------------------|---------------|-----------------------------------------------------------------------------------------------|
+| `startTime` / `endTime`  | Text \| Null  | ISO timestamps of the run, in the scheduler's local base. `endTime` is `null` while a run is in progress. |
+| `status`                 | Text          | `running` \| `completed` \| `failed`.                                                          |
+| `trigger`                | Text          | Last event that touched the file: `started` \| `skipped` \| `completed` \| `failed`.           |
+| `error`                  | Text \| Null  | Summary of the run's errors, or `null`. Never contains an API key.                            |
+| `nextComputeDate`        | Text \| Null  | Next scheduled run computed at the end of the run (the `nextComputeDate` option of [Process](Process.md)). |
+| `promptTokens` / `totalTokens` | Integer | Usage for this run alone.                                                                     |
+| `cumulativePromptTokens` / `cumulativeTotalTokens` | Integer | Running totals across all recorded runs.                                       |
+| `previous`               | Object        | Snapshot of the preceding run — the same keys, without `trigger`, `skipped` and `definitions`. Only one generation is kept. |
+| `skipped`                | Collection    | ISO timestamps of triggers skipped because a batch was already running. Capped at the **last 50**. |
+| `definitions`            | Object        | One entry per definition, keyed `"<dataclassName>.<vectorName>"`, each with its own `startTime`, `endTime`, `status` (`completed` \| `failed` \| `skipped`), `error`, token counters and `previous`. |
+
+[`status()`](#status) reads `startTime`, `endTime`, `status`, `trigger`, `error` and `nextComputeDate` back from this file, which is how `lastExecution` survives a server restart.
 
 ## Lifecycle
 
