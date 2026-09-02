@@ -18,6 +18,9 @@ property _detailFields:=[\
 "autoInvalidate"; \
 "more"]
 
+// Postponed "invalidate vectors?" questions, keyed by "dataclass.vector" (see _deferPromptInvalidate)
+property _pendingInvalidate : Object:={}
+
 // Empty state: shown instead of the whole UI while the structure has no vector attribute
 property emptyStateText : Text
 property _mainObjects:=[\
@@ -122,6 +125,8 @@ Function manager($e : Object)
 				
 				// ______________________________________________________
 			: ($e.code=On Unload:K2:2)
+				
+				This:C1470.flushPromptInvalidate()  // Last chance to ask about a pending edit
 				
 				Use (Storage:C1525.studio)
 					
@@ -430,6 +435,8 @@ Function listManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
+	This:C1470.flushPromptInvalidate()  // The item being edited is left behind
+	
 	If (This:C1470.updateUI())
 		
 		This:C1470.modelUpdateDropdown(This:C1470.currentItem)
@@ -495,14 +502,14 @@ Function moreManager($e : Object)
 			// ______________________________________________________
 		: (Not:C34($menu.popup().selected))
 			
-			// <NOTHING MORE TO DO>
+			GOTO OBJECT:C206(*; "phrase")  // Menu dismissed: give the phrase area its focus back
 			
 			// ______________________________________________________
 		: (Position:C15("{"; $menu.choice)=1)  // Attribute to insert into the descriptive phrase
 			
-			This:C1470.insertInput($item; $menu.choice)
+			This:C1470.insertInput($item; $menu.choice)  // Also restores the focus and the caret
 			This:C1470.saveEmbeddingItems()
-			This:C1470._promptInvalidate($item)
+			This:C1470._deferPromptInvalidate($item)  // Not now: the user may insert another attribute
 			
 			// ______________________________________________________
 		: ($menu.choice="insertAllAttributes")
@@ -547,6 +554,7 @@ Function moreManager($e : Object)
 			End if 
 			// ______________________________________________________
 		: ($menu.choice="computeVectors")
+			This:C1470.flushPromptInvalidate()  // Ask before recomputing, not after
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1; $2)); Formula:C1597(_computeVectors($1)); $item.definition)
 			// ______________________________________________________
 		: ($menu.choice="invalidVectors")
@@ -712,11 +720,10 @@ Function phraseManager($e : Object)
 			End if 
 			
 			// 📌 Ignored if an associated action (for edit items)
-			This:C1470.insertInput($item; $menu.choice)
+			This:C1470.insertInput($item; $menu.choice)  // Also restores the focus and the caret
 			
-			// XXX: maybe launch on times this:
 			This:C1470.saveEmbeddingItems()
-			This:C1470._promptInvalidate($item)  // XXX: maybe too aggressive, ask if go out? (but if never? do not saveEmbeddingItems?)
+			This:C1470._deferPromptInvalidate($item)  // Not now: the user may insert another attribute
 			
 			// ______________________________________________________
 		: ($e.code=On Before Keystroke:K2:6)
@@ -751,7 +758,11 @@ Function phraseManager($e : Object)
 			ST SET TEXT:C1115(*; $me; $item.phrase; ST Start text:K78:15; ST End text:K78:16)
 			
 			This:C1470.saveEmbeddingItems()
-			This:C1470._promptInvalidate($item)
+			
+			// The field also loses the focus when the "more" button or the contextual menu is
+			// clicked: asking here would kill the menu flow, so the question waits until the
+			// user really leaves the item.
+			This:C1470._deferPromptInvalidate($item)
 			
 			Form:C1466.items:=Form:C1466.items  // update UI
 			
@@ -801,7 +812,10 @@ Function modelsDropdownManager($e : Object)
 			This:C1470.currentItem.validate()  // refresh _modelErrors
 			This:C1470.saveEmbeddingItems()
 			This:C1470.modelUpdateDropdown()
-			This:C1470._promptInvalidate(This:C1470.currentItem)
+			
+			// The phrase may have been edited just before: a single question covers both changes
+			This:C1470._deferPromptInvalidate(This:C1470.currentItem)
+			This:C1470.flushPromptInvalidate()
 			
 			Form:C1466.items:=Form:C1466.items  // update UI
 			
@@ -822,6 +836,8 @@ Function autoInvalidateManager($e : Object)
 	
 	This:C1470.currentItem.version+=1
 	This:C1470.saveEmbeddingItems()
+	
+	This:C1470.flushPromptInvalidate()  // The phrase editing is over
 	
 	Form:C1466.items:=Form:C1466.items  // Update UI
 	
@@ -846,6 +862,10 @@ Function insertInput($item : cs:C1710._EmbeddingItem; $input : Text)
 	End if 
 	
 	OBJECT SET VALUE:C1742($me; $newValue)
+	
+	// The menu click moved the focus out of the phrase area: take it back *before* placing
+	// the caret, so the user can go on typing (or insert another attribute) right away.
+	GOTO OBJECT:C206(*; $me)
 	
 	$endSel:=$startSel+Length:C16($input)
 	HIGHLIGHT TEXT:C210(*; $me; $endSel; $endSel)
@@ -1041,6 +1061,36 @@ Function _saveSettings() : Boolean
 	return False:C215
 	
 	// MARK: -[PRIVATE]
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Records that $item may need its vectors invalidated, without asking anything yet.
+	// Clicking the "more" button or the contextual menu makes the phrase area lose the focus,
+	// which saves the definition: prompting there would swallow the menu click and pop up again
+	// at every inserted attribute. The question is asked once, by flushPromptInvalidate(), when
+	// the user really leaves the item (another vector selected, model changed, window closed).
+Function _deferPromptInvalidate($item : cs:C1710._EmbeddingItem)
+	
+	If ($item=Null:C1517)
+		
+		return 
+		
+	End if 
+	
+	This:C1470._pendingInvalidate[$item.definition.dataclassName+"."+$item.definition.vectorName]:=$item
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Asks about every definition changed since the last question (one dialog per item, at most).
+Function flushPromptInvalidate()
+	
+	var $pending : Object:=This:C1470._pendingInvalidate
+	This:C1470._pendingInvalidate:={}  // Reset first: _promptInvalidate() may re-enter through the UI
+	
+	var $key : Text
+	For each ($key; $pending)
+		
+		This:C1470._promptInvalidate($pending[$key])
+		
+	End for each 
+	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Compares current phrase/model against the snapshot taken at load time.
 	// If either changed, prompts the developer and calls invalidateVectors() on confirmation.

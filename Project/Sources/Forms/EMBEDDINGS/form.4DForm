@@ -271,7 +271,7 @@
 				},
 				"more": {
 					"type": "button",
-					"top": 77,
+					"top": 61,
 					"left": 783,
 					"width": 16,
 					"height": 16,
@@ -391,7 +391,7 @@
 			}
 		}
 	],
-	"geometryStamp": 666,
+	"geometryStamp": 682,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
