@@ -134,12 +134,12 @@ Function manager($e : Object)
 			Form:C1466.startFromReference:=($e.objectName="startFromReference")
 			Form:C1466.startFromLast:=($e.objectName="startFromLast")
 			
-			This:C1470.onConfigEdit()
+			This:C1470.onConfigEdit($e)
 			
 			//______________________________________________________
 		: ($e.objectName="intervalHours") || ($e.objectName="dailyTime")
 			
-			This:C1470.onConfigEdit()
+			This:C1470.onConfigEdit($e)
 			
 			//______________________________________________________
 		: ($e.objectName="dailyTimeStepper")
@@ -147,7 +147,7 @@ Function manager($e : Object)
 			// The stepper owns the Time; the field is repainted from it, then the usual
 			// normalisation runs (which re-derives the Time, so the two cannot drift).
 			Form:C1466.dailyTime:=This:C1470._formatHHMM(Form:C1466.dailyTimeValue)
-			This:C1470.onConfigEdit()
+			This:C1470.onConfigEdit($e)
 			
 			//______________________________________________________
 		: ($e.objectName="resetAnchor")
@@ -480,7 +480,11 @@ Function _formatHHMM($value : Time) : Text
 	// Reacts to an interval/daily/startFrom edit: clamps hours, rewrites the daily time in its
 	// canonical "HH:MM" form (an emptied field falls back to midnight rather than staying
 	// blank), re-syncs the stepper, and refreshes the preview.
-Function onConfigEdit()
+Function onConfigEdit($event : Object)
+	
+	If ($event.code=On Clicked:K2:4)
+		return 
+	End if 
 	
 	var $hours : Integer:=Num:C11(Form:C1466.intervalHours)
 	If ($hours<1)
