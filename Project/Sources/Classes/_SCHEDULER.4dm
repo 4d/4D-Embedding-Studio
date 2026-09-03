@@ -74,6 +74,7 @@ Function manager($e : Object)
 				
 				// Window geometry is settled here; enable resizing and force one clean pass.
 				This:C1470._activated:=True:C214
+				This:C1470._fitButtons()  // re-fit now the window is shown, in case best size was not final at On Load
 				This:C1470._layoutKey:=""
 				This:C1470._layout()
 				
@@ -199,6 +200,10 @@ Function onLoad()
 		Storage:C1525.studio["SCHEDULER"]:=Current form window:C827
 	End use 
 	
+	// Size the action buttons to their localized captions before the first layout pass, so the
+	// bars are anchored off the real widths (see _fitButtons / _layout).
+	This:C1470._fitButtons()
+	
 	This:C1470.load()
 	
 	SET TIMER:C645(60)  // refresh status roughly once a second
@@ -311,7 +316,8 @@ Function _layout()
 			This:C1470._moveObj("schedulerHoursLabel"; 190; $y+24)
 			This:C1470._moveObj("startFromReference"; 40; $y+52)
 			This:C1470._moveObj("anchorText"; 62; $y+78)
-			This:C1470._moveObj("resetAnchor"; 320; $y+74)
+			// Kept flush to the panel's right inner edge; its width follows the localized caption.
+			This:C1470._moveObjRight("resetAnchor"; 446; $y+74)
 			This:C1470._moveObj("startFromLast"; 40; $y+106)
 			OBJECT SET VISIBLE:C603(*; "schedulerConfigPanel"; True:C214)
 			OBJECT SET VISIBLE:C603(*; "intervalHours"; True:C214)
@@ -358,16 +364,24 @@ Function _layout()
 	End case 
 	
 	// ── status section (fixed height) ──────────────────────────
-	This:C1470._sizeObj("schedulerStatusPanel"; 20; $y; 440; 92)
+	// Three rows: the state label, then the runtime buttons on a line of their own, then the
+	// last-run line. The buttons get their own row because their localized captions ("Démarrer
+	// le planificateur", "Exécuter maintenant") are far too wide to sit next to the state text.
+	This:C1470._sizeObj("schedulerStatusPanel"; 20; $y; 440; 118)
 	This:C1470._moveObj("schedulerDot"; 40; $y+22)
 	This:C1470._moveObj("spinner"; 39; $y+21)
-	This:C1470._moveObj("stateText"; 58; $y+18)
-	This:C1470._moveObj("forceNow"; 230; $y+16)
-	This:C1470._moveObj("start"; 335; $y+15)
-	This:C1470._moveObj("stop"; 335; $y+15)
-	This:C1470._moveObj("lastRun.label"; 40; $y+60)
-	This:C1470._moveObj("lastRunText"; 150; $y+60)
-	$y:=$y+92+$gap
+	This:C1470._sizeObj("stateText"; 58; $y+18; 380; 20)  // widened: no buttons share this row now
+	// Button row: Run-now on the left, the Start/Stop toggle a constant 12 px to its right; both
+	// widths track the localized captions (see _fitButtons).
+	var $fl; $ft; $fr; $fb : Integer
+	OBJECT GET COORDINATES:C663(*; "forceNow"; $fl; $ft; $fr; $fb)
+	This:C1470._moveObj("forceNow"; 40; $y+50)
+	This:C1470._moveObj("start"; 40+($fr-$fl)+12; $y+49)
+	This:C1470._moveObj("stop"; 40+($fr-$fl)+12; $y+49)
+	// Last-run line: the French label ("Dernière exécution :") needs more room than the English.
+	This:C1470._sizeObj("lastRun.label"; 40; $y+88; 160; 18)
+	This:C1470._sizeObj("lastRunText"; 206; $y+88; 240; 18)
+	$y:=$y+118+$gap
 	
 	// ── error section (0, or 1..5 lines) ───────────────────────
 	If ($hasError)
@@ -393,8 +407,14 @@ Function _layout()
 	// button bar. RESIZE FORM WINDOW takes a *delta* (pixels to add/remove), so we track the height
 	// we last applied and move by the difference. Baseline is the form's designed height (_appliedH),
 	// and we only resize once the window is settled (after On Activate) to keep the delta accurate.
-	This:C1470._moveObj("close"; 300; $y)
-	This:C1470._moveObj("save"; 384; $y)
+	// Right-align the action pair on the form's right margin (x=460 = width 480 − margin 20) with
+	// a constant 8 px gap, whatever width the localized captions produced (see _fitButtons).
+	// English keeps its designed placement (save at 384, close at 300).
+	var $btnGap : Integer:=8
+	var $svl; $svt; $svr; $svb : Integer
+	OBJECT GET COORDINATES:C663(*; "save"; $svl; $svt; $svr; $svb)
+	This:C1470._moveObjRight("save"; 460; $y)
+	This:C1470._moveObjRight("close"; 460-($svr-$svl)-$btnGap; $y)
 	
 	var $targetH : Integer:=$y+This:C1470._buttonBar
 	If (This:C1470._activated && ($targetH#This:C1470._appliedH))
@@ -416,6 +436,50 @@ Function _moveObj($name : Text; $left; $top : Integer)
 Function _sizeObj($name : Text; $left; $top; $width; $height : Integer)
 	
 	OBJECT SET COORDINATES:C1248(*; $name; $left; $top; $left+$width; $top+$height)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Moves an object so its right edge sits at $right (top given), preserving its width and
+	// height — for buttons kept flush to a margin while their width tracks the localized caption.
+Function _moveObjRight($name : Text; $right; $top : Integer)
+	
+	var $l; $t; $r; $b : Integer
+	OBJECT GET COORDINATES:C663(*; $name; $l; $t; $r; $b)
+	OBJECT SET COORDINATES:C1248(*; $name; $right-($r-$l); $top; $right; $top+($b-$t))
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Widens the text buttons to fit their localized captions. The form's design widths fit the
+	// English strings; French ("Enregistrer", "Réinitialiser…") is wider and would clip. Called
+	// before the first _layout so the button bars anchor off the real widths. Idempotent: it
+	// reads the best size fresh each time, so re-running it (On Activate) is a no-op in practice.
+Function _fitButtons()
+	
+	This:C1470._fitButton("close"; 76)
+	This:C1470._fitButton("save"; 76)
+	This:C1470._fitButton("forceNow"; 90)
+	This:C1470._fitButton("start"; 116)
+	This:C1470._fitButton("stop"; 116)
+	This:C1470._fitButton("resetAnchor"; 126)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// One button: OBJECT GET BEST SIZE gives the width its caption needs; keep the top-left and
+	// the height, and never shrink below $minWidth (the design width) so locales that already fit
+	// — English included — are left exactly as drawn.
+Function _fitButton($name : Text; $minWidth : Integer)
+	
+	var $l; $t; $r; $b : Integer
+	OBJECT GET COORDINATES:C663(*; $name; $l; $t; $r; $b)
+	
+	var $bw; $bh : Integer
+	OBJECT GET BEST SIZE:C717(*; $name; $bw; $bh)
+	
+	If ($bw<=0)
+		return   // hidden button (start/stop toggle): best size unavailable, keep what it has
+	End if 
+	If ($bw<$minWidth)
+		$bw:=$minWidth
+	End if 
+	
+	OBJECT SET COORDINATES:C1248(*; $name; $l; $t; $l+$bw; $b)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Text → the time behind the field. Deliberately forgiving, because this is what every

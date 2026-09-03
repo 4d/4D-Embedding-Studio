@@ -161,7 +161,7 @@
 					"top": 242,
 					"left": 20,
 					"width": 440,
-					"height": 92,
+					"height": 118,
 					"borderRadius": 8,
 					"class": "schedulerPanel"
 				},
@@ -184,7 +184,7 @@
 					"contextMenu": "none",
 					"top": 260,
 					"left": 58,
-					"width": 190,
+					"width": 380,
 					"height": 20,
 					"dataSource": "Form:C1466.stateText",
 					"fontWeight": "bold",
@@ -200,8 +200,8 @@
 				"forceNow": {
 					"type": "button",
 					"text": ":xliff:schedulerForceNow",
-					"top": 258,
-					"left": 230,
+					"top": 292,
+					"left": 40,
 					"width": 90,
 					"height": 26,
 					"style": "regular",
@@ -212,8 +212,8 @@
 				"start": {
 					"type": "button",
 					"text": ":xliff:schedulerStart",
-					"top": 257,
-					"left": 335,
+					"top": 291,
+					"left": 142,
 					"width": 116,
 					"height": 26,
 					"style": "regular",
@@ -224,8 +224,8 @@
 				"stop": {
 					"type": "button",
 					"text": ":xliff:schedulerStop",
-					"top": 257,
-					"left": 335,
+					"top": 291,
+					"left": 142,
 					"width": 116,
 					"height": 26,
 					"style": "regular",
@@ -236,9 +236,9 @@
 				"lastRun.label": {
 					"type": "text",
 					"text": ":xliff:schedulerLastRun",
-					"top": 302,
+					"top": 330,
 					"left": 40,
-					"width": 100,
+					"width": 160,
 					"height": 18,
 					"class": "title"
 				},
@@ -251,16 +251,16 @@
 						"onClick"
 					],
 					"contextMenu": "none",
-					"top": 302,
-					"left": 150,
-					"width": 290,
+					"top": 330,
+					"left": 206,
+					"width": 240,
 					"height": 18,
 					"dataSource": "Form:C1466.lastRunText",
 					"fill": "transparent"
 				},
 				"schedulerErrorBox": {
 					"type": "rectangle",
-					"top": 387,
+					"top": 413,
 					"left": 20,
 					"width": 440,
 					"height": 96,
@@ -277,7 +277,7 @@
 						"onClick"
 					],
 					"contextMenu": "none",
-					"top": 387,
+					"top": 413,
 					"left": 30,
 					"width": 416,
 					"height": 97,
@@ -291,7 +291,7 @@
 				"close": {
 					"type": "button",
 					"text": ":xliff:schedulerClose",
-					"top": 556,
+					"top": 582,
 					"left": 295,
 					"width": 76,
 					"height": 26,
@@ -305,7 +305,7 @@
 					"type": "button",
 					"text": ":xliff:schedulerSave",
 					"defaultButton": true,
-					"top": 556,
+					"top": 582,
 					"left": 384,
 					"width": 76,
 					"height": 26,
@@ -368,8 +368,8 @@
 					],
 					"contextMenu": "none",
 					"fill": "transparent",
-					"top": 510,
-					"left": 24,
+					"top": 536,
+					"left": 25,
 					"width": 432,
 					"height": 34,
 					"dataSource": "Form:C1466.summaryText",
@@ -381,7 +381,7 @@
 			}
 		}
 	],
-	"geometryStamp": 292,
+	"geometryStamp": 407,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -407,5 +407,5 @@
 	],
 	"windowSizingX": "fixed",
 	"width": 480,
-	"height": 598
+	"height": 624
 }
