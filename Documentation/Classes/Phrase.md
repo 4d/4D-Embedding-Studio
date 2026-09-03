@@ -109,4 +109,4 @@ var $attrs:=$tpl.attributes(ds.Students)
 ## See also
 
 - [Definition](Definition.md) — holds a `Phrase`.
-- [Process.render()](Process.md#render) — renders a phrase for an entity via the orchestrator.
+- [Playground.render()](Playground.md#render) — renders a phrase for an entity, non-persisting.
