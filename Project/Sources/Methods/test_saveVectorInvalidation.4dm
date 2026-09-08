@@ -5,7 +5,8 @@
 //   • sets the companion "<vectorName>_dirty" boolean to True (when that field exists),
 //     leaving the vector value intact, or
 //   • nullifies the "<vectorName>" field (when there is no _dirty companion).
-// A field that is NOT part of any phrase must never invalidate the vector
+// A field that is NOT part of any phrase must never invalidate the vector, and a
+// definition with autoInvalidate=false must never invalidate at all (see CASE 6).
 //
 // Reference definitions in Settings/embeddings.json exercised here:
 //   _Students.student_vector_1  phrase "ID={ID},firstName={firstName},lastName={lastName}\r"  (no _dirty companion)
@@ -189,8 +190,55 @@ var $vec2Lost : Integer:=ds:C1482._Students.query("ID in :1 and student_vector_2
 ASSERT:C1129($vec2Lost=0; "case5: student_vector_2 must be preserved (has _dirty), "+String:C10($vec2Lost)+" were nullified")
 
 // ══════════════════════════════════════════════════════════════════════
-// Cleanup
+// CASE 6 — autoInvalidate flag: when a definition has autoInvalidate=false,
+//          save() must do NOTHING (vector kept, _dirty untouched), even if a
+//          phrase field changed. The flag is read live per save, so we flip it
+//          in Settings/embeddings.json, run, then RESTORE the file *before*
+//          asserting so a failure can never leave the settings file mutated.
+//
 // ══════════════════════════════════════════════════════════════════════
+var $embFile : 4D:C1709.File:=cs:C1710._Settings.me.file
+var $embOrig : Text:=$embFile.getText()
+
+// Flip both _Students definitions to autoInvalidate=false.
+var $embRoot : Object:=JSON Parse:C1218($embOrig)
+var $embDef : Object
+For each ($embDef; $embRoot.definitions)
+	If ($embDef.dataclassName="_Students") && (($embDef.vectorName="student_vector_1") || ($embDef.vectorName="student_vector_2"))
+		$embDef.autoInvalidate:=False:C215
+	End if 
+End for each 
+$embFile.setText(JSON Stringify:C1217($embRoot; *))
+
+// Build a baseline entity with both vectors set and _dirty=false.
+var $s6 : cs:C1710.Entity:=ds:C1482._Students.new()
+$s6.firstName:="AV_Denise"
+$s6.lastName:="AV_Petit"
+$s6.save()
+$s6:=ds:C1482._Students.get($s6.ID)
+$s6.student_vector_1:=$vec
+$s6.student_vector_2:=$vec
+$s6.student_vector_2_dirty:=False:C215
+$s6.save()
+
+// Modify a phrase field while autoInvalidate=false → nothing must change.
+$s6:=ds:C1482._Students.get($s6.ID)
+$s6.firstName:="AV_Denise_MODIFIED"
+$s6.save()
+
+// Capture results, THEN restore the settings file, THEN assert.
+$s6:=ds:C1482._Students.get($s6.ID)
+var $v1Preserved : Boolean:=($s6.student_vector_1#Null:C1517)
+var $v2Preserved : Boolean:=($s6.student_vector_2#Null:C1517)
+var $dirtyUntouched : Boolean:=Not:C34($s6.student_vector_2_dirty)
+
+// Restore settings + drop all test rows BEFORE asserting, so a case-6 failure
+// (the known bug) can never leave the settings file or the data dirty.
+$embFile.setText($embOrig)
 ds:C1482._Students.query("firstName = :1"; "AV_@").drop()
 ds:C1482.AllTypes.query("Alpha = :1"; "AV_@").drop()
 ds:C1482.School.query("name = :1"; "AV_@").drop()
+
+ASSERT:C1129($v1Preserved; "case6: student_vector_1 must be PRESERVED when autoInvalidate=false (flag ignored — known bug)")
+ASSERT:C1129($v2Preserved; "case6: student_vector_2 must be PRESERVED when autoInvalidate=false")
+ASSERT:C1129($dirtyUntouched; "case6: student_vector_2_dirty must stay false when autoInvalidate=false (flag ignored — known bug)")
