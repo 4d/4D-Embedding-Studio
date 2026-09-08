@@ -92,6 +92,7 @@
 			"test_process_spacedVectorName",
 			"test_processError",
 			"test_resolver",
+			"test_saveVectorInvalidation",
 			"test_scheduleCalc",
 			"test_scheduler",
 			"test_scheduler_asyncSave",
