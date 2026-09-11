@@ -36,10 +36,11 @@
 Class extends _ProcessBase
 
 property _failedModels : Collection
+property _remoteIndexWarned : Boolean
 
 // MARK:-[CONSTRUCTOR]
 Class constructor($settings : cs:C1710.Settings; $options : Object)
-	
+
 	Super:C1705($settings; $options)
 	This:C1470._failedModels:=[]
 	
@@ -470,11 +471,23 @@ Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Definit
 Function _setIndexesPaused($dc : 4D:C1709.DataClass; $paused : Boolean)
 	
 	var $enabled : Boolean:=(This:C1470.options.pauseIndexes=Null:C1517) ? True:C214 : Bool:C1537(This:C1470.options.pauseIndexes)
-	
+
 	If (Not:C34($enabled))
-		return 
-	End if 
-	
+		return
+	End if
+
+	// PAUSE/RESUME INDEXES are server-side commands: they throw from a 4D remote client. When the
+	// batch runs in a remote client's own process (e.g. a host calling cs.EmbeddingStudio.Process
+	// directly rather than through the scheduler, which runs on the server), skip the optimisation
+	// instead of failing — the recalculation still completes, just without paused index maintenance.
+	If (Application type:C494=4D Remote mode:K5:5)
+		If (Not:C34(This:C1470._remoteIndexWarned))
+			This:C1470._remoteIndexWarned:=True:C214
+			cs:C1710._Logger.me.warn("Index pausing skipped: PAUSE/RESUME INDEXES cannot run on a 4D remote client. Run the recalculation on the server (e.g. cs.EmbeddingStudio.Scheduler.me) for faster batch writes.")
+		End if
+		return
+	End if
+
 	var $tablePtr : Pointer:=Table:C252($dc.getInfo().tableNumber)
 	
 	If ($paused)
