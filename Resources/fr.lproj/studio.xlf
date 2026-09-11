@@ -43,8 +43,7 @@
         <trans-unit id="studioIntro" resname="studioIntro">
           <source>Embedding Studio turns each record into a vector, so your app can find records by meaning rather than by exact words.
 Pick a vector attribute, then describe a record in one sentence.</source>
-          <target>Embedding Studio transforme chaque enregistrement en vecteur, pour que votre application retrouve les enregistrements par le sens plutôt que par les mots exacts.
-Choisissez un attribut vecteur, puis décrivez un enregistrement en une phrase.</target>
+          <target>Embedding Studio transforme chaque enregistrement en vecteur, pour que votre application retrouve les enregistrements par le sens plutôt que par les mots exacts. Choisissez un attribut vecteur, puis décrivez un enregistrement en une phrase.</target>
         </trans-unit>
         <trans-unit id="50" resname="explanatoryPhrase">
           <source>Descriptive Phrase</source>

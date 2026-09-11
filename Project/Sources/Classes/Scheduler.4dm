@@ -31,13 +31,13 @@ property _hostSettings : Text:="/SOURCES/settings.4DSettings"
 property _hostEventPath : Text:="/preferences/com.4d/general"
 property _hostEventName : Text:="execute_host_database_event"
 
-singleton Class constructor
+shared singleton Class constructor
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Arms the scheduler: starts the background loop worker if not already running.
 	// Idempotent — calling it again just refreshes the arm-time anchor, which interval mode
 	// only falls back to when the config carries no startReference.
-Function start() : Boolean
+server Function start() : Boolean
 	
 	// Rehydrate the last-run info persisted by the previous process before arming. The
 	// in-memory state is empty after a restart; without this an interval "lastExecution"
@@ -58,7 +58,7 @@ Function start() : Boolean
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Disarms the scheduler. The loop worker stops; a running batch keeps finishing.
-Function stop()
+server Function stop()
 	
 	cs:C1710._SchedulerState.me.disarm()
 	
@@ -76,13 +76,13 @@ Function stop()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Requests a cooperative cancel of the running batch (never force-kills).
-Function cancel()
+server Function cancel()
 	
 	cs:C1710._SchedulerState.me.requestCancel()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Forces a recalculation now. Honors the single-batch rule: skipped if one is running (AC-6.5).
-Function force() : Object
+server Function force() : Object
 	
 	CALL WORKER:C1389(This:C1470._execWorker; "_SCHEDULER_RUN"; False:C215)
 	
@@ -90,7 +90,7 @@ Function force() : Object
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Config is re-read by the loop on each cycle; nothing to do beyond returning status.
-Function reload() : Object
+server Function reload() : Object
 	
 	return This:C1470.status()
 	
@@ -138,7 +138,7 @@ Function _effectiveLastRun() : Text
 
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the current scheduler status (AC-5.5).
-Function status() : Object
+server Function status() : Object
 	
 	var $state : cs:C1710._SchedulerState:=cs:C1710._SchedulerState.me
 	var $persisted : Object:=cs:C1710._ExecutionLog.me.lastRun()

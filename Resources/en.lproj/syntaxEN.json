@@ -866,6 +866,41 @@
 		},
 		"settings": {
 			"Syntax": "settings : cs.EmbeddingStudio.Settings"
+		},
+		"flushPromptInvalidate()": {
+			"Syntax": "**.flushPromptInvalidate**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"selectFirstItem()": {
+			"Syntax": "**.selectFirstItem**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"isEmpty()": {
+			"Syntax": "**.isEmpty**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"paintEmptyState()": {
+			"Syntax": "**.paintEmptyState**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"emptyStateText": {
+			"Syntax": "emptyStateText : Text"
 		}
 	},
 	"EmbedderResult": {
@@ -1485,8 +1520,14 @@
 			"Summary": ""
 		},
 		"onConfigEdit()": {
-			"Syntax": "**.onConfigEdit**()",
-			"Params": [],
+			"Syntax": "**.onConfigEdit**( *event* : Object )",
+			"Params": [
+				[
+					"event",
+					"Object",
+					"->"
+				]
+			],
 			"Summary": ""
 		},
 		"load()": {
@@ -1500,9 +1541,6 @@
 		"stateText": {
 			"Syntax": "stateText : Text"
 		},
-		"nextRunText": {
-			"Syntax": "nextRunText : Text"
-		},
 		"intervalHours": {
 			"Syntax": "intervalHours : Integer"
 		},
@@ -1511,9 +1549,6 @@
 		},
 		"lastRunText": {
 			"Syntax": "lastRunText : Text"
-		},
-		"startFromNow": {
-			"Syntax": "startFromNow : Boolean"
 		},
 		"startFromLast": {
 			"Syntax": "startFromLast : Boolean"
@@ -1535,6 +1570,20 @@
 		},
 		"scheduler": {
 			"Syntax": "scheduler : cs.EmbeddingStudio.Scheduler"
+		},
+		"resetAnchor()": {
+			"Syntax": "**.resetAnchor**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"summaryText": {
+			"Syntax": "summaryText : Text"
+		},
+		"anchorText": {
+			"Syntax": "anchorText : Text"
+		},
+		"dailyTimeValue": {
+			"Syntax": "dailyTimeValue : Time"
 		}
 	},
 	"_dataclassAttributes": {
