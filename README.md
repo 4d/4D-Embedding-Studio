@@ -1,12 +1,46 @@
 # 4D-Embedding-Studio
 
-A 4D component for defining, computing, and maintaining AI embedding vectors directly on your 4D dataclass entities. Configure which fields to embed and with which model; the pipeline renders text phrases, calls the embeddings API, and persists the resulting `4D.Vector` values on your records.
+## Overview
+
+4D Embedding Studio is a component for defining, processing, and maintaining AI embedding vectors directly in your 4D dataclass entities. Configure which fields to embed and with which model. 
+
+Select attributes from your dataclasses to construct the sentences to be vectorized and specify the model to use. For each entity, the component calls the embedding API and stores the resulting `4D.Vector` values.
+
+Configure the embedding scheduler to (re)calculate the vectors for your data at fixed intervals or on demand. Then use the ORDA [`query()` by vector feature](https://developer.4d.com/docs/API/DataClassClass#query-by-vector-similarity) to build a high-performance RAG (Retrieval Augmented Generation) into your 4D application.
+
+The component offers an extensive API that allows you to control the scheduler, customize each step of the data vectorization process, and integrate .
 
 ## Requirements
 
-- [4D-AIKit](https://github.com/4d/4D-AIKit) (loaded automatically as a dependency) with model aliases. (>21R3)
+- [4D-AIKit](https://github.com/4d/4D-AIKit) (loaded automatically as a dependency). 
+- 4D project (>21 R3) with the following configuration:
+  - at least a valid model alias 
+  - at least a dataclass with a `4D.Vector` attribute (object field at the database level).
 
-## Quick start
+
+## Quick Start
+
+When the 4D Embedding Studio is correctly installed in your 4D project, an . 
+
+**1. Select **Embedding Studio...** in the **Design** menu to display the Embedding Studio window.
+**2. For each `4D.Vector` attribute, write a descriptive phrase and select a model. 
+Optionnally, you can check the Invalidate check box. 
+
+**2. Configure your vectors** in your dataclass
+**3. Configure your vectors** in your dataclass
+**4. Configure your vectors** in your dataclass
+**5. Configure your vectors** in your dataclass
+
+
+
+### Dirty-flag support
+
+Declare a Boolean field named `<vectorName>_dirty` on your dataclass. When the flag is `True`, the pipeline recomputes the vector even if one already exists. The flag is cleared automatically after a successful save.
+
+
+## Using the API
+
+### Quick start
 
 **1. Configure your vectors** in `Settings/embeddings.json` (or via the built-in UI):
 
@@ -43,11 +77,9 @@ var $p:=cs.EmbeddingStudio.Process.new()
 $p.processEntity($entity)
 ```
 
-## Dirty-flag support
 
-Declare a Boolean field named `<vectorName>_dirty` on your dataclass. When the flag is `True`, the pipeline recomputes the vector even if one already exists. The flag is cleared automatically after a successful save.
 
-## Class reference
+### Class reference
 
 | Class | Description |
 |---|---|
