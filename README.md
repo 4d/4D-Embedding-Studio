@@ -34,53 +34,47 @@ This phrase will be vectorized for every entity.
 
 ### Configuring the dataclass
 
-To use the 4D Embedding Studio interface, you need to create at least one object attribute associated to a `4D.Vector` class in your datastore. This must be done at the database level.
+To use the 4D Embedding Studio interface, you need to create at least one object attribute associated to a `4D.Vector` class in your datastore. This must be done at the database level (only storage attributes can be embeddings).
 
-In the Structure editor, add a `<vectorName>` Object field to the dataclass (table) whose entities you want to query using AI and [enter "4D.Vector" as class](https://developer.4d.com/docs/Develop/field-properties#class). 
-
-
-### Dirty-flag support
-
-In a production application, data is rarely static. If an embedding is based on a value that has changed, it becomes obsolete and could no longer be relevant. In this case, 4D automatically invalidates and flags for recalculation affected embeddings.
-
-By default, if you do not use a dirty-flag field, 4D simply replace any invalidated vector by `Null`. It is therefore no longer used in searches until its next calculation. This option is suitable for applications that prioritize strict consistency: it is better to return no results than to rely on an embedding that no longer matches the current data.
-
-You can You can also add a Boolean field named <vector_name>_dirty to the structure. When an update is required, this field is set to true, and the existing vector is retained until it is recalculated. However, certain changes—such as a model change—require the vector to be replaced immediately.
-
-Your application can then choose to continue using this vector temporarily or exclude it using a filter on `dirty = false`.
-
-This strategy promotes service continuity while allowing you to precisely identify vectors awaiting recalculation.
-
-If your business logic requires full control, you can also disable automatic invalidation and manage this lifecycle yourself.
-
-
-4D Embedding Studio takes a more targeted approach. 
-
-This means you do not have to develop or maintain your own change-detection logic.
-
-
-When an update is required, this field is set to true, and the existing vector is retained until it is recalculated. However, certain changes—such as a model change—require the vector to be replaced immediately.
-
-Your application can then choose to continue using this vector temporarily or exclude it using a filter on `dirty = false`.
-
-This strategy promotes service continuity while allowing you to precisely identify vectors awaiting recalculation.
-
-If your business logic requires full control, you can also disable automatic invalidation and manage this lifecycle yourself
-
-
-#### Dirty-flag support
-
-
-
-Declare a Boolean field named `<vectorName>_dirty` in the same dataclass (table) as the embedding attribute, so that it is automatically processed as a flag for embedding maintenance. Default is `False`.
-
-When an update is required for the embedding, this field is set to `False`, and the existing vector is retained until it is recalculated. However, certain changes—such as a model change—require the vector to be replaced immediately.
-
-* When the flag is `True` for an entity, the pipeline recomputes the embedding even if one already exists. The flag is cleared automatically after a successful save.
+In the Structure editor, add an Object field (e.g. "myVector") to the dataclass (table) whose entities you want to query using AI and enter ["4D.Vector" as class](https://developer.4d.com/docs/Develop/field-properties#class). 
 
 
 ### Creating an embedding
 
+When you select **Embedding Studio...** in the **Design** menu, the Embedding Studio window is displayed. 
+
+The list on the left side shows all `4D.Vector` class attributes defined in the datastore. You can add as many vector attributes as you want per dataclass. 
+
+**Note:** Any change in the database structure will require that you restart the 4D application so that the 4D Embedding Studio lists up-to-date values.
+
+To create or edit an embedding, select the attribute to configure in this list and write the embedding definition in the "Descriptive sentence" area on the right side. Use the associated menu to build the sentence and to add references to dataclass available attributes with the `{attribute_name}` syntax. 
+
+
+#### How to write the descriptive sentence?
+
+The sentence must build a text that describes the entity just like a human would do it. The embedding could then capturate the semantics and not only attribute values. 
+
+For example, for a `Product` dataclass with many attributes such as name and category, you could write: 
+"The {name} product is a {category} from the {brand} brand. Description: {description}. Key features: {features}."
+
+
+### Selecting a model
+
+Once you have defined your vector attribute, choose the model to use for generating the embedding. The list of models includes the **model aliases** you defined in the [Project Settings](https://developer.4d.com/docs/settings/ai#model-aliases). 
+
+The choice of model is important because it determines the relevance and quality of your embeddings. You’ll also need to provide this model with every query on the dataclass data so that the comparison is performed using the same model. 
+
+
+### Dirty-flag support
+
+In a production application, data is rarely static. If an embedding is based on an attribute value that has changed (e.g. a product description), it becomes obsolete and could no longer be relevant. In this case, 4D automatically invalidates and flags for recalculation affected embeddings.
+
+By default, if you do not use a dirty-flag field, 4D simply replaces any invalidated vector by `Null`. It is therefore no longer used in searches until its next calculation. This option is suitable for applications that prioritize strict consistency: it is better to return no results than to rely on an embedding that no longer matches the current data.
+
+Or, you can add a Boolean field named `<vectorName>_dirty` (e.g. "myVector_dirty") to the structure. In this case, when an update is required, this field is set to `True`, and the associated vector is retained until it is recalculated. Your application can then choose to continue using this vector temporarily or exclude it using a filter on `dirty = False`. The flag is cleared automatically after a successful save.
+This strategy promotes service continuity while allowing you to precisely identify vectors awaiting recalculation. If your business logic requires full control, you can also disable automatic invalidation and manage this lifecycle yourself.
+
+*Note: Certain modifications, such as a model changes, require vectors to be replaced immediately.* 
 
 
 ### Using the scheduler
@@ -88,8 +82,6 @@ When an update is required for the embedding, this field is set to `False`, and 
 ### Building queries with vectors
 
 
-
-successful save.
 
 
 ## API Guide
