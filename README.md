@@ -38,6 +38,17 @@ To use the 4D Embedding Studio interface, you need to create at least one object
 
 In the Structure editor, add an Object field (e.g. "myVector") to the dataclass (table) whose entities you want to query using AI and enter ["4D.Vector" as class](https://developer.4d.com/docs/Develop/field-properties#class). 
 
+#### Dirty-flag support
+
+In a production application, data is rarely static. If an embedding is based on an attribute value that has changed (e.g. a product description), it becomes obsolete and could no longer be relevant. In this case, 4D automatically invalidates and flags for recalculation affected embeddings.
+
+By default, if you do not use a dirty-flag field, 4D simply replaces any invalidated vector by `Null`. It is therefore no longer used in searches until its next calculation. This option is suitable for applications that prioritize strict consistency: it is better to return no results than to rely on an embedding that no longer matches the current data.
+
+Or, you can add a Boolean field named `<vectorName>_dirty` (e.g. "myVector_dirty") to the structure. In this case, when an update is required, this field is set to `True`, and the associated vector is retained until it is recalculated. Your application can then choose to continue using this vector temporarily or exclude it using a filter on `dirty = False`. The flag is cleared automatically after a successful save.
+This strategy promotes service continuity while allowing you to precisely identify vectors awaiting recalculation. If your business logic requires full control, you can also disable automatic invalidation and manage this lifecycle yourself.
+
+*Note: Certain modifications, such as a model changes, require vectors to be replaced immediately.* 
+
 
 ### Creating an embedding
 
@@ -65,19 +76,13 @@ Once you have defined your vector attribute, choose the model to use for generat
 The choice of model is important because it determines the relevance and quality of your embeddings. You’ll also need to provide this model with every query on the dataclass data so that the comparison is performed using the same model. 
 
 
-### Dirty-flag support
+### Calculating embeddings
 
-In a production application, data is rarely static. If an embedding is based on an attribute value that has changed (e.g. a product description), it becomes obsolete and could no longer be relevant. In this case, 4D automatically invalidates and flags for recalculation affected embeddings.
+Embedding attributes must be calculated by sending requests to the AI model. New embeddings must be calculated while obsolete embeddings must be recalculated. This can be done automatically by the 4D Embedding Studio, according to your dirty-flag configuration. 
 
-By default, if you do not use a dirty-flag field, 4D simply replaces any invalidated vector by `Null`. It is therefore no longer used in searches until its next calculation. This option is suitable for applications that prioritize strict consistency: it is better to return no results than to rely on an embedding that no longer matches the current data.
-
-Or, you can add a Boolean field named `<vectorName>_dirty` (e.g. "myVector_dirty") to the structure. In this case, when an update is required, this field is set to `True`, and the associated vector is retained until it is recalculated. Your application can then choose to continue using this vector temporarily or exclude it using a filter on `dirty = False`. The flag is cleared automatically after a successful save.
-This strategy promotes service continuity while allowing you to precisely identify vectors awaiting recalculation. If your business logic requires full control, you can also disable automatic invalidation and manage this lifecycle yourself.
-
-*Note: Certain modifications, such as a model changes, require vectors to be replaced immediately.* 
+Warninf
 
 
-### Using the scheduler
 
 ### Building queries with vectors
 
