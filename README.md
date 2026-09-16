@@ -25,7 +25,7 @@ If you want to have more control over your embeddings, the component offers an e
 **2. Select **Embedding Studio...** in the **Design** menu to display the Embedding Studio window.**  
 **3. For each listed `4D.Vector` attribute, write a descriptive phrase based upon attributes of the dataclass.**  
 Use the contextual menu to insert appropriate attributes.  
-This phrase will be vectorized for every entity.
+This phrase will be vectorized for every entity.  
 **4. Select a model alias (or create a new one).**   
 **5. Select "Execute now" to launch the vectorization of your data or configure the scheduler.**   
 
@@ -36,13 +36,13 @@ This phrase will be vectorized for every entity.
 
 To use the 4D Embedding Studio interface, you need to create at least one object attribute associated to a `4D.Vector` class in your datastore. This must be done at the database level (only storage attributes can be embeddings).
 
-In the Structure editor, add an Object field (e.g. "myVector") to the dataclass (table) whose entities you want to query using AI and enter ["4D.Vector" as class](https://developer.4d.com/docs/Develop/field-properties#class). 
+In the Structure editor, add an Object field to the dataclass (table) whose entities you want to query using AI and enter ["4D.Vector" as class](https://developer.4d.com/docs/Develop/field-properties#class). 
 
 #### Dirty-flag support
 
-In a production application, data is rarely static. If an embedding is based on an attribute value that has changed (e.g. a product description), it becomes obsolete and could no longer be relevant. In this case, 4D automatically invalidates and flags for recalculation affected embeddings.
+In a production application, data is rarely static. If an embedding is based on an attribute value that has changed (e.g. a product description), it becomes obsolete and could no longer be relevant. By default, 4D automatically invalidates and flags for recalculation affected embeddings.
 
-By default, if you do not use a dirty-flag field, 4D simply replaces any invalidated vector by `Null`. It is therefore no longer used in searches until its next calculation. This option is suitable for applications that prioritize strict consistency: it is better to return no results than to rely on an embedding that no longer matches the current data.
+If you do not use a dirty-flag field (see below), 4D simply replaces any invalidated vector by `Null`. It is therefore no longer used in searches until its next calculation. This option is suitable for applications that prioritize strict consistency: it is better to return no results than to rely on an embedding that no longer matches the current data.
 
 Or, you can add a Boolean field named `<vectorName>_dirty` (e.g. "myVector_dirty") to the structure. In this case, when an update is required, this field is set to `True`, and the associated vector is retained until it is recalculated. Your application can then choose to continue using this vector temporarily or exclude it using a filter on `dirty = False`. The flag is cleared automatically after a successful save.
 This strategy promotes service continuity while allowing you to precisely identify vectors awaiting recalculation. If your business logic requires full control, you can also disable automatic invalidation and manage this lifecycle yourself.
@@ -58,10 +58,9 @@ The list on the left side shows all `4D.Vector` class attributes defined in the 
 
 **Note:** Any change in the database structure will require that you restart the 4D application so that the 4D Embedding Studio lists up-to-date values.
 
+#### Writing a descriptive sentence
+
 To create or edit an embedding, select the attribute to configure in this list and write the embedding definition in the "Descriptive sentence" area on the right side. Use the associated menu to build the sentence and to add references to dataclass available attributes with the `{attribute_name}` syntax. 
-
-
-#### How to write the descriptive sentence?
 
 The sentence must build a text that describes the entity just like a human would do it. The embedding could then capturate the semantics and not only attribute values. 
 
@@ -75,16 +74,53 @@ Once you have defined your vector attribute, choose the model to use for generat
 
 The choice of model is important because it determines the relevance and quality of your embeddings. You’ll also need to provide this model with every query on the dataclass data so that the comparison is performed using the same model. 
 
+### Auto-invalidate on save
+
+When this option is checked (default), embeddings are automatically invalidated when at least one of their definition attributes has been modified and the entity was successfully saved. 
+
+However, you might want to handle invalidation in a custom way using the [4D Embedding Studio API](#api-guide). In this case, uncheck this option to disable the automatic mechanism.
 
 ### Calculating embeddings
 
-Embedding attributes must be calculated by sending requests to the AI model. New embeddings must be calculated while obsolete embeddings must be recalculated. This can be done automatically by the 4D Embedding Studio, according to your dirty-flag configuration. 
+Embeddings are calculated by sending a request to the AI model, which then returns the vectorization result, which is subsequently stored in the `4D.Vector` attribute in the dataclass. 4D automatically handles this operation and optimizes it by calculating only the necessary vectors. Each vector is processed independently. Thus, an error on one element does not interrupt the recalculation of the others. Elements that fail will be automatically retried during the next run. Recalculations are performed asynchronously, without blocking users.
+ 
+These calculations can be performed **on demand** or **scheduled at regular intervals** using the scheduler in the 4D Embedding Studio component. 
 
-Warninf
+**Note:** You can also customize embedding calculations per dataclass or entity using the [4D Embedding Studio API](#api-guide).
+
+#### On demand
+
+To launch an embedding calculation, select **Run now** in the menu at the bottom of the 4D Embedding Studio window. This item is disabled if the datastore does not contain any embedding to calculate. You can select **Cancel run** at any moment. 
+
+#### Scheduler
+
+You can configure the 4D Embedding Studio component scheduler to adjust the calculation frequency to suit your application’s needs . 
+
+You can set the time interval between two calculations starting from a specific time (**At regular interval** option), or have a calculation run daily at a specific time (**Once a day** option). 
+
+**Important**: The scheduler needs an explicit authorization from the host database to be started. This authorization is given when you click **Start scheduler** (through the menu command or the button) but it needs to be renewed if the project is restarted. To make sure the scheduler can always restart automatically, you need to select the **Execute "On Host Database Event" method of the components** option in the [project Settings](https://developer.4d.com/docs/settings/security#options). 
 
 
 
-### Building queries with vectors
+
+### Building queries with embeddings
+
+Once you have defined embeddings in your datastore, you can start [querying your dataclasses using vector similarity](https://developer.4d.com/docs/21-R3/API/DataClassClass#query-by-vector-similarity).
+
+You just need to use in the query string the same model as the one used for your embeddings.
+
+For example, you want to find products similar to the one selected by the user. You can write:
+
+```4d
+//create a vector to compare using 4D AIKit
+var $client:=cs.AIKit.OpenAI.new("my api key")
+var $result:=$client.embeddings.create("the"+$entity.name+" product can be used in the "+ $entity.range+" sector"; "text-embedding-ada-002")
+var $vector:=$result.vector
+
+  //search with default metric (cosine)
+var $products:=ds.Products.query("embedding > :1 order by embedding desc"; {vector : $vector})
+
+```
 
 
 
