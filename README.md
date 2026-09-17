@@ -105,16 +105,22 @@ You can set the time interval between two calculations starting from a specific 
 
 ### Building queries with embeddings
 
-Once you have defined embeddings in your datastore, you can start [querying your dataclasses using vector similarity](https://developer.4d.com/docs/21-R3/API/DataClassClass#query-by-vector-similarity).
+Once you have defined embeddings in your datastore, you can start [querying your dataclasses using AI-based features](https://developer.4d.com/docs/API/DataClassClass#query-by-vector-similarity). You just need to make sure that you use the same model for your embedding definition and in the query string.
 
-You just need to use in the query string the same model as the one used for your embeddings.
+For example, assuming that:
 
-For example, you want to find products similar to the one selected by the user. You can write:
+- you have defined a `4D.Vector` attribute named "embedding" in the Products dataclass using the sentence: "The {name} is in the {category} category. It has these {features} features and can be used for {usage}."
+•	you have generated the embeddings using the "myEmbeddingModelAlias" model alias,
+•	you want to find products similar to the one selected by the user. 
+
+You can write:
 
 ```4d
-//create a vector to compare using 4D AIKit
-var $client:=cs.AIKit.OpenAI.new("my api key")
-var $result:=$client.embeddings.create("the"+$entity.name+" product can be used in the "+ $entity.range+" sector"; "text-embedding-ada-002")
+var $entity:=Form.entity //contains the selected entity
+
+  //create a vector to compare using 4D AIKit
+var $client:=cs.AIKit.OpenAI.new()
+var $result:=$client.embeddings.create("A "+ $entity.category+" product that can be used for "+$entity.usage; "myEmbeddingModelAlias")
 var $vector:=$result.vector
 
   //search with default metric (cosine)
