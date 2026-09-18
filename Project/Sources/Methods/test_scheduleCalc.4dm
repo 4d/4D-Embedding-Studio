@@ -48,6 +48,15 @@ var $recent : Object:=$calc.nextRun({mode: "interval"; intervalHours: 2; startFr
 ASSERT:C1129($recent.immediate=False:C215; "recent lastExecution → not immediate")
 ASSERT:C1129($recent.timestamp>$now; "recent lastExecution → next in the future")
 
+// AC-4.2.5: next run is EXACTLY lastExecution + N hours (deterministic math, not just
+// "in the future"). A far-future last execution keeps the computed slot ahead of now,
+// so it is returned verbatim instead of collapsing to an immediate run.
+var $lastExec : Text:="2030-06-15T08:00:00"
+var $exact : Object:=$calc.nextRun({mode: "interval"; intervalHours: 4; startFrom: "lastExecution"}; $lastExec; "")
+ASSERT:C1129($exact.immediate=False:C215; "future lastExecution +4h → not immediate")
+ASSERT:C1129($exact.timestamp="2030-06-15T12:00:00"; "interval lastExecution +4h should be exactly L+4h, got "+$exact.timestamp)
+ASSERT:C1129($exact.timestamp=$calc.slotAfter({mode: "interval"; intervalHours: 4}; $lastExec); "nextRun should match slotAfter for the same interval anchor")
+
 // ══════════════════════════════════════════════════════════════════════
 // INTERVAL — start from now
 // ══════════════════════════════════════════════════════════════════════
