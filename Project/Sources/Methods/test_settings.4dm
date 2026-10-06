@@ -378,6 +378,44 @@ ASSERT:C1129($invalidation.skipped=0; "invalidateVectors: expected 0 skipped")
 ASSERT:C1129($invalidation.errors.length=1; "invalidateVectors: expected the unknown dataclass error, got "+JSON Stringify:C1217($invalidation.errors))
 ASSERT:C1129(ds:C1482._Students.query("student_vector_1 != null").length=0; "invalidateVectors: student vectors should be cleared")
 
+//MARK:- _EMBEDDINGS_DEF_CHANGES asks before invalidating the definitions a model change affects
+For each ($student; $seed.students)
+	$student.reload()
+	$student.student_vector_1:=4D:C1709.Vector.new([1; 2; 3])
+	ASSERT:C1129($student.save().success; "alias change prompt: failed to seed vectors")
+End for each
+$s.definitions:=[cs:C1710.Definition.new("_Students"; "student_vector_1"; "aliasA"; "{firstName}")]
+ASSERT:C1129($s.save(); "alias change prompt: failed to save the definition")
+
+var $dialog : cs:C1710._Dialog:=cs:C1710._Dialog.me
+var $defChanges : Object:={}
+$dialog._capture:=[]
+
+// declined: nothing invalidated (full settings objects accepted: their .models is used)
+$dialog._answers:=[False:C215]
+_EMBEDDINGS_DEF_CHANGES({models: $before}; {models: $after}; $defChanges)
+ASSERT:C1129($defChanges.affected=1; "alias change prompt: expected 1 affected definition, got "+String:C10($defChanges.affected))
+ASSERT:C1129(Not:C34($defChanges.confirmed); "alias change prompt: declined")
+ASSERT:C1129($defChanges.invalidated=0; "alias change prompt: nothing should be invalidated when declined")
+ASSERT:C1129(ds:C1482._Students.query("student_vector_1 != null").length=2; "alias change prompt: vectors should be kept when declined")
+
+// accepted: the affected vectors are invalidated (plain alias maps accepted too)
+$dialog._answers:=[True:C214]
+_EMBEDDINGS_DEF_CHANGES($before; $after; $defChanges)
+ASSERT:C1129($defChanges.confirmed; "alias change prompt: accepted")
+ASSERT:C1129($defChanges.invalidated=2; "alias change prompt: expected 2 invalidated, got "+String:C10($defChanges.invalidated))
+ASSERT:C1129(ds:C1482._Students.query("student_vector_1 != null").length=0; "alias change prompt: vectors should be invalidated when accepted")
+
+// unchanged aliases: nothing to ask
+_EMBEDDINGS_DEF_CHANGES($before; $before; $defChanges)
+ASSERT:C1129($defChanges.affected=0; "alias change prompt: unchanged aliases affect nothing")
+
+var $asked : Collection:=$dialog._capture
+$dialog._capture:=Null:C1517
+$dialog._answers:=[]
+ASSERT:C1129($asked.length=2; "alias change prompt: expected 2 questions, got "+JSON Stringify:C1217($asked))
+ASSERT:C1129(Position:C15("_Students.student_vector_1"; String:C10($asked[0].message))>0; "alias change prompt: the question should list the definition")
+
 ds:C1482._Students.all().drop()
 ds:C1482.School.all().drop()
 ds:C1482.Cities.all().drop()
