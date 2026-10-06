@@ -78,6 +78,7 @@
 			"_testHoldSemaphore",
 			"test_dataclassAttributes",
 			"test_definition",
+			"test_dev",
 			"test_embedder",
 			"test_executionLog",
 			"test_phrase",
