@@ -108,6 +108,14 @@ ASSERT:C1129($text=""; "render stub unknown vectorName should return empty, got 
 $text:=$pg.render($studentAlice; {dataclassName: "School"; vectorName: "student_vector_1"})
 ASSERT:C1129($text=""; "render stub mismatched dataclass should return empty, got '"+$text+"'")
 
+// --- render with ad-hoc stub holding a compiled Phrase ---
+$text:=$pg.render($studentAlice; {phrase: cs:C1710.Phrase.new("Yo {firstName}")})
+ASSERT:C1129($text="Yo Alice"; "render stub Phrase: expected 'Yo Alice' got '"+$text+"'")
+
+// --- render with an unsupported phrase argument (number) → empty ---
+$text:=$pg.render($studentAlice; 42)
+ASSERT:C1129($text=""; "render unsupported phrase type should return empty, got '"+$text+"'")
+
 // =====================================================
 // embed() tests
 // =====================================================
@@ -186,6 +194,34 @@ Catch
 End try
 ASSERT:C1129($threw; "embed stub with no resolvable model should throw")
 Try(1)
+
+// --- embed with a Null entity → throws (no phrase resolved) ---
+$threw:=False:C215
+Try
+	$pg.embed(Null:C1517)
+Catch
+	$threw:=True:C214
+End try
+ASSERT:C1129($threw; "embed null entity should throw (no phrase)")
+Try(1)
+
+// --- ambiguous auto-resolution (two definitions for the dataclass) ---
+$settings.definitions.push(cs:C1710.Definition.new("_Students"; "student_vector_2"; $model; "{lastName}"))
+
+$text:=$pg.render($studentAlice)
+ASSERT:C1129($text=""; "render auto-resolve with 2 definitions should return empty, got '"+$text+"'")
+
+// a phrase is given but no model, and the model cannot be deduced → throws
+$threw:=False:C215
+Try
+	$pg.embed($studentAlice; $phrase)
+Catch
+	$threw:=True:C214
+End try
+ASSERT:C1129($threw; "embed with an ambiguous model should throw")
+Try(1)
+
+$settings.definitions.pop()
 
 // =====================================================
 // Cleanup
