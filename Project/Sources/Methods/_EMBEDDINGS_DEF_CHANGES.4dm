@@ -44,9 +44,7 @@ If ($affected.length>0)
 	var $message : Text:=Replace string:C233(Localized string:C991("aliasChangeConfirm"); "{count}"; String:C10($affected.length))
 	$message:=$message+"\n\n"+$lines.join("\n")
 	
-	CONFIRM:C162($message)
-	
-	If (OK=1)
+	If (cs:C1710._Dialog.me.confirm($message))
 		
 		$confirmed:=True:C214
 		

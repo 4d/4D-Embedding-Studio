@@ -523,7 +523,7 @@ Function moreManager($e : Object)
 			$plainText:=$item.supportedAttributes.map(Formula:C1597($1.value.name)).join(",")
 			var $model:="StudioPhrase"
 			If (Not:C34(cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name").includes($model)))
-				ALERT:C41("You must configure a chat model with name: "+$model)
+				cs:C1710._Dialog.me.alert("You must configure a chat model with name: "+$model)
 				return 
 			End if 
 			var $client : cs:C1710.AIKit.OpenAI:=cs:C1710.AIKit.OpenAI.new()
@@ -550,7 +550,7 @@ Function moreManager($e : Object)
 				$item.phrase:=$item.parsePhrase($item.definition.phrase)
 				This:C1470.saveEmbeddingItems()
 			Else 
-				ALERT:C41(JSON Stringify:C1217($resultAI))
+				cs:C1710._Dialog.me.alert(JSON Stringify:C1217($resultAI))
 			End if 
 			// ______________________________________________________
 		: ($menu.choice="computeVectors")
@@ -651,7 +651,7 @@ Function _handleDevChoice($choice : Text) : Boolean
 			If ($execFile.exists)
 				OPEN URL:C673($execFile.platformPath)
 			Else 
-				ALERT:C41("No execution log file found.")
+				cs:C1710._Dialog.me.alert("No execution log file found.")
 			End if 
 		: (Position:C15("phraseOption:"; $choice)=1)
 			var $optKey : Text:=Substring:C12($choice; Length:C16("phraseOption:")+1)
@@ -665,7 +665,7 @@ Function _handleDevChoice($choice : Text) : Boolean
 		: ($choice="openDiagosticLog")
 			var $file:=Folder:C1567(fk logs folder:K87:17; *).files().filter(Formula:C1597(Position:C15("4DDiagnosticLog_"; $1.value.name)=1)).sort().first()
 			If ($file=Null:C1517)
-				ALERT:C41("No log")
+				cs:C1710._Dialog.me.alert("No log")
 			Else 
 				OPEN URL:C673($file.platformPath)
 			End if 
@@ -1056,7 +1056,7 @@ Function _saveSettings() : Boolean
 		
 	End if 
 	
-	ALERT:C41(Replace string:C233(Localized string:C991("errSettingsNotSaved"); "{file}"; This:C1470.settings.file.path))
+	cs:C1710._Dialog.me.alert(Replace string:C233(Localized string:C991("errSettingsNotSaved"); "{file}"; This:C1470.settings.file.path))
 	
 	return False:C215
 	
@@ -1119,12 +1119,10 @@ Function _promptInvalidate($item : cs:C1710._EmbeddingItem)
 	$item.original:=$item.definition.toObject()
 	
 	// TODO: To localize
-	CONFIRM:C162(\
+	If (cs:C1710._Dialog.me.confirm(\
 		"The definition for "+$item.definition.dataclassName+"."+$item.definition.vectorName+" has changed.\rDo you want to mark all existing vectors for recalculation?"; \
 		"Recalculate"; \
-		"Skip")  // TODO: localize
-	
-	If (Bool:C1537(OK))
+		"Skip"))  // TODO: localize
 		
 		$item.definition.invalidateVectors()
 		
@@ -1246,7 +1244,7 @@ Function _embeddedAttributesMenu($item : cs:C1710._EmbeddingItem; $menu : cs:C17
 Function _popError($message : Text; $widget : Text; $target : Text)
 	
 	BEEP:C151
-	ALERT:C41($message)
+	cs:C1710._Dialog.me.alert($message)
 	
 	If (Length:C16($target)>0)
 		

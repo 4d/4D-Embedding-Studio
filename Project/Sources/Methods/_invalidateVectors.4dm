@@ -5,7 +5,7 @@ var $settings : cs:C1710.Settings:=cs:C1710.Settings.new()
 var $scope : Collection:=($definition=Null:C1517) ? $settings.definitions : [$definition]
 
 If ($scope.length=0)
-	ALERT:C41("⚠️ No vector definitions found.")
+	cs:C1710._Dialog.me.alert("⚠️ No vector definitions found.")
 	return 
 End if 
 
@@ -60,4 +60,4 @@ If ($errors.length>0)
 	End for each 
 End if 
 
-ALERT:C41($msg)
+cs:C1710._Dialog.me.alert($msg)

@@ -112,6 +112,7 @@
 		],
 		"classes": [
 			"_dataclassAttributes",
+			"_Dialog",
 			"_Env",
 			"_ExecutionLog",
 			"_Logger",
