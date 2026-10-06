@@ -193,16 +193,181 @@ ASSERT:C1129($disabledStatus.nextRun=Null:C1517; "disabled: nextRun should be Nu
 ASSERT:C1129($disabledStatus.lastExecution=$historical; "disabled: a historical lastExecution should be preserved")
 
 // ══════════════════════════════════════════════════════════════════════
+// saveConfig() / normalization
+// ══════════════════════════════════════════════════════════════════════
+
+//MARK:- saveConfig normalizes, persists the scheduler key only, and config() reads it back
+$tmp.setText(JSON Stringify:C1217({batchSize: 7; scheduler: {mode: "disabled"}}))
+var $saved : Object:=cs:C1710.Scheduler.me.saveConfig({mode: "daily"; dailyTime: "25:99"; intervalHours: 0; startFrom: "now"})
+ASSERT:C1129($saved.mode="daily"; "saveConfig: expected daily")
+ASSERT:C1129($saved.dailyTime="00:00"; "saveConfig: malformed dailyTime should fall back to 00:00, got "+String:C10($saved.dailyTime))
+ASSERT:C1129($saved.intervalHours=3; "saveConfig: out-of-range hours should fall back to 3")
+ASSERT:C1129($saved.startFrom="reference"; "saveConfig: legacy startFrom 'now' should become 'reference'")
+
+var $onDisk : Object:=JSON Parse:C1218($tmp.getText())
+ASSERT:C1129($onDisk.scheduler.mode="daily"; "saveConfig: the scheduler key should be written")
+ASSERT:C1129($onDisk.scheduler.dailyTime="00:00"; "saveConfig: the normalized value should be written")
+ASSERT:C1129($onDisk.batchSize=7; "saveConfig: other keys should be preserved")
+ASSERT:C1129(cs:C1710.Scheduler.me.config().mode="daily"; "saveConfig: config() should read the saved value back")
+
+//MARK:- reload() returns the status
+var $reloaded : Object:=cs:C1710.Scheduler.me.reload()
+ASSERT:C1129($reloaded.mode="daily"; "reload: should return the status of the current config")
+ASSERT:C1129(OB Is defined:C1231($reloaded; "nextRun"); "reload: should expose nextRun")
+
+//MARK:- a missing configuration normalizes to the disabled defaults
+$cfg:=cs:C1710.Scheduler.me._normalize(Null:C1517)
+ASSERT:C1129($cfg.mode="disabled"; "normalize(Null): expected disabled")
+ASSERT:C1129($cfg.intervalHours=3; "normalize(Null): expected 3h")
+ASSERT:C1129($cfg.dailyTime="00:00"; "normalize(Null): expected 00:00")
+ASSERT:C1129($cfg.startFrom="reference"; "normalize(Null): expected reference")
+
+// ══════════════════════════════════════════════════════════════════════
+// _SchedulerState.restore() / markSkipped()
+// ══════════════════════════════════════════════════════════════════════
+
+$state.endBatch(""; ""; "")
+
+//MARK:- restore without a timestamp is a no-op
+$state.restore(""; "completed"; "")
+ASSERT:C1129($state.lastRun=""; "restore(empty): lastRun should stay empty")
+ASSERT:C1129(Not:C34($state.lastRunRestored); "restore(empty): nothing should be flagged as restored")
+
+//MARK:- restore rehydrates an empty state
+$state.restore("2026-01-01T10:00:00"; "failed"; "boom")
+ASSERT:C1129($state.lastRun="2026-01-01T10:00:00"; "restore: lastRun should be rehydrated")
+ASSERT:C1129($state.lastResult="failed"; "restore: lastResult should be rehydrated")
+ASSERT:C1129($state.lastError="boom"; "restore: lastError should be rehydrated")
+ASSERT:C1129($state.lastRunRestored; "restore: lastRunRestored should be set")
+
+$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "disabled"}}))
+$status:=cs:C1710.Scheduler.me.status()
+ASSERT:C1129($status.lastExecution="2026-01-01T10:00:00"; "restore: status().lastExecution should be the restored run")
+ASSERT:C1129($status.lastRunBeforeRestart; "restore: status() should flag a run from before the restart")
+ASSERT:C1129($status.error="boom"; "restore: status() should expose the restored error")
+
+//MARK:- restore never clobbers an existing run
+$state.restore("2026-02-02T10:00:00"; "completed"; "")
+ASSERT:C1129($state.lastRun="2026-01-01T10:00:00"; "restore: an existing lastRun should be kept")
+
+//MARK:- a genuine run supersedes the restored value
+$state.endBatch("completed"; ""; "2026-03-03T10:00:00")
+ASSERT:C1129(Not:C34($state.lastRunRestored); "endBatch: should clear lastRunRestored")
+
+//MARK:- markSkipped records the skipped slot
+$state.markSkipped("2026-03-03T13:00:00")
+ASSERT:C1129($state.lastResult="skipped"; "markSkipped: lastResult should be skipped")
+ASSERT:C1129($state.skipLoggedFor="2026-03-03T13:00:00"; "markSkipped: the slot key should be kept for dedup")
+
+// ══════════════════════════════════════════════════════════════════════
+// start() / stop() — the real loop worker (disabled config, so it only sleeps)
+// ══════════════════════════════════════════════════════════════════════
+
+var $waited : Integer
+
+cs:C1710.Scheduler.me.stop()
+$state.endBatch(""; ""; "")  // empty in-memory state: start() must rehydrate from the history
+$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "disabled"}}))
+
+$execLog.startFullRun("2026-04-01T08:00:00")
+$execLog.endFullRun("2026-04-01T08:00:00"; "2026-04-01T08:05:00"; "failed"; "boom"; Null:C1517; Null:C1517)
+
+//MARK:- start() rehydrates the last run from the history and arms the loop
+ASSERT:C1129(cs:C1710.Scheduler.me.start(); "start: should return True")
+ASSERT:C1129($state.armed; "start: the state should be armed")
+ASSERT:C1129(Length:C16($state.armedAt)>0; "start: the arm time should be recorded")
+ASSERT:C1129($state.lastRun="2026-04-01T08:05:00"; "start: lastRun should be rehydrated from the history, got '"+$state.lastRun+"'")
+ASSERT:C1129($state.lastResult="failed"; "start: lastResult should be rehydrated from the history")
+ASSERT:C1129($state.lastError="boom"; "start: lastError should be rehydrated from the history")
+ASSERT:C1129($state.lastRunRestored; "start: the rehydrated run should be flagged as restored")
+
+$waited:=0
+While ((Not:C34(cs:C1710.Scheduler.me.isStarted())) && ($waited<300))
+	DELAY PROCESS:C323(Current process:C322; 6)
+	$waited+=6
+End while 
+ASSERT:C1129(cs:C1710.Scheduler.me.isStarted(); "start: the loop worker should be running")
+ASSERT:C1129(cs:C1710.Scheduler.me.status().started; "start: status().started should be true")
+
+//MARK:- stop() disarms and ends the loop worker without waiting for its sleep
+cs:C1710.Scheduler.me.stop()
+ASSERT:C1129(Not:C34($state.armed); "stop: the state should be disarmed")
+
+$waited:=0
+While (cs:C1710.Scheduler.me.isStarted() && ($waited<600))
+	DELAY PROCESS:C323(Current process:C322; 6)
+	$waited+=6
+End while 
+ASSERT:C1129(Not:C34(cs:C1710.Scheduler.me.isStarted()); "stop: the loop worker should be gone")
+
+// ══════════════════════════════════════════════════════════════════════
+// force() — through the real execution worker (_SCHEDULER_RUN)
+// ══════════════════════════════════════════════════════════════════════
+
+var $execWorker : Text:=cs:C1710.Scheduler.me._execWorker
+
+//MARK:- a forced run while a batch is running is skipped and logged
+$state.endBatch(""; ""; "")
+var $busyStamp : Text:=cs:C1710._ScheduleCalc.me._nowISO()
+ASSERT:C1129($state.beginBatch($busyStamp); "force skip: setup batch should start")
+var $skippedBefore : Integer:=($execLog._read().skipped || []).length
+
+cs:C1710.Scheduler.me.force()
+
+$waited:=0
+While ((($execLog._read().skipped || []).length=$skippedBefore) && ($waited<600))
+	DELAY PROCESS:C323(Current process:C322; 6)
+	$waited+=6
+End while 
+ASSERT:C1129(($execLog._read().skipped || []).length=($skippedBefore+1); "force skip: the forced trigger should be logged as skipped")
+ASSERT:C1129($state.running; "force skip: the running batch should be untouched")
+ASSERT:C1129($state.batchStart=$busyStamp; "force skip: the running batch start should be untouched")
+
+$waited:=0
+While ((Process activity:C1495(Processes only:K5:35).processes.query("name = :1"; $execWorker).length>0) && ($waited<600))
+	DELAY PROCESS:C323(Current process:C322; 6)
+	$waited+=6
+End while 
+
+//MARK:- a forced run whose definition cannot run ends "failed" with its errors
+$state.endBatch(""; ""; "")
+$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "disabled"}; definitions: [\
+{dataclassName: "NoSuchDataclass"; vectorName: "v"; modelAlias: "embed"; phrase: "{x}"}]}))
+
+cs:C1710.Scheduler.me.force()
+
+$waited:=0
+While (($state.lastResult#"failed") && ($state.lastResult#"completed") && ($waited<1200))
+	DELAY PROCESS:C323(Current process:C322; 6)
+	$waited+=6
+End while 
+ASSERT:C1129($state.lastResult="failed"; "force failed: the run should end failed, got '"+$state.lastResult+"'")
+ASSERT:C1129(Not:C34($state.running); "force failed: no batch should be running anymore")
+ASSERT:C1129(Position:C15("NoSuchDataclass"; $state.lastError)>0; "force failed: the error should name the failing definition, got '"+$state.lastError+"'")
+
+// the worker still persists the next run after endBatch: let it finish before checking the history
+$waited:=0
+While ((Process activity:C1495(Processes only:K5:35).processes.query("name = :1"; $execWorker).length>0) && ($waited<600))
+	DELAY PROCESS:C323(Current process:C322; 6)
+	$waited+=6
+End while 
+ASSERT:C1129($execLog.status().status="failed"; "force failed: the history should record the failed run")
+
+// ══════════════════════════════════════════════════════════════════════
 // Cleanup
 // ══════════════════════════════════════════════════════════════════════
 
 cs:C1710._SchedulerState.me.endBatch(""; ""; "")
 cs:C1710._Settings.me.file:=$prevFile
 $tmp.delete()
+var $tmpBackup : 4D:C1709.File:=$tmp.parent.file($tmp.fullName+".bak")
+If ($tmpBackup.exists)
+	$tmpBackup.delete()
+End if 
 If ($histExisted)
 	$histFile.setText($histBackup)
-Else
+Else 
 	If ($histFile.exists)
 		$histFile.delete()
-	End if
-End if
+	End if 
+End if 

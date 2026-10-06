@@ -82,3 +82,61 @@ var $slotDay : Text:=$calc.slotAfter({mode: "daily"; dailyTime: "06:00"}; "2020-
 ASSERT:C1129($slotDay="2020-01-02T06:00:00"; "slotAfter daily next day, got "+$slotDay)
 
 ASSERT:C1129($calc.slotAfter({mode: "disabled"}; "2020-01-01T00:00:00")=""; "slotAfter disabled → empty")
+
+ASSERT:C1129($calc.slotAfter(Null:C1517; "2020-01-01T00:00:00")=""; "slotAfter null config → empty")
+ASSERT:C1129($calc.slotAfter({mode: "interval"; intervalHours: 3}; "")=""; "slotAfter without base timestamp → empty")
+
+var $slotClamped : Text:=$calc.slotAfter({mode: "interval"; intervalHours: 48}; "2020-01-01T00:00:00")
+ASSERT:C1129($slotClamped="2020-01-01T03:00:00"; "slotAfter out-of-range hours fall back to 3h, got "+$slotClamped)
+
+var $slotSameDay : Text:=$calc.slotAfter({mode: "daily"; dailyTime: "10:00"}; "2020-01-01T09:00:00")
+ASSERT:C1129($slotSameDay="2020-01-01T10:00:00"; "slotAfter daily later the same day, got "+$slotSameDay)
+
+// ══════════════════════════════════════════════════════════════════════
+// INTERVAL — out-of-range hours
+// ══════════════════════════════════════════════════════════════════════
+
+// intervalHours outside 1..24 falls back to 3h: last execution now → next run in 3h
+var $clamped : Object:=$calc.nextRun({mode: "interval"; intervalHours: 0; startFrom: "lastExecution"}; $now; "")
+var $expectedClamped : Text:=$calc._addSeconds($calc._parse($now); 3*3600).timestamp
+ASSERT:C1129($clamped.timestamp=$expectedClamped; "interval 0h → 3h, expected "+$expectedClamped+", got "+$clamped.timestamp)
+
+// ══════════════════════════════════════════════════════════════════════
+// DATE ARITHMETIC
+// ══════════════════════════════════════════════════════════════════════
+
+var $back : Object:=$calc._addSeconds({date: !2020-01-02!; time: ?00:30:00?}; -3600)
+ASSERT:C1129($back.timestamp="2020-01-01T23:30:00"; "_addSeconds negative crosses midnight backwards, got "+$back.timestamp)
+
+var $forward : Object:=$calc._addSeconds({date: !2020-12-31!; time: ?23:30:00?}; 3600)
+ASSERT:C1129($forward.timestamp="2021-01-01T00:30:00"; "_addSeconds crosses the year, got "+$forward.timestamp)
+
+var $dateOnly : Object:=$calc._parse("2020-03-04")
+ASSERT:C1129($calc._iso($dateOnly.date; $dateOnly.time)="2020-03-04T00:00:00"; "_parse without a time part → midnight")
+
+// ══════════════════════════════════════════════════════════════════════
+// secondsUntil
+// ══════════════════════════════════════════════════════════════════════
+
+var $inAnHour : Text:=$calc._addSeconds($calc._parse($calc._nowISO()); 3600).timestamp
+var $seconds : Integer:=$calc.secondsUntil($inAnHour)
+ASSERT:C1129(($seconds>3590) && ($seconds<=3600); "secondsUntil in one hour ≈ 3600, got "+String:C10($seconds))
+
+var $tomorrow : Text:=$calc._addSeconds($calc._parse($calc._nowISO()); 86400).timestamp
+$seconds:=$calc.secondsUntil($tomorrow)
+ASSERT:C1129(($seconds>86390) && ($seconds<=86400); "secondsUntil the same time tomorrow ≈ 86400, got "+String:C10($seconds))
+
+ASSERT:C1129($calc.secondsUntil("2000-01-01T00:00:00")<0; "secondsUntil a past timestamp is negative")
+
+// ══════════════════════════════════════════════════════════════════════
+// _schedulerFormatDate (display of scheduler timestamps)
+// ══════════════════════════════════════════════════════════════════════
+
+ASSERT:C1129(_schedulerFormatDate("")="—"; "format empty → dash")
+ASSERT:C1129(_schedulerFormatDate("garbage")="garbage"; "format unknown → left untouched")
+
+var $formatted : Text:=_schedulerFormatDate("2026-08-10T11:14:00")
+ASSERT:C1129($formatted=(String:C10(!2026-08-10!; Internal date long:K1:5)+" "+String:C10(?11:14:00?; HH MM:K7:2)); "format timestamp → long date + HH:MM, got "+$formatted)
+
+$formatted:=_schedulerFormatDate("2026-08-10")
+ASSERT:C1129($formatted=(String:C10(!2026-08-10!; Internal date long:K1:5)+" "+String:C10(?00:00:00?; HH MM:K7:2)); "format date only → midnight, got "+$formatted)
