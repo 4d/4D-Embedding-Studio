@@ -56,5 +56,26 @@ Catch
 End try
 ASSERT:C1129($fatalThrown; "fatal embedder path should throw")
 
+// --- Empty batch short-circuits: no API call, empty result ---
+var $idleClient:=cs:C1710._TestAIKitClient.new()
+var $idleEmbedder:=cs:C1710.Embedder.new({client: $idleClient})
+var $emptyResult : cs:C1710.EmbedderResult:=$idleEmbedder.embedBatch([]; $model)
+ASSERT:C1129($emptyResult.vectors.length=0; "empty batch should return no vector")
+ASSERT:C1129($emptyResult.totalTokens=0; "empty batch should not count tokens")
+ASSERT:C1129($idleEmbedder.embedBatch(Null:C1517; $model).vectors.length=0; "null batch should return no vector")
+ASSERT:C1129($idleClient.embeddings.callCount=0; "an empty batch must not reach the API")
+
+// --- EmbedderResult keeps its defaults without a raw result or rate-limit details ---
+var $blank : cs:C1710.EmbedderResult:=cs:C1710.EmbedderResult.new(Null:C1517; True:C214)
+ASSERT:C1129($blank.vectors.length=0; "null result: no vector")
+ASSERT:C1129($blank.remainingTokens=-1; "null result: remainingTokens should stay unknown (-1)")
+ASSERT:C1129($blank.remainingRequests=-1; "null result: remainingRequests should stay unknown (-1)")
+
+var $partial : cs:C1710.EmbedderResult:=cs:C1710.EmbedderResult.new({vectors: []; rateLimit: {}}; True:C214)
+ASSERT:C1129($partial.totalTokens=0; "no usage: totalTokens should stay 0")
+ASSERT:C1129($partial.remainingTokens=-1; "empty rateLimit: remainingTokens should stay unknown (-1)")
+ASSERT:C1129($partial.limitTokens=0; "empty rateLimit: limitTokens should stay 0")
+ASSERT:C1129(Length:C16(String:C10($partial.resetTokens))=0; "empty rateLimit: resetTokens should stay unset")
+
 
 Try(1)

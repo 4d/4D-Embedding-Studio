@@ -17,6 +17,7 @@ ASSERT:C1129($limiter._parseResetDuration("1500ms")=2; "_parseResetDuration 1500
 ASSERT:C1129($limiter._parseResetDuration("1h0m0s")=3600; "_parseResetDuration 1h0m0s")
 ASSERT:C1129($limiter._parseResetDuration("1h30m0s")=5400; "_parseResetDuration 1h30m0s")
 ASSERT:C1129($limiter._parseResetDuration("45")=45; "_parseResetDuration bare number")
+ASSERT:C1129($limiter._parseResetDuration("5d")=0; "_parseResetDuration unknown unit is ignored")
 
 // --- nextBatchSize: unknown state (no update yet) returns configBatchSize ---
 $limiter:=cs:C1710._RateLimiter.new(50)
@@ -70,6 +71,26 @@ usage: {prompt_tokens: 100; total_tokens: 100}}; True:C214)
 $limiter.update($noRateLimit; 5)
 ASSERT:C1129($limiter.remainingTokens=-1; "missing rateLimit should leave remainingTokens at -1")
 ASSERT:C1129($limiter.nextBatchSize()=50; "missing rateLimit should not reduce batch size")
+
+// --- waitIfNeeded: exhausted budgets wait at least 1s each, even with a 0s reset, and say so ---
+$limiter:=cs:C1710._RateLimiter.new(50)
+var $exhaustedBudget : cs:C1710.EmbedderResult:=cs:C1710.EmbedderResult.new({\
+vectors: []; \
+usage: {prompt_tokens: 100; total_tokens: 100}; \
+rateLimit: {remaining: {tokens: 10; request: 0}; limit: {tokens: 150000; request: 1000}; reset: {tokens: "0s"; request: ""}}}; True:C214)
+$limiter.update($exhaustedBudget; 10)
+
+cs:C1710._Logger.me._capture:=[]
+var $waitStart : Integer:=Milliseconds:C459
+$limiter.waitIfNeeded(100)
+var $waitedMs : Integer:=Milliseconds:C459-$waitStart
+var $waitLogs : Collection:=cs:C1710._Logger.me._capture
+cs:C1710._Logger.me._capture:=Null:C1517
+
+ASSERT:C1129($waitLogs.query("message = :1"; "@\"event\":\"Rate limiter waiting (tokens)\"@").length=1; "waitIfNeeded: the token wait should be logged")
+ASSERT:C1129($waitLogs.query("message = :1"; "@\"event\":\"Rate limiter waiting (requests)\"@").length=1; "waitIfNeeded: the request wait should be logged")
+ASSERT:C1129($waitedMs>=1900; "waitIfNeeded: expected ~2s (1s floor per exhausted budget), waited "+String:C10($waitedMs)+"ms")
+ASSERT:C1129($waitedMs<5000; "waitIfNeeded: waited suspiciously long: "+String:C10($waitedMs)+"ms")
 
 // =====================================================================================
 // PART 2 — Integration: batch size adaptation through Process
@@ -239,3 +260,23 @@ ASSERT:C1129($logsMulti.query("message = :1 AND message = :2"; "@\"event\":\"Rat
 ASSERT:C1129($logsMulti.query("message = :1 AND message = :2"; "@\"event\":\"Rate limit hit\"@"; "@\"attempt\":\"2/3\"@").length=1; "2nd cycle should log attempt 2/3")
 ASSERT:C1129($logsMulti.query("message = :1 AND message = :2"; "@\"event\":\"Rate limit hit\"@"; "@\"attempt\":\"3/3\"@").length=1; "3rd cycle should log attempt 3/3")
 cs:C1710._Logger.me._capture:=Null:C1517
+
+//MARK:- test_pro_rateLimitRetriesExhausted
+// A rate limit that never clears ends, once the retries are exhausted, with a NON-critical
+// error (the model is fine, the API is just saturated) carrying the last HTTP status.
+var $clientExh:=cs:C1710._TestAIKitClient.new({alwaysFail: True:C214})
+var $embedderExh:=cs:C1710.Embedder.new({client: $clientExh; backoffMs: 5; maxRetries: 2})
+
+var $exhaustedErr : Object:=Null:C1517
+Try
+	$embedderExh.embed("hello world"; "embed")
+Catch
+	$exhaustedErr:=Last errors:C1799[0]
+End try
+Try(1)  // clear the expected error so the harness does not report it
+
+ASSERT:C1129($exhaustedErr#Null:C1517; "embed should throw once the retries are exhausted")
+ASSERT:C1129($clientExh.embeddings.callCount=3; "expected 1 call + 2 retries, got "+String:C10($clientExh.embeddings.callCount))
+ASSERT:C1129(Not:C34(Bool:C1537($exhaustedErr.isCriticalAPIError)); "exhausted retries should not be a critical model error: "+JSON Stringify:C1217($exhaustedErr))
+ASSERT:C1129(String:C10($exhaustedErr.errorCode)="429"; "exhausted retries should carry the last HTTP status: "+JSON Stringify:C1217($exhaustedErr))
+ASSERT:C1129(Position:C15("2"; String:C10($exhaustedErr.message))>0; "the message should mention the retry count: "+String:C10($exhaustedErr.message))

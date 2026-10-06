@@ -8,7 +8,7 @@
 //   - delaySeconds  (was _TestProcessEmbedderSlow)           : artificial latency
 //   - dataclassName + entityKey + touchField/touchSuffix
 //     (was _TestProcessEmbedderOptimisticLock)               : force a concurrent
-//        modification during embedBatch() to trigger an optimistic-lock save failure.
+//        modification during embed()/embedBatch() to trigger an optimistic-lock save failure.
 
 property embedCalls : Collection:=[]
 property embedBatchCalls : Collection:=[]
@@ -55,6 +55,7 @@ Class constructor($options : Object)
 Function embed($text : Text; $model : Text) : cs:C1710.EmbedderResult
 	This:C1470.embedCalls.push({text: $text; model: $model})
 	This:C1470._maybeThrow([$text]; $model)
+	This:C1470._touchConcurrentEntity()
 	This:C1470._maybeDelay()
 	return cs:C1710.EmbedderResult.new({\
 		vector: This:C1470._vectorFor($text; $model); \
