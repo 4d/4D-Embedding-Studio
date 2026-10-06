@@ -159,6 +159,10 @@ ASSERT:C1129($out.length=2; "resolveForEntity(mixed collection): expected 2 kept
 $out:=$resolver.resolveForEntity([$defSchoolV1; {vectorName: "nope"}]; "_Students")
 ASSERT:C1129($out.length=0; "resolveForEntity(all mismatch): expected empty")
 
+// --- Collection with a Null item → that item contributes nothing ---
+$out:=$resolver.resolveForEntity([Null:C1517; {vectorName: "student_vector_2"}]; "_Students")
+ASSERT:C1129($out.length=1; "resolveForEntity([Null; stub]): expected only the stub, got "+String:C10($out.length))
+
 // --- Empty collection → empty ---
 $out:=$resolver.resolveForEntity([]; "_Students")
 ASSERT:C1129($out.length=0; "resolveForEntity([]): expected empty")
