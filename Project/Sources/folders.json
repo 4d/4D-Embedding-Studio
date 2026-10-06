@@ -84,6 +84,7 @@
 			"test_executionLog",
 			"test_gui_embeddings",
 			"test_gui_scheduler",
+			"test_menu",
 			"test_phrase",
 			"test_playground",
 			"test_process",
@@ -112,6 +113,7 @@
 	},
 	"UTILS": {
 		"methods": [
+			"_coalesce",
 			"_errorColor",
 			"_warningColor"
 		],

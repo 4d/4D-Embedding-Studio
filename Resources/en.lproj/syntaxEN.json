@@ -371,6 +371,20 @@
 				],
 				"Summary": ""
 			}
+		},
+		"_TestGui": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_Dialog": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
 		}
 	},
 	"_typeMedia": {
@@ -3038,6 +3052,114 @@
 		},
 		"data": {
 			"Syntax": "data : Collection"
+		}
+	},
+	"_TestGui": {
+		"menuItemCount()": {
+			"Syntax": "**.menuItemCount**( *builder* : 4D.Function ) : Integer",
+			"Params": [
+				[
+					"builder",
+					"4D.Function",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"note()": {
+			"Syntax": "**.note**( *key* : Text; *value* : Variant )",
+			"Params": [
+				[
+					"key",
+					"Text",
+					"->"
+				],
+				[
+					"value",
+					"Variant",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"run()": {
+			"Syntax": "**.run**( *formName* : Text; *open* : 4D.Function; *steps* : Collection ) : Boolean",
+			"Params": [
+				[
+					"formName",
+					"Text",
+					"->"
+				],
+				[
+					"open",
+					"4D.Function",
+					"->"
+				],
+				[
+					"steps",
+					"Collection",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"notes": {
+			"Syntax": "notes : Object"
+		},
+		"errors": {
+			"Syntax": "errors : Collection"
+		},
+		"form": {
+			"Syntax": "form : Object"
+		}
+	},
+	"_Dialog": {
+		"confirm()": {
+			"Syntax": "**.confirm**( *message* : Text; *okLabel* : Text; *cancelLabel* : Text ) : Boolean",
+			"Params": [
+				[
+					"message",
+					"Text",
+					"->"
+				],
+				[
+					"okLabel",
+					"Text",
+					"->"
+				],
+				[
+					"cancelLabel",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"alert()": {
+			"Syntax": "**.alert**( *message* : Text )",
+			"Params": [
+				[
+					"message",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
 		}
 	}
 }

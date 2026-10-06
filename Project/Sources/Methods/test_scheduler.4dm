@@ -310,16 +310,16 @@ var $execWorker : Text:=cs:C1710.Scheduler.me._execWorker
 $state.endBatch(""; ""; "")
 var $busyStamp : Text:=cs:C1710._ScheduleCalc.me._nowISO()
 ASSERT:C1129($state.beginBatch($busyStamp); "force skip: setup batch should start")
-var $skippedBefore : Integer:=($execLog._read().skipped || []).length
+var $skippedBefore : Integer:=_coalesce($execLog._read().skipped).length
 
 cs:C1710.Scheduler.me.force()
 
 $waited:=0
-While ((($execLog._read().skipped || []).length=$skippedBefore) && ($waited<600))
+While ((_coalesce($execLog._read().skipped).length=$skippedBefore) && ($waited<600))
 	DELAY PROCESS:C323(Current process:C322; 6)
 	$waited+=6
 End while 
-ASSERT:C1129(($execLog._read().skipped || []).length=($skippedBefore+1); "force skip: the forced trigger should be logged as skipped")
+ASSERT:C1129(_coalesce($execLog._read().skipped).length=($skippedBefore+1); "force skip: the forced trigger should be logged as skipped")
 ASSERT:C1129($state.running; "force skip: the running batch should be untouched")
 ASSERT:C1129($state.batchStart=$busyStamp; "force skip: the running batch start should be untouched")
 

@@ -805,7 +805,7 @@ Function isSeparatorItem($item : Integer; $ref : Text) : Boolean
 			
 			GET MENU ITEM PROPERTY:C972($ref; $item; "4D_separator"; $value)
 			
-			return $value#0
+			return Num:C11($value)#0  // the value may come back as text: comparing it with 0 would raise an error
 			
 			//________________________________________
 	End case 
