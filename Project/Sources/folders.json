@@ -82,6 +82,7 @@
 			"test_dev",
 			"test_embedder",
 			"test_executionLog",
+			"test_gui_embeddings",
 			"test_gui_scheduler",
 			"test_phrase",
 			"test_playground",
