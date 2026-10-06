@@ -75,6 +75,7 @@
 			"_onTestErrors",
 			"_runTests",
 			"_runTestsCLI",
+			"_testGuiDriver",
 			"_testHoldSemaphore",
 			"test_dataclassAttributes",
 			"test_definition",
@@ -103,6 +104,7 @@
 			"_TestAIKitClient",
 			"_TestAIKitEmbeddingsAPI",
 			"_TestFixtures",
+			"_TestGui",
 			"_TestProcessEmbedder"
 		]
 	},
