@@ -170,6 +170,22 @@ $raw:=JSON Parse:C1218($tmpFile.getText())
 ASSERT:C1129($raw.definitions.length=1; "save: empty definition (no model/phrase) should be filtered out")
 ASSERT:C1129($raw.definitions[0].vectorName="student_vector_1"; "save: correct definition kept after filter")
 
+// --- Embedder options are written, reloaded, and removed when cleared ---
+$tmpFile.setText(JSON Stringify:C1217({definitions: []}))
+$s:=cs:C1710.Settings.new($tmpFile)
+ASSERT:C1129($s.embedder=Null:C1517; "embedder: no options by default")
+$s.embedder:={className: "_TestProcessEmbedder"; maxRetries: 2}
+$s.save()
+$raw:=JSON Parse:C1218($tmpFile.getText())
+ASSERT:C1129($raw.embedder.className="_TestProcessEmbedder"; "embedder: className should be written")
+ASSERT:C1129($raw.embedder.maxRetries=2; "embedder: maxRetries should be written")
+ASSERT:C1129(cs:C1710.Settings.new($tmpFile).embedder.maxRetries=2; "embedder: options should be reloaded")
+
+$s.embedder:=Null:C1517
+$s.save()
+$raw:=JSON Parse:C1218($tmpFile.getText())
+ASSERT:C1129(Not:C34(OB Is defined:C1231($raw; "embedder")); "embedder: cleared options should be removed from the file")
+
 // ══════════════════════════════════════════════════════════════════════
 // SAVE — UNREADABLE FILE IS NEVER OVERWRITTEN (R-001a)
 // ══════════════════════════════════════════════════════════════════════
@@ -253,6 +269,26 @@ $raw:=JSON Parse:C1218($tmpFile.getText())
 ASSERT:C1129($raw.definitions.length=1; "removal: the dropped definition should be gone")
 ASSERT:C1129($raw.definitions[0].vectorName="student_vector_1"; "removal: the kept definition should be the other one")
 
+//MARK:- a removal by one editor and an addition by another both apply
+$tmpFile.setText(JSON Stringify:C1217({definitions: [\
+{dataclassName: "_Students"; vectorName: "student_vector_1"; modelAlias: "m1"; phrase: "{firstName}"; autoInvalidate: True:C214}; \
+{dataclassName: "School"; vectorName: "school_vector_1"; modelAlias: "m2"; phrase: "{name}"; autoInvalidate: True:C214}]}))
+
+$editorA:=cs:C1710.Settings.new($tmpFile)
+$editorB:=cs:C1710.Settings.new($tmpFile)
+
+$editorB.definitions.push(cs:C1710.Definition.new("_Students"; "student_vector_2"; "m3"; "{lastName}"))
+ASSERT:C1129($editorB.save(); "removal + addition: editor B's save should succeed")
+
+$editorA.definitions:=$editorA.definitions.query("vectorName != :1"; "school_vector_1")
+ASSERT:C1129($editorA.save(); "removal + addition: editor A's save should succeed")
+
+$raw:=JSON Parse:C1218($tmpFile.getText())
+ASSERT:C1129($raw.definitions.length=2; "removal + addition: expected 2 definitions, got "+String:C10($raw.definitions.length))
+ASSERT:C1129($raw.definitions.query("vectorName = :1"; "school_vector_1").length=0; "removal + addition: editor A's removal should apply")
+ASSERT:C1129($raw.definitions.query("vectorName = :1"; "student_vector_2").length=1; "removal + addition: editor B's addition should survive")
+ASSERT:C1129($raw.definitions.query("vectorName = :1"; "student_vector_1").length=1; "removal + addition: the untouched definition should remain")
+
 // ══════════════════════════════════════════════════════════════════════
 // SAVE — KEYS OWNED BY OTHERS ARE NOT REWRITTEN FROM A STALE SNAPSHOT
 // ══════════════════════════════════════════════════════════════════════
@@ -293,6 +329,71 @@ $s.phrase.allowRelations:=False:C215
 $s.save()
 $raw:=JSON Parse:C1218($tmpFile.getText())
 ASSERT:C1129(Not:C34(OB Is defined:C1231($raw; "phrase")); "reset options: the phrase key should be removed from the file")
+
+// ══════════════════════════════════════════════════════════════════════
+// VECTOR HELPERS (data-backed)
+// ══════════════════════════════════════════════════════════════════════
+
+// Two students with every vector computed (dirty flags explicitly cleared).
+var $seed : Object:=cs:C1710._TestFixtures.me.seedStudents(2)
+var $student : 4D:C1709.Entity
+For each ($student; $seed.students)
+	$student.student_vector_1:=4D:C1709.Vector.new([1; 2; 3])
+	$student.student_vector_2:=4D:C1709.Vector.new([1; 2; 3])
+	$student.student_vector_2_dirty:=False:C215
+	ASSERT:C1129($student.save().success; "vector helpers: failed to seed vectors")
+End for each
+
+$tmpFile.setText(JSON Stringify:C1217({definitions: []}))
+$s:=cs:C1710.Settings.new($tmpFile)
+
+//MARK:- _affectedByAliasChange: only a changed model with computed vectors is reported
+$s.definitions:=[\
+cs:C1710.Definition.new("_Students"; "student_vector_1"; "aliasA"; "{firstName}"); \
+cs:C1710.Definition.new("School"; "school_vector_1"; "aliasA"; "{name}"); \
+cs:C1710.Definition.new("_Students"; "student_vector_2"; "aliasB"; "{lastName}"); \
+cs:C1710.Definition.new("_Students"; "student_not_defined"; "aliasNew"; "{lastName}"); \
+cs:C1710.Definition.new("_Students"; "student vector 3"; ""; "{lastName}")]
+
+var $before : Object:={aliasA: {provider: "openai"; model: "small"}; aliasB: {provider: "openai"; model: "same"}}
+var $after : Object:={aliasA: {provider: "openai"; model: "large"}; aliasB: {provider: "openai"; model: "same"}; aliasNew: {provider: "openai"; model: "x"}}
+
+var $affected : Collection:=$s._affectedByAliasChange($before; $after)
+ASSERT:C1129($affected.length=1; "alias change: expected only 1 affected definition, got "+String:C10($affected.length))
+ASSERT:C1129($affected[0].vectorName="student_vector_1"; "alias change: the changed alias with computed vectors should be reported")
+
+ASSERT:C1129($s._affectedByAliasChange(Null:C1517; $after).length=0; "alias change: no previous aliases → nothing reported")
+
+$after.aliasB:={provider: "other"; model: "same"}
+$affected:=$s._affectedByAliasChange($before; $after)
+ASSERT:C1129($affected.query("vectorName = :1"; "student_vector_2").length=1; "alias change: a provider change should be reported too")
+
+//MARK:- invalidateVectors aggregates every definition
+$s.definitions:=[\
+cs:C1710.Definition.new("_Students"; "student_vector_1"; "aliasA"; "{firstName}"); \
+cs:C1710.Definition.new("NoSuchDataclass"; "v"; "aliasA"; "{x}")]
+var $invalidation : Object:=$s.invalidateVectors()
+ASSERT:C1129($invalidation.updated=2; "invalidateVectors: expected 2 updated, got "+String:C10($invalidation.updated))
+ASSERT:C1129($invalidation.skipped=0; "invalidateVectors: expected 0 skipped")
+ASSERT:C1129($invalidation.errors.length=1; "invalidateVectors: expected the unknown dataclass error, got "+JSON Stringify:C1217($invalidation.errors))
+ASSERT:C1129(ds:C1482._Students.query("student_vector_1 != null").length=0; "invalidateVectors: student vectors should be cleared")
+
+ds:C1482._Students.all().drop()
+ds:C1482.School.all().drop()
+ds:C1482.Cities.all().drop()
+
+// ══════════════════════════════════════════════════════════════════════
+// DEFAULT FILE
+// ══════════════════════════════════════════════════════════════════════
+
+//MARK:- Settings/embeddings.json unless EMBEDDINGS_SETTINGS_PATH says otherwise
+var $envPath : Text:=String:C10(cs:C1710._Env.me["EMBEDDINGS_SETTINGS_PATH"])
+var $defaultFile : 4D:C1709.File:=cs:C1710._Settings.me._defaultFile()
+If (Length:C16($envPath)=0)
+	ASSERT:C1129($defaultFile.path=Folder:C1567(fk database folder:K87:14; *).file("Settings/embeddings.json").path; "default file: expected Settings/embeddings.json, got "+$defaultFile.path)
+Else
+	ASSERT:C1129($defaultFile.path=File:C1566($envPath; Is Windows:C1573 ? fk platform path:K87:2 : fk posix path:K87:1).path; "default file: expected EMBEDDINGS_SETTINGS_PATH, got "+$defaultFile.path)
+End if
 
 // Cleanup
 $tmpFile.delete()
