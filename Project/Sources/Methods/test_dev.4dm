@@ -1,6 +1,7 @@
 //%attributes = {}
 // Runs the dev-only helpers of the studio dev menus (_computeVectors, _invalidateVectors,
-// _statVectors, _runInWorker) against a temporary settings file and the mock embedder.
+// _statVectors, _runInWorker, the _EmbeddingItem "_dirty" companion helpers) against a
+// temporary settings file and the mock embedder.
 // Their ALERT / CONFIRM go through cs._Dialog, captured here: nothing is displayed, the
 // scripted answers drive them, and the messages are checked. Runs headless too.
 
@@ -188,6 +189,90 @@ While ((Process activity:C1495(Processes only:K5:35).processes.query("name = :1"
 	$waited+=6
 End while
 ASSERT:C1129(Process activity:C1495(Processes only:K5:35).processes.query("name = :1"; "__test_dev_worker").length=0; "_runInWorker: the worker should be released afterwards")
+
+// ══════════════════════════════════════════════════════════════════════
+// _EmbeddingItem — the "_dirty" companion helpers of the studio "more" dev menu
+// ══════════════════════════════════════════════════════════════════════
+
+//MARK:- a vector whose companion exists and is indexed: nothing to create
+var $withDirty : cs:C1710._EmbeddingItem:=cs:C1710._EmbeddingItem.new(ds:C1482._Students; cs:C1710.Definition.new("_Students"; "student_vector_2"; "embed"; "{lastName}"); Null:C1517)
+ASSERT:C1129($withDirty.hasDirtyAssociatedAttribute(); "dirty helpers: student_vector_2 has its _dirty companion")
+ASSERT:C1129($withDirty.dirtyAssociatedAttributeIndexed(); "dirty helpers: student_vector_2_dirty is indexed")
+$withDirty.createDirtyAssociatedAttribute()  // no-op: already there
+$withDirty.createDirtyAssociatedAttributeIndex()  // no-op: already indexed
+
+//MARK:- a vector without companion: the field and its index are created, then the index alone
+// This changes the structure (SQL ALTER TABLE / CREATE INDEX), which is only possible in
+// interpreted mode. Results are captured, the field and its index are dropped, and only
+// then asserted: a failing assertion must never leave them in the catalog.
+If (Not:C34(Is compiled mode:C492))
+
+	var $plainDef : cs:C1710.Definition:=cs:C1710.Definition.new("School"; "vector_with_error"; "embed"; "{name}")
+	var $dirty : Object:={errors: []}
+
+	$dirty.hasBefore:=cs:C1710._EmbeddingItem.new(ds:C1482.School; $plainDef; Null:C1517).hasDirtyAssociatedAttribute()
+	Try(cs:C1710._EmbeddingItem.new(ds:C1482.School; $plainDef; Null:C1517).createDirtyAssociatedAttribute())
+	$dirty.errors.combine(Last errors:C1799 || [])
+
+	// an item keeps the DataClass it was built with: probe the new structure through a new one
+	$dirty.hasAfter:=cs:C1710._EmbeddingItem.new(ds:C1482.School; $plainDef; Null:C1517).hasDirtyAssociatedAttribute()
+	$dirty.indexedAfter:=cs:C1710._EmbeddingItem.new(ds:C1482.School; $plainDef; Null:C1517).dirtyAssociatedAttributeIndexed()
+
+	DOCUMENT:="DROP INDEX vector_with_error_dirty_School;"
+	Try
+		Begin SQL
+			EXECUTE IMMEDIATE :DOCUMENT
+		End SQL
+	Catch
+		$dirty.errors.combine(Last errors:C1799)
+	End try
+	$dirty.indexedWithoutIndex:=cs:C1710._EmbeddingItem.new(ds:C1482.School; $plainDef; Null:C1517).dirtyAssociatedAttributeIndexed()
+
+	Try(cs:C1710._EmbeddingItem.new(ds:C1482.School; $plainDef; Null:C1517).createDirtyAssociatedAttributeIndex())
+	$dirty.errors.combine(Last errors:C1799 || [])
+	$dirty.indexedAgain:=cs:C1710._EmbeddingItem.new(ds:C1482.School; $plainDef; Null:C1517).dirtyAssociatedAttributeIndexed()
+
+	// undo the structure change: the index, then the field
+	DOCUMENT:="DROP INDEX vector_with_error_dirty_School;"
+	Try
+		Begin SQL
+			EXECUTE IMMEDIATE :DOCUMENT
+		End SQL
+	Catch
+		$dirty.errors.combine(Last errors:C1799)
+	End try
+	DOCUMENT:="ALTER TABLE [School] DROP vector_with_error_dirty;"
+	Try
+		Begin SQL
+			EXECUTE IMMEDIATE :DOCUMENT
+		End SQL
+	Catch
+		$dirty.errors.combine(Last errors:C1799)
+	End try
+	$dirty.hasAfterCleanup:=(ds:C1482.School["vector_with_error_dirty"]#Null:C1517)
+
+	ASSERT:C1129($dirty.errors.length=0; "dirty helpers: no SQL error expected: "+JSON Stringify:C1217($dirty.errors))
+	ASSERT:C1129(Not:C34($dirty.hasBefore); "dirty helpers: vector_with_error has no _dirty companion to begin with")
+	ASSERT:C1129($dirty.hasAfter; "dirty helpers: createDirtyAssociatedAttribute should add vector_with_error_dirty")
+	ASSERT:C1129($dirty.indexedAfter; "dirty helpers: createDirtyAssociatedAttribute should index it too")
+	ASSERT:C1129(Not:C34($dirty.indexedWithoutIndex); "dirty helpers: dropping the index should be seen")
+	ASSERT:C1129($dirty.indexedAgain; "dirty helpers: createDirtyAssociatedAttributeIndex should index it again")
+	ASSERT:C1129(Not:C34($dirty.hasAfterCleanup); "dirty helpers: the test field should be dropped again")
+
+End if
+
+// ══════════════════════════════════════════════════════════════════════
+// _StudentsEntity
+// ══════════════════════════════════════════════════════════════════════
+
+// just for coverage
+var $someone : cs:C1710._StudentsEntity:=ds:C1482._Students.all().first()
+If ($someone=Null:C1517)
+	$someone:=ds:C1482._Students.new()
+	$someone.firstName:="Ada"
+	$someone.lastName:="Lovelace"
+End if
+ASSERT:C1129($someone.fullName=($someone.firstName+" "+$someone.lastName); "fullName: expected first and last name, got "+String:C10($someone.fullName))
 
 // ══════════════════════════════════════════════════════════════════════
 // CLEANUP
