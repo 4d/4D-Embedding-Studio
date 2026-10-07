@@ -260,7 +260,14 @@ Function get supportedAttributes() : Collection
 	
 	// MARK:- dirty attributes
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Also drives the read-only checkbox column of the vector list.
 Function hasDirtyAssociatedAttribute() : Boolean
+	
+	If ((This:C1470.definition=Null:C1517) || (This:C1470._dataclass=Null:C1517))
+		
+		return False:C215
+		
+	End if 
 	
 	return This:C1470._dataclass[This:C1470.definition.vectorName+"_dirty"]#Null:C1517
 	

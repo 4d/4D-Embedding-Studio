@@ -91,6 +91,7 @@ Function manager($e : Object)
 				OBJECT SET FORMAT:C236(*; "Header1"; "path:/.PRODUCT_RESOURCES/Images/ObjectIcons/Icon_600.png")
 				// TODO: Use the new vector icon when ready
 				OBJECT SET FORMAT:C236(*; "Header2"; "path:/.PRODUCT_RESOURCES/Images/StructureEditor/Field_14.png")
+				OBJECT SET FORMAT:C236(*; "Header3"; "path:/.PRODUCT_RESOURCES/Images/StructureEditor/Field_5.png")  // Boolean: the "_dirty" flag
 				
 				This:C1470.paintEmptyState()
 				
@@ -158,7 +159,32 @@ Function manager($e : Object)
 				If ($row>0)
 					
 					var $item : cs:C1710._EmbeddingItem:=Form:C1466.items[$row-1]
-					OBJECT SET HELP TIP:C1181(*; $me; String:C10($item.helptip))
+					
+					ARRAY TEXT:C222($columns; 0x0000)
+					ARRAY TEXT:C222($headers; 0x0000)
+					ARRAY POINTER:C280($columnVars; 0x0000)
+					ARRAY POINTER:C280($headerVars; 0x0000)
+					ARRAY BOOLEAN:C223($visibles; 0x0000)
+					ARRAY POINTER:C280($styles; 0x0000)
+					LISTBOX GET ARRAYS:C832(*; $me; $columns; $headers; $columnVars; $headerVars; $visibles; $styles)
+					
+					var $lines : Collection:=[]
+					
+					// Over a checked "dirty flag" cell, name the flag field first
+					If (($column>0) && ($columns{$column}="dirtyAssociatedAttribute") && $item.hasDirtyAssociatedAttribute())
+						
+						$lines.push(Replace string:C233(Localized string:C991("dirtyFlagIs"); "{attribute}"; $item.definition.vectorName+"_dirty"))
+						
+					End if 
+					
+					// Then the item's errors & warnings, if any
+					If (Length:C16(String:C10($item.helptip))>0)
+						
+						$lines.push($item.helptip)
+						
+					End if 
+					
+					OBJECT SET HELP TIP:C1181(*; $me; $lines.join("\r"))
 					
 				Else 
 					

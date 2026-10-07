@@ -192,7 +192,27 @@
 								"name": "Footer2"
 							},
 							"dataSource": "This:C1470.definition.vectorName",
-							"enterable": false
+							"enterable": false,
+							"width": 189
+						},
+						{
+							"header": {
+								"name": "Header3",
+								"text": "",
+								"tooltip": ":xliff:hasDirtyFlag",
+								"textAlign": "center"
+							},
+							"name": "dirtyAssociatedAttribute",
+							"footer": {
+								"name": "Footer3"
+							},
+							"dataSource": "This:C1470.hasDirtyAssociatedAttribute()",
+							"dataSourceTypeHint": "boolean",
+							"controlType": "checkbox",
+							"width": 32,
+							"enterable": false,
+							"resizable": false,
+							"textAlign": "center"
 						}
 					]
 				},
