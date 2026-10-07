@@ -9,6 +9,7 @@ property original : Object
 
 property _phraseErrors : Collection:=[]
 property _phraseWarnings : Collection:=[]
+property _indexWarnings : Collection:=[]
 property _modelErrors : Collection:=[]
 
 property _dataclass : cs:C1710.DataClass
@@ -42,6 +43,7 @@ Class constructor($dataclass : 4D:C1709.DataClass; $definition : cs:C1710.Defini
 	This:C1470.touched:=False:C215
 	This:C1470._phraseErrors:=[]
 	This:C1470._phraseWarnings:=[]
+	This:C1470._indexWarnings:=[]
 	This:C1470._modelErrors:=[]
 	This:C1470.original:=This:C1470.definition.toObject()
 	
@@ -150,14 +152,20 @@ Function get errors() : Collection
 	return This:C1470._phraseErrors.concat(This:C1470._modelErrors)
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+	// Non-blocking warnings: phrase (e.g. another vector's "_dirty" flag) + missing indexes.
+Function get warnings() : Collection
+	
+	return This:C1470._phraseWarnings.concat(This:C1470._indexWarnings)
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 	// Always safe to call: returns the joined error list (empty string when none).
-	// Non-blocking warnings (e.g. another vector's "_dirty" flag) are appended below the errors.
+	// Non-blocking warnings are appended below the errors.
 Function get helptip() : Text
 
 		var $lines : Collection:=This:C1470.errors.copy()
 
 		var $warning : Text
-		For each ($warning; This:C1470._phraseWarnings)
+		For each ($warning; This:C1470.warnings)
 			$lines.push("⚠️ "+$warning)
 		End for each
 
@@ -170,6 +178,43 @@ Function validate()
 	
 	This:C1470.phrase:=This:C1470.parsePhrase(This:C1470.definition.phrase)
 	This:C1470._validateModel()
+	This:C1470._validateIndexes()
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Warns when the vector or its "_dirty" flag is not indexed:
+	// computing, invalidating and checking what to invalidate get slow on large tables.
+Function _validateIndexes()
+	
+	This:C1470._indexWarnings:=[]
+	
+	If ((This:C1470.definition=Null:C1517) || (This:C1470._dataclass=Null:C1517))
+		
+		return 
+		
+	End if 
+	
+	var $vectorMissing:=Not:C34(This:C1470.vectorIndexed())
+	var $dirtyMissing:=This:C1470.hasDirtyAssociatedAttribute() && Not:C34(This:C1470.dirtyAssociatedAttributeIndexed())
+	
+	Case of 
+			
+			// ______________________________________________________
+		: ($vectorMissing && $dirtyMissing)
+			
+			This:C1470._indexWarnings.push(Localized string:C991("theVectorAndDirtyFieldsAreNotIndexed"))
+			
+			// ______________________________________________________
+		: ($vectorMissing)
+			
+			This:C1470._indexWarnings.push(Localized string:C991("theVectorFieldIsNotIndexed"))
+			
+			// ______________________________________________________
+		: ($dirtyMissing)
+			
+			This:C1470._indexWarnings.push(Localized string:C991("theDirtyFieldIsNotIndexed"))
+			
+			// ______________________________________________________
+	End case 
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Validates the model:
@@ -218,6 +263,13 @@ Function get supportedAttributes() : Collection
 Function hasDirtyAssociatedAttribute() : Boolean
 	
 	return This:C1470._dataclass[This:C1470.definition.vectorName+"_dirty"]#Null:C1517
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function vectorIndexed() : Boolean
+	
+	var $attr : Object:=This:C1470._dataclass[This:C1470.definition.vectorName]
+	
+	return $attr=Null:C1517 ? False:C215 : Bool:C1537($attr.indexed)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function dirtyAssociatedAttributeIndexed() : Boolean

@@ -458,11 +458,20 @@ Function listMetaInfo($me : cs:C1710._EmbeddingItem) : Object
 		
 		If ($me#This:C1470.currentItem)
 			
-			If ($me.errors.length>0)
-				
-				$meta.stroke:=_errorColor
-				
-			End if 
+			Case of 
+					
+					// ______________________________________________________
+				: ($me.errors.length>0)
+					
+					$meta.stroke:=_errorColor
+					
+					// ______________________________________________________
+				: ($me.warnings.length>0)  // e.g. vector or "_dirty" flag not indexed
+					
+					$meta.stroke:=_warningColor
+					
+					// ______________________________________________________
+			End case 
 		End if 
 	End if 
 	
@@ -1005,6 +1014,7 @@ Enriched with saved Definition entries from Settings/embeddings.json.
 		var $ghost : Object:={\
 			definition: $saved; \
 			errors: []; \
+			warnings: []; \
 			helptip: ""}
 		
 		Case of 

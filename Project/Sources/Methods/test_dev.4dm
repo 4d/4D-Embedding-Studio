@@ -201,6 +201,21 @@ ASSERT:C1129($withDirty.dirtyAssociatedAttributeIndexed(); "dirty helpers: stude
 $withDirty.createDirtyAssociatedAttribute()  // no-op: already there
 $withDirty.createDirtyAssociatedAttributeIndex()  // no-op: already indexed
 
+//MARK:- missing indexes are reported as non-blocking warnings
+$withDirty._validateIndexes()  // vector not indexed, its _dirty companion is
+ASSERT:C1129(Not:C34($withDirty.vectorIndexed()); "index warnings: student_vector_2 is not indexed")
+ASSERT:C1129($withDirty.warnings.equal([Localized string:C991("theVectorFieldIsNotIndexed")]); "index warnings: only the vector should be reported, got "+JSON Stringify:C1217($withDirty.warnings))
+ASSERT:C1129(Position:C15("⚠️ "+Localized string:C991("theVectorFieldIsNotIndexed"); $withDirty.helptip)>0; "index warnings: the helptip should show the warning")
+ASSERT:C1129($withDirty.errors.length=0; "index warnings: a warning is not an error")
+
+var $bothMissing : cs:C1710._EmbeddingItem:=cs:C1710._EmbeddingItem.new(ds:C1482._Students; cs:C1710.Definition.new("_Students"; "student vector 3"; "embed"; "{lastName}"); Null:C1517)
+$bothMissing._validateIndexes()  // neither the vector nor its _dirty companion are indexed
+ASSERT:C1129($bothMissing.warnings.equal([Localized string:C991("theVectorAndDirtyFieldsAreNotIndexed")]); "index warnings: both fields should be reported in one message, got "+JSON Stringify:C1217($bothMissing.warnings))
+
+var $noDirty : cs:C1710._EmbeddingItem:=cs:C1710._EmbeddingItem.new(ds:C1482.School; cs:C1710.Definition.new("School"; "school_vector_1"; "embed"; "{name}"); Null:C1517)
+$noDirty._validateIndexes()  // no _dirty companion: only the vector can be reported
+ASSERT:C1129($noDirty.warnings.equal([Localized string:C991("theVectorFieldIsNotIndexed")]); "index warnings: a missing _dirty companion is not an index warning, got "+JSON Stringify:C1217($noDirty.warnings))
+
 //MARK:- a vector without companion: the field and its index are created, then the index alone
 // This changes the structure (SQL ALTER TABLE / CREATE INDEX), which is only possible in
 // interpreted mode. Results are captured, the field and its index are dropped, and only

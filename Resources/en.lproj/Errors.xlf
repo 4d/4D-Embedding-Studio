@@ -152,6 +152,18 @@
           <source>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</source>
           <target>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</target>
         </trans-unit>
+        <trans-unit id="theVectorFieldIsNotIndexed" resname="theVectorFieldIsNotIndexed">
+          <source>The vector field is not indexed.</source>
+          <target>The vector field is not indexed.</target>
+        </trans-unit>
+        <trans-unit id="theDirtyFieldIsNotIndexed" resname="theDirtyFieldIsNotIndexed">
+          <source>The dirty flag field is not indexed.</source>
+          <target>The dirty flag field is not indexed.</target>
+        </trans-unit>
+        <trans-unit id="theVectorAndDirtyFieldsAreNotIndexed" resname="theVectorAndDirtyFieldsAreNotIndexed">
+          <source>The vector field and dirty flag field are not indexed.</source>
+          <target>The vector field and dirty flag field are not indexed.</target>
+        </trans-unit>
       </group>
       <group resname="Model">
         <trans-unit id="tqepk+C7nSjsmFD87VD0gA" resname="theModelIsNotDefined">
