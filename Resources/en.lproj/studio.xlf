@@ -20,6 +20,10 @@
           <source>Vector</source>
           <target>Vector</target>
         </trans-unit>
+        <trans-unit id="dirtyFlag" resname="dirtyFlag">
+          <source>Dirty Flag</source>
+          <target>Dirty Flag</target>
+        </trans-unit>
         <trans-unit id="hasDirtyFlag" resname="hasDirtyFlag">
           <source>Has a dirty flag (&lt;vector&gt;_dirty)</source>
           <target>Has a dirty flag (&lt;vector&gt;_dirty)</target>
