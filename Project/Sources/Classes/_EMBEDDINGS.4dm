@@ -232,7 +232,7 @@ Function manager($e : Object)
 			This:C1470.autoInvalidateManager($e)
 			
 			//______________________________________________________
-		: ($e.objectName="schedulerGear") || ($e.objectName="schedulerStatus") || ($e.objectName="schedulerStatusError")
+		: ($e.objectName="schedulerGear")
 			
 			This:C1470.schedulerManager($e)
 			//______________________________________________________
@@ -333,7 +333,7 @@ Function _emptyStateText() : Text
 	return $lines.join("\r")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Context menu behind the footer gear button / status click: configure + quick runtime actions.
+	// Context menu behind the footer gear button: configure + quick runtime actions.
 Function schedulerManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
