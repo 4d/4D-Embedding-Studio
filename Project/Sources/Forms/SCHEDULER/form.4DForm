@@ -233,6 +233,18 @@
 						"onClick"
 					]
 				},
+				"startHelp": {
+					"type": "button",
+					"text": "Button",
+					"top": 291,
+					"left": 276,
+					"width": 26,
+					"height": 26,
+					"events": [
+						"onClick"
+					],
+					"style": "help"
+				},
 				"lastRun.label": {
 					"type": "text",
 					"text": ":xliff:schedulerLastRun",
@@ -381,7 +393,7 @@
 			}
 		}
 	],
-	"geometryStamp": 407,
+	"geometryStamp": 411,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

@@ -174,6 +174,11 @@ Function manager($e : Object)
 			This:C1470.paint()
 			
 			//______________________________________________________
+		: ($e.objectName="startHelp")
+			
+			OPEN URL:C673("https://github.com/4d/4D-Embedding-Studio/blob/main/Documentation/Classes/Scheduler.md#starting-the-scheduler"; *)
+			
+			//______________________________________________________
 		: ($e.objectName="save")
 			
 			This:C1470.save()
@@ -378,6 +383,11 @@ Function _layout()
 	This:C1470._moveObj("forceNow"; 40; $y+50)
 	This:C1470._moveObj("start"; 40+($fr-$fl)+12; $y+49)
 	This:C1470._moveObj("stop"; 40+($fr-$fl)+12; $y+49)
+	// Help button right after the Start/Stop slot, past the wider of the two captions.
+	var $sl; $st; $sr; $sb; $pl; $pt; $pr; $pb : Integer
+	OBJECT GET COORDINATES:C663(*; "start"; $sl; $st; $sr; $sb)
+	OBJECT GET COORDINATES:C663(*; "stop"; $pl; $pt; $pr; $pb)
+	This:C1470._moveObj("startHelp"; (($sr>$pr) ? $sr : $pr)+8; $y+49)
 	// Last-run line: the French label ("Dernière exécution :") needs more room than the English.
 	This:C1470._sizeObj("lastRun.label"; 40; $y+88; 160; 18)
 	This:C1470._sizeObj("lastRunText"; 206; $y+88; 240; 18)
