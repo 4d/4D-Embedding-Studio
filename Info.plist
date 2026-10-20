@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+
+  <dict>
+    <key>NSHumanReadableCopyright</key>
+    <string>©4D SAS 2026</string>
+    <key>CFBundleShortVersionString</key>
+    <string>Component for 4D</string>
+    <key>CFBundleLongVersionString</key>
+    <string>dev</string>
+    <key>CFBundleGetInfoString</key>
+    <string>Component for 4D</string>
+    <key>CFBundleName</key>
+    <string>4D Embedding Studio</string>
+    <key>com.4d.minSupportedVersion</key>
+    <string>21R5</string>
+  </dict>
+
+</plist>

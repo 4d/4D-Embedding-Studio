@@ -6,17 +6,26 @@ on:
 # used by the 4D-AIKit checkout below; without it the ref is empty and the
 # default branch is silently used instead
 env:
-  DEPENDENCIES_BRANCH: main
+  DEPENDENCIES_BRANCH: 21R5
 
 jobs:
   create:
     name: "Create"
-    runs-on: macos-latest
+    runs-on: macOS
     env:
       GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - name: ⬇️ Checkout
         uses: actions/checkout@v5
+      - name: ⬇️ Checkout postBuild
+        uses: actions/checkout@v5
+        with:
+          repository: 4d/${{secrets.POST_BUILD_REPO}}
+          token: ${{secrets.PAT_TOKEN}}
+          sparse-checkout: |
+            ${{ secrets.POST_BUILD_PATH }}
+          path: Components/${{ secrets.POST_BUILD_REPO }}
+
       - name: Check out 4D-AIKit
         uses: actions/checkout@v6
         with:
@@ -34,6 +43,10 @@ jobs:
           version: vcs
           build: official
           token: ${{ secrets.DLTK }}
+          after-build: "./Components/${{ secrets.POST_BUILD_REPO }}/${{ secrets.POST_BUILD_SCRIPT }}"
+          sign-certificate: "${{ secrets.SIGN_CERTIFICATE }}"
+        env:
+          LOGIN_KEYCHAIN_PASSWORD: "${{ secrets.KEYCHAIN }}"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

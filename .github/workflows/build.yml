@@ -4,7 +4,7 @@ on:
   pull_request:
 
 env:
-  DEPENDENCIES_BRANCH: main
+  DEPENDENCIES_BRANCH: 21R5
   
 jobs:
   build:
@@ -30,7 +30,7 @@ jobs:
     - name: Build
       uses: 4d/build4d-action@main
       with:
-        product-line: main
-        version: main
-        build: latest
+        product-line: 21Rx
+        version: 21R5
+        build: official
         token: ${{ secrets.DLTK }}
