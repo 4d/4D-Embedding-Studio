@@ -201,20 +201,80 @@ ASSERT:C1129($withDirty.dirtyAssociatedAttributeIndexed(); "dirty helpers: stude
 $withDirty.createDirtyAssociatedAttribute()  // no-op: already there
 $withDirty.createDirtyAssociatedAttributeIndex()  // no-op: already indexed
 
-//MARK:- missing indexes are reported as non-blocking warnings
-$withDirty._validateIndexes()  // vector not indexed, its _dirty companion is
-ASSERT:C1129(Not:C34($withDirty.vectorIndexed()); "index warnings: student_vector_2 is not indexed")
-ASSERT:C1129($withDirty.warnings.equal([Localized string:C991("theVectorFieldIsNotIndexed")]); "index warnings: only the vector should be reported, got "+JSON Stringify:C1217($withDirty.warnings))
-ASSERT:C1129(Position:C15("⚠️ "+Localized string:C991("theVectorFieldIsNotIndexed"); $withDirty.helptip)>0; "index warnings: the helptip should show the warning")
+//MARK:- missing indexes are reported as non-blocking warnings, one per index
+var $vectorWarnings : Collection:=[Localized string:C991("theVectorFieldHasNoObjectIndex"); Localized string:C991("theVectorFieldHasNoVectorIndex")]
+
+cs:C1710._vectorIndexes.me.refresh()
+$withDirty._validateIndexes()  // vector not indexed at all, its _dirty companion is
+ASSERT:C1129(Not:C34($withDirty.vectorObjectIndexed()); "index warnings: student_vector_2 has no automatic index")
+ASSERT:C1129(Not:C34($withDirty.vectorDistanceIndexed()); "index warnings: student_vector_2 has no vector index")
+ASSERT:C1129($withDirty.warnings.equal($vectorWarnings); "index warnings: only the vector indexes should be reported, got "+JSON Stringify:C1217($withDirty.warnings))
+ASSERT:C1129(Position:C15("⚠️ "+Localized string:C991("theVectorFieldHasNoVectorIndex"); $withDirty.helptip)>0; "index warnings: the helptip should show the warning")
 ASSERT:C1129($withDirty.errors.length=0; "index warnings: a warning is not an error")
 
 var $bothMissing : cs:C1710._EmbeddingItem:=cs:C1710._EmbeddingItem.new(ds:C1482._Students; cs:C1710.Definition.new("_Students"; "student vector 3"; "embed"; "{lastName}"); Null:C1517)
 $bothMissing._validateIndexes()  // neither the vector nor its _dirty companion are indexed
-ASSERT:C1129($bothMissing.warnings.equal([Localized string:C991("theVectorAndDirtyFieldsAreNotIndexed")]); "index warnings: both fields should be reported in one message, got "+JSON Stringify:C1217($bothMissing.warnings))
+ASSERT:C1129($bothMissing.warnings.equal($vectorWarnings.concat([Localized string:C991("theDirtyFieldIsNotIndexed")])); "index warnings: each missing index should be reported, got "+JSON Stringify:C1217($bothMissing.warnings))
 
 var $noDirty : cs:C1710._EmbeddingItem:=cs:C1710._EmbeddingItem.new(ds:C1482.School; cs:C1710.Definition.new("School"; "school_vector_1"; "embed"; "{name}"); Null:C1517)
 $noDirty._validateIndexes()  // no _dirty companion: only the vector can be reported
-ASSERT:C1129($noDirty.warnings.equal([Localized string:C991("theVectorFieldIsNotIndexed")]); "index warnings: a missing _dirty companion is not an index warning, got "+JSON Stringify:C1217($noDirty.warnings))
+ASSERT:C1129($noDirty.warnings.equal($vectorWarnings); "index warnings: a missing _dirty companion is not an index warning, got "+JSON Stringify:C1217($noDirty.warnings))
+
+//MARK:- the automatic and the vector indexes are told apart
+// Structure change (CREATE INDEX), interpreted mode only: captured, dropped, then asserted.
+If (Not:C34(Is compiled mode:C492))
+
+	var $indexDef : cs:C1710.Definition:=cs:C1710.Definition.new("School"; "school_vector_1"; "embed"; "{name}")
+	var $probe : Object:={errors: []}
+
+	ARRAY POINTER:C280($indexFields; 1)
+	$indexFields{1}:=->[School:2]school_vector_1:6
+	Try(CREATE INDEX:C966([School:2]; $indexFields; Vector cosine index; "__test_dev_cosine"))
+	$probe.errors.combine(Last errors:C1799 || [])
+	cs:C1710._vectorIndexes.me.refresh()
+	$probe.vectorOnly:=cs:C1710._EmbeddingItem.new(ds:C1482.School; $indexDef; Null:C1517)
+	$probe.vectorOnly._validateIndexes()
+	$probe.vectorOnly:={object: $probe.vectorOnly.vectorObjectIndexed(); vector: $probe.vectorOnly.vectorDistanceIndexed(); warnings: $probe.vectorOnly.warnings}
+
+	Try(cs:C1710._EmbeddingItem.new(ds:C1482.School; $indexDef; Null:C1517).createVectorObjectIndex())
+	$probe.errors.combine(Last errors:C1799 || [])
+	$probe.both:=cs:C1710._EmbeddingItem.new(ds:C1482.School; $indexDef; Null:C1517)
+	$probe.both._validateIndexes()
+	$probe.both:={object: $probe.both.vectorObjectIndexed(); vector: $probe.both.vectorDistanceIndexed(); warnings: $probe.both.warnings}
+
+	Try(DELETE INDEX:C967("__test_dev_cosine"))
+	$probe.errors.combine(Last errors:C1799 || [])
+	// the structure definition drops a deleted index a moment later: wait for it (up to ~10s)
+	$waited:=0
+	cs:C1710._vectorIndexes.me.refresh()
+	While (cs:C1710._vectorIndexes.me.has(ds:C1482.School; "school_vector_1") && ($waited<600))
+		DELAY PROCESS:C323(Current process:C322; 6)
+		$waited+=6
+		cs:C1710._vectorIndexes.me.refresh()
+	End while
+	$probe.objectOnly:=cs:C1710._EmbeddingItem.new(ds:C1482.School; $indexDef; Null:C1517)
+	$probe.objectOnly:={object: $probe.objectOnly.vectorObjectIndexed(); vector: $probe.objectOnly.vectorDistanceIndexed()}
+
+	// undo the structure change
+	Try(DELETE INDEX:C967("school_vector_1_School"))
+	$probe.errors.combine(Last errors:C1799 || [])
+	$waited:=0
+	While (Bool:C1537(ds:C1482.School.school_vector_1.indexed) && ($waited<600))
+		DELAY PROCESS:C323(Current process:C322; 6)
+		$waited+=6
+	End while
+	$probe.objectLeft:=Bool:C1537(ds:C1482.School.school_vector_1.indexed)
+	cs:C1710._vectorIndexes.me.refresh()
+
+	ASSERT:C1129($probe.errors.length=0; "index kinds: no error expected: "+JSON Stringify:C1217($probe.errors))
+	ASSERT:C1129((Not:C34($probe.vectorOnly.object)) && $probe.vectorOnly.vector; "index kinds: a cosine index alone is a vector index only: "+JSON Stringify:C1217($probe.vectorOnly))
+	ASSERT:C1129($probe.vectorOnly.warnings.equal([Localized string:C991("theVectorFieldHasNoObjectIndex")]); "index kinds: only the automatic index should be missing: "+JSON Stringify:C1217($probe.vectorOnly.warnings))
+	ASSERT:C1129($probe.both.object && $probe.both.vector; "index kinds: both indexes should be seen: "+JSON Stringify:C1217($probe.both))
+	ASSERT:C1129($probe.both.warnings.length=0; "index kinds: no warning with both indexes: "+JSON Stringify:C1217($probe.both.warnings))
+	ASSERT:C1129($probe.objectOnly.object && (Not:C34($probe.objectOnly.vector)); "index kinds: an automatic index alone is not a vector index: "+JSON Stringify:C1217($probe.objectOnly))
+	ASSERT:C1129(Not:C34($probe.objectLeft); "index kinds: the test index should be dropped again")
+
+End if
 
 //MARK:- a vector without companion: the field and its index are created, then the index alone
 // This changes the structure (SQL ALTER TABLE / CREATE INDEX), which is only possible in

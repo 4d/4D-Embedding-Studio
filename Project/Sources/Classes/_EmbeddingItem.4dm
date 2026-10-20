@@ -181,40 +181,36 @@ Function validate()
 	This:C1470._validateIndexes()
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-	// Warns when the vector or its "_dirty" flag is not indexed:
-	// computing, invalidating and checking what to invalidate get slow on large tables.
+	// Warns, one message per missing index, when the vector lacks its automatic (object) index
+	// (null checks: what to compute or invalidate) or its vector index (similarity queries),
+	// or when its "_dirty" flag is not indexed: these get slow on large tables.
 Function _validateIndexes()
-	
+
 	This:C1470._indexWarnings:=[]
-	
+
 	If ((This:C1470.definition=Null:C1517) || (This:C1470._dataclass=Null:C1517))
-		
-		return 
-		
-	End if 
-	
-	var $vectorMissing:=Not:C34(This:C1470.vectorIndexed())
-	var $dirtyMissing:=This:C1470.hasDirtyAssociatedAttribute() && Not:C34(This:C1470.dirtyAssociatedAttributeIndexed())
-	
-	Case of 
-			
-			// ______________________________________________________
-		: ($vectorMissing && $dirtyMissing)
-			
-			This:C1470._indexWarnings.push(Localized string:C991("theVectorAndDirtyFieldsAreNotIndexed"))
-			
-			// ______________________________________________________
-		: ($vectorMissing)
-			
-			This:C1470._indexWarnings.push(Localized string:C991("theVectorFieldIsNotIndexed"))
-			
-			// ______________________________________________________
-		: ($dirtyMissing)
-			
-			This:C1470._indexWarnings.push(Localized string:C991("theDirtyFieldIsNotIndexed"))
-			
-			// ______________________________________________________
-	End case 
+
+		return
+
+	End if
+
+	If (Not:C34(This:C1470.vectorObjectIndexed()))
+
+		This:C1470._indexWarnings.push(Localized string:C991("theVectorFieldHasNoObjectIndex"))
+
+	End if
+
+	If (Not:C34(This:C1470.vectorDistanceIndexed()))
+
+		This:C1470._indexWarnings.push(Localized string:C991("theVectorFieldHasNoVectorIndex"))
+
+	End if
+
+	If (This:C1470.hasDirtyAssociatedAttribute() && Not:C34(This:C1470.dirtyAssociatedAttributeIndexed()))
+
+		This:C1470._indexWarnings.push(Localized string:C991("theDirtyFieldIsNotIndexed"))
+
+	End if
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Validates the model:
@@ -272,12 +268,38 @@ Function hasDirtyAssociatedAttribute() : Boolean
 	return This:C1470._dataclass[This:C1470.definition.vectorName+"_dirty"]#Null:C1517
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function vectorIndexed() : Boolean
-	
+	// The automatic (object) index, used by the "= null" / "!= null" queries.
+	// On a vector field, ORDA "indexed" only reports this one, never a vector index.
+Function vectorObjectIndexed() : Boolean
+
 	var $attr : Object:=This:C1470._dataclass[This:C1470.definition.vectorName]
-	
+
 	return $attr=Null:C1517 ? False:C215 : Bool:C1537($attr.indexed)
-	
+
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// The vector index (cosine, dot or euclidean), used by the similarity queries.
+Function vectorDistanceIndexed() : Boolean
+
+	return cs:C1710._vectorIndexes.me.has(This:C1470._dataclass; This:C1470.definition.vectorName)
+
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Creates the automatic (object) index of the vector field.
+	// Pointers rather than SQL, so a field name with a space is fine.
+Function createVectorObjectIndex()
+
+	If (This:C1470.vectorObjectIndexed())
+
+		return
+
+	End if
+
+	var $tableNum : Integer:=This:C1470._dataclass.getInfo().tableNumber
+
+	ARRAY POINTER:C280($fields; 1)
+	$fields{1}:=Field:C253($tableNum; This:C1470._dataclass[This:C1470.definition.vectorName].fieldNumber)
+
+	CREATE INDEX:C966(Table:C252($tableNum)->; $fields; Default index type; This:C1470.definition.vectorName+"_"+This:C1470.definition.dataclassName)
+
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function dirtyAssociatedAttributeIndexed() : Boolean
 	

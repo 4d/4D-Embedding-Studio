@@ -12,6 +12,24 @@
           <source>The AI model behind {count} embedding definition(s) with existing data has changed. Reset these embeddings now so they are recomputed on the next run?</source>
           <target>The AI model behind {count} embedding definition(s) with existing data has changed. Reset these embeddings now so they are recomputed on the next run?</target>
         </trans-unit>
+        <trans-unit id="invalidatePromptConfirm" resname="invalidatePromptConfirm">
+          <source>The definition for {vector} has changed.
+Do you want to mark all existing vectors for recalculation?</source>
+          <target>The definition for {vector} has changed.
+Do you want to mark all existing vectors for recalculation?</target>
+        </trans-unit>
+        <trans-unit id="invalidatePromptRecalculate" resname="invalidatePromptRecalculate">
+          <source>Recalculate</source>
+          <target>Recalculate</target>
+        </trans-unit>
+        <trans-unit id="invalidatePromptSkip" resname="invalidatePromptSkip">
+          <source>Skip</source>
+          <target>Skip</target>
+        </trans-unit>
+        <trans-unit id="invalidateFailed" resname="invalidateFailed">
+          <source>⚠️ {count} entity(ies) could not be invalidated.</source>
+          <target>⚠️ {count} entity(ies) could not be invalidated.</target>
+        </trans-unit>
         <trans-unit id="45" resname="dataclass">
           <source>Dataclass</source>
           <target>Dataclass</target>
@@ -201,6 +219,10 @@ Pick a vector attribute, then describe a record in one sentence.</target>
         <trans-unit id="schedulerStateRunning" resname="schedulerStateRunning">
           <source>Running</source>
           <target>Running</target>
+        </trans-unit>
+        <trans-unit id="operationInvalidating" resname="operationInvalidating">
+          <source>Invalidating {vectors}…</source>
+          <target>Invalidating {vectors}…</target>
         </trans-unit>
         <trans-unit id="schedulerStateDisabled" resname="schedulerStateDisabled">
           <source>No schedule</source>

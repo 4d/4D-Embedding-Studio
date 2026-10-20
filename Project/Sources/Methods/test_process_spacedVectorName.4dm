@@ -67,6 +67,7 @@ var $invalidated : Object:=$def.invalidateVectors()
 ASSERT:C1129($invalidated.errors.length=0; "invalidateVectors: no error expected, got "+JSON Stringify:C1217($invalidated.errors))
 ASSERT:C1129($invalidated.updated=3; "invalidateVectors: 3 entities should be flagged, got "+String:C10($invalidated.updated))
 ASSERT:C1129(ds:C1482._Students.all().query(":1 = true"; $dirtyName).length=3; "invalidateVectors: every student should be dirty")
+ASSERT:C1129(Not:C34($def._hasVectorComputed()); "invalidateVectors: no clean computed vector should be left")
 
 // ══════════════════════════════════════════════════════════════════════
 // THIRD RUN — the "OR dirty" branch of the filter

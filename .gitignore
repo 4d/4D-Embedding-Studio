@@ -21,6 +21,7 @@
 *.4DIndy
 *.Match
 *.journal
+*.4DVI
 
 #--------------------------------
 # Ignore derived data

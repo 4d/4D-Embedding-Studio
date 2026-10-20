@@ -12,6 +12,24 @@
           <source>The AI model behind {count} embedding definition(s) with existing data has changed. Reset these embeddings now so they are recomputed on the next run?</source>
           <target>Le modèle d'IA associé à {count} définition(s) d'embedding contenant déjà des données a changé. Réinitialiser ces embeddings maintenant afin qu'ils soient recalculés lors de la prochaine exécution ?</target>
         </trans-unit>
+        <trans-unit id="invalidatePromptConfirm" resname="invalidatePromptConfirm">
+          <source>The definition for {vector} has changed.
+Do you want to mark all existing vectors for recalculation?</source>
+          <target>La définition de {vector} a changé.
+Voulez-vous marquer tous les vecteurs existants pour qu'ils soient recalculés ?</target>
+        </trans-unit>
+        <trans-unit id="invalidatePromptRecalculate" resname="invalidatePromptRecalculate">
+          <source>Recalculate</source>
+          <target>Recalculer</target>
+        </trans-unit>
+        <trans-unit id="invalidatePromptSkip" resname="invalidatePromptSkip">
+          <source>Skip</source>
+          <target>Ignorer</target>
+        </trans-unit>
+        <trans-unit id="invalidateFailed" resname="invalidateFailed">
+          <source>⚠️ {count} entity(ies) could not be invalidated.</source>
+          <target>⚠️ {count} entité(s) n'ont pas pu être invalidée(s).</target>
+        </trans-unit>
         <trans-unit id="45" resname="dataclass">
           <source>Dataclass</source>
           <target>Dataclass</target>
@@ -200,6 +218,10 @@ Pick a vector attribute, then describe a record in one sentence.</source>
         <trans-unit id="schedulerStateRunning" resname="schedulerStateRunning">
           <source>Running</source>
           <target>En cours</target>
+        </trans-unit>
+        <trans-unit id="operationInvalidating" resname="operationInvalidating">
+          <source>Invalidating {vectors}…</source>
+          <target>Invalidation de {vectors}…</target>
         </trans-unit>
         <trans-unit id="schedulerStateDisabled" resname="schedulerStateDisabled">
           <source>No schedule</source>

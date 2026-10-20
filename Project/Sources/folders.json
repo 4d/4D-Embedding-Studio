@@ -60,6 +60,7 @@
 	},
 	"STUDIO": {
 		"methods": [
+			"_invalidateVectorsInBackground",
 			"FORM_MANAGER"
 		],
 		"forms": [
@@ -84,6 +85,7 @@
 			"test_executionLog",
 			"test_gui_embeddings",
 			"test_gui_scheduler",
+			"test_invalidateInBackground",
 			"test_menu",
 			"test_phrase",
 			"test_playground",
@@ -128,7 +130,8 @@
 			"_RateLimiter",
 			"_Resolver",
 			"_Settings",
-			"_typeMedia"
+			"_typeMedia",
+			"_vectorIndexes"
 		]
 	},
 	"trash": {}

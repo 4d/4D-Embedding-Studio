@@ -269,11 +269,18 @@ Function paintSchedulerStatus()
 	If ($hasError)
 		$summary:=$summary+"   •   "+$error
 	End if 
+	
+	// An operation running in a worker (e.g. _invalidateVectorsInBackground) comes first
+	var $operation : Text:=(Storage:C1525.studio=Null:C1517) ? "" : String:C10(Storage:C1525.studio.operation)
+	If (Length:C16($operation)>0)
+		$summary:=$operation+"   •   "+$summary
+	End if 
+	
 	Form:C1466.schedulerStatusText:=$summary
 	
 	OBJECT SET VISIBLE:C603(*; "schedulerStatus"; Not:C34($hasError))
 	OBJECT SET VISIBLE:C603(*; "schedulerStatusError"; $hasError)
-	OBJECT SET VISIBLE:C603(*; "schedulerSpinner"; Bool:C1537($status.running))
+	OBJECT SET VISIBLE:C603(*; "schedulerSpinner"; Bool:C1537($status.running) || (Length:C16($operation)>0))
 	
 	// Full line on the help tip since it may be truncated with an ellipsis.
 	OBJECT SET HELP TIP:C1181(*; "schedulerStatus"; $summary)
@@ -524,7 +531,10 @@ Function moreManager($e : Object)
 		$menu.line().append($workerBusy ? "⏳ Compute Vectors" : "🚧 Compute Vectors"; "computeVectors").enable(Not:C34($workerBusy))
 		$menu.append($workerBusy ? "⏳ Invalid Vectors" : "🚧 Invalid Vectors"; "invalidVectors").enable(Not:C34($workerBusy))
 		$menu.append($workerBusy ? "⏳ Stat Vectors" : "🚧 Stat Vectors"; "statVectors").enable(Not:C34($workerBusy))
-		Case of 
+		If (Not:C34($item.vectorObjectIndexed()))
+			$menu.line().append("🚧 Create automatic index vector attribute"; "createVectorObjectIndex")
+		End if
+		Case of
 			: (Not:C34($item.hasDirtyAssociatedAttribute()))
 				$menu.line().append("🚧 Create dirty attribute"; "createDirtyAttribute")
 			: (Not:C34($item.dirtyAssociatedAttributeIndexed()))
@@ -589,8 +599,8 @@ Function moreManager($e : Object)
 			End if 
 			// ______________________________________________________
 		: ($menu.choice="computeVectors")
-			This:C1470.flushPromptInvalidate()  // Ask before recomputing, not after
-			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1; $2)); Formula:C1597(_computeVectors($1)); $item.definition)
+			// Ask before recomputing, not after: the compute runs once the invalidation is done
+			This:C1470.flushPromptInvalidate(Formula:C1597(_computeVectors($1)); $item.definition)
 			// ______________________________________________________
 		: ($menu.choice="invalidVectors")
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1; $2)); Formula:C1597(_invalidateVectors($1)); $item.definition)
@@ -603,6 +613,9 @@ Function moreManager($e : Object)
 			// ______________________________________________________
 		: ($menu.choice="createDirtyAttributeIndex")
 			$item.createDirtyAssociatedAttributeIndex()
+			// ______________________________________________________
+		: ($menu.choice="createVectorObjectIndex")
+			$item.createVectorObjectIndex()
 			// ______________________________________________________
 	End case 
 	
@@ -1001,7 +1014,9 @@ Enriched with saved Definition entries from Settings/embeddings.json.
 	
 	var $items:=[]
 	var $vf : Object
-	
+
+	cs:C1710._vectorIndexes.me.refresh()  // The structure may have changed since the last load
+
 	For each ($vf; This:C1470._collectVectorFields())
 		
 		var $def : cs:C1710.Definition:=This:C1470.settings.find($vf.dataclassName; $vf.field.name)
@@ -1115,27 +1130,58 @@ Function _deferPromptInvalidate($item : cs:C1710._EmbeddingItem)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Asks about every definition changed since the last question (one dialog per item, at most).
-Function flushPromptInvalidate()
+	// The accepted invalidations run in the "EmbeddingStudio_invalidate" worker (one save per
+	// entity: a large table would freeze the window), which calls invalidateDone() back.
+	// $then (called with $param), e.g. a compute, runs in the "EmbeddingStudio" worker once
+	// the invalidations queued before it are done.
+Function flushPromptInvalidate($then : 4D:C1709.Function; $param : Variant)
 	
 	var $pending : Object:=This:C1470._pendingInvalidate
 	This:C1470._pendingInvalidate:={}  // Reset first: _promptInvalidate() may re-enter through the UI
 	
+	var $accepted : Collection:=[]
 	var $key : Text
 	For each ($key; $pending)
 		
-		This:C1470._promptInvalidate($pending[$key])
+		If (This:C1470._promptInvalidate($pending[$key]))
+			
+			$accepted.push({\
+				dataclassName: $pending[$key].definition.dataclassName; \
+				vectorName: $pending[$key].definition.vectorName})
+			
+		End if 
 		
 	End for each 
 	
+	If (($accepted.length>0) || ($then#Null:C1517))
+		
+		CALL WORKER:C1389("EmbeddingStudio_invalidate"; "_invalidateVectorsInBackground"; $accepted; $then; $param)
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Called back (CALL FORM) by _invalidateVectorsInBackground once the vectors are invalidated.
+Function invalidateDone($result : Object)
+	
+	If ($result.errors.length>0)
+		
+		cs:C1710._Dialog.me.alert($result.message)
+		
+	End if 
+	
+	This:C1470.paintSchedulerStatus()  // The operation is over
+	This:C1470.items:=This:C1470.items  // Update UI
+	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Compares current phrase/model against the snapshot taken at load time.
-	// If either changed, prompts the developer and calls invalidateVectors() on confirmation.
-Function _promptInvalidate($item : cs:C1710._EmbeddingItem)
+	// If either changed, prompts the developer. Returns True when the vectors must be
+	// invalidated: flushPromptInvalidate() runs it in a worker, not in the window's process.
+Function _promptInvalidate($item : cs:C1710._EmbeddingItem) : Boolean
 	
 	If (($item=Null:C1517)\
 		 || ($item.original=Null:C1517))
 		
-		return 
+		return False:C215
 		
 	End if 
 	
@@ -1147,22 +1193,17 @@ Function _promptInvalidate($item : cs:C1710._EmbeddingItem)
 	If (Not:C34($changed))\
 		 || (Not:C34($item.definition._hasVectorComputed()))
 		
-		return 
+		return False:C215
 		
 	End if 
 	
 	// Update snapshot so a subsequent save won't re-prompt for the same delta
 	$item.original:=$item.definition.toObject()
 	
-	// TODO: To localize
-	If (cs:C1710._Dialog.me.confirm(\
-		"The definition for "+$item.definition.dataclassName+"."+$item.definition.vectorName+" has changed.\rDo you want to mark all existing vectors for recalculation?"; \
-		"Recalculate"; \
-		"Skip"))  // TODO: localize
-		
-		$item.definition.invalidateVectors()
-		
-	End if 
+	return cs:C1710._Dialog.me.confirm(\
+		Replace string:C233(Localized string:C991("invalidatePromptConfirm"); "{vector}"; $item.definition.dataclassName+"."+$item.definition.vectorName); \
+		Localized string:C991("invalidatePromptRecalculate"); \
+		Localized string:C991("invalidatePromptSkip"))
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _cacheCatalog()

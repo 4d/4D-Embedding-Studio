@@ -113,6 +113,13 @@ ASSERT:C1129($saved.autoInvalidate=False:C215; "save: autoInvalidate should be s
 ASSERT:C1129($asked.query("kind = :1"; "confirm").length=1; "invalidate prompt: expected exactly one question, got "+JSON Stringify:C1217($asked))
 ASSERT:C1129(Position:C15("_Students.student_vector_1"; String:C10($asked.query("kind = :1"; "confirm").first().message))>0; "invalidate prompt: should name the definition")
 ASSERT:C1129($asked.query("kind = :1"; "alert").length=0; "no alert expected: "+JSON Stringify:C1217($asked))
+
+// the invalidation runs in its own worker, not in the window: wait for it (up to ~10s)
+var $waited : Integer:=0
+While ((ds:C1482._Students.query("student_vector_1 != null").length>0) && ($waited<600))
+	DELAY PROCESS:C323(Current process:C322; 6)
+	$waited+=6
+End while
 ASSERT:C1129(ds:C1482._Students.query("student_vector_1 != null").length=0; "invalidate prompt: the vectors should be invalidated after yes")
 
 //MARK:- dev menus and actions
