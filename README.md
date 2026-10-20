@@ -14,7 +14,7 @@ If you want to have more control over your embeddings, the component offers an e
 ## Requirements
 
 - [4D-AIKit](https://github.com/4d/4D-AIKit) (loaded automatically as a dependency). 
-- 4D project (>21 R3) with the following configuration:
+- 4D project (21 R5 or later) with the following configuration:
   - a valid model alias 
   - a dataclass with a `4D.Vector` attribute (object field at the database level).
 

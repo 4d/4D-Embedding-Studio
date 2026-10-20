@@ -1015,8 +1015,6 @@ Enriched with saved Definition entries from Settings/embeddings.json.
 	var $items:=[]
 	var $vf : Object
 
-	cs:C1710._vectorIndexes.me.refresh()  // The structure may have changed since the last load
-
 	For each ($vf; This:C1470._collectVectorFields())
 		
 		var $def : cs:C1710.Definition:=This:C1470.settings.find($vf.dataclassName; $vf.field.name)

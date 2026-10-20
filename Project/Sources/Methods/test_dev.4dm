@@ -204,7 +204,6 @@ $withDirty.createDirtyAssociatedAttributeIndex()  // no-op: already indexed
 //MARK:- missing indexes are reported as non-blocking warnings, one per index
 var $vectorWarnings : Collection:=[Localized string:C991("theVectorFieldHasNoObjectIndex"); Localized string:C991("theVectorFieldHasNoVectorIndex")]
 
-cs:C1710._vectorIndexes.me.refresh()
 $withDirty._validateIndexes()  // vector not indexed at all, its _dirty companion is
 ASSERT:C1129(Not:C34($withDirty.vectorObjectIndexed()); "index warnings: student_vector_2 has no automatic index")
 ASSERT:C1129(Not:C34($withDirty.vectorDistanceIndexed()); "index warnings: student_vector_2 has no vector index")
@@ -231,7 +230,6 @@ If (Not:C34(Is compiled mode:C492))
 	$indexFields{1}:=->[School:2]school_vector_1:6
 	Try(CREATE INDEX:C966([School:2]; $indexFields; Vector cosine index; "__test_dev_cosine"))
 	$probe.errors.combine(Last errors:C1799 || [])
-	cs:C1710._vectorIndexes.me.refresh()
 	$probe.vectorOnly:=cs:C1710._EmbeddingItem.new(ds:C1482.School; $indexDef; Null:C1517)
 	$probe.vectorOnly._validateIndexes()
 	$probe.vectorOnly:={object: $probe.vectorOnly.vectorObjectIndexed(); vector: $probe.vectorOnly.vectorDistanceIndexed(); warnings: $probe.vectorOnly.warnings}
@@ -244,13 +242,11 @@ If (Not:C34(Is compiled mode:C492))
 
 	Try(DELETE INDEX:C967("__test_dev_cosine"))
 	$probe.errors.combine(Last errors:C1799 || [])
-	// the structure definition drops a deleted index a moment later: wait for it (up to ~10s)
+	// a deleted index may linger a moment: wait for it to go (up to ~10s)
 	$waited:=0
-	cs:C1710._vectorIndexes.me.refresh()
-	While (cs:C1710._vectorIndexes.me.has(ds:C1482.School; "school_vector_1") && ($waited<600))
+	While (cs:C1710._EmbeddingItem.new(ds:C1482.School; $indexDef; Null:C1517).vectorDistanceIndexed() && ($waited<600))
 		DELAY PROCESS:C323(Current process:C322; 6)
 		$waited+=6
-		cs:C1710._vectorIndexes.me.refresh()
 	End while
 	$probe.objectOnly:=cs:C1710._EmbeddingItem.new(ds:C1482.School; $indexDef; Null:C1517)
 	$probe.objectOnly:={object: $probe.objectOnly.vectorObjectIndexed(); vector: $probe.objectOnly.vectorDistanceIndexed()}
@@ -264,7 +260,6 @@ If (Not:C34(Is compiled mode:C492))
 		$waited+=6
 	End while
 	$probe.objectLeft:=Bool:C1537(ds:C1482.School.school_vector_1.indexed)
-	cs:C1710._vectorIndexes.me.refresh()
 
 	ASSERT:C1129($probe.errors.length=0; "index kinds: no error expected: "+JSON Stringify:C1217($probe.errors))
 	ASSERT:C1129((Not:C34($probe.vectorOnly.object)) && $probe.vectorOnly.vector; "index kinds: a cosine index alone is a vector index only: "+JSON Stringify:C1217($probe.vectorOnly))

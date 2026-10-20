@@ -130,8 +130,7 @@
 			"_RateLimiter",
 			"_Resolver",
 			"_Settings",
-			"_typeMedia",
-			"_vectorIndexes"
+			"_typeMedia"
 		]
 	},
 	"trash": {}

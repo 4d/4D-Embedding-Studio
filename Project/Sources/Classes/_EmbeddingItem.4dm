@@ -280,7 +280,9 @@ Function vectorObjectIndexed() : Boolean
 	// The vector index (cosine, dot or euclidean), used by the similarity queries.
 Function vectorDistanceIndexed() : Boolean
 
-	return cs:C1710._vectorIndexes.me.has(This:C1470._dataclass; This:C1470.definition.vectorName)
+	var $vectorTypes : Collection:=[Vector cosine index; Vector dot index; Vector euclidean index]
+
+	return This:C1470._dataclass.getIndexes().some(Formula:C1597($2.includes($1.value.type) && $1.value.attributes.includes($3)); $vectorTypes; This:C1470.definition.vectorName)
 
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Creates the automatic (object) index of the vector field.
