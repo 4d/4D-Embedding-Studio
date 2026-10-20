@@ -505,16 +505,16 @@ ASSERT:C1129($result.success; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($result.entitiesUpdated=2; JSON Stringify:C1217($result.toObject()))
 ASSERT:C1129($batchEmbedder.embedBatchCalls.length=1; "batchSize 0: both entities should go in a single chunk")
 
-//MARK:- index pausing disabled, or resumed synchronously
+//MARK:- index pausing requested (off by default), resumed asynchronously or synchronously
 ASSERT:C1129($studentsDef.invalidateVectors().errors.length=0; "failed to invalidate students before pauseIndexes test")
-$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new(); pauseIndexes: False:C215})
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new(); pauseIndexes: True:C214})
 $result:=$proc.process($studentsDef)
-ASSERT:C1129($result.success && ($result.entitiesUpdated=2); "pauseIndexes False: "+JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.success && ($result.entitiesUpdated=2); "pauseIndexes True: "+JSON Stringify:C1217($result.toObject()))
 
 ASSERT:C1129($studentsDef.invalidateVectors().errors.length=0; "failed to invalidate students before waitForIndexes test")
-$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new(); waitForIndexes: True:C214})
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new(); pauseIndexes: True:C214; waitForIndexes: True:C214})
 $result:=$proc.process($studentsDef)
-ASSERT:C1129($result.success && ($result.entitiesUpdated=2); "waitForIndexes True: "+JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.success && ($result.entitiesUpdated=2); "pauseIndexes + waitForIndexes True: "+JSON Stringify:C1217($result.toObject()))
 
 //MARK:- a provider returning the wrong number of vectors is reported for the chunk
 ASSERT:C1129($studentsDef.invalidateVectors().errors.length=0; "failed to invalidate students before vector count test")
