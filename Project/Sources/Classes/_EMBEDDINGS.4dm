@@ -532,7 +532,7 @@ Function moreManager($e : Object)
 		$menu.append($workerBusy ? "⏳ Invalid Vectors" : "🚧 Invalid Vectors"; "invalidVectors").enable(Not:C34($workerBusy))
 		$menu.append($workerBusy ? "⏳ Stat Vectors" : "🚧 Stat Vectors"; "statVectors").enable(Not:C34($workerBusy))
 		If (Not:C34($item.vectorObjectIndexed()))
-			$menu.line().append("🚧 Create automatic index vector attribute"; "createVectorObjectIndex")
+			$menu.line().append("🚧 Create standard index vector attribute"; "createVectorObjectIndex")
 		End if
 		Case of
 			: (Not:C34($item.hasDirtyAssociatedAttribute()))
