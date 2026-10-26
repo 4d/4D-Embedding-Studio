@@ -14,7 +14,7 @@ If you want to have more control over your embeddings, the component offers an e
 ## Requirements
 
 - [4D-AIKit](https://github.com/4d/4D-AIKit) (loaded automatically as a dependency). 
-- 4D project (>version 21 R3) with the following configuration:
+- 4D project (> 21 R3) with the following configuration:
   - a valid model alias 
   - a dataclass with a `4D.Vector` attribute (object field at the database level).
 
@@ -36,7 +36,7 @@ This phrase will be vectorized for every entity.
 
 To use the 4D Embedding Studio interface, you need to create at least one object attribute associated to a `4D.Vector` class in your datastore. This must be done at the database level (only storage attributes can be embeddings).
 
-In the Structure editor, add an Object field to the dataclass (table) whose entities you want to query using AI and enter ["4D.Vector" as class](https://developer.4d.com/docs/Develop/field-properties#class). 
+In the Structure editor, add an Object field to the dataclass (table) whose entities you want to query using AI and enter ["4D.Vector" as class](https://developer.4d.com/docs/Develop/structure-fields#class). 
 
 #### Dirty-flag support
 
