@@ -14,7 +14,7 @@ If you want to have more control over your embeddings, the component offers an e
 ## Requirements
 
 - [4D-AIKit](https://github.com/4d/4D-AIKit) (loaded automatically as a dependency). 
-- 4D project (>21 R3) with the following configuration:
+- 4D project (>version 21 R3) with the following configuration:
   - a valid model alias 
   - a dataclass with a `4D.Vector` attribute (object field at the database level).
 
@@ -109,8 +109,8 @@ Once you have defined embeddings in your datastore, you can start [querying your
 
 For example, assuming that:
 
-- you have defined a `4D.Vector` attribute named "embedding" in the Products dataclass using the sentence: "The {name} is in the {category} category. It has these {features} features and can be used for {usage}."
-•	you have generated the embeddings using the "myEmbeddingModelAlias" model alias,
+• you have defined a `4D.Vector` attribute named "embedding" in the Products dataclass using the sentence: "The {name} is in the {category} category. It has these {features} features and can be used for {usage}."  
+•	you have generated the embeddings using the "myEmbeddingModelAlias" model alias,  
 •	you want to find products similar to the one selected by the user. 
 
 You can write:
