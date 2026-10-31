@@ -240,8 +240,16 @@ Function _validateModel()
 		
 	End if 
 	
+	// Model is set — 4D AIKit must be loaded to know the available aliases
+	If (Not:C34(cs:C1710._AIKit.me.isAvailable))
+		
+		This:C1470._modelErrors.push(cs:C1710._AIKit.me.missingReason)
+		return 
+		
+	End if 
+	
 	// Model is set — must be part of the available aliases
-	var $aliases : Collection:=cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name")
+	var $aliases : Collection:=cs:C1710._AIKit.me.modelNames()
 	
 	If (Not:C34($aliases.includes($model)))
 		

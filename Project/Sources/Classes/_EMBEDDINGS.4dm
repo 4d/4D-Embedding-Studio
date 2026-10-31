@@ -567,11 +567,15 @@ Function moreManager($e : Object)
 		: ($menu.choice="aiGeneratedPhrase")
 			$plainText:=$item.supportedAttributes.map(Formula:C1597($1.value.name)).join(",")
 			var $model:="StudioPhrase"
-			If (Not:C34(cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name").includes($model)))
+			If (Not:C34(cs:C1710._AIKit.me.isAvailable))
+				cs:C1710._Dialog.me.alert(cs:C1710._AIKit.me.missingReason)
+				return 
+			End if 
+			If (Not:C34(cs:C1710._AIKit.me.modelNames().includes($model)))
 				cs:C1710._Dialog.me.alert("You must configure a chat model with name: "+$model)
 				return 
 			End if 
-			var $client : cs:C1710.AIKit.OpenAI:=cs:C1710.AIKit.OpenAI.new()
+			var $client : cs:C1710.AIKit.OpenAI:=cs:C1710._AIKit.me.client()
 			var $prompt:="You are an assistant that generates natural-language phrases for embedding database rows."
 			$prompt+="Your task : "
 			$prompt+="- Convert a list of fields into ONE short, natural sentence."
@@ -1293,8 +1297,7 @@ Function _collectVectorFields() : Collection
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _getModelDropdownValues() : Collection
 	
-	// return cs.AIKit.OpenAIProviders.new().modelAliases().extract("name")
-	var $models : Collection:=cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name")
+	var $models : Collection:=cs:C1710._AIKit.me.modelNames()  // [] without 4D AIKit
 	$models.push("-")
 	$models.push(Localized string:C991("createAModel"))
 	

@@ -151,6 +151,16 @@
           <target state="new">Missing parameter</target>
         </trans-unit>
       </group>
+      <group resname="AIKit">
+        <trans-unit id="errAIKitMissing" resname="errAIKitMissing">
+          <source>The 4D AIKit component is not loaded. Embedding Studio needs it to list and call the AI models: add the 4D AIKit dependency (github.com/4d/4D-AIKit) to the project, then restart.</source>
+          <target state="new">The 4D AIKit component is not loaded. Embedding Studio needs it to list and call the AI models: add the 4D AIKit dependency (github.com/4d/4D-AIKit) to the project, then restart.</target>
+        </trans-unit>
+        <trans-unit id="errAIKitOutdated" resname="errAIKitOutdated">
+          <source>The 4D AIKit component is too old: OpenAIProviders is missing. Update 4D AIKit and use 4D 21 R3 or later.</source>
+          <target state="new">The 4D AIKit component is too old: OpenAIProviders is missing. Update 4D AIKit and use 4D 21 R3 or later.</target>
+        </trans-unit>
+      </group>
     </body>
   </file>
 </xliff>

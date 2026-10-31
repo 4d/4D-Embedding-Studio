@@ -78,6 +78,7 @@
 			"_runTestsCLI",
 			"_testGuiDriver",
 			"_testHoldSemaphore",
+			"test_aikit",
 			"test_dataclassAttributes",
 			"test_definition",
 			"test_dev",
@@ -120,6 +121,7 @@
 			"_warningColor"
 		],
 		"classes": [
+			"_AIKit",
 			"_dataclassAttributes",
 			"_Dialog",
 			"_Env",

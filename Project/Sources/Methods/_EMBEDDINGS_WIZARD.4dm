@@ -11,6 +11,11 @@ var $openDial : Boolean
 
 If (Num:C11(Storage:C1525.studio[$form])=0)
 	
+	// Definitions can still be edited without 4D AIKit, but no model can be listed or called
+	If (Not:C34(cs:C1710._AIKit.me.isAvailable))
+		cs:C1710._Dialog.me.alert(cs:C1710._AIKit.me.missingReason)
+	End if 
+	
 	// Create the window
 	var $winRef:=Open form window:C675($form; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)
 	$openDial:=True:C214

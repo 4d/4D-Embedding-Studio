@@ -24,7 +24,7 @@ If (Not:C34(Is compiled mode:C492))
 	
 	If (Structure file:C489=Structure file:C489(*))  // DEV: VERSION MINI
 		
-		If ((cs:C1710.AIKit#Null:C1517) && (cs:C1710.AIKit.OpenAIProviders=Null:C1517))
+		If (Not:C34(cs:C1710._AIKit.me.isAvailable))
 			
 			var $c:=Split string:C1554(Application version:C493; "")
 			var $major : Text:=$c[0]+$c[1]
@@ -39,7 +39,7 @@ If (Not:C34(Is compiled mode:C492))
 				
 			End if 
 			
-			ALERT:C41("You must use 4D 21R3>, current="+$version)
+			ALERT:C41(cs:C1710._AIKit.me.missingReason+"\r(4D "+$version+")")
 			
 		End if 
 	End if 

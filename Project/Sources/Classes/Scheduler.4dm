@@ -48,6 +48,10 @@ server Function start() : Boolean
 	var $error : Text:=(($terminal) && (Value type:C1509($persisted.error)=Is text:K8:3)) ? String:C10($persisted.error) : ""
 	cs:C1710._SchedulerState.me.restore($persisted.timestamp; ($terminal ? $persisted.status : ""); $error)
 
+	If (Not:C34(cs:C1710._AIKit.me.isAvailable))
+		cs:C1710._Logger.me.error("Scheduler: "+cs:C1710._AIKit.me.missingReason)  // Every run will fail its definitions until 4D AIKit is loaded
+	End if 
+	
 	cs:C1710._SchedulerState.me.arm(cs:C1710._ScheduleCalc.me._nowISO())
 	
 	If (Not:C34(This:C1470.isStarted()))

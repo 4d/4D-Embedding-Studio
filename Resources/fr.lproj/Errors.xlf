@@ -175,6 +175,16 @@
           <target>Le modèle « {model} » n'est pas disponible.</target>
         </trans-unit>
       </group>
+      <group resname="AIKit">
+        <trans-unit id="errAIKitMissing" resname="errAIKitMissing">
+          <source>The 4D AIKit component is not loaded. Embedding Studio needs it to list and call the AI models: add the 4D AIKit dependency (github.com/4d/4D-AIKit) to the project, then restart.</source>
+          <target>Le composant 4D AIKit n'est pas chargé. Embedding Studio en a besoin pour lister et appeler les modèles d'IA : ajoutez la dépendance 4D AIKit (github.com/4d/4D-AIKit) au projet, puis redémarrez.</target>
+        </trans-unit>
+        <trans-unit id="errAIKitOutdated" resname="errAIKitOutdated">
+          <source>The 4D AIKit component is too old: OpenAIProviders is missing. Update 4D AIKit and use 4D 21 R3 or later.</source>
+          <target>Le composant 4D AIKit est trop ancien : OpenAIProviders est absent. Mettez à jour 4D AIKit et utilisez 4D 21 R3 ou une version ultérieure.</target>
+        </trans-unit>
+      </group>
     </body>
   </file>
 </xliff>
