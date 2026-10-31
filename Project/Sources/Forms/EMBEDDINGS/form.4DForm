@@ -206,9 +206,8 @@
 							"footer": {
 								"name": "Footer3"
 							},
-							"dataSource": "This:C1470.hasDirtyAssociatedAttribute()",
-							"dataSourceTypeHint": "boolean",
-							"controlType": "checkbox",
+							"dataSource": "This:C1470.dirtyAssociatedAttributeMark",
+							"dataSourceTypeHint": "text",
 							"width": 100,
 							"enterable": false,
 							"resizable": false,

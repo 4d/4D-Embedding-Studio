@@ -264,7 +264,7 @@ Function get supportedAttributes() : Collection
 	
 	// MARK:- dirty attributes
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Also drives the read-only checkbox column of the vector list.
+	// Also drives the read-only "dirty flag" column of the vector list (see dirtyAssociatedAttributeMark).
 Function hasDirtyAssociatedAttribute() : Boolean
 	
 	If ((This:C1470.definition=Null:C1517) || (This:C1470._dataclass=Null:C1517))
@@ -274,6 +274,13 @@ Function hasDirtyAssociatedAttribute() : Boolean
 	End if 
 	
 	return This:C1470._dataclass[This:C1470.definition.vectorName+"_dirty"]#Null:C1517
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Cell value of the "dirty flag" column: a plain ✓ (U+2713, renders on macOS and Windows), not a
+	// checkbox, which would look like a control that creates the field (use the context menu for that).
+Function get dirtyAssociatedAttributeMark() : Text
+	
+	return This:C1470.hasDirtyAssociatedAttribute() ? "✓" : ""
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// The automatic (object) index, used by the "= null" / "!= null" queries.
