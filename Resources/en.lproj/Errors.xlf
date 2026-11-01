@@ -153,16 +153,16 @@
           <target>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</target>
         </trans-unit>
         <trans-unit id="theVectorFieldHasNoObjectIndex" resname="theVectorFieldHasNoObjectIndex">
-          <source>The vector field has no standard index: finding records with missing vectors (to compute) or existing vectors (to invalidate) scans every record.</source>
-          <target>The vector field has no standard index: finding records with missing vectors (to compute) or existing vectors (to invalidate) scans every record.</target>
+          <source>Add a standard index on the vector field to speed up computing and updating vectors.</source>
+          <target>Add a standard index on the vector field to speed up computing and updating vectors.</target>
         </trans-unit>
         <trans-unit id="theVectorFieldHasNoVectorIndex" resname="theVectorFieldHasNoVectorIndex">
-          <source>The vector field has no vector index (cosine, dot or euclidean): similarity queries scan every record.</source>
-          <target>The vector field has no vector index (cosine, dot or euclidean): similarity queries scan every record.</target>
+          <source>Add a vector index on the vector field for much faster similarity searches.</source>
+          <target>Add a vector index on the vector field for much faster similarity searches.</target>
         </trans-unit>
         <trans-unit id="theDirtyFieldIsNotIndexed" resname="theDirtyFieldIsNotIndexed">
-          <source>The dirty flag field has no index: finding the records to recompute scans every record.</source>
-          <target>The dirty flag field has no index: finding the records to recompute scans every record.</target>
+          <source>Index the dirty flag field to find vectors to recompute faster.</source>
+          <target>Index the dirty flag field to find vectors to recompute faster.</target>
         </trans-unit>
       </group>
       <group resname="Model">

@@ -170,9 +170,10 @@ Function manager($e : Object)
 					
 					var $lines : Collection:=[]
 					
-					// Over a checked "dirty flag" cell, name the flag field first
+					// Over a checked "dirty flag" cell, say so, then name the flag field
 					If (($column>0) && ($columns{$column}="dirtyAssociatedAttribute") && $item.hasDirtyAssociatedAttribute())
 						
+						$lines.push(Localized string:C991("hasDirtyAssociatedField"))
 						$lines.push(Replace string:C233(Localized string:C991("dirtyFlagIs"); "{attribute}"; $item.definition.vectorName+"_dirty"))
 						
 					End if 

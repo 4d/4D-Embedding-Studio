@@ -43,8 +43,12 @@ Do you want to mark all existing vectors for recalculation?</target>
           <target>Dirty Flag</target>
         </trans-unit>
         <trans-unit id="hasDirtyFlag" resname="hasDirtyFlag">
-          <source>Has a dirty flag (&lt;vector&gt;_dirty)</source>
-          <target>Has a dirty flag (&lt;vector&gt;_dirty)</target>
+          <source>Yes if the table has a Boolean field named &lt;vector&gt;_dirty. This field keeps an outdated vector until it is recomputed, instead of erasing it. To enable it, add it to the structure.</source>
+          <target>Yes if the table has a Boolean field named &lt;vector&gt;_dirty. This field keeps an outdated vector until it is recomputed, instead of erasing it. To enable it, add it to the structure.</target>
+        </trans-unit>
+        <trans-unit id="hasDirtyAssociatedField" resname="hasDirtyAssociatedField">
+          <source>Has an associated dirty field</source>
+          <target>Has an associated dirty field</target>
         </trans-unit>
         <trans-unit id="dirtyFlagIs" resname="dirtyFlagIs">
           <source>Dirty flag: {attribute}</source>
