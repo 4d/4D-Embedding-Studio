@@ -762,7 +762,7 @@ Function phraseManager($e : Object)
 			// ______________________________________________________
 		: ($e.code=On Mouse Enter:K2:33) || ($e.code=On Mouse Move:K2:35)
 			
-			OBJECT SET HELP TIP:C1181(*; $me; String:C10($item.helptip))
+			OBJECT SET HELP TIP:C1181(*; $me; $item.phraseHelptip)
 			
 			// ______________________________________________________
 		: ($e.code=On Mouse Leave:K2:34)

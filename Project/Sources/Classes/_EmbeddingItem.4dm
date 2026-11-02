@@ -170,7 +170,20 @@ Function get helptip() : Text
 		End for each
 
 		return $lines.join("\r")
-	
+
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+	// Same as helptip, limited to the phrase's own errors and warnings (no model or index messages).
+Function get phraseHelptip() : Text
+
+	var $lines : Collection:=This:C1470._phraseErrors.copy()
+
+	var $warning : Text
+	For each ($warning; This:C1470._phraseWarnings)
+		$lines.push("⚠️ "+$warning)
+	End for each
+
+	return $lines.join("\r")
+
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Re-runs phrase + model validation and refreshes _phraseErrors / _modelErrors.
 	// Also refreshes the styled phrase so the editor stays in sync.
