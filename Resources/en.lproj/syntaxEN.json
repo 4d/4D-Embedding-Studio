@@ -322,24 +322,6 @@
 				"SummaryFormat": "text"
 			}
 		},
-		"Playground": {
-			"new()": {
-				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings; *options* : Object )",
-				"Params": [
-					[
-						"settings",
-						"cs.EmbeddingStudio.Settings",
-						"->"
-					],
-					[
-						"options",
-						"Object",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		},
 		"Scheduler": {
 			"new()": {
 				"Syntax": "**.new**()",
@@ -411,6 +393,24 @@
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
+				"Summary": ""
+			}
+		},
+		"StudioEmbedder": {
+			"new()": {
+				"Syntax": "**.new**( *settings* : cs.EmbeddingStudio.Settings; *options* : Object )",
+				"Params": [
+					[
+						"settings",
+						"cs.EmbeddingStudio.Settings",
+						"->"
+					],
+					[
+						"options",
+						"Object",
+						"->"
+					]
+				],
 				"Summary": ""
 			}
 		}
@@ -940,7 +940,7 @@
 		"openHelp()": {
 			"Syntax": "**.openHelp**()",
 			"Params": [],
-			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rOpens the project's GitHub repository in the default browser (footer help button).",
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rOpens the online documentation (developer.4d.com) in the default browser (footer help button).",
 			"SummaryFormat": "text"
 		},
 		"readEmbeddingItems()": {
@@ -1690,6 +1690,19 @@
 				]
 			],
 			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rCell value of the \"dirty flag\" column: a plain ✓ (U+2713, renders on macOS and Windows), not a\rcheckbox, which would look like a control that creates the field (use the context menu for that).",
+			"SummaryFormat": "text"
+		},
+		"get phraseHelptip()": {
+			"Syntax": "**.get phraseHelptip**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-",
+					""
+				]
+			],
+			"Summary": "<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==\rSame as helptip, limited to the phrase's own errors and warnings (no model or index messages).",
 			"SummaryFormat": "text"
 		}
 	},
@@ -2627,65 +2640,6 @@
 				]
 			],
 			"Summary": "MARK:-[PUBLIC]\r=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rProcess one, many, or all Definitions across their full dataclass selections.\r$definition may be: Null (= all definitions in settings), a single Definition,\ror a collection of Definition.",
-			"SummaryFormat": "text"
-		},
-		"_inheritedFrom_": "_ProcessBase"
-	},
-	"Playground": {
-		"embed()": {
-			"Syntax": "**.embed**( *input* : Variant; *context* : Variant; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
-			"Params": [
-				[
-					"input",
-					"Variant",
-					"->",
-					""
-				],
-				[
-					"context",
-					"Variant",
-					"->",
-					""
-				],
-				[
-					"model",
-					"Text",
-					"->",
-					""
-				],
-				[
-					"",
-					"cs.EmbeddingStudio.EmbedderResult",
-					"<-",
-					""
-				]
-			],
-			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rCompute a vector for an arbitrary input — without persisting anywhere.\rUseful for previews, similarity checks, REPL experimentation, or ad-hoc querying.\r\rSupported call shapes:\rembed(\"some text\"; \"text-embedding-3-small\")          → direct embed\rembed(\"some text\"; $definition)                        → uses $definition.modelAlias\rembed($entity; $definition)                            → renders definition.phrase, embeds with definition.modelAlias\rembed($entity; $phrase; \"text-embedding-3-small\")      → renders $phrase, embeds with given model\rembed($entity; \"template with {field}\"; \"model\")       → compiles template on the fly\rembed($entity)                                         → auto-resolve definition from settings (unique match required)\rembed($entity; {vectorName: \"v\"})                      → stub → saved definition (deduces phrase + model)\rembed($entity; {phrase: \"tpl {x}\"; modelAlias: \"m\"})   → ad-hoc stub, phrase compiled inline, model taken from stub\rembed(\"some text\"; {modelAlias: \"m\"})                  → stub supplies the model only\r\r$context stubs are resolved exactly like cs.Process resolves its definition argument — a\r{vectorName} stub is matched against the saved definitions for the (entity's) dataclass; an\rexplicit {modelAlias} on the stub always wins over a deduced one.\r\rThrows if no model can be determined.",
-			"SummaryFormat": "text"
-		},
-		"render()": {
-			"Syntax": "**.render**( *entity* : 4D.Entity; *definitionOrPhrase* : Variant ) : Text",
-			"Params": [
-				[
-					"entity",
-					"4D.Entity",
-					"->",
-					""
-				],
-				[
-					"definitionOrPhrase",
-					"Variant",
-					"->",
-					""
-				],
-				[
-					"",
-					"Text",
-					"<-",
-					""
-				]
-			],
-			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rRender the phrase for an entity and return the resulting text. No API call, no persistence.\r$definitionOrPhrase may be:\r- cs.Phrase                  → used directly\r- cs.Definition     → uses $definition.phrase\r- Text                       → compiled on the fly as a new Phrase\r- Object stub                → {vectorName[; dataclassName]} looked up in settings (deduces the phrase),\ror {phrase|template: Text} compiled inline\r- Null                       → auto-resolved from settings (requires a unique match for $entity's dataclass)",
 			"SummaryFormat": "text"
 		},
 		"_inheritedFrom_": "_ProcessBase"
@@ -3812,5 +3766,64 @@
 			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rTrue when 4D AIKit is loaded and recent enough for the studio.",
 			"SummaryFormat": "text"
 		}
+	},
+	"StudioEmbedder": {
+		"embed()": {
+			"Syntax": "**.embed**( *input* : Variant; *context* : Variant; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
+			"Params": [
+				[
+					"input",
+					"Variant",
+					"->",
+					""
+				],
+				[
+					"context",
+					"Variant",
+					"->",
+					""
+				],
+				[
+					"model",
+					"Text",
+					"->",
+					""
+				],
+				[
+					"",
+					"cs.EmbeddingStudio.EmbedderResult",
+					"<-",
+					""
+				]
+			],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rCompute a vector for an arbitrary input — without persisting anywhere.\rUseful for search queries, similarity checks, or previews.\r\rSupported call shapes:\rembed(\"some text\"; \"text-embedding-3-small\")          → direct embed\rembed(\"some text\"; $definition)                        → uses $definition.modelAlias\rembed($entity; $definition)                            → renders definition.phrase, embeds with definition.modelAlias\rembed($entity; $phrase; \"text-embedding-3-small\")      → renders $phrase, embeds with given model\rembed($entity; \"template with {field}\"; \"model\")       → compiles template on the fly\rembed($entity)                                         → auto-resolve definition from settings (unique match required)\rembed($entity; {vectorName: \"v\"})                      → stub → saved definition (deduces phrase + model)\rembed($entity; {phrase: \"tpl {x}\"; modelAlias: \"m\"})   → ad-hoc stub, phrase compiled inline, model taken from stub\rembed(\"some text\"; {modelAlias: \"m\"})                  → stub supplies the model only\r\r$context stubs are resolved exactly like cs.Process resolves its definition argument — a\r{vectorName} stub is matched against the saved definitions for the (entity's) dataclass; an\rexplicit {modelAlias} on the stub always wins over a deduced one.\r\rThrows if no model can be determined.",
+			"SummaryFormat": "text"
+		},
+		"render()": {
+			"Syntax": "**.render**( *entity* : 4D.Entity; *definitionOrPhrase* : Variant ) : Text",
+			"Params": [
+				[
+					"entity",
+					"4D.Entity",
+					"->",
+					"4D entity"
+				],
+				[
+					"definitionOrPhrase",
+					"Variant",
+					"->",
+					"could be"
+				],
+				[
+					"",
+					"Text",
+					"<-",
+					""
+				]
+			],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rRender the phrase for an entity and return the resulting text. No API call, no persistence.\r- cs.Phrase                  → used directly\r- cs.Definition     → uses $definition.phrase\r- Text                       → compiled on the fly as a new Phrase\r- Object stub                → {vectorName[; dataclassName]} looked up in settings (deduces the phrase),\ror {phrase|template: Text} compiled inline\r- Null                       → auto-resolved from settings (requires a unique match for $entity's dataclass)\r\r$entity: 4D entity\r$definitionOrPhrase: could be",
+			"SummaryFormat": "text"
+		},
+		"_inheritedFrom_": "_ProcessBase"
 	}
 }

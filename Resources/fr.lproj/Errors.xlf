@@ -73,7 +73,7 @@
           <target>API d'embedding injoignable après {retries} tentatives</target>
         </trans-unit>
       </group>
-      <group resname="Playground">
+      <group resname="StudioEmbedder">
         <trans-unit id="errNoPhraseResolved" resname="errNoPhraseResolved">
           <source>No phrase could be resolved for the given entity/context</source>
           <target>Aucune phrase n'a pu être résolue pour l'entité ou le contexte fourni</target>

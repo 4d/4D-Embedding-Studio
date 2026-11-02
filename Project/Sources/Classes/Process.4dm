@@ -13,7 +13,7 @@
  
  All entry points return a cs.ProcessResult.
 
- For ad-hoc rendering and embedding without persistence, see cs.Playground.
+ For on-demand rendering and embedding without persistence, see cs.StudioEmbedder.
 
  Options object ($options)
 

@@ -33,13 +33,13 @@
 			"Embedder",
 			"EmbedderResult",
 			"Phrase",
-			"Playground",
 			"Process",
 			"ProcessError",
 			"ProcessErrorCode",
 			"ProcessResult",
 			"Scheduler",
-			"Settings"
+			"Settings",
+			"StudioEmbedder"
 		]
 	},
 	"SCHEDULER": {
@@ -92,7 +92,6 @@
 			"test_invalidateInBackground",
 			"test_menu",
 			"test_phrase",
-			"test_playground",
 			"test_process",
 			"test_process_criticalModels",
 			"test_process_history",
@@ -107,7 +106,8 @@
 			"test_scheduleCalc",
 			"test_scheduler",
 			"test_scheduler_asyncSave",
-			"test_settings"
+			"test_settings",
+			"test_studioEmbedder"
 		],
 		"classes": [
 			"_TestAIKitClient",

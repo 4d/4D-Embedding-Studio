@@ -105,7 +105,7 @@ You can set the time interval between two calculations starting from a specific 
 
 ### Building queries with embeddings
 
-Once you have defined embeddings in your datastore, you can start [querying your dataclasses using AI-based features](https://developer.4d.com/docs/API/DataClassClass#query-by-vector-similarity). You just need to make sure that you use the same model for your embedding definition and in the query string.
+Once you have defined embeddings in your datastore, you can start [querying your dataclasses using AI-based features](https://developer.4d.com/docs/API/DataClassClass#query-by-vector-similarity). You just need to make sure that you use the same model for your embedding definition and in the query string. The [StudioEmbedder](Documentation/Classes/StudioEmbedder.md) class does it for you: it takes the model from the saved definition.
 
 For example, assuming that:
 
@@ -118,15 +118,17 @@ You can write:
 ```4d
 var $entity:=Form.entity //contains the selected entity
 
-  //create a vector to compare using 4D AIKit
-var $client:=cs.AIKit.OpenAI.new()
-var $result:=$client.embeddings.create("A "+ $entity.category+" product that can be used for "+$entity.usage; "myEmbeddingModelAlias")
-var $vector:=$result.vector
+  //create a vector to compare, with the model of the "embedding" definition
+var $studioEmbedder:=cs.EmbeddingStudio.StudioEmbedder.new()
+var $vector:=$studioEmbedder.embed("A "+$entity.category+" product that can be used for "+$entity.usage; \
+	{vectorName: "embedding"; dataclassName: "Products"}).vector
 
   //search with default metric (cosine)
 var $products:=ds.Products.query("embedding > :1 order by embedding desc"; {vector : $vector})
 
 ```
+
+To compare with the whole phrase of the selected product instead, pass the entity: `$studioEmbedder.embed($entity; {vectorName: "embedding"})` renders the definition's phrase for it and uses the definition's model.
 
 
 
@@ -178,7 +180,7 @@ $p.processEntity($entity)
 |---|---|
 | [Process](Documentation/Classes/Process.md) | Main orchestrator — entry point for all batch and entity operations. |
 | [Scheduler](Documentation/Classes/Scheduler.md) | Automated recalculation scheduler — background task, force/cancel, and runtime status. |
-| [Playground](Documentation/Classes/Playground.md) | Ad-hoc, non-persisting helpers for rendering phrases and computing one-off vectors. |
+| [StudioEmbedder](Documentation/Classes/StudioEmbedder.md) | Renders and embeds on demand using your saved definitions — e.g. to build a search query vector. Nothing is persisted. |
 | [Settings](Documentation/Classes/Settings.md) | Loads and saves the `embeddings.json` configuration file. |
 | [Definition](Documentation/Classes/Definition.md) | Describes one vector field: dataclass, field name, model alias, and phrase template. |
 | [Embedder](Documentation/Classes/Embedder.md) | Thin wrapper around the AIKit embeddings API with retry/backoff logic. |
