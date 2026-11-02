@@ -148,12 +148,12 @@ Pick a vector attribute, then describe a record in one sentence.</source>
           <target>Plus d'informations</target>
         </trans-unit>
         <trans-unit id="schedulerWindowTitle" resname="schedulerWindowTitle">
-          <source>Embedding Scheduler</source>
-          <target>Planificateur d'embeddings</target>
+          <source>Outdated Embeddings Scheduler</source>
+          <target>Planificateur des embeddings obsolètes</target>
         </trans-unit>
         <trans-unit id="schedulerIntro" resname="schedulerIntro">
-          <source>Automatically recompute the embedding vectors defined for your dataclasses. Choose when this task runs.</source>
-          <target>Recalcule automatiquement les vecteurs d'embedding définis pour vos dataclasses. Choisissez quand cette tâche s'exécute.</target>
+          <source>Automatically recompute the outdated embedding vectors defined for your dataclasses. Choose when this task runs.</source>
+          <target>Recalcule automatiquement les vecteurs d'embedding obsolètes définis pour vos dataclasses. Choisissez quand cette tâche s'exécute.</target>
         </trans-unit>
         <trans-unit id="schedulerModeNever" resname="schedulerModeNever">
           <source>Never</source>
