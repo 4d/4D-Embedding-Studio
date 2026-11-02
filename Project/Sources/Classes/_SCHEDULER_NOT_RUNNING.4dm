@@ -57,7 +57,7 @@ Function manager($e : Object)
 			//______________________________________________________
 		: ($e.objectName="help")
 
-			OPEN URL:C673("https://github.com/4d/4D-Embedding-Studio/blob/main/Documentation/Classes/Scheduler.md#starting-the-scheduler"; *)
+			OPEN URL:C673("https://developer.4d.com/docs/embeddingstudio/Classes/Scheduler#starting-the-scheduler"; *)
 
 			//______________________________________________________
 		: ($e.objectName="startNow")
