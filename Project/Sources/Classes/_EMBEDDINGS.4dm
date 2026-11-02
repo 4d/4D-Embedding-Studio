@@ -256,10 +256,10 @@ Function manager($e : Object)
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Opens the project's GitHub repository in the default browser (footer help button).
+	// Opens the online documentation (developer.4d.com) in the default browser (footer help button).
 Function openHelp()
 	
-	OPEN URL:C673("https://github.com/4d/4D-Embedding-Studio")
+	OPEN URL:C673("https://developer.4d.com/docs/embeddingstudio/overview")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Footer status bar: repaints the one-line scheduler summary and the running spinner.
