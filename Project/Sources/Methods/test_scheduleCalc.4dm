@@ -5,11 +5,11 @@ var $calc : cs:C1710._ScheduleCalc:=cs:C1710._ScheduleCalc.me
 var $now : Text:=$calc._nowISO()
 
 // ══════════════════════════════════════════════════════════════════════
-// DISABLED / UNKNOWN
+// NEVER / UNKNOWN
 // ══════════════════════════════════════════════════════════════════════
 
 ASSERT:C1129($calc.nextRun(Null:C1517; ""; "")=Null:C1517; "null config → Null")
-ASSERT:C1129($calc.nextRun({mode: "disabled"}; ""; "")=Null:C1517; "disabled → Null")
+ASSERT:C1129($calc.nextRun({mode: "never"}; ""; "")=Null:C1517; "never → Null")
 ASSERT:C1129($calc.nextRun({mode: "unknown"}; ""; "")=Null:C1517; "unknown mode → Null")
 
 // ══════════════════════════════════════════════════════════════════════
@@ -81,7 +81,7 @@ ASSERT:C1129($slot="2020-01-01T03:00:00"; "slotAfter interval +3h, got "+$slot)
 var $slotDay : Text:=$calc.slotAfter({mode: "daily"; dailyTime: "06:00"}; "2020-01-01T09:00:00")
 ASSERT:C1129($slotDay="2020-01-02T06:00:00"; "slotAfter daily next day, got "+$slotDay)
 
-ASSERT:C1129($calc.slotAfter({mode: "disabled"}; "2020-01-01T00:00:00")=""; "slotAfter disabled → empty")
+ASSERT:C1129($calc.slotAfter({mode: "never"}; "2020-01-01T00:00:00")=""; "slotAfter never → empty")
 
 ASSERT:C1129($calc.slotAfter(Null:C1517; "2020-01-01T00:00:00")=""; "slotAfter null config → empty")
 ASSERT:C1129($calc.slotAfter({mode: "interval"; intervalHours: 3}; "")=""; "slotAfter without base timestamp → empty")

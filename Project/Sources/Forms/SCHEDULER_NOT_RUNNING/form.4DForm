@@ -1,0 +1,253 @@
+{
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"windowTitle": ":xliff:schedulerNotRunningWindowTitle",
+	"windowSizingX": "fixed",
+	"windowSizingY": "fixed",
+	"destination": "detailScreen",
+	"width": 600,
+	"height": 426,
+	"events": [
+		"onLoad",
+		"onClick",
+		"onUnload"
+	],
+	"css": [
+		{
+			"path": "SCHEDULER_NOT_RUNNING.css",
+			"media": "mac"
+		},
+		{
+			"path": "SCHEDULER_NOT_RUNNING.css",
+			"media": "windows"
+		}
+	],
+	"pages": [
+		{
+			"objects": {}
+		},
+		{
+			"objects": {
+				"icon": {
+					"type": "picture",
+					"left": 24,
+					"top": 22,
+					"width": 56,
+					"height": 58,
+					"picture": "/RESOURCES/Images/schedulerWarning.png",
+					"pictureFormat": "scaled"
+				},
+				"title": {
+					"type": "text",
+					"text": ":xliff:schedulerNotRunningTitle",
+					"left": 100,
+					"top": 24,
+					"width": 480,
+					"height": 20,
+					"fontSize": 15,
+					"fontWeight": "bold"
+				},
+				"explanation": {
+					"type": "text",
+					"text": ":xliff:schedulerNotRunningExplanation",
+					"left": 100,
+					"top": 52,
+					"width": 480,
+					"height": 56
+				},
+				"howToStart": {
+					"type": "text",
+					"text": ":xliff:schedulerNotRunningHowToStart",
+					"left": 100,
+					"top": 118,
+					"width": 480,
+					"height": 18,
+					"fontWeight": "bold"
+				},
+				"optionAPanel": {
+					"type": "rectangle",
+					"left": 100,
+					"top": 142,
+					"width": 480,
+					"height": 72,
+					"borderRadius": 6,
+					"class": "notRunningPanel"
+				},
+				"optionA": {
+					"type": "input",
+					"left": 116,
+					"top": 150,
+					"width": 448,
+					"height": 18,
+					"dataSource": "Form:C1466.optionA",
+					"styledText": true,
+					"enterable": false,
+					"focusable": false,
+					"borderStyle": "none",
+					"fill": "transparent",
+					"contextMenu": "none"
+				},
+				"optionASetting": {
+					"type": "text",
+					"text": ":xliff:schedulerNotRunningOptionASetting",
+					"left": 116,
+					"top": 176,
+					"width": 448,
+					"height": 18,
+					"fontSize": 12,
+					"fontStyle": "italic"
+				},
+				"openSettings": {
+					"type": "button",
+					"style": "custom",
+					"text": ":xliff:schedulerNotRunningOpenSettings",
+					"left": 364,
+					"top": 194,
+					"width": 204,
+					"height": 17,
+					"fontSize": 12,
+					"textAlign": "right",
+					"textDecoration": "underline",
+					"focusable": false,
+					"class": "notRunningLink",
+					"events": [
+						"onClick"
+					]
+				},
+				"optionBPanel": {
+					"type": "rectangle",
+					"left": 100,
+					"top": 224,
+					"width": 480,
+					"height": 78,
+					"borderRadius": 6,
+					"class": "notRunningPanel"
+				},
+				"optionB": {
+					"type": "input",
+					"left": 116,
+					"top": 232,
+					"width": 448,
+					"height": 18,
+					"dataSource": "Form:C1466.optionB",
+					"styledText": true,
+					"enterable": false,
+					"focusable": false,
+					"borderStyle": "none",
+					"fill": "transparent",
+					"contextMenu": "none"
+				},
+				"codeBox": {
+					"type": "rectangle",
+					"left": 116,
+					"top": 254,
+					"width": 448,
+					"height": 32,
+					"borderRadius": 5,
+					"class": "notRunningCodeBox"
+				},
+				"code": {
+					"type": "input",
+					"left": 128,
+					"top": 262,
+					"width": 340,
+					"height": 17,
+					"dataSource": "Form:C1466.code",
+					"enterable": false,
+					"focusable": false,
+					"borderStyle": "none",
+					"fill": "transparent",
+					"contextMenu": "none",
+					"fontFamily": "Menlo",
+					"fontSize": 12,
+					"class": "notRunningCode"
+				},
+				"copy": {
+					"type": "button",
+					"style": "regular",
+					"text": ":xliff:schedulerNotRunningCopy",
+					"icon": "/RESOURCES/Images/schedulerCopy.png",
+					"textPlacement": "right",
+					"imageHugsTitle": true,
+					"left": 476,
+					"top": 259,
+					"width": 80,
+					"height": 22,
+					"focusable": false,
+					"events": [
+						"onClick"
+					]
+				},
+				"infoIcon": {
+					"type": "picture",
+					"left": 100,
+					"top": 317,
+					"width": 16,
+					"height": 16,
+					"picture": "/RESOURCES/Images/schedulerInfo.png",
+					"pictureFormat": "scaled"
+				},
+				"testingNote": {
+					"type": "text",
+					"text": ":xliff:schedulerNotRunningTestingNote",
+					"left": 124,
+					"top": 316,
+					"width": 456,
+					"height": 34,
+					"fontSize": 12,
+					"class": "notRunningMuted"
+				},
+				"help": {
+					"type": "button",
+					"style": "help",
+					"text": "",
+					"left": 24,
+					"top": 382,
+					"width": 22,
+					"height": 22,
+					"events": [
+						"onClick"
+					]
+				},
+				"startNow": {
+					"type": "button",
+					"style": "regular",
+					"text": ":xliff:schedulerNotRunningStartNow",
+					"left": 330,
+					"top": 380,
+					"width": 150,
+					"height": 26,
+					"events": [
+						"onClick"
+					]
+				},
+				"ok": {
+					"type": "button",
+					"style": "regular",
+					"text": ":xliff:schedulerNotRunningOk",
+					"defaultButton": true,
+					"left": 492,
+					"top": 380,
+					"width": 88,
+					"height": 26,
+					"events": [
+						"onClick"
+					]
+				}
+			}
+		}
+	],
+	"formClass": "_SCHEDULER_NOT_RUNNING",
+	"method": "FORM_MANAGER",
+	"rightMargin": 20,
+	"bottomMargin": 20,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
+}

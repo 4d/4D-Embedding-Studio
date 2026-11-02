@@ -45,16 +45,19 @@
 	"SCHEDULER": {
 		"methods": [
 			"_SCHEDULER_LOOP",
+			"_SCHEDULER_NOT_RUNNING",
 			"_SCHEDULER_RUN",
 			"_SCHEDULER_WIZARD",
 			"_schedulerFormatDate"
 		],
 		"forms": [
-			"SCHEDULER"
+			"SCHEDULER",
+			"SCHEDULER_NOT_RUNNING"
 		],
 		"classes": [
 			"_ScheduleCalc",
 			"_SCHEDULER",
+			"_SCHEDULER_NOT_RUNNING",
 			"_SchedulerState"
 		]
 	},

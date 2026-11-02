@@ -98,7 +98,7 @@ You can configure the 4D Embedding Studio component scheduler to adjust the calc
 
 You can set the time interval between two calculations starting from a specific time (**At regular interval** option), or have a calculation run daily at a specific time (**Once a day** option). 
 
-**Important**: The scheduler needs an explicit authorization from the host database to be started. This authorization is given when you click **Start scheduler** (through the menu command or the button) but it needs to be renewed if the project is restarted. To make sure the scheduler can always restart automatically, you need to select the **Execute "On Host Database Event" method of the components** option in the [project Settings](https://developer.4d.com/docs/settings/security#options). 
+**Important**: The scheduler needs an explicit authorization from the host database to be started. This authorization is given when you click **Start now** in the warning shown when you open the scheduler settings while the scheduler is not running, but it needs to be renewed if the project is restarted. To make sure the scheduler can always restart automatically, you need to select the **Execute "On Host Database Event" method of the components** option in the [project Settings](https://developer.4d.com/docs/settings/security#options). 
 
 
 

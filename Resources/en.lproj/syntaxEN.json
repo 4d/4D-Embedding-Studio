@@ -1723,8 +1723,8 @@
 		"modeInterval": {
 			"Syntax": "modeInterval : Boolean"
 		},
-		"modeDisabled": {
-			"Syntax": "modeDisabled : Boolean"
+		"modeNever": {
+			"Syntax": "modeNever : Boolean"
 		},
 		"startReference": {
 			"Syntax": "startReference : Text"

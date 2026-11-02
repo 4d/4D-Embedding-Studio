@@ -353,11 +353,6 @@ Function schedulerManager($e : Object)
 	$menu.append(Localized string:C991("schedulerConfigure"); "configure")
 	$menu.line()
 	$menu.append(Localized string:C991("schedulerForceNow"); "forceNow").enable(Bool:C1537($status.started) && Not:C34(Bool:C1537($status.running)))
-	If (Bool:C1537($status.started))
-		$menu.append(Localized string:C991("schedulerStop"); "stop")
-	Else 
-		$menu.append(Localized string:C991("schedulerStart"); "start")
-	End if 
 	$menu.append(Localized string:C991("schedulerCancel"); "cancel").enable(Bool:C1537($status.running))
 	
 	// In dev mode the same button also carries the global dev actions.
@@ -375,10 +370,6 @@ Function schedulerManager($e : Object)
 			_SCHEDULER_WIZARD
 		: ($menu.choice="forceNow")
 			$scheduler.force()
-		: ($menu.choice="start")
-			$scheduler.start()
-		: ($menu.choice="stop")
-			$scheduler.stop()
 		: ($menu.choice="cancel")
 			$scheduler.cancel()
 		Else 
@@ -414,7 +405,7 @@ Function _schedulerStateLabel($status : Object) : Text
 		: (Bool:C1537($status.running))
 			return Localized string:C991("schedulerStateRunning")
 		: (Not:C34(Bool:C1537($status.enabled)))
-			return Localized string:C991("schedulerStateDisabled")
+			return Localized string:C991("schedulerStateNever")
 		: (Bool:C1537($status.started))
 			return Localized string:C991("schedulerStateArmed")
 		Else 
@@ -629,6 +620,14 @@ Function moreManager($e : Object)
 	// opening the settings / log files) to an existing menu. Caller gates on dev mode.
 Function _appendDevMenu($menu : cs:C1710._menu)
 	
+	// Users start the scheduler from the "not running" dialog; start/stop at will is for dev only.
+	If (Bool:C1537(cs:C1710.Scheduler.me.status().started))
+		$menu.append("🚧 Stop Scheduler"; "stopScheduler")
+	Else 
+		$menu.append("🚧 Start Scheduler"; "startScheduler")
+	End if 
+	$menu.line()
+	
 	var $workerBusy : Boolean:=(Process number:C372("EmbeddingStudio")>0)
 	
 	$menu.append($workerBusy ? "⏳ Compute All Vectors" : "🚧 Compute All Vectors"; "computeAllVectors").enable(Not:C34($workerBusy))
@@ -680,6 +679,10 @@ Function _appendDevMenu($menu : cs:C1710._menu)
 Function _handleDevChoice($choice : Text) : Boolean
 	
 	Case of 
+		: ($choice="startScheduler")
+			cs:C1710.Scheduler.me.start()
+		: ($choice="stopScheduler")
+			cs:C1710.Scheduler.me.stop()
 		: ($choice="computeAllVectors")
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1)); Formula:C1597(_computeVectors))
 		: ($choice="invalidAllVectors")

@@ -156,9 +156,9 @@ Pick a vector attribute, then describe a record in one sentence.</target>
           <source>Automatically recompute the embedding vectors defined for your dataclasses. Choose when this task runs.</source>
           <target>Automatically recompute the embedding vectors defined for your dataclasses. Choose when this task runs.</target>
         </trans-unit>
-        <trans-unit id="schedulerModeDisabled" resname="schedulerModeDisabled">
-          <source>Disabled</source>
-          <target>Disabled</target>
+        <trans-unit id="schedulerModeNever" resname="schedulerModeNever">
+          <source>Never</source>
+          <target>Never</target>
         </trans-unit>
         <trans-unit id="schedulerModeInterval" resname="schedulerModeInterval">
           <source>At a regular interval</source>
@@ -196,6 +196,10 @@ Pick a vector attribute, then describe a record in one sentence.</target>
           <source>Run now</source>
           <target>Run now</target>
         </trans-unit>
+        <trans-unit id="schedulerForceNowTip" resname="schedulerForceNowTip">
+          <source>Recompute the outdated embeddings now, without waiting for the next scheduled run</source>
+          <target>Recompute the outdated embeddings now, without waiting for the next scheduled run</target>
+        </trans-unit>
         <trans-unit id="schedulerForceNowTipStopped" resname="schedulerForceNowTipStopped">
           <source>Start the scheduler to run it now</source>
           <target>Start the scheduler to run it now</target>
@@ -203,14 +207,6 @@ Pick a vector attribute, then describe a record in one sentence.</target>
         <trans-unit id="schedulerForceNowTipRunning" resname="schedulerForceNowTipRunning">
           <source>A run is already in progress</source>
           <target>A run is already in progress</target>
-        </trans-unit>
-        <trans-unit id="schedulerStart" resname="schedulerStart">
-          <source>Start scheduler</source>
-          <target>Start scheduler</target>
-        </trans-unit>
-        <trans-unit id="schedulerStop" resname="schedulerStop">
-          <source>Stop scheduler</source>
-          <target>Stop scheduler</target>
         </trans-unit>
         <trans-unit id="schedulerCancel" resname="schedulerCancel">
           <source>Cancel run</source>
@@ -228,7 +224,7 @@ Pick a vector attribute, then describe a record in one sentence.</target>
           <source>Invalidating {vectors}…</source>
           <target>Invalidating {vectors}…</target>
         </trans-unit>
-        <trans-unit id="schedulerStateDisabled" resname="schedulerStateDisabled">
+        <trans-unit id="schedulerStateNever" resname="schedulerStateNever">
           <source>No schedule</source>
           <target>No schedule</target>
         </trans-unit>
@@ -264,7 +260,7 @@ Pick a vector attribute, then describe a record in one sentence.</target>
           <source>Not saved yet.</source>
           <target>Not saved yet.</target>
         </trans-unit>
-        <trans-unit id="schedulerSummaryDisabled" resname="schedulerSummaryDisabled">
+        <trans-unit id="schedulerSummaryNever" resname="schedulerSummaryNever">
           <source>No automatic recalculation.</source>
           <target>No automatic recalculation.</target>
         </trans-unit>
@@ -307,6 +303,62 @@ Pick a vector attribute, then describe a record in one sentence.</target>
         <trans-unit id="schedulerRelHours" resname="schedulerRelHours">
           <source>in {h} h {m} min</source>
           <target>in {h} h {m} min</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningWindowTitle" resname="schedulerNotRunningWindowTitle">
+          <source>Scheduler</source>
+          <target>Scheduler</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningTitle" resname="schedulerNotRunningTitle">
+          <source>The scheduler is not running</source>
+          <target>The scheduler is not running</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningExplanation" resname="schedulerNotRunningExplanation">
+          <source>The scheduler is a background process that decides, based on your settings, when to recompute vectors. As long as it is not running, no scheduled recomputation takes place.</source>
+          <target>The scheduler is a background process that decides, based on your settings, when to recompute vectors. As long as it is not running, no scheduled recomputation takes place.</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningHowToStart" resname="schedulerNotRunningHowToStart">
+          <source>To start it every time the database opens, either:</source>
+          <target>To start it every time the database opens, either:</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOptionA" resname="schedulerNotRunningOptionA">
+          <source>A · No code</source>
+          <target>A · No code</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOptionAText" resname="schedulerNotRunningOptionAText">
+          <source>— in Settings &gt; Security, check:</source>
+          <target>— in Settings &gt; Security, check:</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOptionASetting" resname="schedulerNotRunningOptionASetting">
+          <source>Execute “On Host Database Event” method of the components</source>
+          <target>Execute “On Host Database Event” method of the components</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOpenSettings" resname="schedulerNotRunningOpenSettings">
+          <source>Open Settings…</source>
+          <target>Open Settings…</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOptionB" resname="schedulerNotRunningOptionB">
+          <source>B · By code</source>
+          <target>B · By code</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOptionBText" resname="schedulerNotRunningOptionBText">
+          <source>— in the “On Server Startup” database method:</source>
+          <target>— in the “On Server Startup” database method:</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningCopy" resname="schedulerNotRunningCopy">
+          <source>Copy</source>
+          <target>Copy</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningTestingNote" resname="schedulerNotRunningTestingNote">
+          <source>Just testing? “Start now” runs it until the database is next closed, without changing your settings.</source>
+          <target>Just testing? “Start now” runs it until the database is next closed, without changing your settings.</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningStartNow" resname="schedulerNotRunningStartNow">
+          <source>Start now</source>
+          <target>Start now</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOk" resname="schedulerNotRunningOk">
+          <source>OK</source>
+          <target>OK</target>
         </trans-unit>
       </group>
     </body>

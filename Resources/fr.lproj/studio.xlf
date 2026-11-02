@@ -155,9 +155,9 @@ Pick a vector attribute, then describe a record in one sentence.</source>
           <source>Automatically recompute the embedding vectors defined for your dataclasses. Choose when this task runs.</source>
           <target>Recalcule automatiquement les vecteurs d'embedding définis pour vos dataclasses. Choisissez quand cette tâche s'exécute.</target>
         </trans-unit>
-        <trans-unit id="schedulerModeDisabled" resname="schedulerModeDisabled">
-          <source>Disabled</source>
-          <target>Désactivé</target>
+        <trans-unit id="schedulerModeNever" resname="schedulerModeNever">
+          <source>Never</source>
+          <target>Jamais</target>
         </trans-unit>
         <trans-unit id="schedulerModeInterval" resname="schedulerModeInterval">
           <source>At a regular interval</source>
@@ -195,6 +195,10 @@ Pick a vector attribute, then describe a record in one sentence.</source>
           <source>Run now</source>
           <target>Exécuter maintenant</target>
         </trans-unit>
+        <trans-unit id="schedulerForceNowTip" resname="schedulerForceNowTip">
+          <source>Recompute the outdated embeddings now, without waiting for the next scheduled run</source>
+          <target>Recalculer maintenant les embeddings obsolètes, sans attendre la prochaine exécution planifiée</target>
+        </trans-unit>
         <trans-unit id="schedulerForceNowTipStopped" resname="schedulerForceNowTipStopped">
           <source>Start the scheduler to run it now</source>
           <target>Démarrez le planificateur pour l'exécuter maintenant</target>
@@ -202,14 +206,6 @@ Pick a vector attribute, then describe a record in one sentence.</source>
         <trans-unit id="schedulerForceNowTipRunning" resname="schedulerForceNowTipRunning">
           <source>A run is already in progress</source>
           <target>Une exécution est déjà en cours</target>
-        </trans-unit>
-        <trans-unit id="schedulerStart" resname="schedulerStart">
-          <source>Start scheduler</source>
-          <target>Démarrer le planificateur</target>
-        </trans-unit>
-        <trans-unit id="schedulerStop" resname="schedulerStop">
-          <source>Stop scheduler</source>
-          <target>Arrêter le planificateur</target>
         </trans-unit>
         <trans-unit id="schedulerCancel" resname="schedulerCancel">
           <source>Cancel run</source>
@@ -227,7 +223,7 @@ Pick a vector attribute, then describe a record in one sentence.</source>
           <source>Invalidating {vectors}…</source>
           <target>Invalidation de {vectors}…</target>
         </trans-unit>
-        <trans-unit id="schedulerStateDisabled" resname="schedulerStateDisabled">
+        <trans-unit id="schedulerStateNever" resname="schedulerStateNever">
           <source>No schedule</source>
           <target>Pas de planification</target>
         </trans-unit>
@@ -263,7 +259,7 @@ Pick a vector attribute, then describe a record in one sentence.</source>
           <source>Not saved yet.</source>
           <target>Pas encore enregistré.</target>
         </trans-unit>
-        <trans-unit id="schedulerSummaryDisabled" resname="schedulerSummaryDisabled">
+        <trans-unit id="schedulerSummaryNever" resname="schedulerSummaryNever">
           <source>No automatic recalculation.</source>
           <target>Aucun recalcul automatique.</target>
         </trans-unit>
@@ -306,6 +302,62 @@ Pick a vector attribute, then describe a record in one sentence.</source>
         <trans-unit id="schedulerRelHours" resname="schedulerRelHours">
           <source>in {h} h {m} min</source>
           <target>dans {h} h {m} min</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningWindowTitle" resname="schedulerNotRunningWindowTitle">
+          <source>Scheduler</source>
+          <target>Planificateur</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningTitle" resname="schedulerNotRunningTitle">
+          <source>The scheduler is not running</source>
+          <target>Le planificateur n'est pas démarré</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningExplanation" resname="schedulerNotRunningExplanation">
+          <source>The scheduler is a background process that decides, based on your settings, when to recompute vectors. As long as it is not running, no scheduled recomputation takes place.</source>
+          <target>Le planificateur est un process de fond qui décide, selon vos réglages, quand lancer les recalculs de vecteurs. Tant qu'il n'est pas démarré, aucun recalcul planifié n'a lieu.</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningHowToStart" resname="schedulerNotRunningHowToStart">
+          <source>To start it every time the database opens, either:</source>
+          <target>Pour qu'il démarre à chaque ouverture de la base, au choix :</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOptionA" resname="schedulerNotRunningOptionA">
+          <source>A · No code</source>
+          <target>A · Sans code</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOptionAText" resname="schedulerNotRunningOptionAText">
+          <source>— in Settings &gt; Security, check:</source>
+          <target>— dans Propriétés &gt; Sécurité, cochez :</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOptionASetting" resname="schedulerNotRunningOptionASetting">
+          <source>Execute “On Host Database Event” method of the components</source>
+          <target>Exécuter la méthode « Sur événement base hôte » des composants</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOpenSettings" resname="schedulerNotRunningOpenSettings">
+          <source>Open Settings…</source>
+          <target>Ouvrir les propriétés…</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOptionB" resname="schedulerNotRunningOptionB">
+          <source>B · By code</source>
+          <target>B · Par code</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOptionBText" resname="schedulerNotRunningOptionBText">
+          <source>— in the “On Server Startup” database method:</source>
+          <target>— dans la méthode base « Sur démarrage serveur » :</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningCopy" resname="schedulerNotRunningCopy">
+          <source>Copy</source>
+          <target>Copier</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningTestingNote" resname="schedulerNotRunningTestingNote">
+          <source>Just testing? “Start now” runs it until the database is next closed, without changing your settings.</source>
+          <target>Juste pour tester ? « Démarrer maintenant » le lance jusqu'à la prochaine fermeture de la base, sans modifier vos réglages.</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningStartNow" resname="schedulerNotRunningStartNow">
+          <source>Start now</source>
+          <target>Démarrer maintenant</target>
+        </trans-unit>
+        <trans-unit id="schedulerNotRunningOk" resname="schedulerNotRunningOk">
+          <source>OK</source>
+          <target>OK</target>
         </trans-unit>
       </group>
     </body>

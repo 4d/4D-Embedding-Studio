@@ -12,7 +12,7 @@
    cs.EmbeddingStudio.Scheduler.me.autoStart() // True when the host arms us through On Host Database Event
 
  The scheduler config lives under the "scheduler" key of Settings/embeddings.json:
-   { "mode": "disabled|interval|daily",
+   { "mode": "never|interval|daily",
      "intervalHours": 1..24,                    // interval mode
      "startFrom": "reference|lastExecution",    // interval mode
      "startReference": "YYYY-MM-DDThh:mm:ss",   // interval, anchor for startFrom "reference"
@@ -119,7 +119,7 @@ Function saveConfig($cfg : Object) : Object
 	return $normalized
 
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Computes the next scheduled run, or Null when disabled.
+	// Computes the next scheduled run, or Null in "never" mode.
 Function nextRun() : Object
 	
 	var $state : cs:C1710._SchedulerState:=cs:C1710._SchedulerState.me
@@ -147,10 +147,10 @@ server Function status() : Object
 	var $state : cs:C1710._SchedulerState:=cs:C1710._SchedulerState.me
 	var $persisted : Object:=cs:C1710._ExecutionLog.me.lastRun()
 	var $cfg : Object:=This:C1470.config()
-	var $next : Object:=($cfg.mode="disabled") ? Null:C1517 : This:C1470.nextRun()
+	var $next : Object:=($cfg.mode="never") ? Null:C1517 : This:C1470.nextRun()
 
 	return {\
-		enabled: ($cfg.mode#"disabled"); \
+		enabled: ($cfg.mode#"never"); \
 		mode: $cfg.mode; \
 		armed: $state.armed; \
 		running: $state.running; \
@@ -199,7 +199,7 @@ Function _normalize($sched : Object) : Object
 
 	var $mode : Text:=String:C10($sched.mode)
 	If (($mode#"interval") && ($mode#"daily"))
-		$mode:="disabled"
+		$mode:="never"
 	End if
 
 	var $hours : Integer:=Num:C11($sched.intervalHours)

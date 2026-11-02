@@ -20,18 +20,18 @@ var $histBackup : Text:=($histExisted) ? $histFile.getText() : ""
 cs:C1710._SchedulerState.me.endBatch(""; ""; "")  // reset runtime baseline
 
 // ══════════════════════════════════════════════════════════════════════
-// DISABLED
+// NEVER
 // ══════════════════════════════════════════════════════════════════════
 
-$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "disabled"}}))
+$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "never"}}))
 cs:C1710._Settings.me.file:=$tmp
 
-ASSERT:C1129(cs:C1710.Scheduler.me.config().mode="disabled"; "config: expected disabled")
-ASSERT:C1129(cs:C1710.Scheduler.me.nextRun()=Null:C1517; "disabled: nextRun should be Null")
+ASSERT:C1129(cs:C1710.Scheduler.me.config().mode="never"; "config: expected never")
+ASSERT:C1129(cs:C1710.Scheduler.me.nextRun()=Null:C1517; "never: nextRun should be Null")
 
 var $status : Object:=cs:C1710.Scheduler.me.status()
-ASSERT:C1129($status.enabled=False:C215; "disabled: status.enabled should be false")
-ASSERT:C1129($status.nextRun=Null:C1517; "disabled: status.nextRun should be Null")
+ASSERT:C1129($status.enabled=False:C215; "never: status.enabled should be false")
+ASSERT:C1129($status.nextRun=Null:C1517; "never: status.nextRun should be Null")
 
 // ══════════════════════════════════════════════════════════════════════
 // INTERVAL
@@ -183,21 +183,21 @@ $state.markSkipped($batchStart)
 ASSERT:C1129(cs:C1710.Scheduler.me.status().lastResult="skipped"; "skip: status.lastResult should be 'skipped'")
 $state.endBatch("completed"; ""; cs:C1710._ScheduleCalc.me._nowISO())
 
-//MARK:- disabled keeps a historical last execution but drops the next run
+//MARK:- never mode keeps a historical last execution but drops the next run
 var $historical : Text:="2031-01-02T03:04:05"
 $state.endBatch(""; ""; "")  // clear in-memory lastRun
 $state.restore($historical; "completed"; "")  // as after a restart, rehydrated from persisted history
-$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "disabled"}}))
-var $disabledStatus : Object:=cs:C1710.Scheduler.me.status()
-ASSERT:C1129($disabledStatus.nextRun=Null:C1517; "disabled: nextRun should be Null")
-ASSERT:C1129($disabledStatus.lastExecution=$historical; "disabled: a historical lastExecution should be preserved")
+$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "never"}}))
+var $neverModeStatus : Object:=cs:C1710.Scheduler.me.status()
+ASSERT:C1129($neverModeStatus.nextRun=Null:C1517; "never mode: nextRun should be Null")
+ASSERT:C1129($neverModeStatus.lastExecution=$historical; "never mode: a historical lastExecution should be preserved")
 
 // ══════════════════════════════════════════════════════════════════════
 // saveConfig() / normalization
 // ══════════════════════════════════════════════════════════════════════
 
 //MARK:- saveConfig normalizes, persists the scheduler key only, and config() reads it back
-$tmp.setText(JSON Stringify:C1217({batchSize: 7; scheduler: {mode: "disabled"}}))
+$tmp.setText(JSON Stringify:C1217({batchSize: 7; scheduler: {mode: "never"}}))
 var $saved : Object:=cs:C1710.Scheduler.me.saveConfig({mode: "daily"; dailyTime: "25:99"; intervalHours: 0; startFrom: "now"})
 ASSERT:C1129($saved.mode="daily"; "saveConfig: expected daily")
 ASSERT:C1129($saved.dailyTime="00:00"; "saveConfig: malformed dailyTime should fall back to 00:00, got "+String:C10($saved.dailyTime))
@@ -215,11 +215,12 @@ var $reloaded : Object:=cs:C1710.Scheduler.me.reload()
 ASSERT:C1129($reloaded.mode="daily"; "reload: should return the status of the current config")
 ASSERT:C1129(OB Is defined:C1231($reloaded; "nextRun"); "reload: should expose nextRun")
 
-//MARK:- a missing configuration normalizes to the disabled defaults
+//MARK:- a missing configuration normalizes to the never defaults
 $cfg:=cs:C1710.Scheduler.me._normalize(Null:C1517)
-ASSERT:C1129($cfg.mode="disabled"; "normalize(Null): expected disabled")
+ASSERT:C1129($cfg.mode="never"; "normalize(Null): expected never")
 ASSERT:C1129($cfg.intervalHours=3; "normalize(Null): expected 3h")
 ASSERT:C1129($cfg.dailyTime="00:00"; "normalize(Null): expected 00:00")
+ASSERT:C1129(cs:C1710.Scheduler.me._normalize({mode: "disabled"}).mode="never"; "normalize: the old \"disabled\" value is no longer supported and reads as never")
 ASSERT:C1129($cfg.startFrom="reference"; "normalize(Null): expected reference")
 
 // ══════════════════════════════════════════════════════════════════════
@@ -240,7 +241,7 @@ ASSERT:C1129($state.lastResult="failed"; "restore: lastResult should be rehydrat
 ASSERT:C1129($state.lastError="boom"; "restore: lastError should be rehydrated")
 ASSERT:C1129($state.lastRunRestored; "restore: lastRunRestored should be set")
 
-$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "disabled"}}))
+$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "never"}}))
 $status:=cs:C1710.Scheduler.me.status()
 ASSERT:C1129($status.lastExecution="2026-01-01T10:00:00"; "restore: status().lastExecution should be the restored run")
 ASSERT:C1129($status.lastRunBeforeRestart; "restore: status() should flag a run from before the restart")
@@ -260,14 +261,14 @@ ASSERT:C1129($state.lastResult="skipped"; "markSkipped: lastResult should be ski
 ASSERT:C1129($state.skipLoggedFor="2026-03-03T13:00:00"; "markSkipped: the slot key should be kept for dedup")
 
 // ══════════════════════════════════════════════════════════════════════
-// start() / stop() — the real loop worker (disabled config, so it only sleeps)
+// start() / stop() — the real loop worker (never config, so it only sleeps)
 // ══════════════════════════════════════════════════════════════════════
 
 var $waited : Integer
 
 cs:C1710.Scheduler.me.stop()
 $state.endBatch(""; ""; "")  // empty in-memory state: start() must rehydrate from the history
-$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "disabled"}}))
+$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "never"}}))
 
 $execLog.startFullRun("2026-04-01T08:00:00")
 $execLog.endFullRun("2026-04-01T08:00:00"; "2026-04-01T08:05:00"; "failed"; "boom"; Null:C1517; Null:C1517)
@@ -331,7 +332,7 @@ End while
 
 //MARK:- a forced run whose definition cannot run ends "failed" with its errors
 $state.endBatch(""; ""; "")
-$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "disabled"}; definitions: [\
+$tmp.setText(JSON Stringify:C1217({scheduler: {mode: "never"}; definitions: [\
 {dataclassName: "NoSuchDataclass"; vectorName: "v"; modelAlias: "embed"; phrase: "{x}"}]}))
 
 cs:C1710.Scheduler.me.force()

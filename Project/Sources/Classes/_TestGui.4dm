@@ -14,7 +14,7 @@
 // Usage:
 //   var $gui:=cs._TestGui.me
 //   $gui.run("SCHEDULER"; Formula(_SCHEDULER_WIZARD); [\
-//     {objectName: "modeDaily"; code: On Clicked}; \
+//     {objectName: "startFromLast"; code: On Clicked}; \
 //     Formula($1.note("summary"; Form.summaryText))])
 //   ASSERT($gui.errors.length=0; JSON Stringify($gui.errors))
 //   $gui.form   // the Form object of the closed window

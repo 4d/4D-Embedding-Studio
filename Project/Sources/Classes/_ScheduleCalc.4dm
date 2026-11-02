@@ -3,13 +3,13 @@
  Stateless: every input is passed in, no side effects, no persistence.
 
  $config : { mode; intervalHours; startFrom; dailyTime }
-   mode      : "disabled" | "interval" | "daily"
+   mode      : "never" | "interval" | "daily"
    intervalHours : Integer 1..24 (interval mode)
    startFrom : "reference" | "lastExecution" (interval mode; "reference" uses config.startReference)
    dailyTime : "HH:MM" (daily mode)
 
  nextRun() returns { date : Date; time : Time; timestamp : Text; immediate : Boolean }
- or Null when the scheduler is disabled.
+ or Null in "never" mode.
  All values are expressed in local time (Current date / Current time).
 **/
 
@@ -31,7 +31,7 @@ Function nextRun($config : Object; $lastExecution : Text; $anchor : Text) : Obje
 		: (String:C10($config.mode)="daily")
 			return This:C1470._daily($config; String:C10($lastExecution))
 		Else 
-			return Null:C1517  // disabled or unknown
+			return Null:C1517  // never or unknown
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -174,7 +174,7 @@ Function _iso($date : Date; $time : Time) : Text
 	return $d+"T"+Time string:C180($time)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the next schedule slot strictly after $after (local ISO), or "" when disabled.
+	// Returns the next schedule slot strictly after $after (local ISO), or "" in "never" mode.
 	// Used to detect scheduled slots that elapse while a batch is running (skip traceability).
 Function slotAfter($config : Object; $after : Text) : Text
 	
