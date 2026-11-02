@@ -60,6 +60,11 @@ Formula:C1597(Form:C1466.currentItem:=Form:C1466.items.query("definition.datacla
 {objectName: "phrase"; code: On Clicked:K2:4}; \
 {objectName: "phrase"; code: On After Edit:K2:43; value: "{firstName} {nonExistent}"}; \
 Formula:C1597($1.note("typingErrors"; Form:C1466.currentItem.errors.length)); \
+{code: On Deactivate:K2:10}; \
+Formula:C1597($1.note("savedOnDeactivate"; JSON Parse:C1218(cs:C1710._Settings.me.file.getText()).definitions.query("vectorName = :1"; "student_vector_1").first().phrase)); \
+Formula:C1597(Form:C1466.refresh()); \
+Formula:C1597($1.note("keptAfterRefresh"; Form:C1466.currentItem.definition.phrase.template)); \
+{objectName: "phrase"; code: On After Edit:K2:43; value: "{firstName} {lastName}"}; \
 {objectName: "phrase"; code: On Data Change:K2:15; value: "{firstName} {lastName}"}; \
 Formula:C1597($1.note("savedErrors"; Form:C1466.currentItem.errors.length)); \
 Formula:C1597(Form:C1466.modelsDropdown.currentValue:="embed"); \
@@ -81,6 +86,9 @@ Formula:C1597(Form:C1466.items:=[]); \
 Formula:C1597($1.note("emptyState"; Form:C1466.paintEmptyState())); \
 Formula:C1597($1.note("emptyText"; Form:C1466.emptyStateText)); \
 Formula:C1597(Form:C1466.refresh()); \
+Formula:C1597(Form:C1466.currentItem:=Form:C1466.items.query("definition.dataclassName = :1 AND definition.vectorName = :2"; "_Students"; "student_vector_2")[0]); \
+{objectName: "list"; code: On Selection Change:K2:31}; \
+{objectName: "phrase"; code: On After Edit:K2:43; value: "{lastName} pasted"}; \
 Formula:C1597(Form:C1466.currentItem:=Null:C1517); \
 {objectName: "list"; code: On Selection Change:K2:31}])
 
@@ -102,6 +110,14 @@ ASSERT:C1129($notes.notVectorErrors=1; "list: a non-vector attribute should be r
 //MARK:- the phrase editor: errors while typing, saved on data change
 ASSERT:C1129($notes.typingErrors=1; "phrase: an unknown attribute should be highlighted while typing, got "+String:C10($notes.typingErrors))
 ASSERT:C1129($notes.savedErrors=0; "phrase: the corrected phrase should have no error, got "+String:C10($notes.savedErrors))
+
+//MARK:- the phrase being edited is kept when the area gets no On Data Change (#25586)
+var $vector1Edit : Text:="{firstName} {nonExistent}"
+ASSERT:C1129($notes.savedOnDeactivate=$vector1Edit; "phrase: the edit should be saved when the window is deactivated, got "+String:C10($notes.savedOnDeactivate))
+ASSERT:C1129($notes.keptAfterRefresh=$vector1Edit; "phrase: the edit should survive the refresh done on activate, got "+String:C10($notes.keptAfterRefresh))
+
+var $pasted : Object:=JSON Parse:C1218($tmp.getText()).definitions.query("vectorName = :1"; "student_vector_2").first()
+ASSERT:C1129(($pasted#Null:C1517) && ($pasted.phrase="{lastName} pasted"); "phrase: a phrase pasted before selecting another vector should be saved, got "+JSON Stringify:C1217($pasted))
 
 var $saved : Object:=JSON Parse:C1218($tmp.getText()).definitions.query("vectorName = :1"; "student_vector_1").first()
 ASSERT:C1129($saved#Null:C1517; "save: the definition should still be in the settings file")

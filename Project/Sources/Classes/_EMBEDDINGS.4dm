@@ -21,6 +21,9 @@ property _detailFields:=[\
 // Postponed "invalidate vectors?" questions, keyed by "dataclass.vector" (see _deferPromptInvalidate)
 property _pendingInvalidate : Object:={}
 
+// Item whose phrase was edited (On After Edit) but not saved yet (see _editPhrase / commitPhrase)
+property _editedItem : Object
+
 // Empty state: shown instead of the whole UI while the structure has no vector attribute
 property emptyStateText : Text
 property _mainObjects:=[\
@@ -40,7 +43,7 @@ property _emptyStateObjects:=[\
 property modelsDropdown : Object
 property _cache : Object  // Current catalog cache
 
-// ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___
+// MARK:-[CONSTRUCTOR]
 Class constructor
 	
 	This:C1470.read()
@@ -119,6 +122,13 @@ Function manager($e : Object)
 				This:C1470.paintEmptyState()
 				
 				// ______________________________________________________
+			: ($e.code=On Deactivate:K2:10)
+				
+				// The phrase area keeps the focus (no On Data Change): save the edit now, so that
+				// it survives the refresh done when the window comes back to the front
+				This:C1470.commitPhrase()
+				
+				// ______________________________________________________
 			: ($e.code=On Timer:K2:25)
 				
 				This:C1470.paintSchedulerStatus()
@@ -127,6 +137,7 @@ Function manager($e : Object)
 				// ______________________________________________________
 			: ($e.code=On Unload:K2:2)
 				
+				This:C1470.commitPhrase()  // The window may be closed while the phrase is being edited
 				This:C1470.flushPromptInvalidate()  // Last chance to ask about a pending edit
 				
 				Use (Storage:C1525.studio)
@@ -238,18 +249,18 @@ Function manager($e : Object)
 			This:C1470.schedulerManager($e)
 			//______________________________________________________
 		: ($e.objectName="help")
-
+			
 			This:C1470.openHelp()
-
+			
 			//______________________________________________________
-	End case
+	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Opens the project's GitHub repository in the default browser (footer help button).
 Function openHelp()
-
+	
 	OPEN URL:C673("https://github.com/4d/4D-Embedding-Studio")
-
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Footer status bar: repaints the one-line scheduler summary and the running spinner.
 Function paintSchedulerStatus()
@@ -460,6 +471,7 @@ Function listManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
+	This:C1470.commitPhrase()  // The phrase area may not have got its On Data Change yet
 	This:C1470.flushPromptInvalidate()  // The item being edited is left behind
 	
 	If (This:C1470.updateUI())
@@ -525,8 +537,8 @@ Function moreManager($e : Object)
 		$menu.append($workerBusy ? "⏳ Stat Vectors" : "🚧 Stat Vectors"; "statVectors").enable(Not:C34($workerBusy))
 		If (Not:C34($item.vectorObjectIndexed()))
 			$menu.line().append("🚧 Create standard index vector attribute"; "createVectorObjectIndex")
-		End if
-		Case of
+		End if 
+		Case of 
 			: (Not:C34($item.hasDirtyAssociatedAttribute()))
 				$menu.line().append("🚧 Create dirty attribute"; "createDirtyAttribute")
 			: (Not:C34($item.dirtyAssociatedAttributeIndexed()))
@@ -793,37 +805,67 @@ Function phraseManager($e : Object)
 				GET HIGHLIGHT:C209(*; $me; $startSel; $endSel)
 				ST SET TEXT:C1115(*; $me; $char; $startSel; $endSel)
 				
+				This:C1470._editPhrase($item; ST Get plain text:C1092(*; $me))  // A programmatic change
+				
 			End if 
 			
 			// ______________________________________________________
 		: ($e.code=On After Edit:K2:43)
 			
-			// Highlight any errors, if any
-			$item.phrase:=$item.parsePhrase(cs:C1710.Phrase.new($plainText))
+			// Typing, pasting, dropping…: the definition follows each change, so that nothing is
+			// lost if the area never gets its On Data Change (window deactivated, other vector
+			// selected in the list, window closed)
+			This:C1470._editPhrase($item; $plainText)
 			
 			Form:C1466.items:=Form:C1466.items  // update UI
 			
 			// ______________________________________________________
 		: ($e.code=On Data Change:K2:15)
 			
-			$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
-			$item.version+=1
+			// The area still shows the edited item: take its final text. Otherwise (another
+			// vector already selected, edit already saved) the text is not this item's one, and
+			// the edit is already in the definition.
+			If ($item=This:C1470._editedItem)
+				
+				This:C1470._editPhrase($item; $plainText)
+				
+				// Re-validate phrase + model and refresh styled text
+				$item.validate()
+				ST SET TEXT:C1115(*; $me; $item.phrase; ST Start text:K78:15; ST End text:K78:16)
+				
+			End if 
 			
-			// Re-validate phrase + model and refresh styled text
-			$item.validate()
-			ST SET TEXT:C1115(*; $me; $item.phrase; ST Start text:K78:15; ST End text:K78:16)
-			
-			This:C1470.saveEmbeddingItems()
-			
-			// The field also loses the focus when the "more" button or the contextual menu is
-			// clicked: asking here would kill the menu flow, so the question waits until the
-			// user really leaves the item.
-			This:C1470._deferPromptInvalidate($item)
+			This:C1470.commitPhrase()
 			
 			Form:C1466.items:=Form:C1466.items  // update UI
 			
 			// ______________________________________________________
 	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Puts the text being edited into $item's definition, without saving it (see commitPhrase).
+Function _editPhrase($item : cs:C1710._EmbeddingItem; $plainText : Text)
+	
+	$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
+	$item.phrase:=$item.parsePhrase($item.definition.phrase)  // Highlight any errors, if any
+	$item.version+=1
+	
+	This:C1470._editedItem:=$item
+	
+	// The field also loses the focus when the "more" button or the contextual menu is
+	// clicked: asking here would kill the menu flow, so the question waits until the
+	// user really leaves the item.
+	This:C1470._deferPromptInvalidate($item)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Saves the phrase being edited, if any.
+Function commitPhrase()
+	
+	If (This:C1470._editedItem#Null:C1517)
+		
+		This:C1470.saveEmbeddingItems()
+		
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function modelsDropdownManager($e : Object)
@@ -962,6 +1004,8 @@ Function modelUpdateDropdown($item : cs:C1710._EmbeddingItem)
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function refresh()
 	
+	This:C1470.commitPhrase()  // The items are read again from the settings file
+	
 	This:C1470.readEmbeddingItems()
 	
 	If (This:C1470._catalogModified())
@@ -970,6 +1014,8 @@ Function refresh()
 		This:C1470.readEmbeddingItems()  // Update list
 		
 	End if 
+	
+	This:C1470._keepPendingInvalidate()
 	
 	// MARK: Update list
 	var $current:=This:C1470.currentItem
@@ -1022,7 +1068,7 @@ Enriched with saved Definition entries from Settings/embeddings.json.
 	
 	var $items:=[]
 	var $vf : Object
-
+	
 	For each ($vf; This:C1470._collectVectorFields())
 		
 		var $def : cs:C1710.Definition:=This:C1470.settings.find($vf.dataclassName; $vf.field.name)
@@ -1095,6 +1141,10 @@ Enriched with saved Definition entries from Settings/embeddings.json.
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function saveEmbeddingItems()
 	
+	// Every definition is saved, the edited phrase too. Reset first: a refused save shows an
+	// alert, which deactivates the window, whose On Deactivate would try again.
+	This:C1470._editedItem:=Null:C1517
+	
 	// Keep only defined items
 	This:C1470.settings.definitions:=This:C1470.items\
 		.filter(Formula:C1597(Bool:C1537($1.value.defined)))\
@@ -1133,6 +1183,28 @@ Function _deferPromptInvalidate($item : cs:C1710._EmbeddingItem)
 	End if 
 	
 	This:C1470._pendingInvalidate[$item.definition.dataclassName+"."+$item.definition.vectorName]:=$item
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// After the items were read again (refresh), moves the postponed questions onto the new
+	// items, with the snapshot taken before the edit: the vectors were computed from it, and the
+	// saved edit (now the new item's snapshot) must not hide the change.
+Function _keepPendingInvalidate()
+	
+	var $key : Text
+	For each ($key; This:C1470._pendingInvalidate)
+		
+		var $old : cs:C1710._EmbeddingItem:=This:C1470._pendingInvalidate[$key]
+		var $new : Object:=This:C1470.items.query("definition.dataclassName = :1 & definition.vectorName = :2"; \
+			$old.definition.dataclassName; $old.definition.vectorName).first()
+		
+		If (($new#Null:C1517) && OB Instance of:C1731($new; cs:C1710._EmbeddingItem))
+			
+			$new.original:=$old.original
+			This:C1470._pendingInvalidate[$key]:=$new
+			
+		End if 
+		
+	End for each 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Asks about every definition changed since the last question (one dialog per item, at most).

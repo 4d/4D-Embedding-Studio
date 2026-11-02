@@ -85,7 +85,8 @@
 			"new()": {
 				"Syntax": "**.new**()",
 				"Params": [],
-				"Summary": ""
+				"Summary": "MARK:-[CONSTRUCTOR]",
+				"SummaryFormat": "text"
 			}
 		},
 		"EmbedderResult": {
@@ -140,10 +141,12 @@
 					[
 						"template",
 						"Text",
-						"->"
+						"->",
+						""
 					]
 				],
-				"Summary": ""
+				"Summary": "MARK:-[CONSTRUCTOR]",
+				"SummaryFormat": "text"
 			}
 		},
 		"_Logger": {
@@ -237,10 +240,12 @@
 					[
 						"options",
 						"Object",
-						"->"
+						"->",
+						""
 					]
 				],
-				"Summary": ""
+				"Summary": "MARK:-[CONSTRUCTOR]",
+				"SummaryFormat": "text"
 			}
 		},
 		"_Settings": {
@@ -257,13 +262,6 @@
 				"Summary": ""
 			}
 		},
-		"_vectorIndexes": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
 		"ProcessError": {
 			"new()": {
 				"Syntax": "**.new**( *scope* : Text; *code* : Integer; *ref* : Variant; *message* : Text; *overrides* : Object )",
@@ -271,30 +269,36 @@
 					[
 						"scope",
 						"Text",
-						"->"
+						"->",
+						""
 					],
 					[
 						"code",
 						"Integer",
-						"->"
+						"->",
+						""
 					],
 					[
 						"ref",
 						"Variant",
-						"->"
+						"->",
+						""
 					],
 					[
 						"message",
 						"Text",
-						"->"
+						"->",
+						""
 					],
 					[
 						"overrides",
 						"Object",
-						"->"
+						"->",
+						""
 					]
 				],
-				"Summary": ""
+				"Summary": "$overrides (optional): {severity; retryable} to override the code defaults.",
+				"SummaryFormat": "text"
 			}
 		},
 		"Process": {
@@ -304,15 +308,18 @@
 					[
 						"settings",
 						"cs.EmbeddingStudio.Settings",
-						"->"
+						"->",
+						""
 					],
 					[
 						"options",
 						"Object",
-						"->"
+						"->",
+						""
 					]
 				],
-				"Summary": ""
+				"Summary": "MARK:-[CONSTRUCTOR]",
+				"SummaryFormat": "text"
 			}
 		},
 		"Playground": {
@@ -392,6 +399,20 @@
 				],
 				"Summary": ""
 			}
+		},
+		"_SCHEDULER_NOT_RUNNING": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
+		"_AIKit": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
 		}
 	},
 	"_typeMedia": {
@@ -406,10 +427,12 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rCalls invalidateVectors() on every definition and merges the results.\rReturns {updated: Integer; skipped: Integer; errors: Collection of Text}",
+			"SummaryFormat": "text"
 		},
 		"find()": {
 			"Syntax": "**.find**( *dataclassName* : Text; *vectorName* : Text ) : cs.EmbeddingStudio.Definition",
@@ -417,20 +440,24 @@
 				[
 					"dataclassName",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"vectorName",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio.Definition",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns the saved Definition for the given dataclass/vector, or Null.",
+			"SummaryFormat": "text"
 		},
 		"get file()": {
 			"Syntax": "**.get file**() : 4D.File",
@@ -438,15 +465,18 @@
 				[
 					"",
 					"4D.File",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "Return the file used",
+			"SummaryFormat": "text"
 		},
 		"load()": {
 			"Syntax": "**.load**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReads the settings file, if any, and populates This.definitions with Definition objects.\rAlso loads This.batchSize and This.phrase (allow* options).\rAny unknown top-level keys (e.g. \"models\") are preserved internally and restored on save.",
+			"SummaryFormat": "text"
 		},
 		"findAll()": {
 			"Syntax": "**.findAll**( *dataclassName* : Text ) : Collection",
@@ -454,15 +484,18 @@
 				[
 					"dataclassName",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "Returns the saved Definitions for the given dataclass",
+			"SummaryFormat": "text"
 		},
 		"save()": {
 			"Syntax": "**.save**() : Boolean",
@@ -470,10 +503,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rSerializes This.definitions, batchSize and phrase options back to the settings file,\rpreserving any other top-level keys, and merging the definitions with whatever the file\rholds now (another editor may have written to it since this instance loaded).\rReturns False, without touching the file, when the settings could not be read at load\rtime — saving then would replace real settings with defaults.",
+			"SummaryFormat": "text"
 		},
 		"embedder": {
 			"Syntax": "embedder : Object"
@@ -509,10 +544,12 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==\rReturns a plain object suitable for JSON persistence.\rThe phrase is flattened to its template text.",
+			"SummaryFormat": "text"
 		},
 		"invalidateVectors()": {
 			"Syntax": "**.invalidateVectors**() : Object",
@@ -520,10 +557,12 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==\rNullifies the vector field (and sets the companion _dirty flag when present) for every\rentity in the definition's dataclass, forcing a full re-embedding on the next run.\rReturns {updated: Integer; skipped: Integer; errors: Collection of Text}",
+			"SummaryFormat": "text"
 		},
 		"validate()": {
 			"Syntax": "**.validate**( *settings* : cs.EmbeddingStudio.Settings ) : Object",
@@ -531,15 +570,18 @@
 				[
 					"settings",
 					"cs.EmbeddingStudio.Settings",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==\rValidates the definition against the live ds model and known models from settings.\rReturns {success: Boolean, errors: Collection of {field, message}}\r$settings may be Null — phrase validation will run without options.",
+			"SummaryFormat": "text"
 		},
 		"get hasDefinition()": {
 			"Syntax": "**.get hasDefinition**() : Boolean",
@@ -547,10 +589,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==\rReturns true if model or phrase defined.",
+			"SummaryFormat": "text"
 		},
 		"autoInvalidate": {
 			"Syntax": "autoInvalidate : Boolean"
@@ -575,20 +619,24 @@
 				[
 					"lastRun",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"lastResult",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"lastError",
 					"Text",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rRehydrates the last-run info from persistence after a restart (this state is in-memory\ronly, so it is empty on a fresh process). Without it, interval \"lastExecution\" fires\rimmediately and daily double-fires today's slot after every restart, and status() would\rreport \"never run\". $lastRun is LOCAL ISO (the scheduler's time base), not the log's UTC.\rNo-op once an in-session run has set lastRun, so a live run is never clobbered.",
+			"SummaryFormat": "text"
 		},
 		"markSkipped()": {
 			"Syntax": "**.markSkipped**( *key* : Text )",
@@ -596,15 +644,18 @@
 				[
 					"key",
 					"Text",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rRecords that a due trigger was skipped (dedup per next-run key).",
+			"SummaryFormat": "text"
 		},
 		"requestCancel()": {
 			"Syntax": "**.requestCancel**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rRequests a cooperative cancel of the running batch.",
+			"SummaryFormat": "text"
 		},
 		"endBatch()": {
 			"Syntax": "**.endBatch**( *result* : Text; *error* : Text; *endTimestamp* : Text )",
@@ -612,20 +663,24 @@
 				[
 					"result",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"error",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"endTimestamp",
 					"Text",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rMarks the current batch as finished with the given result and updates lastRun.",
+			"SummaryFormat": "text"
 		},
 		"beginBatch()": {
 			"Syntax": "**.beginBatch**( *startTimestamp* : Text ) : Boolean",
@@ -633,20 +688,24 @@
 				[
 					"startTimestamp",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rMarks a batch as started. Returns False if one is already running (guards double-run).",
+			"SummaryFormat": "text"
 		},
 		"disarm()": {
 			"Syntax": "**.disarm**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rMarks the scheduler as disarmed (loop stopped).",
+			"SummaryFormat": "text"
 		},
 		"arm()": {
 			"Syntax": "**.arm**( *anchor* : Text )",
@@ -654,10 +713,12 @@
 				[
 					"anchor",
 					"Text",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rMarks the scheduler as armed and records the anchor time for \"start from now\".",
+			"SummaryFormat": "text"
 		},
 		"lastRunRestored": {
 			"Syntax": "lastRunRestored : Boolean"
@@ -700,15 +761,18 @@
 				[
 					"builder",
 					"4D.Function",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Integer",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rBuilds a menu with $builder (called with the menu as $1) and returns its item count.\rThe menu is released, never displayed.",
+			"SummaryFormat": "text"
 		},
 		"note()": {
 			"Syntax": "**.note**( *key* : Text; *value* : Variant )",
@@ -716,15 +780,18 @@
 				[
 					"key",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"value",
 					"Variant",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rRecords a value seen inside the window, for assertions once it is closed.",
+			"SummaryFormat": "text"
 		},
 		"run()": {
 			"Syntax": "**.run**( *formName* : Text; *open* : 4D.Function; *steps* : Collection ) : Boolean",
@@ -732,25 +799,30 @@
 				[
 					"formName",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"open",
 					"4D.Function",
-					"->"
+					"->",
+					""
 				],
 				[
 					"steps",
 					"Collection",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rOpens the window with $open, plays $steps inside it, and returns once it is closed.\rReturns False when the window could not be driven (e.g. it was already open).",
+			"SummaryFormat": "text"
 		},
 		"notes": {
 			"Syntax": "notes : Object"
@@ -769,10 +841,12 @@
 				[
 					"result",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rCalled back (CALL FORM) by _invalidateVectorsInBackground once the vectors are invalidated.",
+			"SummaryFormat": "text"
 		},
 		"flushPromptInvalidate()": {
 			"Syntax": "**.flushPromptInvalidate**( *then* : 4D.Function; *param* : Variant )",
@@ -780,15 +854,18 @@
 				[
 					"then",
 					"4D.Function",
-					"->"
+					"->",
+					""
 				],
 				[
 					"param",
 					"Variant",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rAsks about every definition changed since the last question (one dialog per item, at most).\rThe accepted invalidations run in the \"EmbeddingStudio_invalidate\" worker (one save per\rentity: a large table would freeze the window), which calls invalidateDone() back.\r$then (called with $param), e.g. a compute, runs in the \"EmbeddingStudio\" worker once\rthe invalidations queued before it are done.",
+			"SummaryFormat": "text"
 		},
 		"modelUpdateDropdown()": {
 			"Syntax": "**.modelUpdateDropdown**( *item* : cs.EmbeddingStudio._EmbeddingItem )",
@@ -796,10 +873,12 @@
 				[
 					"item",
 					"cs.EmbeddingStudio._EmbeddingItem",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"phraseManager()": {
 			"Syntax": "**.phraseManager**( *e* : Object )",
@@ -807,15 +886,18 @@
 				[
 					"e",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"read()": {
 			"Syntax": "**.read**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"listMetaInfo()": {
 			"Syntax": "**.listMetaInfo**( *me* : cs.EmbeddingStudio._EmbeddingItem ) : Object",
@@ -823,20 +905,24 @@
 				[
 					"me",
 					"cs.EmbeddingStudio._EmbeddingItem",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"selectFirstItem()": {
 			"Syntax": "**.selectFirstItem**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rSelects the first vector of the list, if any, so the details panel is shown at startup.",
+			"SummaryFormat": "text"
 		},
 		"modelsDropdownManager()": {
 			"Syntax": "**.modelsDropdownManager**( *e* : Object )",
@@ -844,15 +930,18 @@
 				[
 					"e",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"openHelp()": {
 			"Syntax": "**.openHelp**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rOpens the project's GitHub repository in the default browser (footer help button).",
+			"SummaryFormat": "text"
 		},
 		"readEmbeddingItems()": {
 			"Syntax": "**.readEmbeddingItems**() : Collection",
@@ -860,10 +949,12 @@
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK:- [ITEMS]\r=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"updateUI()": {
 			"Syntax": "**.updateUI**() : Boolean",
@@ -871,10 +962,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rHide/show details based on selection",
+			"SummaryFormat": "text"
 		},
 		"autoInvalidateManager()": {
 			"Syntax": "**.autoInvalidateManager**( *e* : Object )",
@@ -882,10 +975,12 @@
 				[
 					"e",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"isEmpty()": {
 			"Syntax": "**.isEmpty**() : Boolean",
@@ -893,10 +988,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rTrue while the structure holds no vector attribute and no saved definition.",
+			"SummaryFormat": "text"
 		},
 		"listManager()": {
 			"Syntax": "**.listManager**( *e* : Object )",
@@ -904,10 +1001,12 @@
 				[
 					"e",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"paintEmptyState()": {
 			"Syntax": "**.paintEmptyState**() : Boolean",
@@ -915,10 +1014,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rThere is nothing to configure until a 4D.Vector attribute exists: the list, the details\rand the scheduler footer are then replaced by a short \"how to get started\" message.",
+			"SummaryFormat": "text"
 		},
 		"moreManager()": {
 			"Syntax": "**.moreManager**( *e* : Object )",
@@ -926,15 +1027,18 @@
 				[
 					"e",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"paintSchedulerStatus()": {
 			"Syntax": "**.paintSchedulerStatus**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rFooter status bar: repaints the one-line scheduler summary and the running spinner.",
+			"SummaryFormat": "text"
 		},
 		"manager()": {
 			"Syntax": "**.manager**( *e* : Object )",
@@ -942,10 +1046,12 @@
 				[
 					"e",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK:- [MANAGERS]\r=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"schedulerManager()": {
 			"Syntax": "**.schedulerManager**( *e* : Object )",
@@ -953,20 +1059,24 @@
 				[
 					"e",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rContext menu behind the footer gear button: configure + quick runtime actions.",
+			"SummaryFormat": "text"
 		},
 		"saveEmbeddingItems()": {
 			"Syntax": "**.saveEmbeddingItems**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"refresh()": {
 			"Syntax": "**.refresh**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"insertInput()": {
 			"Syntax": "**.insertInput**( *item* : cs.EmbeddingStudio._EmbeddingItem; *input* : Text )",
@@ -974,15 +1084,18 @@
 				[
 					"item",
 					"cs.EmbeddingStudio._EmbeddingItem",
-					"->"
+					"->",
+					""
 				],
 				[
 					"input",
 					"Text",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK: -\r=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"modelsDropdown": {
 			"Syntax": "modelsDropdown : Object"
@@ -1013,6 +1126,12 @@
 		},
 		"catalog": {
 			"Syntax": "catalog : cs.EmbeddingStudio.DataStore"
+		},
+		"commitPhrase()": {
+			"Syntax": "**.commitPhrase**()",
+			"Params": [],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rSaves the phrase being edited, if any.",
+			"SummaryFormat": "text"
 		}
 	},
 	"EmbedderResult": {
@@ -1096,15 +1215,18 @@
 				[
 					"scope",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rErrors filtered by scope (\"pipeline\" | \"definition\" | \"chunk\" | \"entity\").",
+			"SummaryFormat": "text"
 		},
 		"errorsByCode()": {
 			"Syntax": "**.errorsByCode**( *code* : Integer ) : Collection",
@@ -1112,15 +1234,18 @@
 				[
 					"code",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rErrors filtered by machine-readable code (see cs.ProcessErrorCode).",
+			"SummaryFormat": "text"
 		},
 		"get hasFatal()": {
 			"Syntax": "**.get hasFatal**() : Boolean",
@@ -1128,10 +1253,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rTrue when at least one fatal error was recorded (e.g. a model became unavailable).",
+			"SummaryFormat": "text"
 		},
 		"toObject()": {
 			"Syntax": "**.toObject**() : Object",
@@ -1139,10 +1266,12 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rPlain object suitable for logging or JSON serialization.",
+			"SummaryFormat": "text"
 		},
 		"retryableErrors()": {
 			"Syntax": "**.retryableErrors**() : Collection",
@@ -1150,10 +1279,12 @@
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rErrors flagged retryable — re-running the operation could plausibly succeed.",
+			"SummaryFormat": "text"
 		},
 		"get success()": {
 			"Syntax": "**.get success**() : Boolean",
@@ -1161,10 +1292,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rTrue when no blocking error was recorded (severity \"error\" or \"fatal\"). Warnings don't fail the run.",
+			"SummaryFormat": "text"
 		},
 		"duration": {
 			"Syntax": "duration : Integer"
@@ -1201,15 +1334,18 @@
 				[
 					"dataclass",
 					"4D.DataClass",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"render()": {
 			"Syntax": "**.render**( *data* : Object ) : Text",
@@ -1217,15 +1353,18 @@
 				[
 					"data",
 					"Object",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Text",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK:-[PUBLIC]\r=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rRenders the compiled template by replacing variables with values from $data.\rMissing keys produce an empty string.",
+			"SummaryFormat": "text"
 		},
 		"validate()": {
 			"Syntax": "**.validate**( *dataclass* : 4D.DataClass; *options* : Object; *vectorName* : Text ) : Object",
@@ -1233,25 +1372,30 @@
 				[
 					"dataclass",
 					"4D.DataClass",
-					"->"
+					"->",
+					""
 				],
 				[
 					"options",
 					"Object",
-					"->"
+					"->",
+					""
 				],
 				[
 					"vectorName",
 					"Text",
-					"->"
+					"->",
+					"the vector being defined. Its own \"<vectorName>_dirty\" flag is an ERROR"
 				],
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rValidates that all keys in the phrase can be resolved against a DataClass.\rWalks dot-notation paths through relations (N:1 / 1:1).\rReturns {success: Boolean, errors: Collection of {key, message}, warnings: Collection of {key, message}}\r\r$options (all default to False — storage kind only):\r.allowRelations  : Boolean — allow dot-notation paths through N:1 relations\r.allowCalculated : Boolean — allow calculated attributes\r.allowAlias      : Boolean — allow alias attributes\r\r(embedding it feeds the phrase that recomputes the vector → invalidation loop); any other\rvector's \"_dirty\" flag is a WARNING (valid but meaningless text in the phrase).\r\r$vectorName : the vector being defined. Its own \"<vectorName>_dirty\" flag is an ERROR",
+			"SummaryFormat": "text"
 		},
 		"get keys()": {
 			"Syntax": "**.get keys**() : Collection",
@@ -1259,10 +1403,12 @@
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==\rReturns a copy of the variable names found in the template.",
+			"SummaryFormat": "text"
 		},
 		"get template()": {
 			"Syntax": "**.get template**() : Text",
@@ -1270,10 +1416,12 @@
 				[
 					"",
 					"Text",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK:-[PROPERTIES]\r<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==\rReturns the original template string.",
+			"SummaryFormat": "text"
 		}
 	},
 	"_Logger": {
@@ -1283,10 +1431,12 @@
 				[
 					"payload",
 					"Variant",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"debug()": {
 			"Syntax": "**.debug**( *payload* : Variant )",
@@ -1294,10 +1444,12 @@
 				[
 					"payload",
 					"Variant",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"warn()": {
 			"Syntax": "**.warn**( *payload* : Variant )",
@@ -1305,10 +1457,12 @@
 				[
 					"payload",
 					"Variant",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"info()": {
 			"Syntax": "**.info**( *payload* : Variant )",
@@ -1316,10 +1470,12 @@
 				[
 					"payload",
 					"Variant",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"outputType": {
 			"Syntax": "outputType : Integer"
@@ -1332,12 +1488,14 @@
 		"createDirtyAssociatedAttributeIndex()": {
 			"Syntax": "**.createDirtyAssociatedAttributeIndex**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"createVectorObjectIndex()": {
 			"Syntax": "**.createVectorObjectIndex**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rCreates the automatic (object) index of the vector field.\rPointers rather than SQL, so a field name with a space is fine.",
+			"SummaryFormat": "text"
 		},
 		"vectorDistanceIndexed()": {
 			"Syntax": "**.vectorDistanceIndexed**() : Boolean",
@@ -1345,10 +1503,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rThe vector index (cosine, dot or euclidean), used by the similarity queries.",
+			"SummaryFormat": "text"
 		},
 		"dirtyAssociatedAttributeIndexed()": {
 			"Syntax": "**.dirtyAssociatedAttributeIndexed**() : Boolean",
@@ -1356,10 +1516,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"get helptip()": {
 			"Syntax": "**.get helptip**() : Text",
@@ -1367,10 +1529,12 @@
 				[
 					"",
 					"Text",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==\rAlways safe to call: returns the joined error list (empty string when none).\rNon-blocking warnings are appended below the errors.",
+			"SummaryFormat": "text"
 		},
 		"get warnings()": {
 			"Syntax": "**.get warnings**() : Collection",
@@ -1378,10 +1542,12 @@
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==\rNon-blocking warnings: phrase (e.g. another vector's \"_dirty\" flag) + missing indexes.",
+			"SummaryFormat": "text"
 		},
 		"vectorObjectIndexed()": {
 			"Syntax": "**.vectorObjectIndexed**() : Boolean",
@@ -1389,10 +1555,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rThe automatic (object) index, used by the \"= null\" / \"!= null\" queries.\rOn a vector field, ORDA \"indexed\" only reports this one, never a vector index.",
+			"SummaryFormat": "text"
 		},
 		"get errors()": {
 			"Syntax": "**.get errors**() : Collection",
@@ -1400,10 +1568,12 @@
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==\rConcatenation of phrase + model error messages (most recent validate() pass).",
+			"SummaryFormat": "text"
 		},
 		"hasDirtyAssociatedAttribute()": {
 			"Syntax": "**.hasDirtyAssociatedAttribute**() : Boolean",
@@ -1411,15 +1581,18 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK:- dirty attributes\r=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rAlso drives the read-only \"dirty flag\" column of the vector list (see dirtyAssociatedAttributeMark).",
+			"SummaryFormat": "text"
 		},
 		"createDirtyAssociatedAttribute()": {
 			"Syntax": "**.createDirtyAssociatedAttribute**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"get defined()": {
 			"Syntax": "**.get defined**() : Boolean",
@@ -1427,10 +1600,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==",
+			"SummaryFormat": "text"
 		},
 		"get supportedAttributes()": {
 			"Syntax": "**.get supportedAttributes**() : Collection",
@@ -1438,10 +1613,12 @@
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==",
+			"SummaryFormat": "text"
 		},
 		"parsePhrase()": {
 			"Syntax": "**.parsePhrase**( *phrase* : cs.EmbeddingStudio.Phrase ) : Text",
@@ -1449,20 +1626,24 @@
 				[
 					"phrase",
 					"cs.EmbeddingStudio.Phrase",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Text",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rValidate a compiled Phrase against this item's dataclass and return styled\rtext (multistyle) with any attribute errors highlighted.",
+			"SummaryFormat": "text"
 		},
 		"validate()": {
 			"Syntax": "**.validate**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rRe-runs phrase + model validation and refreshes _phraseErrors / _modelErrors.\rAlso refreshes the styled phrase so the editor stays in sync.",
+			"SummaryFormat": "text"
 		},
 		"get inputsMenu()": {
 			"Syntax": "**.get inputsMenu**() : cs.EmbeddingStudio._menu",
@@ -1470,10 +1651,12 @@
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "<== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==\rGives a menu of available dataclass attributes to insert into the descriptive phrase.",
+			"SummaryFormat": "text"
 		},
 		"original": {
 			"Syntax": "original : Object"
@@ -1495,6 +1678,19 @@
 		},
 		"version": {
 			"Syntax": "version : Integer"
+		},
+		"get dirtyAssociatedAttributeMark()": {
+			"Syntax": "**.get dirtyAssociatedAttributeMark**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-",
+					""
+				]
+			],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rCell value of the \"dirty flag\" column: a plain ✓ (U+2713, renders on macOS and Windows), not a\rcheckbox, which would look like a control that creates the field (use the context menu for that).",
+			"SummaryFormat": "text"
 		}
 	},
 	"_ExecutionLog": {
@@ -1504,10 +1700,12 @@
 				[
 					"startTimestamp",
 					"Text",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rSets top-level to \"running\", saving current top-level as \"previous\".",
+			"SummaryFormat": "text"
 		},
 		"status()": {
 			"Syntax": "**.status**() : Object",
@@ -1515,10 +1713,12 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns a read-only snapshot of the top-level run state (for status reporting).",
+			"SummaryFormat": "text"
 		},
 		"updateDefinition()": {
 			"Syntax": "**.updateDefinition**( *defKey* : Text; *startTime* : Text; *endTime* : Text; *status* : Text; *error* : Variant; *usage* : Object )",
@@ -1526,35 +1726,42 @@
 				[
 					"defKey",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"startTime",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"endTime",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"status",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"error",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"usage",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rUpdates one definition entry, saving its current state as \"previous\".",
+			"SummaryFormat": "text"
 		},
 		"lastRun()": {
 			"Syntax": "**.lastRun**() : Object",
@@ -1562,10 +1769,12 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns the last completed run as { timestamp; status; error }, all in the scheduler's\rlocal ISO base (startTime/endTime are written in that base too). While a run is in\rprogress the top-level endTime is Null and the last completed run sits in \"previous\",\rso fall back to it — this is what lets the scheduler rehydrate its anchor after a restart\rstraight from the history, without persisting the timestamp a second time in its own field.",
+			"SummaryFormat": "text"
 		},
 		"endFullRun()": {
 			"Syntax": "**.endFullRun**( *startTimestamp* : Text; *endTimestamp* : Text; *status* : Text; *error* : Variant; *nextComputeDate* : Variant; *usage* : Object )",
@@ -1573,35 +1782,42 @@
 				[
 					"startTimestamp",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"endTimestamp",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"status",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"error",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"nextComputeDate",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"usage",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rFinalizes top-level with completed/failed status.",
+			"SummaryFormat": "text"
 		},
 		"setNextComputeDate()": {
 			"Syntax": "**.setNextComputeDate**( *value* : Text )",
@@ -1609,10 +1825,12 @@
 				[
 					"value",
 					"Text",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rUpdates the top-level next scheduled recalculation date.",
+			"SummaryFormat": "text"
 		},
 		"logSkipped()": {
 			"Syntax": "**.logSkipped**( *timestamp* : Text )",
@@ -1620,22 +1838,26 @@
 				[
 					"timestamp",
 					"Text",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rRecords a skipped scheduler trigger with its timestamp (AC-4.1.4).",
+			"SummaryFormat": "text"
 		}
 	},
 	"_SCHEDULER": {
 		"paint()": {
 			"Syntax": "**.paint**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rRefreshes the last run's error, the summary and the Run now button.",
+			"SummaryFormat": "text"
 		},
 		"save()": {
 			"Syntax": "**.save**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rPersists the edited configuration through the Scheduler, then reloads the normalized values.",
+			"SummaryFormat": "text"
 		},
 		"onConfigEdit()": {
 			"Syntax": "**.onConfigEdit**( *event* : Object )",
@@ -1643,10 +1865,12 @@
 				[
 					"event",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReacts to an interval/daily/startFrom edit: clamps hours, rewrites the daily time in its\rcanonical \"HH:MM\" form (an emptied field falls back to midnight rather than staying\rblank), re-syncs the stepper, and refreshes the preview.",
+			"SummaryFormat": "text"
 		},
 		"currentConfig()": {
 			"Syntax": "**.currentConfig**() : Object",
@@ -1654,15 +1878,18 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rBuilds a raw scheduler config object from the current form variables.",
+			"SummaryFormat": "text"
 		},
 		"onLoad()": {
 			"Syntax": "**.onLoad**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rOn Load: register the window, load the saved config, arm a periodic status refresh.",
+			"SummaryFormat": "text"
 		},
 		"manager()": {
 			"Syntax": "**.manager**( *e* : Object )",
@@ -1670,25 +1897,30 @@
 				[
 					"e",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rCentral event dispatcher, called by the FORM_MANAGER form method.",
+			"SummaryFormat": "text"
 		},
 		"resetAnchor()": {
 			"Syntax": "**.resetAnchor**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rRe-anchors the fixed-rate schedule on the current instant, and selects that mode.\rLike every other control in the config panel it only edits the pending configuration;\rSave is what commits it.",
+			"SummaryFormat": "text"
 		},
 		"preview()": {
 			"Syntax": "**.preview**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rComputes and displays the next run from the *current edits* (not necessarily saved yet).",
+			"SummaryFormat": "text"
 		},
 		"load()": {
 			"Syntax": "**.load**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rPopulates the form variables from the saved configuration.",
+			"SummaryFormat": "text"
 		},
 		"summaryText": {
 			"Syntax": "summaryText : Text"
@@ -1698,9 +1930,6 @@
 		},
 		"errorText": {
 			"Syntax": "errorText : Text"
-		},
-		"stateText": {
-			"Syntax": "stateText : Text"
 		},
 		"startFromLast": {
 			"Syntax": "startFromLast : Boolean"
@@ -1729,11 +1958,24 @@
 		"startReference": {
 			"Syntax": "startReference : Text"
 		},
-		"lastRunText": {
-			"Syntax": "lastRunText : Text"
-		},
 		"scheduler": {
 			"Syntax": "scheduler : cs.EmbeddingStudio.Scheduler"
+		},
+		"selectMode()": {
+			"Syntax": "**.selectMode**( *mode* : Text )",
+			"Params": [
+				[
+					"mode",
+					"Text",
+					"->",
+					""
+				]
+			],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rShows the page of a mode (\"never\", \"interval\" or \"daily\"; anything else is never). Applied\rat once, without waiting for the On Page Change that follows (it then finds nothing to do).",
+			"SummaryFormat": "text"
+		},
+		"modeTab": {
+			"Syntax": "modeTab : Object"
 		}
 	},
 	"_dataclassAttributes": {
@@ -1743,10 +1985,12 @@
 				[
 					"dataclassName",
 					"Text",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rInvalidate the cache. Call with no argument to clear everything,\ror with a dataclass name to drop a single entry.",
+			"SummaryFormat": "text"
 		},
 		"isExcludedStorageType()": {
 			"Syntax": "**.isExcludedStorageType**( *attribute* : Object; *allowObject* : Boolean ) : Boolean",
@@ -1754,20 +1998,24 @@
 				[
 					"attribute",
 					"Object",
-					"->"
+					"->",
+					""
 				],
 				[
 					"allowObject",
 					"Boolean",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns True when a storage attribute should be excluded from a phrase.\rblob and image are always excluded; object is excluded unless $allowObject is True.",
+			"SummaryFormat": "text"
 		},
 		"isVectorDirtySibling()": {
 			"Syntax": "**.isVectorDirtySibling**( *dataclass* : 4D.DataClass; *fieldName* : Text ) : Boolean",
@@ -1775,20 +2023,24 @@
 				[
 					"dataclass",
 					"4D.DataClass",
-					"->"
+					"->",
+					""
 				],
 				[
 					"fieldName",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns True when $fieldName is the \"<vectorName>_dirty\" invalidation flag of a 4D.Vector\rattribute present on $dataclass (these boolean flags are never useful inside a phrase).",
+			"SummaryFormat": "text"
 		},
 		"hasField()": {
 			"Syntax": "**.hasField**( *dataclass* : 4D.DataClass; *fieldName* : Text ) : Boolean",
@@ -1796,20 +2048,24 @@
 				[
 					"dataclass",
 					"4D.DataClass",
-					"->"
+					"->",
+					""
 				],
 				[
 					"fieldName",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns True if the given field name exists on the dataclass.\rField name set is cached per dataclass so repeated lookups (typically\rfor \"${vectorName}_dirty\" probes during batch embedding runs) are O(1).",
+			"SummaryFormat": "text"
 		},
 		"forDataclass()": {
 			"Syntax": "**.forDataclass**( *dataclass* : 4D.DataClass; *options* : Object ) : Collection",
@@ -1817,20 +2073,24 @@
 				[
 					"dataclass",
 					"4D.DataClass",
-					"->"
+					"->",
+					""
 				],
 				[
 					"options",
 					"Object",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns the collection of \"supported\" attributes for the given dataclass,\rfiltered by the optional phrase options (allowRelations, allowCalculated, allowAlias, allowObject).\rThe base list is cached per dataclass; options filtering is applied on top without caching.",
+			"SummaryFormat": "text"
 		}
 	},
 	"_RateLimiter": {
@@ -1840,10 +2100,12 @@
 				[
 					"",
 					"Integer",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns the recommended batch size for the next chunk.",
+			"SummaryFormat": "text"
 		},
 		"waitIfNeeded()": {
 			"Syntax": "**.waitIfNeeded**( *estimatedTokens* : Integer )",
@@ -1851,10 +2113,12 @@
 				[
 					"estimatedTokens",
 					"Integer",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rPre-flight throttle. Waits if the remaining budget is too low for the next batch.",
+			"SummaryFormat": "text"
 		},
 		"update()": {
 			"Syntax": "**.update**( *embedderResult* : cs.EmbeddingStudio.EmbedderResult; *chunkSize* : Integer )",
@@ -1862,15 +2126,18 @@
 				[
 					"embedderResult",
 					"cs.EmbeddingStudio.EmbedderResult",
-					"->"
+					"->",
+					""
 				],
 				[
 					"chunkSize",
 					"Integer",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rUpdate internal state from the latest API response.",
+			"SummaryFormat": "text"
 		},
 		"configBatchSize": {
 			"Syntax": "configBatchSize : Integer"
@@ -1901,20 +2168,24 @@
 				[
 					"config",
 					"Object",
-					"->"
+					"->",
+					""
 				],
 				[
 					"after",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Text",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns the next schedule slot strictly after $after (local ISO), or \"\" in \"never\" mode.\rUsed to detect scheduled slots that elapse while a batch is running (skip traceability).",
+			"SummaryFormat": "text"
 		},
 		"secondsUntil()": {
 			"Syntax": "**.secondsUntil**( *timestamp* : Text ) : Integer",
@@ -1922,15 +2193,18 @@
 				[
 					"timestamp",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Integer",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***\rSeconds from now until the given local ISO timestamp (may be negative if past).",
+			"SummaryFormat": "text"
 		},
 		"nextRun()": {
 			"Syntax": "**.nextRun**( *config* : Object; *lastExecution* : Text; *anchor* : Text ) : Object",
@@ -1938,25 +2212,30 @@
 				[
 					"config",
 					"Object",
-					"->"
+					"->",
+					""
 				],
 				[
 					"lastExecution",
 					"Text",
-					"->"
+					"->",
+					"local ISO timestamp of the last completed run, or \"\" if none."
 				],
 				[
 					"anchor",
 					"Text",
-					"->"
+					"->",
+					"local ISO timestamp used as the \"start from now\" anchor (arm time), or \"\" for current."
 				],
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rComputes the next scheduled run.\r\r$lastExecution : local ISO timestamp of the last completed run, or \"\" if none.\r$anchor        : local ISO timestamp used as the \"start from now\" anchor (arm time), or \"\" for current.",
+			"SummaryFormat": "text"
 		}
 	},
 	"_TestProcessEmbedder": {
@@ -2052,20 +2331,24 @@
 				[
 					"texts",
 					"Collection",
-					"->"
+					"->",
+					""
 				],
 				[
 					"model",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio.EmbedderResult",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rEmbed a collection of texts in a single API call.\rReturns a EmbedderResult with vectors in same order as inputs.",
+			"SummaryFormat": "text"
 		},
 		"embed()": {
 			"Syntax": "**.embed**( *text* : Text; *model* : Text ) : cs.EmbeddingStudio.EmbedderResult",
@@ -2073,20 +2356,24 @@
 				[
 					"text",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"model",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio.EmbedderResult",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK:-[PUBLIC]\r=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rEmbed a single text. Returns a 4D.Vector.\rThrows on fatal errors after retries are exhausted.",
+			"SummaryFormat": "text"
 		},
 		"backoffMs": {
 			"Syntax": "backoffMs : Integer"
@@ -2105,10 +2392,12 @@
 				[
 					"",
 					"4D.File",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***",
+			"SummaryFormat": "text"
 		},
 		"get backupFile()": {
 			"Syntax": "**.get backupFile**() : 4D.File",
@@ -2116,10 +2405,12 @@
 				[
 					"",
 					"4D.File",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***\rWhere the last readable settings content is kept.",
+			"SummaryFormat": "text"
 		},
 		"set file()": {
 			"Syntax": "**.set file**( *file* : 4D.File )",
@@ -2127,10 +2418,12 @@
 				[
 					"file",
 					"4D.File",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***",
+			"SummaryFormat": "text"
 		},
 		"set()": {
 			"Syntax": "**.set**( *value* : Object )",
@@ -2138,10 +2431,12 @@
 				[
 					"value",
 					"Object",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***",
+			"SummaryFormat": "text"
 		},
 		"get()": {
 			"Syntax": "**.get**() : Object",
@@ -2149,10 +2444,12 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***\rThe settings content, or Null when there is none to read (absent or unreadable file).\rUse read() when the difference matters.",
+			"SummaryFormat": "text"
 		},
 		"read()": {
 			"Syntax": "**.read**() : Object",
@@ -2160,10 +2457,12 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***\rReads the settings file and tells the caller *why* there is no content, which a bare\rNull cannot: an absent file is a fresh install, an unreadable one is a file we must not\roverwrite with defaults.\rReturns { exists : Boolean ; valid : Boolean ; data : Object }",
+			"SummaryFormat": "text"
 		}
 	},
 	"ProcessErrorCode": {
@@ -2173,15 +2472,18 @@
 				[
 					"code",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rDefault severity (\"warning\" | \"error\" | \"fatal\") and retryability for a code.\rCallers may override these per-error, but these defaults cover the common case.",
+			"SummaryFormat": "text"
 		},
 		"VECTOR_COUNT_MISMATCH": {
 			"Syntax": "VECTOR_COUNT_MISMATCH : Integer"
@@ -2208,34 +2510,6 @@
 			"Syntax": "NULL_INPUT : Integer"
 		}
 	},
-	"_vectorIndexes": {
-		"refresh()": {
-			"Syntax": "**.refresh**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"has()": {
-			"Syntax": "**.has**( *dataclass* : 4D.DataClass; *attributeName* : Text ) : Boolean",
-			"Params": [
-				[
-					"dataclass",
-					"4D.DataClass",
-					"->"
-				],
-				[
-					"attributeName",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		}
-	},
 	"ProcessError": {
 		"toObject()": {
 			"Syntax": "**.toObject**() : Object",
@@ -2243,10 +2517,12 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rPlain object — for logging or JSON serialization.",
+			"SummaryFormat": "text"
 		},
 		"get isFatal()": {
 			"Syntax": "**.get isFatal**() : Boolean",
@@ -2254,10 +2530,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rTrue when this error blocks the rest of the run (e.g. a model is unavailable).",
+			"SummaryFormat": "text"
 		},
 		"timestamp": {
 			"Syntax": "timestamp : Text"
@@ -2288,20 +2566,24 @@
 				[
 					"es",
 					"4D.EntitySelection",
-					"->"
+					"->",
+					""
 				],
 				[
 					"definition",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio.ProcessResult",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rProcess an entity selection. Preferred path for large jobs — honors batchSize.",
+			"SummaryFormat": "text"
 		},
 		"processEntity()": {
 			"Syntax": "**.processEntity**( *entity* : 4D.Entity; *definition* : Variant ) : cs.EmbeddingStudio.ProcessResult",
@@ -2309,20 +2591,24 @@
 				[
 					"entity",
 					"4D.Entity",
-					"->"
+					"->",
+					""
 				],
 				[
 					"definition",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio.ProcessResult",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rProcess a single entity. $definition rules match resolveForEntity.",
+			"SummaryFormat": "text"
 		},
 		"process()": {
 			"Syntax": "**.process**( *definition* : Variant ) : cs.EmbeddingStudio.ProcessResult",
@@ -2330,15 +2616,18 @@
 				[
 					"definition",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio.ProcessResult",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK:-[PUBLIC]\r=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rProcess one, many, or all Definitions across their full dataclass selections.\r$definition may be: Null (= all definitions in settings), a single Definition,\ror a collection of Definition.",
+			"SummaryFormat": "text"
 		},
 		"_inheritedFrom_": "_ProcessBase"
 	},
@@ -2349,25 +2638,30 @@
 				[
 					"input",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"context",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"model",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio.EmbedderResult",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rCompute a vector for an arbitrary input — without persisting anywhere.\rUseful for previews, similarity checks, REPL experimentation, or ad-hoc querying.\r\rSupported call shapes:\rembed(\"some text\"; \"text-embedding-3-small\")          → direct embed\rembed(\"some text\"; $definition)                        → uses $definition.modelAlias\rembed($entity; $definition)                            → renders definition.phrase, embeds with definition.modelAlias\rembed($entity; $phrase; \"text-embedding-3-small\")      → renders $phrase, embeds with given model\rembed($entity; \"template with {field}\"; \"model\")       → compiles template on the fly\rembed($entity)                                         → auto-resolve definition from settings (unique match required)\rembed($entity; {vectorName: \"v\"})                      → stub → saved definition (deduces phrase + model)\rembed($entity; {phrase: \"tpl {x}\"; modelAlias: \"m\"})   → ad-hoc stub, phrase compiled inline, model taken from stub\rembed(\"some text\"; {modelAlias: \"m\"})                  → stub supplies the model only\r\r$context stubs are resolved exactly like cs.Process resolves its definition argument — a\r{vectorName} stub is matched against the saved definitions for the (entity's) dataclass; an\rexplicit {modelAlias} on the stub always wins over a deduced one.\r\rThrows if no model can be determined.",
+			"SummaryFormat": "text"
 		},
 		"render()": {
 			"Syntax": "**.render**( *entity* : 4D.Entity; *definitionOrPhrase* : Variant ) : Text",
@@ -2375,20 +2669,24 @@
 				[
 					"entity",
 					"4D.Entity",
-					"->"
+					"->",
+					""
 				],
 				[
 					"definitionOrPhrase",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Text",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rRender the phrase for an entity and return the resulting text. No API call, no persistence.\r$definitionOrPhrase may be:\r- cs.Phrase                  → used directly\r- cs.Definition     → uses $definition.phrase\r- Text                       → compiled on the fly as a new Phrase\r- Object stub                → {vectorName[; dataclassName]} looked up in settings (deduces the phrase),\ror {phrase|template: Text} compiled inline\r- Null                       → auto-resolved from settings (requires a unique match for $entity's dataclass)",
+			"SummaryFormat": "text"
 		},
 		"_inheritedFrom_": "_ProcessBase"
 	},
@@ -2399,10 +2697,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rTrue when the host database authorizes the component \"On Host Database Event\" method\r(Settings > Security), in which case the scheduler arms and disarms itself with the host.\rFalse means the host is responsible for calling start() and stop().",
+			"SummaryFormat": "text"
 		},
 		"isStarted()": {
 			"Syntax": "**.isStarted**() : Boolean",
@@ -2410,10 +2710,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rTrue when the background loop worker is alive, i.e. the scheduler really runs.",
+			"SummaryFormat": "text"
 		},
 		"force()": {
 			"Syntax": "**.force**() : Object",
@@ -2421,15 +2723,18 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rForces a recalculation now. Honors the single-batch rule: skipped if one is running (AC-6.5).",
+			"SummaryFormat": "text"
 		},
 		"stop()": {
 			"Syntax": "**.stop**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rDisarms the scheduler. The loop worker stops; a running batch keeps finishing.",
+			"SummaryFormat": "text"
 		},
 		"status()": {
 			"Syntax": "**.status**() : Object",
@@ -2437,10 +2742,12 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns the current scheduler status (AC-5.5).",
+			"SummaryFormat": "text"
 		},
 		"nextRun()": {
 			"Syntax": "**.nextRun**() : Object",
@@ -2448,10 +2755,12 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rComputes the next scheduled run, or Null in \"never\" mode.",
+			"SummaryFormat": "text"
 		},
 		"config()": {
 			"Syntax": "**.config**() : Object",
@@ -2459,10 +2768,12 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns the effective scheduler configuration with defaults applied.",
+			"SummaryFormat": "text"
 		},
 		"saveConfig()": {
 			"Syntax": "**.saveConfig**( *cfg* : Object ) : Object",
@@ -2470,15 +2781,18 @@
 				[
 					"cfg",
 					"Object",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rValidates and persists a scheduler configuration, then returns the normalized value.\rOnly the \"scheduler\" key is written; _Settings.set merges, preserving other keys.",
+			"SummaryFormat": "text"
 		},
 		"reload()": {
 			"Syntax": "**.reload**() : Object",
@@ -2486,15 +2800,18 @@
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rConfig is re-read by the loop on each cycle; nothing to do beyond returning status.",
+			"SummaryFormat": "text"
 		},
 		"cancel()": {
 			"Syntax": "**.cancel**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rRequests a cooperative cancel of the running batch (never force-kills).",
+			"SummaryFormat": "text"
 		},
 		"start()": {
 			"Syntax": "**.start**() : Boolean",
@@ -2502,10 +2819,12 @@
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rArms the scheduler: starts the background loop worker if not already running.\rIdempotent — calling it again just refreshes the arm-time anchor, which interval mode\ronly falls back to when the config carries no startReference.",
+			"SummaryFormat": "text"
 		}
 	},
 	"_Resolver": {
@@ -2515,15 +2834,18 @@
 				[
 					"definition",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rResolution for the dataclass-wide process($definition) entry point.\rNo entity context available.",
+			"SummaryFormat": "text"
 		},
 		"dataclassNameFromEntity()": {
 			"Syntax": "**.dataclassNameFromEntity**( *entity* : 4D.Entity ) : Text",
@@ -2531,15 +2853,18 @@
 				[
 					"entity",
 					"4D.Entity",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Text",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rInfer dataclass name from a single entity.",
+			"SummaryFormat": "text"
 		},
 		"dataclassNameFromSelection()": {
 			"Syntax": "**.dataclassNameFromSelection**( *es* : 4D.EntitySelection ) : Text",
@@ -2547,15 +2872,18 @@
 				[
 					"es",
 					"4D.EntitySelection",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Text",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rInfer dataclass name from an entity selection.",
+			"SummaryFormat": "text"
 		},
 		"resolveForEntity()": {
 			"Syntax": "**.resolveForEntity**( *definition* : Variant; *contextDataclassName* : Text ) : Collection",
@@ -2563,20 +2891,24 @@
 				[
 					"definition",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"contextDataclassName",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rResolution for processEntity*() entry points.\r$contextDataclassName is the dataclass inferred from the entity/selection.",
+			"SummaryFormat": "text"
 		},
 		"settings": {
 			"Syntax": "settings : cs.EmbeddingStudio.Settings"
@@ -2589,25 +2921,30 @@
 				[
 					"message",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"okLabel",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"cancelLabel",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rAsks $message and returns True when the user accepted.\r$okLabel / $cancelLabel are optional button titles.",
+			"SummaryFormat": "text"
 		},
 		"alert()": {
 			"Syntax": "**.alert**( *message* : Text )",
@@ -2615,10 +2952,12 @@
 				[
 					"message",
 					"Text",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rDisplays $message.",
+			"SummaryFormat": "text"
 		}
 	},
 	"_TestAIKitClient": {
@@ -2633,15 +2972,18 @@
 				[
 					"count",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "Drop and re-create a deterministic fixture set: 1 city (Paris), 1 school\r(Sorbonne) and $count students. Returns {city; school; students}.",
+			"SummaryFormat": "text"
 		},
 		"ensureAliases()": {
 			"Syntax": "**.ensureAliases**( *names* : Collection ) : Boolean",
@@ -2649,15 +2991,18 @@
 				[
 					"names",
 					"Collection",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "Ensure every requested model alias exists (test-only bootstrap, mock mode).\rReturns True when all requested aliases resolve after the bootstrap.",
+			"SummaryFormat": "text"
 		}
 	},
 	"_menu": {
@@ -2667,20 +3012,24 @@
 				[
 					"withStyle",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"callback",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rFonts menu with or without styles",
+			"SummaryFormat": "text"
 		},
 		"edit()": {
 			"Syntax": "**.edit**( *contextual* : Boolean ) : cs.EmbeddingStudio._menu",
@@ -2688,15 +3037,18 @@
 				[
 					"contextual",
 					"Boolean",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rStandard Edit menu",
+			"SummaryFormat": "text"
 		},
 		"windows()": {
 			"Syntax": "**.windows**( *callback* : Text ) : cs.EmbeddingStudio._menu",
@@ -2704,15 +3056,18 @@
 				[
 					"callback",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rWindows menu",
+			"SummaryFormat": "text"
 		},
 		"popup()": {
 			"Syntax": "**.popup**( *where* : Variant; *x* : Variant; *y* : Integer ) : cs.EmbeddingStudio._menu",
@@ -2720,25 +3075,30 @@
 				[
 					"where",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"x",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"y",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK:-[TOOLS]\r=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rDisplay the current menu as a pop-up menu",
+			"SummaryFormat": "text"
 		},
 		"getProperty()": {
 			"Syntax": "**.getProperty**( *property* : Text; *index* : Integer ) : Variant",
@@ -2746,20 +3106,24 @@
 				[
 					"property",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Variant",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns a property of a menu item",
+			"SummaryFormat": "text"
 		},
 		"icon()": {
 			"Syntax": "**.icon**( *proxy* : Text; *index* : Integer ) : cs.EmbeddingStudio._menu",
@@ -2767,20 +3131,24 @@
 				[
 					"proxy",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK:-[PROPERTIES]\r=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rModifies the icon associated with a menu item",
+			"SummaryFormat": "text"
 		},
 		"disable()": {
 			"Syntax": "**.disable**( *index* : Integer ) : cs.EmbeddingStudio._menu",
@@ -2788,15 +3156,18 @@
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rDisable a menu item",
+			"SummaryFormat": "text"
 		},
 		"itemSubMenuRef()": {
 			"Syntax": "**.itemSubMenuRef**( *withTitle* : Text ) : Text",
@@ -2804,15 +3175,18 @@
 				[
 					"withTitle",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Text",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"item()": {
 			"Syntax": "**.item**( *item* : Variant; *ref* : Text ) : Object",
@@ -2820,20 +3194,24 @@
 				[
 					"item",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"ref",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Object",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns a menu item from its title or index",
+			"SummaryFormat": "text"
 		},
 		"itemCount()": {
 			"Syntax": "**.itemCount**() : Integer",
@@ -2841,10 +3219,12 @@
 				[
 					"",
 					"Integer",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK:-[INFORMATIONS]\r=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns the number of menu items present in the menu",
+			"SummaryFormat": "text"
 		},
 		"setData()": {
 			"Syntax": "**.setData**( *name* : Text; *value* : Variant; *index* : Integer ) : cs.EmbeddingStudio._menu",
@@ -2852,25 +3232,30 @@
 				[
 					"name",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"value",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK:-[DATA]\r=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rAssociates data to a menu item",
+			"SummaryFormat": "text"
 		},
 		"enable()": {
 			"Syntax": "**.enable**( *enabled* : Boolean; *index* : Integer ) : cs.EmbeddingStudio._menu",
@@ -2878,20 +3263,24 @@
 				[
 					"enabled",
 					"Boolean",
-					"->"
+					"->",
+					""
 				],
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rDefines the activated status of a menu item",
+			"SummaryFormat": "text"
 		},
 		"getData()": {
 			"Syntax": "**.getData**( *name* : Text; *ref* : Text ) : Variant",
@@ -2899,20 +3288,24 @@
 				[
 					"name",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"ref",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Variant",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rRetrieve data associated to selected menu item",
+			"SummaryFormat": "text"
 		},
 		"property()": {
 			"Syntax": "**.property**( *property* : Text; *value* : Variant; *index* : Integer ) : cs.EmbeddingStudio._menu",
@@ -2920,25 +3313,30 @@
 				[
 					"property",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"value",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rAssociates a property to a menu item\r\r⚠️ ONE CAN SET A PROPERTY FOR ALL MENU TYPE (MENU BAR OR POPUP)\rBUT  UNIQUELY RETRIEVE IT FOR THE MENU BAR ITEMS",
+			"SummaryFormat": "text"
 		},
 		"indent()": {
 			"Syntax": "**.indent**( *index* : Integer; *number* : Integer ) : cs.EmbeddingStudio._menu",
@@ -2946,20 +3344,24 @@
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"number",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"parameter()": {
 			"Syntax": "**.parameter**( *param* : Text; *index* : Integer ) : cs.EmbeddingStudio._menu",
@@ -2967,20 +3369,24 @@
 				[
 					"param",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rAssociates a custom parameter to a menu item",
+			"SummaryFormat": "text"
 		},
 		"mark()": {
 			"Syntax": "**.mark**( *checked* : Boolean; *index* : Integer ) : cs.EmbeddingStudio._menu",
@@ -2988,20 +3394,24 @@
 				[
 					"checked",
 					"Boolean",
-					"->"
+					"->",
+					""
 				],
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rSets the check mark of a menu item",
+			"SummaryFormat": "text"
 		},
 		"method()": {
 			"Syntax": "**.method**( *method* : Text; *index* : Integer ) : cs.EmbeddingStudio._menu",
@@ -3009,20 +3419,24 @@
 				[
 					"method",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rDefines the project method associated with a menu item",
+			"SummaryFormat": "text"
 		},
 		"isSeparatorItem()": {
 			"Syntax": "**.isSeparatorItem**( *item* : Integer; *ref* : Text ) : Boolean",
@@ -3030,20 +3444,24 @@
 				[
 					"item",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"ref",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"Boolean",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"items()": {
 			"Syntax": "**.items**() : Collection",
@@ -3051,10 +3469,12 @@
 				[
 					"",
 					"Collection",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rReturns a collection of the first level menu items",
+			"SummaryFormat": "text"
 		},
 		"setStyle()": {
 			"Syntax": "**.setStyle**( *tyle* : Integer; *index* : Integer ) : cs.EmbeddingStudio._menu",
@@ -3062,20 +3482,24 @@
 				[
 					"tyle",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rChanges the font style of the menu item",
+			"SummaryFormat": "text"
 		},
 		"delete()": {
 			"Syntax": "**.delete**( *index* : Integer ) : cs.EmbeddingStudio._menu",
@@ -3083,15 +3507,18 @@
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rDelete an item or the last added item",
+			"SummaryFormat": "text"
 		},
 		"file()": {
 			"Syntax": "**.file**() : cs.EmbeddingStudio._menu",
@@ -3099,10 +3526,12 @@
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rDefault File menu",
+			"SummaryFormat": "text"
 		},
 		"shortcut()": {
 			"Syntax": "**.shortcut**( *key* : Variant; *modifier* : Integer; *index* : Integer ) : cs.EmbeddingStudio._menu",
@@ -3110,25 +3539,30 @@
 				[
 					"key",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"modifier",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rReplaces the shortcut key associated with the menu item",
+			"SummaryFormat": "text"
 		},
 		"add()": {
 			"Syntax": "**.add**( *ref* : Text; *text* : Text; *param* : Variant; *mark* : Boolean )",
@@ -3136,30 +3570,36 @@
 				[
 					"ref",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"text",
 					"Text",
-					"->"
+					"->",
+					""
 				],
 				[
 					"param",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"mark",
 					"Boolean",
-					"->"
+					"->",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===",
+			"SummaryFormat": "text"
 		},
 		"release()": {
 			"Syntax": "**.release**()",
 			"Params": [],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rRemoves the menu from memory",
+			"SummaryFormat": "text"
 		},
 		"action()": {
 			"Syntax": "**.action**( *action* : Variant; *index* : Integer ) : cs.EmbeddingStudio._menu",
@@ -3167,20 +3607,24 @@
 				[
 					"action",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"index",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rAssociate a standard action with a menu item",
+			"SummaryFormat": "text"
 		},
 		"line()": {
 			"Syntax": "**.line**( *afterItem* : Integer ) : cs.EmbeddingStudio._menu",
@@ -3188,15 +3632,18 @@
 				[
 					"afterItem",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rAdds/insert a line\rIf afterItem < 0, it is considered as the offset from the item count of the menu",
+			"SummaryFormat": "text"
 		},
 		"append()": {
 			"Syntax": "**.append**( *item* : Variant; *param* : Variant; *mark* : Variant; *afterItem* : Integer ) : cs.EmbeddingStudio._menu",
@@ -3204,30 +3651,36 @@
 				[
 					"item",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"param",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"mark",
 					"Variant",
-					"->"
+					"->",
+					""
 				],
 				[
 					"afterItem",
 					"Integer",
-					"->"
+					"->",
+					""
 				],
 				[
 					"",
 					"cs.EmbeddingStudio._menu",
-					"<-"
+					"<-",
+					""
 				]
 			],
-			"Summary": ""
+			"Summary": "MARK:-[DEFINITION]\r=== === === === === === === === === === === === === === === === === === === === === === === === === ===\rAdds/insert an item\rIf afterItem < 0, it is considered as the offset from the item count of the menu",
+			"SummaryFormat": "text"
 		},
 		"selected": {
 			"Syntax": "selected : Boolean"
@@ -3255,6 +3708,109 @@
 		},
 		"data": {
 			"Syntax": "data : Collection"
+		}
+	},
+	"_SCHEDULER_NOT_RUNNING": {
+		"manager()": {
+			"Syntax": "**.manager**( *e* : Object )",
+			"Params": [
+				[
+					"e",
+					"Object",
+					"->",
+					""
+				]
+			],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rCentral event dispatcher, called by the FORM_MANAGER form method.",
+			"SummaryFormat": "text"
+		},
+		"onLoad()": {
+			"Syntax": "**.onLoad**()",
+			"Params": [],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rOn Load: register the window, build the styled lines, fit the buttons to their captions.",
+			"SummaryFormat": "text"
+		},
+		"code": {
+			"Syntax": "code : Text"
+		},
+		"optionB": {
+			"Syntax": "optionB : Text"
+		},
+		"optionA": {
+			"Syntax": "optionA : Text"
+		}
+	},
+	"_AIKit": {
+		"modelNames()": {
+			"Syntax": "**.modelNames**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-",
+					""
+				]
+			],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rThe names of the model aliases, or [] when AIKit cannot be used.",
+			"SummaryFormat": "text"
+		},
+		"modelAliases()": {
+			"Syntax": "**.modelAliases**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
+					"<-",
+					""
+				]
+			],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rThe model aliases configured for AIKit, or [] when AIKit cannot be used.",
+			"SummaryFormat": "text"
+		},
+		"client()": {
+			"Syntax": "**.client**() : cs.AIKit.OpenAI",
+			"Params": [
+				[
+					"",
+					"cs.AIKit.OpenAI",
+					"<-",
+					""
+				]
+			],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rA new AIKit client. Throws when 4D AIKit cannot be used.",
+			"SummaryFormat": "text"
+		},
+		"assert()": {
+			"Syntax": "**.assert**()",
+			"Params": [],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rThrows when 4D AIKit cannot be used. isCriticalAPIError makes cs.Process stop calling the\rmodel for the rest of the run instead of failing once per entity.",
+			"SummaryFormat": "text"
+		},
+		"get missingReason()": {
+			"Syntax": "**.get missingReason**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-",
+					""
+				]
+			],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rWhy 4D AIKit cannot be used, or \"\" when it can.",
+			"SummaryFormat": "text"
+		},
+		"get isAvailable()": {
+			"Syntax": "**.get isAvailable**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-",
+					""
+				]
+			],
+			"Summary": "=== === === === === === === === === === === === === === === === === === === === === === === === === === ===\rTrue when 4D AIKit is loaded and recent enough for the studio.",
+			"SummaryFormat": "text"
 		}
 	}
 }

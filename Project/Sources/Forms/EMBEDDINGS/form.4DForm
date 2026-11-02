@@ -7,6 +7,7 @@
 		"onLoad",
 		"onClick",
 		"onActivate",
+		"onDeactivate",
 		"onDoubleClick",
 		"onLosingFocus",
 		"onGettingFocus",
