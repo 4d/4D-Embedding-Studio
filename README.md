@@ -23,6 +23,7 @@ If you want to have more control over your embeddings, the component offers an e
 
 **1. Add a field of type Object to the table and associate it with the `4D.Vector` class.**  
 **2. Select **Embedding Studio...** in the **Design** menu to display the Embedding Studio window.**  
+![menu](Documentation/menu.png)
 **3. For each listed `4D.Vector` attribute, write a descriptive phrase based upon attributes of the dataclass.**  
 Use the contextual menu to insert appropriate attributes.  
 This phrase will be vectorized for every entity.  
@@ -36,7 +37,7 @@ This phrase will be vectorized for every entity.
 
 To use the 4D Embedding Studio interface, you need to create at least one object attribute associated to a `4D.Vector` class in your datastore. This must be done at the database level (only storage attributes can be embeddings).
 
-In the Structure editor, add an Object field to the dataclass (table) whose entities you want to query using AI and enter ["4D.Vector" as class](https://developer.4d.com/docs/Develop/field-properties#class). 
+In the Structure editor, add an Object field to the dataclass (table) whose entities you want to query using AI and enter ["4D.Vector" as class](https://developer.4d.com/docs/Develop/structure-fields#class). 
 
 #### Dirty-flag support
 
@@ -56,6 +57,8 @@ When you select **Embedding Studio...** in the **Design** menu, the Embedding St
 
 The list on the left side shows all `4D.Vector` class attributes defined in the datastore. You can add as many vector attributes as you want per dataclass. 
 
+A check mark (✓) in the Dirty Flag column indicates that a [`<vectorName>_dirty` boolean field](#dirty-flag-support) is associated to the vector field.  
+
 **Note:** Any change in the database structure will require that you restart the 4D application so that the 4D Embedding Studio lists up-to-date values.
 
 #### Writing a descriptive sentence
@@ -66,6 +69,8 @@ The sentence must build a text that describes the entity just like a human would
 
 For example, for a `Product` dataclass with many attributes such as name and category, you could write: 
 "The {name} product is a {category} from the {brand} brand. Description: {description}. Key features: {features}."
+
+![menu](Documentation/studio-interface.png)
 
 
 ### Selecting a model
@@ -90,47 +95,58 @@ These calculations can be performed **on demand** or **scheduled at regular inte
 
 #### On demand
 
-To launch an embedding calculation, select **Run now** in the menu at the bottom of the 4D Embedding Studio window. This item is disabled if the datastore does not contain any embedding to calculate. You can select **Cancel run** at any moment. 
+To launch an embedding calculation, select **Run now** in the menu at the bottom of the 4D Embedding Studio window. This item is disabled if the datastore does not contain any embedding to calculate. When started, you can select **Cancel run** at any moment. 
 
 #### Scheduler
 
-You can configure the 4D Embedding Studio component scheduler to adjust the calculation frequency to suit your application’s needs . 
+You can configure the 4D Embedding Studio component scheduler to adjust the calculation frequency to suit your application’s needs. 
 
-You can set the time interval between two calculations starting from a specific time (**At regular interval** option), or have a calculation run daily at a specific time (**Once a day** option). 
+**Important:** The scheduler needs a 4D worker process to run. You can start it manually for testing purposes (**Start now** button in the scheduler dialog box) but to make sure a worker is available every times the application opens, you need to configure it. You can either:
+- select the **Execute "On Host Database Event" method of the components** option in the [project Settings](https://developer.4d.com/docs/settings/security#options)
+- or write the following code in your startup code:
 
-**Important**: The scheduler needs an explicit authorization from the host database to be started. This authorization is given when you click **Start now** in the warning shown when you open the scheduler settings while the scheduler is not running, but it needs to be renewed if the project is restarted. To make sure the scheduler can always restart automatically, you need to select the **Execute "On Host Database Event" method of the components** option in the [project Settings](https://developer.4d.com/docs/settings/security#options). 
+```4d
+  //at startup
+cs.EmbeddingStudio.Scheduler.me.start()
+```
 
-
+The scheduler allows you can set the time interval between two calculations. Select the tab corresponding to your needs and click **Save**.
+- **Never**: the scheduler is off and never runs
+- **At regular interval**: set the time interval between each calculation starting from a specified time. 
+- **Once a day**: the calculation takes place every day at a specific time 
+ starting from a specific time.
 
 
 ### Building queries with embeddings
 
-Once you have defined embeddings in your datastore, you can start [querying your dataclasses using AI-based features](https://developer.4d.com/docs/API/DataClassClass#query-by-vector-similarity). You just need to make sure that you use the same model for your embedding definition and in the query string. The [StudioEmbedder](Documentation/Classes/StudioEmbedder.md) class does it for you: it takes the model from the saved definition.
+Once you have defined embeddings in your datastore, you can start [querying your dataclasses using AI-based features](https://developer.4d.com/docs/API/DataClassClass#query-by-vector-similarity). You just need to make sure that you use the same model for your embedding definition and in the query string.
 
 For example, assuming that:
 
-- you have defined a `4D.Vector` attribute named "embedding" in the Products dataclass using the sentence: "The {name} is in the {category} category. It has these {features} features and can be used for {usage}."
-•	you have generated the embeddings using the "myEmbeddingModelAlias" model alias,
-•	you want to find products similar to the one selected by the user. 
+• you have defined a `4D.Vector` attribute named "product_vector" in the Products dataclass using a sentence: "The {name} is in the {category} category. It has these {features} features and can be used for {usage}."  
+•	you want to find products that "can be used safely outside". 
 
 You can write:
 
 ```4d
-var $entity:=Form.entity //contains the selected entity
+// Retrieve the model alias from the embedding definition, configured in 4D Embedding Studio
+var $settings:=cs.EmbeddingStudio.Settings.new()
+var $definition:=$settings.find("Products"; "product_vector")
 
-  //create a vector to compare, with the model of the "embedding" definition
-var $studioEmbedder:=cs.EmbeddingStudio.StudioEmbedder.new()
-var $vector:=$studioEmbedder.embed("A "+$entity.category+" product that can be used for "+$entity.usage; \
-	{vectorName: "embedding"; dataclassName: "Products"}).vector
+// Compute the vector of the query with the same model
+var $result:=cs.EmbeddingStudio.StudioEmbedder.new().embed("products that can be used safely outside"; $definition)
+var $vector:=$result.vector
 
   //search with default metric (cosine)
-var $products:=ds.Products.query("embedding > :1 order by embedding desc"; {vector : $vector})
+var $products:=ds.Products.query("product_vector > :1 order by product_vector desc"; {vector : $vector})
 
 ```
 
-To compare with the whole phrase of the selected product instead, pass the entity: `$studioEmbedder.embed($entity; {vectorName: "embedding"})` renders the definition's phrase for it and uses the definition's model.
+If you use a dirty field, simply add a criterion to exclude vectors waiting to be recalculated:
 
-
+```4d
+var $products:=ds.Products.query("product_vector > :1 and product_vector_dirty = false order by product_vector desc"; {vector : $vector})
+```
 
 
 ## API Guide
@@ -189,3 +205,9 @@ $p.processEntity($entity)
 | [ProcessError](Documentation/Classes/ProcessError.md) | Typed entry in `ProcessResult.errors` — scope, severity, code, ref, message, retryable. |
 | [ProcessErrorCode](Documentation/Classes/ProcessErrorCode.md) | Singleton catalogue of machine-readable error codes and their default severity/retryability. |
 | [Phrase](Documentation/Classes/Phrase.md) | Lightweight `{variable}` template engine used to build text from entity attributes. |
+
+
+
+### See also
+
+Blog post: [Vectorize your data effortlessly with 4D Embedding Studio](https://blog.4d.com/vectorize-your-data-effortlessly-with-4d-vector-studio)
