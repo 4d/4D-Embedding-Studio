@@ -1,6 +1,6 @@
 # StudioEmbedder
 
-The `StudioEmbedder` class provides ad-hoc, non-persisting helpers for previewing rendered phrases and computing one-off embedding vectors. Useful for similarity search inputs, debugging, REPL experimentation, or previews.
+The `StudioEmbedder` class renders and embeds on demand, resolved against the Studio settings: a saved definition gives the phrase and the model, so the vector you compute matches the ones stored by [Process](Process.md). Nothing is persisted. Typical uses: building the vector of a search query, finding entities similar to a given one, or previewing the text sent for an entity.
 
 For the full batch pipeline that persists vectors on entities, see [Process](Process.md).
 
@@ -20,9 +20,9 @@ For the full batch pipeline that persists vectors on entities, see [Process](Pro
 | *options*     | Object                                    | Optional runtime options. Supports `embedder` for injection. |
 
 ```4d
-var $pg:=cs.EmbeddingStudio.StudioEmbedder.new()
-var $pg:=cs.EmbeddingStudio.StudioEmbedder.new($settings)
-var $pg:=cs.EmbeddingStudio.StudioEmbedder.new($settings; {embedder: $mockEmbedder})
+var $studioEmbedder:=cs.EmbeddingStudio.StudioEmbedder.new()
+var $studioEmbedder:=cs.EmbeddingStudio.StudioEmbedder.new($settings)
+var $studioEmbedder:=cs.EmbeddingStudio.StudioEmbedder.new($settings; {embedder: $mockEmbedder})
 ```
 
 ## Functions
@@ -40,7 +40,7 @@ Return the text that [`embed()`](#embed) sends for an entity (the phrase rendere
 | Function result       | Text                                                                        | The rendered text.                                                          |
 
 ```4d
-var $pg:=cs.EmbeddingStudio.StudioEmbedder.new()
+var $studioEmbedder:=cs.EmbeddingStudio.StudioEmbedder.new()
 var $text: Text
 $text:=$studioEmbedder.render($student; $def)                        // use def's phrase
 $text:=$studioEmbedder.render($student; cs.EmbeddingStudio.Phrase.new("Hi {firstName}"))
@@ -66,7 +66,7 @@ Compute a vector for an arbitrary input, without persisting anywhere.
 Throws if no model can be determined.
 
 ```4d
-var $pg:=cs.EmbeddingStudio.StudioEmbedder.new()
+var $studioEmbedder:=cs.EmbeddingStudio.StudioEmbedder.new()
 var $vector: 4D.Vector
 
 // Text + model
@@ -108,7 +108,7 @@ Both `render()` and `embed()` accept a plain object in place of a `Phrase`/`Defi
 
 For `embed()`, the model is deduced in this order: an explicit `{modelAlias}` on the stub → the model of a stub-matched saved definition → the *model* argument → the entity's unique definition. An explicit `{modelAlias}` always wins.
 
-Unlike [`Process.process()`](Process.md#process-resolution), a stub is **not** turned into a brand-new `Definition` from its fields — `StudioEmbedder` is ad-hoc, so use `{phrase}`/`{template}` for one-off templates.
+Unlike [`Process.process()`](Process.md#process-resolution), a stub is **not** turned into a brand-new `Definition` from its fields — `StudioEmbedder` persists nothing, so use `{phrase}`/`{template}` for one-off templates.
 
 ## See also
 

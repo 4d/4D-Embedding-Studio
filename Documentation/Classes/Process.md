@@ -2,7 +2,7 @@
 
 The `Process` class orchestrates the full embedding pipeline: it browses 4D entities, renders text from their fields using a [Definition](Definition.md), calls the embeddings API through an [Embedder](Embedder.md), and stores the resulting `4D.Vector` on each entity.
 
-For ad-hoc, non-persisting helpers (previewing rendered phrases, computing one-off vectors), see [StudioEmbedder](StudioEmbedder.md).
+To render or embed on demand without persistence (search query vectors, phrase previews), see [StudioEmbedder](StudioEmbedder.md).
 
 ## Properties
 

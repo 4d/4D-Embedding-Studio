@@ -14,7 +14,7 @@ If you want to have more control over your embeddings, the component offers an e
 ## Requirements
 
 - [4D-AIKit](https://github.com/4d/4D-AIKit) (loaded automatically as a dependency). 
-- 4D project (> 21 R5) with the following configuration:
+- 4D project (21 R5 or later) with the following configuration:
   - a valid model alias 
   - a dataclass with a `4D.Vector` attribute (object field at the database level).
 
@@ -95,15 +95,13 @@ These calculations can be performed **on demand** or **scheduled at regular inte
 
 #### On demand
 
-To launch an embedding calculation, select **Run now** in the menu at the bottom of the 4D Embedding Studio window. This item is disabled if the datastore does not contain any embedding to calculate. You can select **Cancel run** at any moment. 
+To launch an embedding calculation, select **Run now** in the menu at the bottom of the 4D Embedding Studio window. This item is disabled if the datastore does not contain any embedding to calculate. When started, you can select **Cancel run** at any moment. 
 
 #### Scheduler
 
 You can configure the 4D Embedding Studio component scheduler to adjust the calculation frequency to suit your application’s needs. 
 
-You can set the time interval between two calculations starting from a specific time (**At regular interval** option), or have a calculation run daily at a specific time (**Once a day** option). 
-
-**Important**: The scheduler needs a 4D worker process to run. To make sure a worker is always available, you can either:
+**Important:** The scheduler needs a 4D worker process to run. You can start it manually for testing purposes (**Start now** button in the scheduler dialog box) but to make sure a worker is available every times the application opens, you need to configure it. You can either:
 - select the **Execute "On Host Database Event" method of the components** option in the [project Settings](https://developer.4d.com/docs/settings/security#options)
 - or write the following code in your startup code:
 
@@ -112,6 +110,11 @@ You can set the time interval between two calculations starting from a specific 
 cs.EmbeddingStudio.Scheduler.me.start()
 ```
 
+The scheduler allows you can set the time interval between two calculations. Select the tab corresponding to your needs and click **Save**.
+- **Never**: the scheduler is off and never runs
+- **At regular interval**: set the time interval between each calculation starting from a specified time. 
+- **Once a day**: the calculation takes place every day at a specific time 
+ starting from a specific time.
 
 
 ### Building queries with embeddings
@@ -193,7 +196,7 @@ $p.processEntity($entity)
 |---|---|
 | [Process](Documentation/Classes/Process.md) | Main orchestrator — entry point for all batch and entity operations. |
 | [Scheduler](Documentation/Classes/Scheduler.md) | Automated recalculation scheduler — background task, force/cancel, and runtime status. |
-| [StudioEmbedder](Documentation/Classes/StudioEmbedder.md) | Ad-hoc, non-persisting helpers for rendering phrases and computing one-off vectors. |
+| [StudioEmbedder](Documentation/Classes/StudioEmbedder.md) | Renders and embeds on demand using your saved definitions — e.g. to build a search query vector. Nothing is persisted. |
 | [Settings](Documentation/Classes/Settings.md) | Loads and saves the `embeddings.json` configuration file. |
 | [Definition](Documentation/Classes/Definition.md) | Describes one vector field: dataclass, field name, model alias, and phrase template. |
 | [Embedder](Documentation/Classes/Embedder.md) | Thin wrapper around the AIKit embeddings API with retry/backoff logic. |
