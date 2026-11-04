@@ -13,7 +13,7 @@
  
  All entry points return a cs.ProcessResult.
 
- For ad-hoc rendering and embedding without persistence, see cs.Playground.
+ For on-demand rendering and embedding without persistence, see cs.StudioEmbedder.
 
  Options object ($options)
 
@@ -28,7 +28,7 @@
  | debug | Boolean | False | If true, emits extra diagnostic log entries. |
  | embedder | cs.Embedder | New embedder instance | Optional embedder override, mainly for tests or custom providers. |
  | shouldCancel | 4D.Function | Null | Optional predicate called between chunks; if it returns True, selection processing stops gracefully (cooperative cancel). |
- | pauseIndexes | Boolean | True | If true, index maintenance on the target table is paused for the duration of a selection's batch run (and resumed right after), to speed up large writes. |
+ | pauseIndexes | Boolean | False | If true, index maintenance on the target table is paused for the duration of a selection's batch run (and resumed right after), to speed up large writes. Resuming rebuilds every index of the table (all of them, not only the vector ones), so only worth it for large recalculations. Ignored on a 4D remote client. |
  | waitForIndexes | Boolean | False | If true, resuming indexes (after pauseIndexes) blocks until recomputation is complete; by default resume is asynchronous. |
  | nextComputeDate | Text | Null | Internal. ISO timestamp of the next scheduled run, recorded verbatim in the execution history at the end of a full run. Set by the scheduler. |
 **/
@@ -465,14 +465,13 @@ Function _runOnSelection($es : 4D:C1709.EntitySelection; $def : cs:C1710.Definit
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Pauses (or resumes) index maintenance on a table, guarded by the pauseIndexes
-	// option (default True). Meant to speed up large batch writes on a selection.
+	// option (default False: nothing is done unless requested). Meant to speed up large
+	// batch writes on a selection, but resuming rebuilds every index of the table.
 	// Resume is asynchronous (indexes recomputed in the background) unless the
 	// waitForIndexes option is true, in which case resume blocks until done.
 Function _setIndexesPaused($dc : 4D:C1709.DataClass; $paused : Boolean)
 	
-	var $enabled : Boolean:=(This:C1470.options.pauseIndexes=Null:C1517) ? True:C214 : Bool:C1537(This:C1470.options.pauseIndexes)
-
-	If (Not:C34($enabled))
+	If (Not:C34(Bool:C1537(This:C1470.options.pauseIndexes)))
 		return
 	End if
 

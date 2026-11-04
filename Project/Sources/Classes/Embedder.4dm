@@ -13,7 +13,11 @@ Class constructor($options : Object)
 	
 	$options:=$options || {}
 	
-	This:C1470.client:=$options.client || cs:C1710.AIKit.OpenAI.new()
+	// Without 4D AIKit the client stays Null: building an Embedder never fails, the first call throws.
+	This:C1470.client:=$options.client
+	If ((This:C1470.client=Null:C1517) && (cs:C1710._AIKit.me.isAvailable))
+		This:C1470.client:=cs:C1710._AIKit.me.client()
+	End if 
 	This:C1470.maxRetries:=($options.maxRetries#Null:C1517) ? Num:C11($options.maxRetries) : 3
 	This:C1470.backoffMs:=($options.backoffMs#Null:C1517) ? Num:C11($options.backoffMs) : 500
 	
@@ -56,6 +60,12 @@ Function _createWithRetry($input : Variant; $model : Text) : cs:C1710.AIKit.Open
 	
 	var $attempt : Integer:=0
 	var $result : cs:C1710.AIKit.OpenAIEmbeddingsResult
+	
+	If (This:C1470.client=Null:C1517)
+		
+		This:C1470.client:=cs:C1710._AIKit.me.client()  // Throws a clear error when 4D AIKit is not loaded
+		
+	End if 
 	
 	While ($attempt<=This:C1470.maxRetries)
 		

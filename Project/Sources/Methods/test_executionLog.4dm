@@ -23,6 +23,25 @@ $execLog.endFullRun("2026-01-01T00:00:00"; "2026-01-01T00:00:10"; "completed"; N
 ASSERT:C1129($execLog.status().status="completed"; "endFullRun: status should be completed")
 ASSERT:C1129($execLog.lastRun().timestamp="2026-01-01T00:00:10"; "endFullRun: lastRun should be the end timestamp")
 
+//MARK:- while a run is in progress, lastRun() is the previous completed run
+$execLog.startFullRun("2026-01-01T01:00:00")
+var $inProgress : Object:=$execLog.lastRun()
+ASSERT:C1129($inProgress.timestamp="2026-01-01T00:00:10"; "in progress: lastRun should fall back to the previous run, got '"+String:C10($inProgress.timestamp)+"'")
+ASSERT:C1129($inProgress.status="completed"; "in progress: lastRun status should be the previous one, got '"+String:C10($inProgress.status)+"'")
+
+$execLog.endFullRun("2026-01-01T01:00:00"; "2026-01-01T01:00:05"; "completed"; Null:C1517; Null:C1517; Null:C1517)
+ASSERT:C1129($execLog.lastRun().timestamp="2026-01-01T01:00:05"; "after the run: lastRun should be the new end timestamp")
+
+//MARK:- skipped triggers are capped to the 50 most recent
+var $k : Integer
+For ($k; 1; 55)
+	$execLog.logSkipped("2026-01-01T02:00:"+String:C10($k; "00"))
+End for
+var $skipped : Collection:=$execLog._read().skipped
+ASSERT:C1129($skipped.length=50; "skipped cap: expected 50 entries, got "+String:C10($skipped.length))
+ASSERT:C1129($skipped[0]="2026-01-01T02:00:06"; "skipped cap: the oldest entries should be dropped first, got "+String:C10($skipped[0]))
+ASSERT:C1129($skipped[49]="2026-01-01T02:00:55"; "skipped cap: the newest entry should be last, got "+String:C10($skipped[49]))
+
 //MARK:- next compute date
 $execLog.setNextComputeDate("2026-01-02T03:00:00")
 ASSERT:C1129($execLog.status().nextComputeDate="2026-01-02T03:00:00"; "setNextComputeDate: value should be stored")

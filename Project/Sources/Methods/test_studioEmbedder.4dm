@@ -1,5 +1,5 @@
 //%attributes = {}
-// Automated tests for cs.Playground (render + embed).
+// Automated tests for cs.StudioEmbedder (render + embed).
 
 var $mockEmbedder:=Not:C34(Shift down:C543)
 
@@ -28,7 +28,7 @@ If (Not:C34(Asserted:C1132($modelAlias#Null:C1517; "you must configure an 'embed
 	return 
 End if 
 
-var $settingsFile : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).file("Settings/__test_playground_tmp.json")
+var $settingsFile : 4D:C1709.File:=Folder:C1567(fk database folder:K87:14; *).file("Settings/__test_studioEmbedder_tmp.json")
 
 $settingsFile.setText(JSON Stringify:C1217({batchSize: 50; definitions: [\
 {dataclassName: "_Students"; vectorName: "student_vector_1"; modelAlias: $model; phrase: "{firstName} {lastName}"}]}))
@@ -65,102 +65,110 @@ var $embedder : Object:=$mockEmbedder ? cs:C1710._TestProcessEmbedder.new() : Nu
 // render() tests
 // =====================================================
 
-var $pg:=cs:C1710.Playground.new($settings; {embedder: $embedder})
+var $studioEmbedder:=cs:C1710.StudioEmbedder.new($settings; {embedder: $embedder})
 
 // --- render with definition ---
-var $text : Text:=$pg.render($studentAlice; $studentsDef)
+var $text : Text:=$studioEmbedder.render($studentAlice; $studentsDef)
 ASSERT:C1129($text="Alice Durand"; "render with definition: expected 'Alice Durand' got '"+$text+"'")
 
 // --- render with Phrase ---
 var $phrase : cs:C1710.Phrase:=cs:C1710.Phrase.new("Hello {firstName}")
-$text:=$pg.render($studentAlice; $phrase)
+$text:=$studioEmbedder.render($studentAlice; $phrase)
 ASSERT:C1129($text="Hello Alice"; "render with Phrase: expected 'Hello Alice' got '"+$text+"'")
 
 // --- render with Text template ---
-$text:=$pg.render($studentAlice; "Student: {lastName}")
+$text:=$studioEmbedder.render($studentAlice; "Student: {lastName}")
 ASSERT:C1129($text="Student: Durand"; "render with Text: expected 'Student: Durand' got '"+$text+"'")
 
 // --- render with Null (auto-resolve, unique definition) ---
-$text:=$pg.render($studentAlice)
+$text:=$studioEmbedder.render($studentAlice)
 ASSERT:C1129($text="Alice Durand"; "render auto-resolve: expected 'Alice Durand' got '"+$text+"'")
 
 // --- render with Null entity returns empty ---
-$text:=$pg.render(Null:C1517)
+$text:=$studioEmbedder.render(Null:C1517)
 ASSERT:C1129($text=""; "render null entity should return empty")
 
 // --- render with stub {vectorName} (resolved against entity's dataclass) ---
-$text:=$pg.render($studentAlice; {vectorName: "student_vector_1"})
+$text:=$studioEmbedder.render($studentAlice; {vectorName: "student_vector_1"})
 ASSERT:C1129($text="Alice Durand"; "render stub vectorName: expected 'Alice Durand' got '"+$text+"'")
 
 // --- render with ad-hoc stub {phrase} ---
-$text:=$pg.render($studentAlice; {phrase: "Hi {firstName}"})
+$text:=$studioEmbedder.render($studentAlice; {phrase: "Hi {firstName}"})
 ASSERT:C1129($text="Hi Alice"; "render stub phrase: expected 'Hi Alice' got '"+$text+"'")
 
 // --- render with ad-hoc stub {template} ---
-$text:=$pg.render($studentAlice; {template: "Name: {lastName}"})
+$text:=$studioEmbedder.render($studentAlice; {template: "Name: {lastName}"})
 ASSERT:C1129($text="Name: Durand"; "render stub template: expected 'Name: Durand' got '"+$text+"'")
 
 // --- render with stub {vectorName} that doesn't exist → empty (no unique match) ---
-$text:=$pg.render($studentAlice; {vectorName: "does_not_exist"})
+$text:=$studioEmbedder.render($studentAlice; {vectorName: "does_not_exist"})
 ASSERT:C1129($text=""; "render stub unknown vectorName should return empty, got '"+$text+"'")
 
 // --- render with stub whose dataclassName mismatches the entity → empty ---
-$text:=$pg.render($studentAlice; {dataclassName: "School"; vectorName: "student_vector_1"})
+$text:=$studioEmbedder.render($studentAlice; {dataclassName: "School"; vectorName: "student_vector_1"})
 ASSERT:C1129($text=""; "render stub mismatched dataclass should return empty, got '"+$text+"'")
+
+// --- render with ad-hoc stub holding a compiled Phrase ---
+$text:=$studioEmbedder.render($studentAlice; {phrase: cs:C1710.Phrase.new("Yo {firstName}")})
+ASSERT:C1129($text="Yo Alice"; "render stub Phrase: expected 'Yo Alice' got '"+$text+"'")
+
+// --- render with an unsupported phrase argument (number) → empty ---
+$text:=$studioEmbedder.render($studentAlice; 42)
+ASSERT:C1129($text=""; "render unsupported phrase type should return empty, got '"+$text+"'")
 
 // =====================================================
 // embed() tests
 // =====================================================
 
 // --- embed text + model ---
-var $result : cs:C1710.EmbedderResult:=$pg.embed("hello world"; $model)
+var $result : cs:C1710.EmbedderResult:=$studioEmbedder.embed("hello world"; $model)
 ASSERT:C1129($result#Null:C1517; "embed text+model should return result")
 ASSERT:C1129($result.vector#Null:C1517; "embed text+model should return a vector")
 
 // --- embed text + definition ---
-$result:=$pg.embed("hello world"; $studentsDef)
+$result:=$studioEmbedder.embed("hello world"; $studentsDef)
 ASSERT:C1129($result#Null:C1517; "embed text+def should return result")
 ASSERT:C1129($result.vector#Null:C1517; "embed text+def should return a vector")
 
 // --- embed entity + definition ---
-$result:=$pg.embed($studentAlice; $studentsDef)
+$result:=$studioEmbedder.embed($studentAlice; $studentsDef)
 ASSERT:C1129($result#Null:C1517; "embed entity+def should return result")
 ASSERT:C1129($result.vector#Null:C1517; "embed entity+def should return a vector")
 
 // --- embed entity + phrase + model ---
-$result:=$pg.embed($studentAlice; $phrase; $model)
+$result:=$studioEmbedder.embed($studentAlice; $phrase; $model)
 ASSERT:C1129($result#Null:C1517; "embed entity+phrase+model should return result")
 ASSERT:C1129($result.vector#Null:C1517; "embed entity+phrase+model should return a vector")
 
 // --- embed entity + text template + model ---
-$result:=$pg.embed($studentAlice; "Profile: {firstName}"; $model)
+$result:=$studioEmbedder.embed($studentAlice; "Profile: {firstName}"; $model)
 ASSERT:C1129($result#Null:C1517; "embed entity+template+model should return result")
 ASSERT:C1129($result.vector#Null:C1517; "embed entity+template+model should return a vector")
 
 // --- embed entity auto-resolve (unique definition) ---
-$result:=$pg.embed($studentAlice)
+$result:=$studioEmbedder.embed($studentAlice)
 ASSERT:C1129($result#Null:C1517; "embed entity auto-resolve should return result")
 ASSERT:C1129($result.vector#Null:C1517; "embed entity auto-resolve should return a vector")
 
 // --- embed entity + stub {vectorName} (deduces phrase + model) ---
-$result:=$pg.embed($studentAlice; {vectorName: "student_vector_1"})
+$result:=$studioEmbedder.embed($studentAlice; {vectorName: "student_vector_1"})
 ASSERT:C1129($result#Null:C1517; "embed entity+stub vectorName should return result")
 ASSERT:C1129($result.vector#Null:C1517; "embed entity+stub vectorName should return a vector")
 
 // --- embed entity + ad-hoc stub {phrase; modelAlias} ---
-$result:=$pg.embed($studentAlice; {phrase: "Hi {firstName}"; modelAlias: $model})
+$result:=$studioEmbedder.embed($studentAlice; {phrase: "Hi {firstName}"; modelAlias: $model})
 ASSERT:C1129($result#Null:C1517; "embed entity+stub phrase/model should return result")
 ASSERT:C1129($result.vector#Null:C1517; "embed entity+stub phrase/model should return a vector")
 
 // --- embed text + stub {modelAlias} ---
-$result:=$pg.embed("hello world"; {modelAlias: $model})
+$result:=$studioEmbedder.embed("hello world"; {modelAlias: $model})
 ASSERT:C1129($result#Null:C1517; "embed text+stub model should return result")
 ASSERT:C1129($result.vector#Null:C1517; "embed text+stub model should return a vector")
 
 // --- embed with no model throws ---
 var $threw : Boolean:=False:C215
 Try
-	$pg.embed("hello world")
+	$studioEmbedder.embed("hello world")
 Catch
 	$threw:=True:C214
 End try
@@ -170,7 +178,7 @@ Try(1)
 // --- embed entity + stub {vectorName} that doesn't exist → throws (no phrase resolved) ---
 $threw:=False:C215
 Try
-	$pg.embed($studentAlice; {vectorName: "does_not_exist"})
+	$studioEmbedder.embed($studentAlice; {vectorName: "does_not_exist"})
 Catch
 	$threw:=True:C214
 End try
@@ -180,12 +188,40 @@ Try(1)
 // --- embed text + stub that resolves no model → throws ---
 $threw:=False:C215
 Try
-	$pg.embed("hello world"; {phrase: "ignored {x}"})
+	$studioEmbedder.embed("hello world"; {phrase: "ignored {x}"})
 Catch
 	$threw:=True:C214
 End try
 ASSERT:C1129($threw; "embed stub with no resolvable model should throw")
 Try(1)
+
+// --- embed with a Null entity → throws (no phrase resolved) ---
+$threw:=False:C215
+Try
+	$studioEmbedder.embed(Null:C1517)
+Catch
+	$threw:=True:C214
+End try
+ASSERT:C1129($threw; "embed null entity should throw (no phrase)")
+Try(1)
+
+// --- ambiguous auto-resolution (two definitions for the dataclass) ---
+$settings.definitions.push(cs:C1710.Definition.new("_Students"; "student_vector_2"; $model; "{lastName}"))
+
+$text:=$studioEmbedder.render($studentAlice)
+ASSERT:C1129($text=""; "render auto-resolve with 2 definitions should return empty, got '"+$text+"'")
+
+// a phrase is given but no model, and the model cannot be deduced → throws
+$threw:=False:C215
+Try
+	$studioEmbedder.embed($studentAlice; $phrase)
+Catch
+	$threw:=True:C214
+End try
+ASSERT:C1129($threw; "embed with an ambiguous model should throw")
+Try(1)
+
+$settings.definitions.pop()
 
 // =====================================================
 // Cleanup

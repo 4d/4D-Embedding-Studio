@@ -73,7 +73,7 @@
           <target>Embedding API unreachable after {retries} retries</target>
         </trans-unit>
       </group>
-      <group resname="Playground">
+      <group resname="StudioEmbedder">
         <trans-unit id="errNoPhraseResolved" resname="errNoPhraseResolved">
           <source>No phrase could be resolved for the given entity/context</source>
           <target>No phrase could be resolved for the given entity/context</target>
@@ -152,6 +152,18 @@
           <source>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</source>
           <target>The attribute "{attribute}" of the dataclass "{dataclass}" is not a vector.</target>
         </trans-unit>
+        <trans-unit id="theVectorFieldHasNoObjectIndex" resname="theVectorFieldHasNoObjectIndex">
+          <source>Add a standard index on the vector field to speed up computing and updating vectors.</source>
+          <target>Add a standard index on the vector field to speed up computing and updating vectors.</target>
+        </trans-unit>
+        <trans-unit id="theVectorFieldHasNoVectorIndex" resname="theVectorFieldHasNoVectorIndex">
+          <source>Add a vector index on the vector field for much faster similarity searches.</source>
+          <target>Add a vector index on the vector field for much faster similarity searches.</target>
+        </trans-unit>
+        <trans-unit id="theDirtyFieldIsNotIndexed" resname="theDirtyFieldIsNotIndexed">
+          <source>Index the dirty flag field to find vectors to recompute faster.</source>
+          <target>Index the dirty flag field to find vectors to recompute faster.</target>
+        </trans-unit>
       </group>
       <group resname="Model">
         <trans-unit id="tqepk+C7nSjsmFD87VD0gA" resname="theModelIsNotDefined">
@@ -161,6 +173,16 @@
         <trans-unit id="theModelIsNotAvailable" resname="theModelIsNotAvailable">
           <source>The model "{model}" is not available.</source>
           <target>The model "{model}" is not available.</target>
+        </trans-unit>
+      </group>
+      <group resname="AIKit">
+        <trans-unit id="errAIKitMissing" resname="errAIKitMissing">
+          <source>The 4D AIKit component is not loaded. Embedding Studio needs it to list and call the AI models: add the 4D AIKit dependency (github.com/4d/4D-AIKit) to the project, then restart.</source>
+          <target>The 4D AIKit component is not loaded. Embedding Studio needs it to list and call the AI models: add the 4D AIKit dependency (github.com/4d/4D-AIKit) to the project, then restart.</target>
+        </trans-unit>
+        <trans-unit id="errAIKitOutdated" resname="errAIKitOutdated">
+          <source>The 4D AIKit component is too old: OpenAIProviders is missing. Update 4D AIKit and use 4D 21 R3 or later.</source>
+          <target>The 4D AIKit component is too old: OpenAIProviders is missing. Update 4D AIKit and use 4D 21 R3 or later.</target>
         </trans-unit>
       </group>
     </body>

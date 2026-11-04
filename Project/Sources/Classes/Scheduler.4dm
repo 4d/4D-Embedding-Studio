@@ -12,7 +12,7 @@
    cs.EmbeddingStudio.Scheduler.me.autoStart() // True when the host arms us through On Host Database Event
 
  The scheduler config lives under the "scheduler" key of Settings/embeddings.json:
-   { "mode": "disabled|interval|daily",
+   { "mode": "never|interval|daily",
      "intervalHours": 1..24,                    // interval mode
      "startFrom": "reference|lastExecution",    // interval mode
      "startReference": "YYYY-MM-DDThh:mm:ss",   // interval, anchor for startFrom "reference"
@@ -48,6 +48,10 @@ server Function start() : Boolean
 	var $error : Text:=(($terminal) && (Value type:C1509($persisted.error)=Is text:K8:3)) ? String:C10($persisted.error) : ""
 	cs:C1710._SchedulerState.me.restore($persisted.timestamp; ($terminal ? $persisted.status : ""); $error)
 
+	If (Not:C34(cs:C1710._AIKit.me.isAvailable))
+		cs:C1710._Logger.me.error("Scheduler: "+cs:C1710._AIKit.me.missingReason)  // Every run will fail its definitions until 4D AIKit is loaded
+	End if 
+	
 	cs:C1710._SchedulerState.me.arm(cs:C1710._ScheduleCalc.me._nowISO())
 	
 	If (Not:C34(This:C1470.isStarted()))
@@ -115,7 +119,7 @@ Function saveConfig($cfg : Object) : Object
 	return $normalized
 
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Computes the next scheduled run, or Null when disabled.
+	// Computes the next scheduled run, or Null in "never" mode.
 Function nextRun() : Object
 	
 	var $state : cs:C1710._SchedulerState:=cs:C1710._SchedulerState.me
@@ -143,10 +147,10 @@ server Function status() : Object
 	var $state : cs:C1710._SchedulerState:=cs:C1710._SchedulerState.me
 	var $persisted : Object:=cs:C1710._ExecutionLog.me.lastRun()
 	var $cfg : Object:=This:C1470.config()
-	var $next : Object:=($cfg.mode="disabled") ? Null:C1517 : This:C1470.nextRun()
+	var $next : Object:=($cfg.mode="never") ? Null:C1517 : This:C1470.nextRun()
 
 	return {\
-		enabled: ($cfg.mode#"disabled"); \
+		enabled: ($cfg.mode#"never"); \
 		mode: $cfg.mode; \
 		armed: $state.armed; \
 		running: $state.running; \
@@ -195,7 +199,7 @@ Function _normalize($sched : Object) : Object
 
 	var $mode : Text:=String:C10($sched.mode)
 	If (($mode#"interval") && ($mode#"daily"))
-		$mode:="disabled"
+		$mode:="never"
 	End if
 
 	var $hours : Integer:=Num:C11($sched.intervalHours)

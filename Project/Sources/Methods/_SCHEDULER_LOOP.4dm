@@ -17,7 +17,7 @@ Repeat
 	var $sleep : Integer:=$state.checkInterval
 	var $cfg : Object:=$scheduler.config()
 	
-	If ($cfg.mode#"disabled")
+	If ($cfg.mode#"never")
 		
 		var $nowStamp : Text:=$calc._nowISO()
 		

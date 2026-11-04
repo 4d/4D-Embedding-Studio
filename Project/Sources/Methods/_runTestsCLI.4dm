@@ -7,11 +7,14 @@ End if
 
 var $test : Object
 For each ($test; $results.tests || [])
-	If ($test.success)
-		LOG EVENT:C667(Into system standard outputs:K38:9; "PASS "+String:C10($test.name)+Char:C90(Line feed:K15:40))
-	Else 
-		LOG EVENT:C667(Into system standard outputs:K38:9; "FAIL "+String:C10($test.name)+" "+JSON Stringify:C1217($test.errors)+Char:C90(Line feed:K15:40))
-	End if 
+	Case of 
+		: (Bool:C1537($test.skipped))
+			LOG EVENT:C667(Into system standard outputs:K38:9; "SKIP "+String:C10($test.name)+Char:C90(Line feed:K15:40))
+		: ($test.success)
+			LOG EVENT:C667(Into system standard outputs:K38:9; "PASS "+String:C10($test.name)+Char:C90(Line feed:K15:40))
+		Else 
+			LOG EVENT:C667(Into system standard outputs:K38:9; "FAIL "+String:C10($test.name)+" "+JSON Stringify:C1217($test.errors)+Char:C90(Line feed:K15:40); Error message:K38:3)
+	End case 
 End for each 
 
 Try

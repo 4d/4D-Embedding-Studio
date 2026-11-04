@@ -1,13 +1,21 @@
 //%attributes = {}
-#DECLARE() : Integer
+#DECLARE($skipNotRunning : Boolean) : Integer
 
 // Opens the standalone embedding scheduler window (single instance).
 // Can be launched from the host Design menu or from the Embedding Studio status bar.
+// When the scheduler does not run, the SCHEDULER_NOT_RUNNING dialog is shown first
+// ($skipNotRunning: GUI tests); closing it opens nothing.
 
 var $form:="SCHEDULER"
 var $openDial : Boolean
 
 If (Num:C11(Storage:C1525.studio[$form])=0)
+
+	If (Not:C34($skipNotRunning) && Not:C34(Bool:C1537(cs:C1710.Scheduler.me.status().started)))
+		If (Not:C34(_SCHEDULER_NOT_RUNNING))
+			return 0
+		End if
+	End if
 
 	// Create the window
 	var $winRef:=Open form window:C675($form; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)

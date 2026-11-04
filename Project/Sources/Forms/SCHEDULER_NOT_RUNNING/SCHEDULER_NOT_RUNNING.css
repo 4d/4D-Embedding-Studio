@@ -1,0 +1,44 @@
+/* "Scheduler not running" dialog — option panels, code snippet, link and muted note.
+   Colors follow the system appearance (light / dark) via prefers-color-scheme. */
+
+.notRunningPanel {
+	fill: #FFFFFF;
+	stroke: #D2D2D2;
+}
+
+.notRunningCodeBox {
+	fill: #F4F4F6;
+	stroke: #E0E0E4;
+}
+
+.notRunningCode {
+	stroke: #1F3A93;
+}
+
+.notRunningLink {
+	stroke: #0A64D6;
+}
+
+.notRunningMuted {
+	stroke: #6E6E73;
+}
+
+@media (prefers-color-scheme: dark) {
+	.notRunningPanel {
+		fill: #26272B;
+		stroke: #3C3D41;
+	}
+	.notRunningCodeBox {
+		fill: #1E1F22;
+		stroke: #3C3D41;
+	}
+	.notRunningCode {
+		stroke: #8AB4F8;
+	}
+	.notRunningLink {
+		stroke: #4DA3FF;
+	}
+	.notRunningMuted {
+		stroke: #9AA0A6;
+	}
+}

@@ -15,7 +15,7 @@ var $settings : cs:C1710.Settings:=cs:C1710.Settings.new()
 
 If (Not:C34($settings.file.exists))
 	
-	ALERT:C41("⚠️ Settings file not found:\n"+$settings.file.path\
+	cs:C1710._Dialog.me.alert("⚠️ Settings file not found:\n"+$settings.file.path\
 		+"\n\nCreate it and add at least one vector definition, then re-run.")
 	return 
 	
@@ -23,7 +23,7 @@ End if
 
 If ($settings.definitions.length=0)
 	
-	ALERT:C41("⚠️ No vector definitions in settings.\n\nAdd definitions to:\n"+$settings.file.path)
+	cs:C1710._Dialog.me.alert("⚠️ No vector definitions in settings.\n\nAdd definitions to:\n"+$settings.file.path)
 	return 
 	
 End if 
@@ -59,8 +59,7 @@ If ($missing.length>0)
 	End for each 
 	$hint:=$hint+"\nEdit: "+$settings.file.path+"\n\nContinue "+($dryRun ? "with dry-run" : "")+" anyway?"
 	
-	CONFIRM:C162($hint)
-	If (OK=0)
+	If (Not:C34(cs:C1710._Dialog.me.confirm($hint)))
 		return 
 	End if 
 	
@@ -91,8 +90,7 @@ For each ($seedDef; $scope)
 		continue
 	End if 
 	
-	CONFIRM:C162("ℹ️ \""+$seedDef.dataclassName+"\" has "+String:C10($current)+" entitie(s).\nCreate "+String:C10($entities.create)+" test entities with random data?")
-	If (OK=0)
+	If (Not:C34(cs:C1710._Dialog.me.confirm("ℹ️ \""+$seedDef.dataclassName+"\" has "+String:C10($current)+" entitie(s).\nCreate "+String:C10($entities.create)+" test entities with random data?")))
 		continue
 	End if 
 	
@@ -141,7 +139,7 @@ For each ($seedDef; $scope)
 End for each 
 
 If (Length:C16($seedLog)>0)
-	ALERT:C41("ℹ️ Test data seeded:\n\n"+$seedLog)
+	cs:C1710._Dialog.me.alert("ℹ️ Test data seeded:\n\n"+$seedLog)
 End if 
 
 // ══════════════════════════════════════════════════════════════════════
@@ -154,7 +152,7 @@ var $result : cs:C1710.ProcessResult
 Try
 	$result:=$proc.process($definition)
 Catch
-	ALERT:C41("❌ Process raised an error:\n"+Last errors:C1799[0].message)
+	cs:C1710._Dialog.me.alert("❌ Process raised an error:\n"+Last errors:C1799[0].message)
 	return 
 End try
 
@@ -174,10 +172,10 @@ If ($result.errors.length>0)
 		$errText:=$errText+"  • "+String:C10($err.scope)+" / "+String:C10($err.ref)+": "+String:C10($err.message)+"\n"
 	End for each 
 	
-	ALERT:C41("⚠️ "+String:C10($result.errors.length)+" error(s) — fix these before running for real:\n\n"+$errText+"\n"+$summary)
+	cs:C1710._Dialog.me.alert("⚠️ "+String:C10($result.errors.length)+" error(s) — fix these before running for real:\n\n"+$errText+"\n"+$summary)
 	
 Else 
 	
-	ALERT:C41("✅ Configuration OK — all "+String:C10($scope.length)+" definition(s) passed.\n\n"+$summary)
+	cs:C1710._Dialog.me.alert("✅ Configuration OK — all "+String:C10($scope.length)+" definition(s) passed.\n\n"+$summary)
 	
 End if 

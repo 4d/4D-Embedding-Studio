@@ -1,5 +1,5 @@
 /**
- Shared base for Process and Playground.
+ Shared base for Process and StudioEmbedder.
  Holds common configuration, embedder construction, and resolver wiring.
 **/
 

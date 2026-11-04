@@ -66,6 +66,11 @@ ASSERT:C1129($tpl.keys.length=3; "Adjacent: expected 3 keys")
 $result:=$tpl.render({a: "1"; b: "2"; c: "3"})
 ASSERT:C1129($result="123"; "Adjacent: expected '123', got '"+$result+"'")
 
+// --- Object and collection values are rendered as JSON ---
+$tpl:=cs:C1710.Phrase.new("tags: {tags} meta: {meta}")
+$result:=$tpl.render({tags: ["a"; "b"]; meta: {k: 1}})
+ASSERT:C1129($result="tags: [\"a\",\"b\"] meta: {\"k\":1}"; "Object value: expected JSON rendering, got '"+$result+"'")
+
 // ══════════════════════════════════════════════════════════════════════
 // DOT-NOTATION TESTS
 // ══════════════════════════════════════════════════════════════════════
@@ -81,6 +86,11 @@ ASSERT:C1129($result="Alice in Paris"; "Dot render: expected 'Alice in Paris', g
 $tpl:=cs:C1710.Phrase.new("{a.b.c}")
 $result:=$tpl.render({a: {x: 1}})
 ASSERT:C1129($result=""; "Dot missing: expected empty, got '"+$result+"'")
+
+// --- Dot-notation through a non-object value ---
+$tpl:=cs:C1710.Phrase.new("[{a.b}]")
+$result:=$tpl.render({a: "text"})
+ASSERT:C1129($result="[]"; "Dot through scalar: expected '[]', got '"+$result+"'")
 
 // ══════════════════════════════════════════════════════════════════════
 // VALIDATE TESTS (against real DataClasses)
@@ -158,6 +168,26 @@ $v:=$tpl.validate(ds:C1482._Students)
 ASSERT:C1129(Not:C34($v.success); "Validate multi-error: expected failure")
 ASSERT:C1129($v.errors.length=2; "Validate multi-error: expected 2 errors, got "+String:C10($v.errors.length))
 
+// --- Calculated attribute: rejected by default, accepted with allowCalculated ---
+// _StudentsEntity declares the computed attribute "fullName"
+$tpl:=cs:C1710.Phrase.new("{fullName}")
+$v:=$tpl.validate(ds:C1482._Students)
+ASSERT:C1129(Not:C34($v.success); "Validate calculated not allowed: expected failure")
+ASSERT:C1129($v.errors.length=1; "Validate calculated not allowed: expected 1 error")
+ASSERT:C1129($v.errors[0].key="fullName"; "Validate calculated not allowed: error key mismatch")
+$v:=$tpl.validate(ds:C1482._Students; {allowCalculated: True:C214})
+ASSERT:C1129($v.success; "Validate calculated allowed: expected success, errors: "+JSON Stringify:C1217($v.errors))
+
+// --- Alias attribute: rejected by default, accepted with allowAlias ---
+// _StudentsEntity declares the alias "town" (school.city.name)
+$tpl:=cs:C1710.Phrase.new("{town}")
+$v:=$tpl.validate(ds:C1482._Students)
+ASSERT:C1129(Not:C34($v.success); "Validate alias not allowed: expected failure")
+ASSERT:C1129($v.errors.length=1; "Validate alias not allowed: expected 1 error")
+ASSERT:C1129($v.errors[0].key="town"; "Validate alias not allowed: error key mismatch")
+$v:=$tpl.validate(ds:C1482._Students; {allowAlias: True:C214})
+ASSERT:C1129($v.success; "Validate alias allowed: expected success, errors: "+JSON Stringify:C1217($v.errors))
+
 // --- "_dirty" sibling of the CURRENT vector → error (would invalidate forever) ---
 // student_vector_2_dirty is the dirty flag of the student_vector_2 vector
 $tpl:=cs:C1710.Phrase.new("{firstName} {student_vector_2_dirty}")
@@ -232,6 +262,26 @@ ASSERT:C1129($v.errors[0].key=""; "No key fields: error key should be empty")
 $tpl:=cs:C1710.Phrase.new("")
 $v:=$tpl.validate(ds:C1482._Students)
 ASSERT:C1129($v.success; "Empty phrase: expected success")
+
+// ══════════════════════════════════════════════════════════════════════
+// ATTRIBUTES — one entry per key, Null when the key cannot be resolved
+// ══════════════════════════════════════════════════════════════════════
+
+var $attrs : Collection
+
+// --- Simple, related (through N:1 relations) and unresolvable keys, in key order ---
+$tpl:=cs:C1710.Phrase.new("{firstName} {school.city.state} {nonExistent} {firstName.length} {school.nope}")
+$attrs:=$tpl.attributes(ds:C1482._Students)
+ASSERT:C1129($attrs.length=5; "Attributes: expected 5 entries, got "+String:C10($attrs.length))
+ASSERT:C1129($attrs[0].name="firstName"; "Attributes[0]: expected firstName")
+ASSERT:C1129($attrs[1].name="state"; "Attributes[1]: expected the Cities.state attribute")
+ASSERT:C1129($attrs[2]=Null:C1517; "Attributes[2]: unknown attribute should be Null")
+ASSERT:C1129($attrs[3]=Null:C1517; "Attributes[3]: path through a non-relation should be Null")
+ASSERT:C1129($attrs[4]=Null:C1517; "Attributes[4]: unknown attribute on a related dataclass should be Null")
+
+// --- Static phrase → no attribute ---
+$attrs:=cs:C1710.Phrase.new("no keys").attributes(ds:C1482._Students)
+ASSERT:C1129($attrs.length=0; "Attributes static: expected empty")
 
 // ══════════════════════════════════════════════════════════════════════
 

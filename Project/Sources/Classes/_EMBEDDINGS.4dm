@@ -21,6 +21,9 @@ property _detailFields:=[\
 // Postponed "invalidate vectors?" questions, keyed by "dataclass.vector" (see _deferPromptInvalidate)
 property _pendingInvalidate : Object:={}
 
+// Item whose phrase was edited (On After Edit) but not saved yet (see _editPhrase / commitPhrase)
+property _editedItem : Object
+
 // Empty state: shown instead of the whole UI while the structure has no vector attribute
 property emptyStateText : Text
 property _mainObjects:=[\
@@ -40,7 +43,7 @@ property _emptyStateObjects:=[\
 property modelsDropdown : Object
 property _cache : Object  // Current catalog cache
 
-// ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___ --- ___
+// MARK:-[CONSTRUCTOR]
 Class constructor
 	
 	This:C1470.read()
@@ -91,6 +94,7 @@ Function manager($e : Object)
 				OBJECT SET FORMAT:C236(*; "Header1"; "path:/.PRODUCT_RESOURCES/Images/ObjectIcons/Icon_600.png")
 				// TODO: Use the new vector icon when ready
 				OBJECT SET FORMAT:C236(*; "Header2"; "path:/.PRODUCT_RESOURCES/Images/StructureEditor/Field_14.png")
+				OBJECT SET FORMAT:C236(*; "Header3"; "path:/.PRODUCT_RESOURCES/Images/StructureEditor/Field_5.png")  // Boolean: the "_dirty" flag
 				
 				This:C1470.paintEmptyState()
 				
@@ -118,6 +122,13 @@ Function manager($e : Object)
 				This:C1470.paintEmptyState()
 				
 				// ______________________________________________________
+			: ($e.code=On Deactivate:K2:10)
+				
+				// The phrase area keeps the focus (no On Data Change): save the edit now, so that
+				// it survives the refresh done when the window comes back to the front
+				This:C1470.commitPhrase()
+				
+				// ______________________________________________________
 			: ($e.code=On Timer:K2:25)
 				
 				This:C1470.paintSchedulerStatus()
@@ -126,6 +137,7 @@ Function manager($e : Object)
 				// ______________________________________________________
 			: ($e.code=On Unload:K2:2)
 				
+				This:C1470.commitPhrase()  // The window may be closed while the phrase is being edited
 				This:C1470.flushPromptInvalidate()  // Last chance to ask about a pending edit
 				
 				Use (Storage:C1525.studio)
@@ -158,7 +170,33 @@ Function manager($e : Object)
 				If ($row>0)
 					
 					var $item : cs:C1710._EmbeddingItem:=Form:C1466.items[$row-1]
-					OBJECT SET HELP TIP:C1181(*; $me; String:C10($item.helptip))
+					
+					ARRAY TEXT:C222($columns; 0x0000)
+					ARRAY TEXT:C222($headers; 0x0000)
+					ARRAY POINTER:C280($columnVars; 0x0000)
+					ARRAY POINTER:C280($headerVars; 0x0000)
+					ARRAY BOOLEAN:C223($visibles; 0x0000)
+					ARRAY POINTER:C280($styles; 0x0000)
+					LISTBOX GET ARRAYS:C832(*; $me; $columns; $headers; $columnVars; $headerVars; $visibles; $styles)
+					
+					var $lines : Collection:=[]
+					
+					// Over a checked "dirty flag" cell, say so, then name the flag field
+					If (($column>0) && ($columns{$column}="dirtyAssociatedAttribute") && $item.hasDirtyAssociatedAttribute())
+						
+						$lines.push(Localized string:C991("hasDirtyAssociatedField"))
+						$lines.push(Replace string:C233(Localized string:C991("dirtyFlagIs"); "{attribute}"; $item.definition.vectorName+"_dirty"))
+						
+					End if 
+					
+					// Then the item's errors & warnings, if any
+					If (Length:C16(String:C10($item.helptip))>0)
+						
+						$lines.push($item.helptip)
+						
+					End if 
+					
+					OBJECT SET HELP TIP:C1181(*; $me; $lines.join("\r"))
 					
 				Else 
 					
@@ -206,23 +244,23 @@ Function manager($e : Object)
 			This:C1470.autoInvalidateManager($e)
 			
 			//______________________________________________________
-		: ($e.objectName="schedulerGear") || ($e.objectName="schedulerStatus") || ($e.objectName="schedulerStatusError")
+		: ($e.objectName="schedulerGear")
 			
 			This:C1470.schedulerManager($e)
 			//______________________________________________________
 		: ($e.objectName="help")
-
+			
 			This:C1470.openHelp()
-
+			
 			//______________________________________________________
-	End case
+	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Opens the project's GitHub repository in the default browser (footer help button).
+	// Opens the online documentation (developer.4d.com) in the default browser (footer help button).
 Function openHelp()
-
-	OPEN URL:C673("https://github.com/4d/4D-Embedding-Studio")
-
+	
+	OPEN URL:C673("https://developer.4d.com/docs/embeddingstudio/overview")
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Footer status bar: repaints the one-line scheduler summary and the running spinner.
 Function paintSchedulerStatus()
@@ -243,11 +281,18 @@ Function paintSchedulerStatus()
 	If ($hasError)
 		$summary:=$summary+"   •   "+$error
 	End if 
+	
+	// An operation running in a worker (e.g. _invalidateVectorsInBackground) comes first
+	var $operation : Text:=(Storage:C1525.studio=Null:C1517) ? "" : String:C10(Storage:C1525.studio.operation)
+	If (Length:C16($operation)>0)
+		$summary:=$operation+"   •   "+$summary
+	End if 
+	
 	Form:C1466.schedulerStatusText:=$summary
 	
 	OBJECT SET VISIBLE:C603(*; "schedulerStatus"; Not:C34($hasError))
 	OBJECT SET VISIBLE:C603(*; "schedulerStatusError"; $hasError)
-	OBJECT SET VISIBLE:C603(*; "schedulerSpinner"; Bool:C1537($status.running))
+	OBJECT SET VISIBLE:C603(*; "schedulerSpinner"; Bool:C1537($status.running) || (Length:C16($operation)>0))
 	
 	// Full line on the help tip since it may be truncated with an ellipsis.
 	OBJECT SET HELP TIP:C1181(*; "schedulerStatus"; $summary)
@@ -307,7 +352,7 @@ Function _emptyStateText() : Text
 	return $lines.join("\r")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Context menu behind the footer gear button / status click: configure + quick runtime actions.
+	// Context menu behind the footer gear button: configure + quick runtime actions.
 Function schedulerManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
@@ -319,11 +364,6 @@ Function schedulerManager($e : Object)
 	$menu.append(Localized string:C991("schedulerConfigure"); "configure")
 	$menu.line()
 	$menu.append(Localized string:C991("schedulerForceNow"); "forceNow").enable(Bool:C1537($status.started) && Not:C34(Bool:C1537($status.running)))
-	If (Bool:C1537($status.started))
-		$menu.append(Localized string:C991("schedulerStop"); "stop")
-	Else 
-		$menu.append(Localized string:C991("schedulerStart"); "start")
-	End if 
 	$menu.append(Localized string:C991("schedulerCancel"); "cancel").enable(Bool:C1537($status.running))
 	
 	// In dev mode the same button also carries the global dev actions.
@@ -341,10 +381,6 @@ Function schedulerManager($e : Object)
 			_SCHEDULER_WIZARD
 		: ($menu.choice="forceNow")
 			$scheduler.force()
-		: ($menu.choice="start")
-			$scheduler.start()
-		: ($menu.choice="stop")
-			$scheduler.stop()
 		: ($menu.choice="cancel")
 			$scheduler.cancel()
 		Else 
@@ -380,7 +416,7 @@ Function _schedulerStateLabel($status : Object) : Text
 		: (Bool:C1537($status.running))
 			return Localized string:C991("schedulerStateRunning")
 		: (Not:C34(Bool:C1537($status.enabled)))
-			return Localized string:C991("schedulerStateDisabled")
+			return Localized string:C991("schedulerStateNever")
 		: (Bool:C1537($status.started))
 			return Localized string:C991("schedulerStateArmed")
 		Else 
@@ -435,6 +471,7 @@ Function listManager($e : Object)
 	
 	$e:=$e || FORM Event:C1606
 	
+	This:C1470.commitPhrase()  // The phrase area may not have got its On Data Change yet
 	This:C1470.flushPromptInvalidate()  // The item being edited is left behind
 	
 	If (This:C1470.updateUI())
@@ -458,11 +495,20 @@ Function listMetaInfo($me : cs:C1710._EmbeddingItem) : Object
 		
 		If ($me#This:C1470.currentItem)
 			
-			If ($me.errors.length>0)
-				
-				$meta.stroke:=_errorColor
-				
-			End if 
+			Case of 
+					
+					// ______________________________________________________
+				: ($me.errors.length>0)
+					
+					$meta.stroke:=_errorColor
+					
+					// ______________________________________________________
+				: ($me.warnings.length>0)  // e.g. vector or "_dirty" flag not indexed
+					
+					$meta.stroke:=_warningColor
+					
+					// ______________________________________________________
+			End case 
 		End if 
 	End if 
 	
@@ -489,6 +535,9 @@ Function moreManager($e : Object)
 		$menu.line().append($workerBusy ? "⏳ Compute Vectors" : "🚧 Compute Vectors"; "computeVectors").enable(Not:C34($workerBusy))
 		$menu.append($workerBusy ? "⏳ Invalid Vectors" : "🚧 Invalid Vectors"; "invalidVectors").enable(Not:C34($workerBusy))
 		$menu.append($workerBusy ? "⏳ Stat Vectors" : "🚧 Stat Vectors"; "statVectors").enable(Not:C34($workerBusy))
+		If (Not:C34($item.vectorObjectIndexed()))
+			$menu.line().append("🚧 Create standard index vector attribute"; "createVectorObjectIndex")
+		End if 
 		Case of 
 			: (Not:C34($item.hasDirtyAssociatedAttribute()))
 				$menu.line().append("🚧 Create dirty attribute"; "createDirtyAttribute")
@@ -522,11 +571,15 @@ Function moreManager($e : Object)
 		: ($menu.choice="aiGeneratedPhrase")
 			$plainText:=$item.supportedAttributes.map(Formula:C1597($1.value.name)).join(",")
 			var $model:="StudioPhrase"
-			If (Not:C34(cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name").includes($model)))
-				ALERT:C41("You must configure a chat model with name: "+$model)
+			If (Not:C34(cs:C1710._AIKit.me.isAvailable))
+				cs:C1710._Dialog.me.alert(cs:C1710._AIKit.me.missingReason)
 				return 
 			End if 
-			var $client : cs:C1710.AIKit.OpenAI:=cs:C1710.AIKit.OpenAI.new()
+			If (Not:C34(cs:C1710._AIKit.me.modelNames().includes($model)))
+				cs:C1710._Dialog.me.alert("You must configure a chat model with name: "+$model)
+				return 
+			End if 
+			var $client : cs:C1710.AIKit.OpenAI:=cs:C1710._AIKit.me.client()
 			var $prompt:="You are an assistant that generates natural-language phrases for embedding database rows."
 			$prompt+="Your task : "
 			$prompt+="- Convert a list of fields into ONE short, natural sentence."
@@ -550,12 +603,12 @@ Function moreManager($e : Object)
 				$item.phrase:=$item.parsePhrase($item.definition.phrase)
 				This:C1470.saveEmbeddingItems()
 			Else 
-				ALERT:C41(JSON Stringify:C1217($resultAI))
+				cs:C1710._Dialog.me.alert(JSON Stringify:C1217($resultAI))
 			End if 
 			// ______________________________________________________
 		: ($menu.choice="computeVectors")
-			This:C1470.flushPromptInvalidate()  // Ask before recomputing, not after
-			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1; $2)); Formula:C1597(_computeVectors($1)); $item.definition)
+			// Ask before recomputing, not after: the compute runs once the invalidation is done
+			This:C1470.flushPromptInvalidate(Formula:C1597(_computeVectors($1)); $item.definition)
 			// ______________________________________________________
 		: ($menu.choice="invalidVectors")
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1; $2)); Formula:C1597(_invalidateVectors($1)); $item.definition)
@@ -569,12 +622,23 @@ Function moreManager($e : Object)
 		: ($menu.choice="createDirtyAttributeIndex")
 			$item.createDirtyAssociatedAttributeIndex()
 			// ______________________________________________________
+		: ($menu.choice="createVectorObjectIndex")
+			$item.createVectorObjectIndex()
+			// ______________________________________________________
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Appends the global dev-only actions (all-vectors ops, diagnostic log, phrase config,
 	// opening the settings / log files) to an existing menu. Caller gates on dev mode.
 Function _appendDevMenu($menu : cs:C1710._menu)
+	
+	// Users start the scheduler from the "not running" dialog; start/stop at will is for dev only.
+	If (Bool:C1537(cs:C1710.Scheduler.me.status().started))
+		$menu.append("🚧 Stop Scheduler"; "stopScheduler")
+	Else 
+		$menu.append("🚧 Start Scheduler"; "startScheduler")
+	End if 
+	$menu.line()
 	
 	var $workerBusy : Boolean:=(Process number:C372("EmbeddingStudio")>0)
 	
@@ -627,6 +691,10 @@ Function _appendDevMenu($menu : cs:C1710._menu)
 Function _handleDevChoice($choice : Text) : Boolean
 	
 	Case of 
+		: ($choice="startScheduler")
+			cs:C1710.Scheduler.me.start()
+		: ($choice="stopScheduler")
+			cs:C1710.Scheduler.me.stop()
 		: ($choice="computeAllVectors")
 			CALL WORKER:C1389("EmbeddingStudio"; Formula:C1597(_runInWorker($1)); Formula:C1597(_computeVectors))
 		: ($choice="invalidAllVectors")
@@ -651,7 +719,7 @@ Function _handleDevChoice($choice : Text) : Boolean
 			If ($execFile.exists)
 				OPEN URL:C673($execFile.platformPath)
 			Else 
-				ALERT:C41("No execution log file found.")
+				cs:C1710._Dialog.me.alert("No execution log file found.")
 			End if 
 		: (Position:C15("phraseOption:"; $choice)=1)
 			var $optKey : Text:=Substring:C12($choice; Length:C16("phraseOption:")+1)
@@ -665,7 +733,7 @@ Function _handleDevChoice($choice : Text) : Boolean
 		: ($choice="openDiagosticLog")
 			var $file:=Folder:C1567(fk logs folder:K87:17; *).files().filter(Formula:C1597(Position:C15("4DDiagnosticLog_"; $1.value.name)=1)).sort().first()
 			If ($file=Null:C1517)
-				ALERT:C41("No log")
+				cs:C1710._Dialog.me.alert("No log")
 			Else 
 				OPEN URL:C673($file.platformPath)
 			End if 
@@ -694,7 +762,7 @@ Function phraseManager($e : Object)
 			// ______________________________________________________
 		: ($e.code=On Mouse Enter:K2:33) || ($e.code=On Mouse Move:K2:35)
 			
-			OBJECT SET HELP TIP:C1181(*; $me; String:C10($item.helptip))
+			OBJECT SET HELP TIP:C1181(*; $me; $item.phraseHelptip)
 			
 			// ______________________________________________________
 		: ($e.code=On Mouse Leave:K2:34)
@@ -737,37 +805,67 @@ Function phraseManager($e : Object)
 				GET HIGHLIGHT:C209(*; $me; $startSel; $endSel)
 				ST SET TEXT:C1115(*; $me; $char; $startSel; $endSel)
 				
+				This:C1470._editPhrase($item; ST Get plain text:C1092(*; $me))  // A programmatic change
+				
 			End if 
 			
 			// ______________________________________________________
 		: ($e.code=On After Edit:K2:43)
 			
-			// Highlight any errors, if any
-			$item.phrase:=$item.parsePhrase(cs:C1710.Phrase.new($plainText))
+			// Typing, pasting, dropping…: the definition follows each change, so that nothing is
+			// lost if the area never gets its On Data Change (window deactivated, other vector
+			// selected in the list, window closed)
+			This:C1470._editPhrase($item; $plainText)
 			
 			Form:C1466.items:=Form:C1466.items  // update UI
 			
 			// ______________________________________________________
 		: ($e.code=On Data Change:K2:15)
 			
-			$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
-			$item.version+=1
+			// The area still shows the edited item: take its final text. Otherwise (another
+			// vector already selected, edit already saved) the text is not this item's one, and
+			// the edit is already in the definition.
+			If ($item=This:C1470._editedItem)
+				
+				This:C1470._editPhrase($item; $plainText)
+				
+				// Re-validate phrase + model and refresh styled text
+				$item.validate()
+				ST SET TEXT:C1115(*; $me; $item.phrase; ST Start text:K78:15; ST End text:K78:16)
+				
+			End if 
 			
-			// Re-validate phrase + model and refresh styled text
-			$item.validate()
-			ST SET TEXT:C1115(*; $me; $item.phrase; ST Start text:K78:15; ST End text:K78:16)
-			
-			This:C1470.saveEmbeddingItems()
-			
-			// The field also loses the focus when the "more" button or the contextual menu is
-			// clicked: asking here would kill the menu flow, so the question waits until the
-			// user really leaves the item.
-			This:C1470._deferPromptInvalidate($item)
+			This:C1470.commitPhrase()
 			
 			Form:C1466.items:=Form:C1466.items  // update UI
 			
 			// ______________________________________________________
 	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Puts the text being edited into $item's definition, without saving it (see commitPhrase).
+Function _editPhrase($item : cs:C1710._EmbeddingItem; $plainText : Text)
+	
+	$item.definition.phrase:=cs:C1710.Phrase.new($plainText)
+	$item.phrase:=$item.parsePhrase($item.definition.phrase)  // Highlight any errors, if any
+	$item.version+=1
+	
+	This:C1470._editedItem:=$item
+	
+	// The field also loses the focus when the "more" button or the contextual menu is
+	// clicked: asking here would kill the menu flow, so the question waits until the
+	// user really leaves the item.
+	This:C1470._deferPromptInvalidate($item)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Saves the phrase being edited, if any.
+Function commitPhrase()
+	
+	If (This:C1470._editedItem#Null:C1517)
+		
+		This:C1470.saveEmbeddingItems()
+		
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function modelsDropdownManager($e : Object)
@@ -906,6 +1004,8 @@ Function modelUpdateDropdown($item : cs:C1710._EmbeddingItem)
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function refresh()
 	
+	This:C1470.commitPhrase()  // The items are read again from the settings file
+	
 	This:C1470.readEmbeddingItems()
 	
 	If (This:C1470._catalogModified())
@@ -914,6 +1014,8 @@ Function refresh()
 		This:C1470.readEmbeddingItems()  // Update list
 		
 	End if 
+	
+	This:C1470._keepPendingInvalidate()
 	
 	// MARK: Update list
 	var $current:=This:C1470.currentItem
@@ -1005,6 +1107,7 @@ Enriched with saved Definition entries from Settings/embeddings.json.
 		var $ghost : Object:={\
 			definition: $saved; \
 			errors: []; \
+			warnings: []; \
 			helptip: ""}
 		
 		Case of 
@@ -1038,6 +1141,10 @@ Enriched with saved Definition entries from Settings/embeddings.json.
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function saveEmbeddingItems()
 	
+	// Every definition is saved, the edited phrase too. Reset first: a refused save shows an
+	// alert, which deactivates the window, whose On Deactivate would try again.
+	This:C1470._editedItem:=Null:C1517
+	
 	// Keep only defined items
 	This:C1470.settings.definitions:=This:C1470.items\
 		.filter(Formula:C1597(Bool:C1537($1.value.defined)))\
@@ -1056,7 +1163,7 @@ Function _saveSettings() : Boolean
 		
 	End if 
 	
-	ALERT:C41(Replace string:C233(Localized string:C991("errSettingsNotSaved"); "{file}"; This:C1470.settings.file.path))
+	cs:C1710._Dialog.me.alert(Replace string:C233(Localized string:C991("errSettingsNotSaved"); "{file}"; This:C1470.settings.file.path))
 	
 	return False:C215
 	
@@ -1078,28 +1185,81 @@ Function _deferPromptInvalidate($item : cs:C1710._EmbeddingItem)
 	This:C1470._pendingInvalidate[$item.definition.dataclassName+"."+$item.definition.vectorName]:=$item
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// After the items were read again (refresh), moves the postponed questions onto the new
+	// items, with the snapshot taken before the edit: the vectors were computed from it, and the
+	// saved edit (now the new item's snapshot) must not hide the change.
+Function _keepPendingInvalidate()
+	
+	var $key : Text
+	For each ($key; This:C1470._pendingInvalidate)
+		
+		var $old : cs:C1710._EmbeddingItem:=This:C1470._pendingInvalidate[$key]
+		var $new : Object:=This:C1470.items.query("definition.dataclassName = :1 & definition.vectorName = :2"; \
+			$old.definition.dataclassName; $old.definition.vectorName).first()
+		
+		If (($new#Null:C1517) && OB Instance of:C1731($new; cs:C1710._EmbeddingItem))
+			
+			$new.original:=$old.original
+			This:C1470._pendingInvalidate[$key]:=$new
+			
+		End if 
+		
+	End for each 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Asks about every definition changed since the last question (one dialog per item, at most).
-Function flushPromptInvalidate()
+	// The accepted invalidations run in the "EmbeddingStudio_invalidate" worker (one save per
+	// entity: a large table would freeze the window), which calls invalidateDone() back.
+	// $then (called with $param), e.g. a compute, runs in the "EmbeddingStudio" worker once
+	// the invalidations queued before it are done.
+Function flushPromptInvalidate($then : 4D:C1709.Function; $param : Variant)
 	
 	var $pending : Object:=This:C1470._pendingInvalidate
 	This:C1470._pendingInvalidate:={}  // Reset first: _promptInvalidate() may re-enter through the UI
 	
+	var $accepted : Collection:=[]
 	var $key : Text
 	For each ($key; $pending)
 		
-		This:C1470._promptInvalidate($pending[$key])
+		If (This:C1470._promptInvalidate($pending[$key]))
+			
+			$accepted.push({\
+				dataclassName: $pending[$key].definition.dataclassName; \
+				vectorName: $pending[$key].definition.vectorName})
+			
+		End if 
 		
 	End for each 
 	
+	If (($accepted.length>0) || ($then#Null:C1517))
+		
+		CALL WORKER:C1389("EmbeddingStudio_invalidate"; "_invalidateVectorsInBackground"; $accepted; $then; $param)
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Called back (CALL FORM) by _invalidateVectorsInBackground once the vectors are invalidated.
+Function invalidateDone($result : Object)
+	
+	If ($result.errors.length>0)
+		
+		cs:C1710._Dialog.me.alert($result.message)
+		
+	End if 
+	
+	This:C1470.paintSchedulerStatus()  // The operation is over
+	This:C1470.items:=This:C1470.items  // Update UI
+	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Compares current phrase/model against the snapshot taken at load time.
-	// If either changed, prompts the developer and calls invalidateVectors() on confirmation.
-Function _promptInvalidate($item : cs:C1710._EmbeddingItem)
+	// If either changed, prompts the developer. Returns True when the vectors must be
+	// invalidated: flushPromptInvalidate() runs it in a worker, not in the window's process.
+Function _promptInvalidate($item : cs:C1710._EmbeddingItem) : Boolean
 	
 	If (($item=Null:C1517)\
 		 || ($item.original=Null:C1517))
 		
-		return 
+		return False:C215
 		
 	End if 
 	
@@ -1111,24 +1271,17 @@ Function _promptInvalidate($item : cs:C1710._EmbeddingItem)
 	If (Not:C34($changed))\
 		 || (Not:C34($item.definition._hasVectorComputed()))
 		
-		return 
+		return False:C215
 		
 	End if 
 	
 	// Update snapshot so a subsequent save won't re-prompt for the same delta
 	$item.original:=$item.definition.toObject()
 	
-	// TODO: To localize
-	CONFIRM:C162(\
-		"The definition for "+$item.definition.dataclassName+"."+$item.definition.vectorName+" has changed.\rDo you want to mark all existing vectors for recalculation?"; \
-		"Recalculate"; \
-		"Skip")  // TODO: localize
-	
-	If (Bool:C1537(OK))
-		
-		$item.definition.invalidateVectors()
-		
-	End if 
+	return cs:C1710._Dialog.me.confirm(\
+		Replace string:C233(Localized string:C991("invalidatePromptConfirm"); "{vector}"; $item.definition.dataclassName+"."+$item.definition.vectorName); \
+		Localized string:C991("invalidatePromptRecalculate"); \
+		Localized string:C991("invalidatePromptSkip"))
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _cacheCatalog()
@@ -1220,8 +1373,7 @@ Function _collectVectorFields() : Collection
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _getModelDropdownValues() : Collection
 	
-	// return cs.AIKit.OpenAIProviders.new().modelAliases().extract("name")
-	var $models : Collection:=cs:C1710.AIKit.OpenAIProviders.new().modelAliases().extract("name")
+	var $models : Collection:=cs:C1710._AIKit.me.modelNames()  // [] without 4D AIKit
 	$models.push("-")
 	$models.push(Localized string:C991("createAModel"))
 	
@@ -1246,7 +1398,7 @@ Function _embeddedAttributesMenu($item : cs:C1710._EmbeddingItem; $menu : cs:C17
 Function _popError($message : Text; $widget : Text; $target : Text)
 	
 	BEEP:C151
-	ALERT:C41($message)
+	cs:C1710._Dialog.me.alert($message)
 	
 	If (Length:C16($target)>0)
 		

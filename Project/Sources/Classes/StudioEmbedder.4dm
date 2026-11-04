@@ -1,23 +1,24 @@
 /**
- Ad-hoc, non-persisting helpers for rendering phrases and computing embeddings.
+ Renders and embeds on demand, resolved against the Studio settings (saved definitions → phrase + model).
+ Nothing is persisted: use it to build a search query vector consistent with the stored ones, or to preview a phrase.
 
  Usage:
-   var $pg:=cs.Playground.new()
-   var $pg:=cs.Playground.new($settings; $options)
+   var $studioEmbedder:=cs.StudioEmbedder.new()
+   var $studioEmbedder:=cs.StudioEmbedder.new($settings; $options)
 
-   $pg.render($entity)                                  // auto-resolve phrase
-   $pg.render($entity; $phrase)                         // explicit phrase
-   $pg.render($entity; $definition)                     // from definition
-   $pg.render($entity; "template with {field}")         // compile on the fly
-   $pg.render($entity; {vectorName: "embedding"})       // stub → saved definition (deduces phrase)
-   $pg.render($entity; {phrase: "tpl {field}"})         // ad-hoc stub → inline template
+   $studioEmbedder.render($entity)                                  // auto-resolve phrase
+   $studioEmbedder.render($entity; $phrase)                         // explicit phrase
+   $studioEmbedder.render($entity; $definition)                     // from definition
+   $studioEmbedder.render($entity; "template with {field}")         // compile on the fly
+   $studioEmbedder.render($entity; {vectorName: "embedding"})       // stub → saved definition (deduces phrase)
+   $studioEmbedder.render($entity; {phrase: "tpl {field}"})         // ad-hoc stub → inline template
 
-   $pg.embed("some text"; "text-embedding-3-small")     // direct embed
-   $pg.embed($entity; $definition)                      // render + embed
-   $pg.embed($entity)                                   // auto-resolve everything
-   $pg.embed($entity; {vectorName: "embedding"})        // stub → saved definition (deduces phrase + model)
-   $pg.embed($entity; {phrase: "tpl {x}"; modelAlias: "m"})  // ad-hoc stub (deduces nothing, all given)
-   $pg.embed("some text"; {modelAlias: "m"})            // stub supplies the model
+   $studioEmbedder.embed("some text"; "text-embedding-3-small")     // direct embed
+   $studioEmbedder.embed($entity; $definition)                      // render + embed
+   $studioEmbedder.embed($entity)                                   // auto-resolve everything
+   $studioEmbedder.embed($entity; {vectorName: "embedding"})        // stub → saved definition (deduces phrase + model)
+   $studioEmbedder.embed($entity; {phrase: "tpl {x}"; modelAlias: "m"})  // ad-hoc stub (deduces nothing, all given)
+   $studioEmbedder.embed("some text"; {modelAlias: "m"})            // stub supplies the model
 
  Untyped stubs are resolved the same way cs.Process resolves its definition argument: a
  {vectorName: …} (optionally with {dataclassName}) is matched against the saved
@@ -32,7 +33,8 @@ Class constructor($settings : cs:C1710.Settings; $options : Object)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Render the phrase for an entity and return the resulting text. No API call, no persistence.
-	// $definitionOrPhrase may be:
+	// $entity: 4D entity
+	// $definitionOrPhrase: could be
 	//   - cs.Phrase                  → used directly
 	//   - cs.Definition     → uses $definition.phrase
 	//   - Text                       → compiled on the fly as a new Phrase
@@ -59,7 +61,7 @@ Function render($entity : 4D:C1709.Entity; $definitionOrPhrase : Variant) : Text
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Compute a vector for an arbitrary input — without persisting anywhere.
-	// Useful for previews, similarity checks, REPL experimentation, or ad-hoc querying.
+	// Useful for search queries, similarity checks, or previews.
 	//
 	// Supported call shapes:
 	//   embed("some text"; "text-embedding-3-small")          → direct embed
@@ -262,3 +264,4 @@ Function _modelFromStub($contextDataclassName : Text; $stub : Object; $fallback 
 	End if 
 	
 	return $fallback
+	

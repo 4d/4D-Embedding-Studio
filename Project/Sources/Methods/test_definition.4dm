@@ -72,3 +72,49 @@ $def:=cs:C1710.Definition.new("_Students"; "no_such_attribute"; "m"; "{firstName
 $result:=$def.validate(Null:C1517)
 ASSERT:C1129(Not:C34($result.success); "unknown attribute: should not validate")
 ASSERT:C1129($result.errors.query("field = :1"; "vectorName").length=1; "unknown attribute: should report the vector name")
+
+// ══════════════════════════════════════════════════════════════════════
+// MODEL & PHRASE
+// ══════════════════════════════════════════════════════════════════════
+
+//MARK:- missing model alias
+$def:=cs:C1710.Definition.new("_Students"; "student_vector_1"; ""; "{firstName}")
+$result:=$def.validate(Null:C1517)
+ASSERT:C1129(Not:C34($result.success); "missing modelAlias: should not validate")
+ASSERT:C1129($result.errors.query("field = :1"; "modelAlias").length=1; "missing modelAlias: should report the model")
+
+//MARK:- missing phrase
+$def:=cs:C1710.Definition.new("_Students"; "student_vector_1"; "m"; "")
+$result:=$def.validate(Null:C1517)
+ASSERT:C1129(Not:C34($result.success); "missing phrase: should not validate")
+ASSERT:C1129($result.errors.query("field = :1"; "phrase").length=1; "missing phrase: should report the phrase")
+
+//MARK:- every phrase error is reported against the phrase field
+$def:=cs:C1710.Definition.new("_Students"; "student_vector_1"; "m"; "{nonExistent} {student_vector_1}")
+$result:=$def.validate(Null:C1517)
+ASSERT:C1129(Not:C34($result.success); "invalid phrase: should not validate")
+ASSERT:C1129($result.errors.query("field = :1"; "phrase").length=2; "invalid phrase: expected 2 phrase errors, got "+JSON Stringify:C1217($result.errors))
+
+//MARK:- the phrase options of the settings are applied
+$def:=cs:C1710.Definition.new("_Students"; "student_vector_1"; "m"; "{school.name}")
+$result:=$def.validate(Null:C1517)
+ASSERT:C1129($result.errors.query("field = :1"; "phrase").length=1; "phrase options: a relation should be rejected without settings")
+
+var $settings : cs:C1710.Settings:=cs:C1710.Settings.new()
+$settings.phrase.allowRelations:=True:C214
+$result:=$def.validate($settings)
+ASSERT:C1129($result.errors.query("field = :1"; "phrase").length=0; "phrase options: allowRelations from settings should accept the relation, got "+JSON Stringify:C1217($result.errors))
+
+// ══════════════════════════════════════════════════════════════════════
+// UNKNOWN DATACLASS — vector helpers
+// ══════════════════════════════════════════════════════════════════════
+
+//MARK:- invalidateVectors reports the unknown dataclass
+$def:=cs:C1710.Definition.new("NoSuchDataclass"; "v"; "m"; "{x}")
+var $invalidated : Object:=$def.invalidateVectors()
+ASSERT:C1129(($invalidated.updated=0) && ($invalidated.skipped=0); "unknown dataclass: nothing should be invalidated")
+ASSERT:C1129($invalidated.errors.length=1; "unknown dataclass: expected 1 error")
+ASSERT:C1129(Position:C15("NoSuchDataclass"; String:C10($invalidated.errors[0]))>0; "unknown dataclass: the error should name it, got "+String:C10($invalidated.errors[0]))
+
+//MARK:- _hasVectorComputed is False for an unknown dataclass
+ASSERT:C1129(Not:C34($def._hasVectorComputed()); "unknown dataclass: no vector can be computed")

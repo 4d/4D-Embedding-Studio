@@ -1,15 +1,5 @@
-/* Embedding scheduler dialog — panels and status dot.
+/* Embedding scheduler dialog — texts and the error box.
    Colors follow the system appearance (light / dark) via prefers-color-scheme. */
-
-.schedulerPanel {
-	fill: #F2F2F2;
-	stroke: #DADADA;
-}
-
-.schedulerDot {
-	fill: #9AA0A6;
-	stroke: transparent;
-}
 
 .schedulerMuted {
 	fill: transparent;
@@ -27,13 +17,6 @@
 }
 
 @media (prefers-color-scheme: dark) {
-	.schedulerPanel {
-		fill: #26272B;
-		stroke: #3C3D41;
-	}
-	.schedulerDot {
-		fill: #6B7075;
-	}
 	.schedulerMuted {
 		stroke: #9AA0A6;
 	}

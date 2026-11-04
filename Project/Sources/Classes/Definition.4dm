@@ -36,26 +36,21 @@ Function validate($settings : cs:C1710.Settings) : Object
 	End if 
 	
 	// Model (independent from dataclass)
-	If (Length:C16(String:C10(This:C1470.modelAlias))=0)
-		
-		$errors.push({field: "modelAlias"; message: Localized string:C991("errNoModelConfigured")})
-		
-	Else 
-		
-		var $found:=False:C215
-		var $models:=cs:C1710.AIKit.OpenAIProviders.new().modelAliases()
-		var $m : Object
-		For each ($m; $models)
-			If ($m.name=This:C1470.modelAlias)
-				$found:=True:C214
-			End if 
-		End for each 
-		
-		If (Not:C34($found))
+	Case of 
+			
+		: (Length:C16(String:C10(This:C1470.modelAlias))=0)
+			
+			$errors.push({field: "modelAlias"; message: Localized string:C991("errNoModelConfigured")})
+			
+		: (Not:C34(cs:C1710._AIKit.me.isAvailable))  // The aliases cannot be listed without 4D AIKit
+			
+			$errors.push({field: "modelAlias"; message: cs:C1710._AIKit.me.missingReason})
+			
+		: (Not:C34(cs:C1710._AIKit.me.modelNames().includes(This:C1470.modelAlias)))
+			
 			$errors.push({field: "modelAlias"; message: Replace string:C233(Localized string:C991("errModelNotDefined"); "{model}"; This:C1470.modelAlias)})
-		End if 
-		
-	End if 
+			
+	End case 
 	
 	// Dataclass and vector field
 	var $dc : 4D:C1709.DataClass:=ds:C1482[This:C1470.dataclassName]

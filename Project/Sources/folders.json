@@ -33,33 +33,37 @@
 			"Embedder",
 			"EmbedderResult",
 			"Phrase",
-			"Playground",
 			"Process",
 			"ProcessError",
 			"ProcessErrorCode",
 			"ProcessResult",
 			"Scheduler",
-			"Settings"
+			"Settings",
+			"StudioEmbedder"
 		]
 	},
 	"SCHEDULER": {
 		"methods": [
 			"_SCHEDULER_LOOP",
+			"_SCHEDULER_NOT_RUNNING",
 			"_SCHEDULER_RUN",
 			"_SCHEDULER_WIZARD",
 			"_schedulerFormatDate"
 		],
 		"forms": [
-			"SCHEDULER"
+			"SCHEDULER",
+			"SCHEDULER_NOT_RUNNING"
 		],
 		"classes": [
 			"_ScheduleCalc",
 			"_SCHEDULER",
+			"_SCHEDULER_NOT_RUNNING",
 			"_SchedulerState"
 		]
 	},
 	"STUDIO": {
 		"methods": [
+			"_invalidateVectorsInBackground",
 			"FORM_MANAGER"
 		],
 		"forms": [
@@ -75,13 +79,19 @@
 			"_onTestErrors",
 			"_runTests",
 			"_runTestsCLI",
+			"_testGuiDriver",
 			"_testHoldSemaphore",
+			"test_aikit",
 			"test_dataclassAttributes",
 			"test_definition",
+			"test_dev",
 			"test_embedder",
 			"test_executionLog",
+			"test_gui_embeddings",
+			"test_gui_scheduler",
+			"test_invalidateInBackground",
+			"test_menu",
 			"test_phrase",
-			"test_playground",
 			"test_process",
 			"test_process_criticalModels",
 			"test_process_history",
@@ -96,22 +106,27 @@
 			"test_scheduleCalc",
 			"test_scheduler",
 			"test_scheduler_asyncSave",
-			"test_settings"
+			"test_settings",
+			"test_studioEmbedder"
 		],
 		"classes": [
 			"_TestAIKitClient",
 			"_TestAIKitEmbeddingsAPI",
 			"_TestFixtures",
+			"_TestGui",
 			"_TestProcessEmbedder"
 		]
 	},
 	"UTILS": {
 		"methods": [
+			"_coalesce",
 			"_errorColor",
 			"_warningColor"
 		],
 		"classes": [
+			"_AIKit",
 			"_dataclassAttributes",
+			"_Dialog",
 			"_Env",
 			"_ExecutionLog",
 			"_Logger",

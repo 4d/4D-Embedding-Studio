@@ -298,6 +298,32 @@ $proc:=cs:C1710.Process.new($settings)
 ASSERT:C1129(OB Instance of:C1731($proc.embedder; cs:C1710.Embedder); "unknown className should fall back to default Embedder")
 $settings.embedder:=Null:C1517
 
+// --- no settings.embedder: default Embedder with its default retry policy ---
+$proc:=cs:C1710.Process.new($settings)
+ASSERT:C1129(OB Instance of:C1731($proc.embedder; cs:C1710.Embedder); "no settings.embedder: should be a default Embedder")
+ASSERT:C1129($proc.embedder.maxRetries=3; "no settings.embedder: default maxRetries should be 3")
+ASSERT:C1129($proc.embedder.backoffMs=500; "no settings.embedder: default backoffMs should be 500")
+
+// --- settings.embedder.className without embed/embedBatch: falls back to default Embedder, and says so ---
+$settings.embedder:={className: "ProcessResult"}
+cs:C1710._Logger.me._capture:=[]
+$proc:=cs:C1710.Process.new($settings)
+var $classLogs : Collection:=cs:C1710._Logger.me._capture
+cs:C1710._Logger.me._capture:=Null:C1517
+ASSERT:C1129(OB Instance of:C1731($proc.embedder; cs:C1710.Embedder); "className without embed/embedBatch should fall back to default Embedder")
+ASSERT:C1129($classLogs.query("message = :1"; "@missing embed or embedBatch@").length=1; "className without embed/embedBatch should be logged: "+JSON Stringify:C1217($classLogs))
+
+// --- settings.embedder.className that cannot be instantiated: falls back to default Embedder, and says so ---
+$settings.embedder:={className: "Phrase"}  // its constructor expects a Text template, not the embedder options
+cs:C1710._Logger.me._capture:=[]
+$proc:=cs:C1710.Process.new($settings)
+$classLogs:=cs:C1710._Logger.me._capture
+cs:C1710._Logger.me._capture:=Null:C1517
+ASSERT:C1129(OB Instance of:C1731($proc.embedder; cs:C1710.Embedder); "className that cannot be instantiated should fall back to default Embedder")
+ASSERT:C1129($classLogs.query("message = :1"; "@could not be instantiated@").length=1; "className that cannot be instantiated should be logged: "+JSON Stringify:C1217($classLogs))
+$settings.embedder:=Null:C1517
+Try(1)  // clear the error raised by the refused instantiation
+
 // --- invalidateVectors with dirty companion field (student_vector_2 has student_vector_2_dirty) ---
 var $studentsDef2:=cs:C1710.Definition.new("_Students"; "student_vector_2"; $model; "{firstName} {lastName}")
 $proc:=cs:C1710.Process.new($settings; {embedder: $embedder})
@@ -323,5 +349,183 @@ $studentAlice:=ds:C1482._Students.get($studentAlice.ID)
 $studentBob:=ds:C1482._Students.get($studentBob.ID)
 ASSERT:C1129(Not:C34($studentAlice.student_vector_2_dirty); "after recompute: Alice student_vector_2_dirty should be cleared")
 ASSERT:C1129(Not:C34($studentBob.student_vector_2_dirty); "after recompute: Bob student_vector_2_dirty should be cleared")
+
+// ══════════════════════════════════════════════════════════════════════
+// ENTITY ENTRY POINTS — null inputs and invalid definitions are reported, not thrown
+// ══════════════════════════════════════════════════════════════════════
+
+//MARK:- processEntity(Null)
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new()})
+$result:=$proc.processEntity(Null:C1517)
+ASSERT:C1129(Not:C34($result.success); "processEntity(Null) should fail")
+ASSERT:C1129($result.errorsByCode($codes.NULL_INPUT).length=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errors[0].scope="entity"; JSON Stringify:C1217($result.toObject()))
+
+//MARK:- processEntitySelection(Null)
+$result:=$proc.processEntitySelection(Null:C1517)
+ASSERT:C1129(Not:C34($result.success); "processEntitySelection(Null) should fail")
+ASSERT:C1129($result.errorsByCode($codes.NULL_INPUT).length=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errors[0].scope="pipeline"; JSON Stringify:C1217($result.toObject()))
+
+//MARK:- invalid definition on processEntity / processEntitySelection
+$result:=$proc.processEntity($studentAlice; $badDef)
+ASSERT:C1129(Not:C34($result.success); "processEntity with an invalid definition should fail")
+ASSERT:C1129($result.definitionsProcessed=0; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errorsByCode($codes.VALIDATION_FAILED).length>0; JSON Stringify:C1217($result.toObject()))
+
+$result:=$proc.processEntitySelection(ds:C1482._Students.all(); $badDef)
+ASSERT:C1129(Not:C34($result.success); "processEntitySelection with an invalid definition should fail")
+ASSERT:C1129($result.definitionsProcessed=0; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errorsByCode($codes.VALIDATION_FAILED).length>0; JSON Stringify:C1217($result.toObject()))
+
+//MARK:- _validateDefinition rejects Null and objects that are not definitions
+var $report : cs:C1710.ProcessResult:=cs:C1710.ProcessResult.new()
+ASSERT:C1129(Not:C34($proc._validateDefinition(Null:C1517; $report)); "_validateDefinition(Null) should be False")
+ASSERT:C1129(Not:C34($proc._validateDefinition({dataclassName: "_Students"; vectorName: "student_vector_1"}; $report)); "_validateDefinition(plain object) should be False")
+ASSERT:C1129($report.errorsByCode($codes.NULL_INPUT).length=1; JSON Stringify:C1217($report.toObject()))
+ASSERT:C1129($report.errorsByCode($codes.INVALID_DEFINITION).length=1; JSON Stringify:C1217($report.toObject()))
+
+// ══════════════════════════════════════════════════════════════════════
+// SINGLE ENTITY PATH (processEntity)
+// ══════════════════════════════════════════════════════════════════════
+
+var $single : cs:C1710._TestProcessEmbedder
+
+//MARK:- an entity already embedded and not dirty is skipped without API call
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new(); force: True:C214})
+$result:=$proc.processEntity($studentAlice; $studentsDef)
+ASSERT:C1129($result.entitiesUpdated=1; "setup: Alice should be embedded: "+JSON Stringify:C1217($result.toObject()))
+
+$studentAlice:=ds:C1482._Students.get($studentAlice.ID)
+$single:=cs:C1710._TestProcessEmbedder.new()
+$proc:=cs:C1710.Process.new($settings; {embedder: $single})
+$result:=$proc.processEntity($studentAlice; $studentsDef)
+ASSERT:C1129($result.success; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.entitiesConsidered=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.entitiesUpdated=0; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.apiCalls=0; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($single.embedCalls.length=0; "already embedded entity: the embedder should not be called")
+
+//MARK:- dryRun: no API call, nothing written
+ASSERT:C1129($studentsDef.invalidateVectors().errors.length=0; "failed to invalidate students before single dryRun test")
+$studentAlice:=ds:C1482._Students.get($studentAlice.ID)
+$single:=cs:C1710._TestProcessEmbedder.new()
+$proc:=cs:C1710.Process.new($settings; {embedder: $single; dryRun: True:C214})
+$result:=$proc.processEntity($studentAlice; $studentsDef)
+ASSERT:C1129($result.success; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.entitiesConsidered=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.apiCalls=0; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($single.embedCalls.length=0; "single dryRun: the embedder should not be called")
+ASSERT:C1129(ds:C1482._Students.get($studentAlice.ID).student_vector_1=Null:C1517; "single dryRun: no vector should be written")
+
+//MARK:- debug option logs each recomputed vector
+cs:C1710._Logger.me._capture:=[]
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new(); debug: True:C214})
+$result:=$proc.processEntity($studentAlice; $studentsDef)
+var $debugLogs : Collection:=cs:C1710._Logger.me._capture
+cs:C1710._Logger.me._capture:=Null:C1517
+ASSERT:C1129($result.entitiesUpdated=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($debugLogs.query("message = :1"; "@Vector recomputed@").length=1; "single debug: the recomputed vector should be logged: "+JSON Stringify:C1217($debugLogs))
+
+//MARK:- the dirty flag is cleared
+ASSERT:C1129($studentsDef2.invalidateVectors().errors.length=0; "failed to invalidate student_vector_2 before single dirty test")
+$studentAlice:=ds:C1482._Students.get($studentAlice.ID)
+ASSERT:C1129(Bool:C1537($studentAlice.student_vector_2_dirty); "setup: Alice student_vector_2 should be dirty")
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new()})
+$result:=$proc.processEntity($studentAlice; $studentsDef2)
+ASSERT:C1129($result.entitiesUpdated=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129(Not:C34(ds:C1482._Students.get($studentAlice.ID).student_vector_2_dirty); "single dirty: the dirty flag should be cleared")
+
+//MARK:- a non-critical embedding failure is reported for the entity
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new({nonCriticalTexts: ["Alice Durand"]}); force: True:C214})
+$result:=$proc.processEntity($studentAlice; $studentsDef)
+ASSERT:C1129(Not:C34($result.success); "single non-critical failure should be reported")
+ASSERT:C1129($result.entitiesSkipped=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errorsByCode($codes.EMBED_FAILED).length=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errorsByCode($codes.EMBED_FAILED)[0].scope="entity"; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129(Not:C34($result.hasFatal); "a non-critical failure is not fatal")
+
+//MARK:- a critical model failure on one entity skips that model afterwards
+var $criticalEntityDef:=cs:C1710.Definition.new("_Students"; "student_vector_1"; $badmodel; "{firstName}")
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new({criticalModels: [$badmodel]}); force: True:C214})
+cs:C1710._Logger.me._capture:=[]
+$result:=$proc.processEntity($studentAlice; $criticalEntityDef)
+var $entityCriticalLogs : Collection:=cs:C1710._Logger.me._capture
+cs:C1710._Logger.me._capture:=Null:C1517
+ASSERT:C1129(Not:C34($result.success); "single critical failure should be reported")
+ASSERT:C1129($result.entitiesSkipped=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errorsByCode($codes.MODEL_UNAVAILABLE).length=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.hasFatal; "single critical failure should be fatal")
+// no errorCode on the thrown error: the HTTP status of its first error is logged instead
+ASSERT:C1129($entityCriticalLogs.query("message = :1 AND message = :2"; "@\"event\":\"Critical API error\"@"; "@\"errorCode\":\"400\"@").length=1; "single critical failure should be logged with its status: "+JSON Stringify:C1217($entityCriticalLogs))
+
+$result:=$proc.processEntity($studentBob; $criticalEntityDef)
+ASSERT:C1129($result.definitionsProcessed=0; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errorsByCode($codes.MODEL_SKIPPED).length=1; "processEntity: the failed model should be skipped: "+JSON Stringify:C1217($result.toObject()))
+
+$result:=$proc.processEntitySelection(ds:C1482._Students.all(); $criticalEntityDef)
+ASSERT:C1129($result.entitiesConsidered=0; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errorsByCode($codes.MODEL_SKIPPED).length=1; "processEntitySelection: the failed model should be skipped: "+JSON Stringify:C1217($result.toObject()))
+Try(1)  // clear the errors thrown by the mock embedder
+
+//MARK:- a save failure keeps the vector dirty and says so
+ASSERT:C1129($studentsDef2.invalidateVectors().errors.length=0; "failed to invalidate student_vector_2 before single save failure test")
+$studentAlice:=ds:C1482._Students.get($studentAlice.ID)
+// the embedder saves the same row from elsewhere: the entity held by Process becomes stale
+var $lockEmbedder:=cs:C1710._TestProcessEmbedder.new({dataclassName: "_Students"; entityKey: $studentAlice.ID; touchField: "lastName"; touchSuffix: "_concurrent"})
+cs:C1710._Logger.me._capture:=[]
+$proc:=cs:C1710.Process.new($settings; {embedder: $lockEmbedder})
+$result:=$proc.processEntity($studentAlice; $studentsDef2)
+var $lockLogs : Collection:=cs:C1710._Logger.me._capture
+cs:C1710._Logger.me._capture:=Null:C1517
+ASSERT:C1129($lockEmbedder.touchCount=1; "single save failure: the concurrent save should have happened: "+JSON Stringify:C1217($lockEmbedder.touchErrors))
+ASSERT:C1129(Not:C34($result.success); "single save failure should be reported")
+ASSERT:C1129($result.entitiesUpdated=0; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.entitiesSkipped=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.errorsByCode($codes.SAVE_FAILED).length=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129(Bool:C1537(ds:C1482._Students.get($studentAlice.ID).student_vector_2_dirty); "single save failure: the dirty flag must remain set")
+ASSERT:C1129($lockLogs.query("message = :1"; "@\"event\":\"Vector still dirty after save during recomputation\"@").length=1; "single save failure: the still-dirty vector should be logged")
+
+$studentAlice:=ds:C1482._Students.get($studentAlice.ID)
+$studentAlice.lastName:="Durand"
+ASSERT:C1129($studentAlice.save().success; "failed to restore Alice's last name")
+
+// ══════════════════════════════════════════════════════════════════════
+// SELECTION PATH OPTIONS
+// ══════════════════════════════════════════════════════════════════════
+
+//MARK:- a non-positive batchSize falls back to 50 (one chunk here)
+ASSERT:C1129($studentsDef.invalidateVectors().errors.length=0; "failed to invalidate students before batchSize test")
+$settings.batchSize:=0
+var $batchEmbedder:=cs:C1710._TestProcessEmbedder.new()
+$proc:=cs:C1710.Process.new($settings; {embedder: $batchEmbedder})
+$result:=$proc.process($studentsDef)
+$settings.batchSize:=50
+ASSERT:C1129($result.success; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.entitiesUpdated=2; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($batchEmbedder.embedBatchCalls.length=1; "batchSize 0: both entities should go in a single chunk")
+
+//MARK:- index pausing requested (off by default), resumed asynchronously or synchronously
+ASSERT:C1129($studentsDef.invalidateVectors().errors.length=0; "failed to invalidate students before pauseIndexes test")
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new(); pauseIndexes: True:C214})
+$result:=$proc.process($studentsDef)
+ASSERT:C1129($result.success && ($result.entitiesUpdated=2); "pauseIndexes True: "+JSON Stringify:C1217($result.toObject()))
+
+ASSERT:C1129($studentsDef.invalidateVectors().errors.length=0; "failed to invalidate students before waitForIndexes test")
+$proc:=cs:C1710.Process.new($settings; {embedder: cs:C1710._TestProcessEmbedder.new(); pauseIndexes: True:C214; waitForIndexes: True:C214})
+$result:=$proc.process($studentsDef)
+ASSERT:C1129($result.success && ($result.entitiesUpdated=2); "pauseIndexes + waitForIndexes True: "+JSON Stringify:C1217($result.toObject()))
+
+//MARK:- a provider returning the wrong number of vectors is reported for the chunk
+ASSERT:C1129($studentsDef.invalidateVectors().errors.length=0; "failed to invalidate students before vector count test")
+var $shortEmbedder : Object:={\
+embedBatch: Formula:C1597(cs:C1710.EmbedderResult.new({vectors: []; usage: {prompt_tokens: 1; total_tokens: 1}}; True:C214))}
+$proc:=cs:C1710.Process.new($settings; {embedder: $shortEmbedder})
+$result:=$proc.process($studentsDef)
+ASSERT:C1129(Not:C34($result.success); "vector count mismatch should be reported")
+ASSERT:C1129($result.errorsByCode($codes.VECTOR_COUNT_MISMATCH).length=1; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.entitiesSkipped=2; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129($result.entitiesUpdated=0; JSON Stringify:C1217($result.toObject()))
+ASSERT:C1129(ds:C1482._Students.query("student_vector_1 = null").length=2; "vector count mismatch: no vector should be written")
 
 $settingsFile.delete()

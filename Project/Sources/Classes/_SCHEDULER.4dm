@@ -1,29 +1,33 @@
 /**
  Form class for the standalone SCHEDULER window.
 
- Edits the embedding scheduler configuration (mode / interval / daily) and drives
- the live runtime through cs.Scheduler.me (Force now / Start / Stop / Cancel).
- Opened as an independent window by _SCHEDULER_WIZARD.
+ Edits the embedding scheduler configuration (mode / interval / daily). Starting and
+ stopping the scheduler is not done here: _SCHEDULER_WIZARD shows SCHEDULER_NOT_RUNNING
+ first when it does not run. Opened as an independent window by _SCHEDULER_WIZARD.
+
+ The mode is the form page, picked with the "mode" tab control (page 0): 1 never, 2 interval,
+ 3 daily. Each page holds the settings of its mode; the tab box also holds the summary.
 
  The form binds these dynamic variables (see SCHEDULER/form.4DForm):
-   modeDisabled, modeInterval, modeDaily   radio group "mode"
+   modeNever, modeInterval, modeDaily   derived from the current page (see _applyPage)
    intervalHours                           interval: hours between runs (1..24)
    startFromReference, startFromLast       radio group "startFrom": fixed rate vs fixed delay
    anchorText                              interval: the fixed-rate anchor, read-only
    dailyTime                               daily: the time of day, always "HH:MM"
    dailyTimeValue                          daily: the same instant as a Time, for the stepper
-   stateText, lastRunText, errorText        read-only status
+   errorText                               read-only: the last run's error
    summaryText                             the pending configuration restated in prose
 
  Everything in the config panel — the Reset-to-now button included — edits a *pending*
- configuration that only Save commits; the runtime buttons (Run now / Start / Stop) act at
- once. To keep the two apart, the next-run line says when it is showing an unsaved projection.
+ configuration that only Save commits. The summary line says when it is showing an unsaved
+ projection. The Run now button, alone at the bottom left, is the exception: it acts at once.
 **/
 
 property scheduler : cs:C1710.Scheduler
 
 // Form-bound variables (see SCHEDULER/form.4DForm dataSources)
-property modeDisabled; modeInterval; modeDaily : Boolean
+property modeTab : Object  // the "mode" tab control: {values; index}, index = page - 1
+property modeNever; modeInterval; modeDaily : Boolean
 property startFromReference; startFromLast : Boolean
 property intervalHours : Integer
 property dailyTime : Text
@@ -32,7 +36,7 @@ property dailyTime : Text
 // itself stays text: 4D would render a time expression in its own format ("11:00:00",
 // "11 hours…"), and this row must read "HH:MM" and nothing else.
 property dailyTimeValue : Time
-property stateText; lastRunText; errorText : Text
+property errorText : Text
 property anchorText; summaryText : Text
 
 // The pending interval anchor ("YYYY-MM-DDThh:mm:ss") behind the startFromReference radio.
@@ -46,6 +50,7 @@ property _savedConfig : Object
 // Vertical-layout bookkeeping (see _layout).
 property _layoutKey : Text  // last applied layout signature; skips relayout when unchanged
 property _buttonBar : Integer:=46  // reserved under the last section: buttons (26) + bottom margin (20)
+property _tabHeader : Integer:=36  // from the top of the tab control to its first row of settings
 property _appliedH : Integer:=400  // window content height last applied; MUST match the form's design height
 property _appliedHD : Boolean:=False:C215  // to postpone resize of windows using timer, using this._appliedH value
 property _activated : Boolean  // True once the window is shown (On Activate); gates the first resize
@@ -81,6 +86,12 @@ Function manager($e : Object)
 				
 				
 				//______________________________________________________
+			: ($e.code=On Page Change:K2:54)
+
+				// A tab was clicked (gotoPage action) or FORM GOTO PAGE ran: the page is the mode.
+				This:C1470._applyPage(FORM Get current page:C276)
+
+				//______________________________________________________
 			: ($e.code=On Timer:K2:25)
 				
 				If (Bool:C1537(This:C1470._appliedHD))
@@ -91,6 +102,7 @@ Function manager($e : Object)
 					SET WINDOW RECT:C444($l; $t; $r; $t+This:C1470._appliedH; Current form window:C827)
 					
 					This:C1470._appliedHD:=False:C215
+					SET TIMER:C645(60)  // back to the status refresh rate (see _layout)
 					
 				Else 
 					This:C1470.paint()
@@ -114,18 +126,6 @@ Function manager($e : Object)
 	End if 
 	
 	Case of 
-			
-			//______________________________________________________
-		: ($e.objectName="modeDisabled") || ($e.objectName="modeInterval") || ($e.objectName="modeDaily")
-			
-			// Set the flags from the clicked radio: during On Clicked the other group members are
-			// not reliably zeroed yet, which would make _layout keep the previous mode (no reflow).
-			Form:C1466.modeDisabled:=($e.objectName="modeDisabled")
-			Form:C1466.modeInterval:=($e.objectName="modeInterval")
-			Form:C1466.modeDaily:=($e.objectName="modeDaily")
-			
-			This:C1470._layout()
-			This:C1470.preview()
 			
 			//______________________________________________________
 		: ($e.objectName="startFromReference") || ($e.objectName="startFromLast")
@@ -154,25 +154,14 @@ Function manager($e : Object)
 		: ($e.objectName="resetAnchor")
 			
 			This:C1470.resetAnchor()
-			
+
 			//______________________________________________________
 		: ($e.objectName="forceNow")
-			
+
+			// Acts at once, on the saved configuration: unlike the settings, it needs no Save.
 			This:C1470.scheduler.force()
 			This:C1470.paint()
-			
-			//______________________________________________________
-		: ($e.objectName="start")
-			
-			This:C1470.scheduler.start()
-			This:C1470.paint()
-			
-			//______________________________________________________
-		: ($e.objectName="stop")
-			
-			This:C1470.scheduler.stop()
-			This:C1470.paint()
-			
+
 			//______________________________________________________
 		: ($e.objectName="save")
 			
@@ -203,7 +192,14 @@ Function onLoad()
 	// Size the action buttons to their localized captions before the first layout pass, so the
 	// bars are anchored off the real widths (see _fitButtons / _layout).
 	This:C1470._fitButtons()
-	
+
+	// One tab per mode, in page order (see selectMode).
+	Form:C1466.modeTab:={values: [\
+		Localized string:C991("schedulerModeNever"); \
+		Localized string:C991("schedulerModeInterval"); \
+		Localized string:C991("schedulerModeDaily")]; \
+		index: 0}
+
 	This:C1470.load()
 	
 	SET TIMER:C645(60)  // refresh status roughly once a second
@@ -214,11 +210,7 @@ Function load()
 	
 	var $cfg : Object:=This:C1470.scheduler.config()
 	This:C1470._savedConfig:=$cfg
-	
-	Form:C1466.modeDisabled:=($cfg.mode="disabled")
-	Form:C1466.modeInterval:=($cfg.mode="interval")
-	Form:C1466.modeDaily:=($cfg.mode="daily")
-	
+
 	Form:C1466.intervalHours:=$cfg.intervalHours
 	Form:C1466.dailyTime:=This:C1470._formatHHMM(This:C1470._parseHHMM(String:C10($cfg.dailyTime)))
 	Form:C1466.dailyTimeValue:=This:C1470._parseHHMM(Form:C1466.dailyTime)
@@ -236,16 +228,48 @@ Function load()
 	Form:C1466.startFromLast:=($cfg.startFrom="lastExecution")
 	Form:C1466.startFromReference:=Not:C34(Bool:C1537(Form:C1466.startFromLast))
 	This:C1470._paintAnchor()
-	
-	This:C1470._layout()
+
+	// Last: the page change lays the form out and previews, so every field must be set.
+	This:C1470.selectMode(String:C10($cfg.mode))
 	This:C1470.paint()
-	
+
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Vertical layout: stacks the sections (config, status, error) top-down, sizing and hiding
-	// each according to the mode and the error, then fits the window to the result. Keyed so it
-	// only reflows when something actually changes.
+	// Shows the page of a mode ("never", "interval" or "daily"; anything else is never). Applied
+	// at once, without waiting for the On Page Change that follows (it then finds nothing to do).
+Function selectMode($mode : Text)
+
+	var $page : Integer:=1
+	Case of
+		: ($mode="interval")
+			$page:=2
+		: ($mode="daily")
+			$page:=3
+	End case
+
+	FORM GOTO PAGE:C247($page)
+	This:C1470._applyPage($page)
+
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// The page is the mode: sets the mode flags from it, keeps the tab on it, and refreshes.
+Function _applyPage($page : Integer)
+
+	Form:C1466.modeNever:=($page=1)
+	Form:C1466.modeInterval:=($page=2)
+	Form:C1466.modeDaily:=($page=3)
+
+	// The tab follows a click by itself, not FORM GOTO PAGE.
+	Form:C1466.modeTab.index:=$page-1
+	Form:C1466.modeTab:=Form:C1466.modeTab  // reassigned so the tab redraws
+
+	This:C1470._fitButton("resetAnchor"; 126)  // page 2 may not have been shown when _fitButtons ran
+	This:C1470.preview()  // the new mode's summary, then the layout fitted to it
+
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Vertical layout: stacks the sections (intro, mode tabs with the settings and the summary,
+	// error) top-down, sizing each according to the mode and the error, then fits the window to
+	// the result. Keyed so it only reflows when something actually changes.
 Function _layout()
-	
+
 	var $interval : Boolean:=Bool:C1537(Form:C1466.modeInterval)
 	var $daily : Boolean:=Bool:C1537(Form:C1466.modeDaily)
 	var $hasError : Boolean:=(Length:C16(String:C10(Form:C1466.errorText))>0)
@@ -265,10 +289,10 @@ Function _layout()
 		End if 
 	End if 
 	
-	// Exact wrapped height of the summary sentence (1..3 lines).
+	// Exact wrapped height of the summary sentence (1..3 lines), inside the tab box.
 	var $sw; $sh : Integer
 	OBJECT SET VISIBLE:C603(*; "summaryText"; True:C214)
-	OBJECT GET BEST SIZE:C717(*; "summaryText"; $sw; $sh; 432)
+	OBJECT GET BEST SIZE:C717(*; "summaryText"; $sw; $sh; 408)
 	If ($sh<18)
 		$sh:=18
 	End if 
@@ -296,93 +320,41 @@ Function _layout()
 	
 	var $gap : Integer:=12
 	
-	// ── header: purpose sentence, then the mode radios under it ─
+	// ── header: purpose sentence ───────────────────────────────
 	This:C1470._sizeObj("intro"; 20; 16; 440; $ih)
 	var $y : Integer:=16+$ih+$gap
-	This:C1470._moveObj("modeDisabled"; 24; $y)
-	This:C1470._moveObj("modeInterval"; 126; $y)
-	This:C1470._moveObj("modeDaily"; 318; $y)
-	$y:=$y+20+$gap
-	
-	// ── config section ─────────────────────────────────────────
+
+	// ── mode tabs: the settings of the selected page, then the summary ─
+	// The box fits the current page: only its objects show, so each case places its own page.
+	var $tabTop : Integer:=$y
+	var $top : Integer:=$tabTop+This:C1470._tabHeader
+	var $bottom : Integer:=$top  // where the summary goes; never has no settings above it
 	Case of 
 		: ($interval)
 			// Row 1: every N hours. Row 2: the fixed-rate radio, with its anchor and the
 			// Reset-to-now button underneath. Row 3: the fixed-delay radio. The anchor is
-			// always present, so the panel keeps a constant height.
-			This:C1470._sizeObj("schedulerConfigPanel"; 20; $y; 440; 140)
-			This:C1470._moveObj("intervalHours.label"; 40; $y+24)
-			This:C1470._moveObj("intervalHours"; 124; $y+22)
-			This:C1470._moveObj("schedulerHoursLabel"; 190; $y+24)
-			This:C1470._moveObj("startFromReference"; 40; $y+52)
-			This:C1470._moveObj("anchorText"; 62; $y+78)
-			// Kept flush to the panel's right inner edge; its width follows the localized caption.
-			This:C1470._moveObjRight("resetAnchor"; 446; $y+74)
-			This:C1470._moveObj("startFromLast"; 40; $y+106)
-			OBJECT SET VISIBLE:C603(*; "schedulerConfigPanel"; True:C214)
-			OBJECT SET VISIBLE:C603(*; "intervalHours"; True:C214)
-			OBJECT SET VISIBLE:C603(*; "intervalHours.label"; True:C214)
-			OBJECT SET VISIBLE:C603(*; "schedulerHoursLabel"; True:C214)
-			OBJECT SET VISIBLE:C603(*; "startFromReference"; True:C214)
-			OBJECT SET VISIBLE:C603(*; "anchorText"; True:C214)
-			OBJECT SET VISIBLE:C603(*; "resetAnchor"; True:C214)
-			OBJECT SET VISIBLE:C603(*; "startFromLast"; True:C214)
-			OBJECT SET VISIBLE:C603(*; "dailyTime"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "dailyTimeStepper"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "dailyTime.label"; False:C215)
-			$y:=$y+140+$gap
+			// always present, so the page keeps a constant height.
+			This:C1470._moveObj("intervalHours.label"; 40; $top+2)
+			This:C1470._moveObj("intervalHours"; 124; $top)
+			This:C1470._moveObj("schedulerHoursLabel"; 190; $top+2)
+			This:C1470._moveObj("startFromReference"; 40; $top+30)
+			This:C1470._moveObj("anchorText"; 62; $top+56)
+			// Kept flush to the box's right inner edge; its width follows the localized caption.
+			This:C1470._moveObjRight("resetAnchor"; 444; $top+52)
+			This:C1470._moveObj("startFromLast"; 40; $top+84)
+			$bottom:=$top+104+$gap
 		: ($daily)
-			This:C1470._sizeObj("schedulerConfigPanel"; 20; $y; 440; 56)
-			This:C1470._moveObj("dailyTime.label"; 40; $y+20)
-			This:C1470._moveObj("dailyTime"; 130; $y+18)
-			This:C1470._moveObj("dailyTimeStepper"; 198; $y+16)
-			OBJECT SET VISIBLE:C603(*; "schedulerConfigPanel"; True:C214)
-			OBJECT SET VISIBLE:C603(*; "dailyTime"; True:C214)
-			OBJECT SET VISIBLE:C603(*; "dailyTimeStepper"; True:C214)
-			OBJECT SET VISIBLE:C603(*; "dailyTime.label"; True:C214)
-			OBJECT SET VISIBLE:C603(*; "intervalHours"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "intervalHours.label"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "schedulerHoursLabel"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "startFromReference"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "anchorText"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "resetAnchor"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "startFromLast"; False:C215)
-			$y:=$y+56+$gap
-		Else 
-			// disabled: no config section at all
-			OBJECT SET VISIBLE:C603(*; "schedulerConfigPanel"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "intervalHours"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "intervalHours.label"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "schedulerHoursLabel"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "startFromReference"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "anchorText"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "resetAnchor"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "startFromLast"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "dailyTime"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "dailyTimeStepper"; False:C215)
-			OBJECT SET VISIBLE:C603(*; "dailyTime.label"; False:C215)
+			This:C1470._moveObj("dailyTime.label"; 40; $top+4)
+			This:C1470._moveObj("dailyTime"; 130; $top+2)
+			This:C1470._moveObj("dailyTimeStepper"; 198; $top)
+			$bottom:=$top+22+$gap
 	End case 
 	
-	// ── status section (fixed height) ──────────────────────────
-	// Three rows: the state label, then the runtime buttons on a line of their own, then the
-	// last-run line. The buttons get their own row because their localized captions ("Démarrer
-	// le planificateur", "Exécuter maintenant") are far too wide to sit next to the state text.
-	This:C1470._sizeObj("schedulerStatusPanel"; 20; $y; 440; 118)
-	This:C1470._moveObj("schedulerDot"; 40; $y+22)
-	This:C1470._moveObj("spinner"; 39; $y+21)
-	This:C1470._sizeObj("stateText"; 58; $y+18; 380; 20)  // widened: no buttons share this row now
-	// Button row: Run-now on the left, the Start/Stop toggle a constant 12 px to its right; both
-	// widths track the localized captions (see _fitButtons).
-	var $fl; $ft; $fr; $fb : Integer
-	OBJECT GET COORDINATES:C663(*; "forceNow"; $fl; $ft; $fr; $fb)
-	This:C1470._moveObj("forceNow"; 40; $y+50)
-	This:C1470._moveObj("start"; 40+($fr-$fl)+12; $y+49)
-	This:C1470._moveObj("stop"; 40+($fr-$fl)+12; $y+49)
-	// Last-run line: the French label ("Dernière exécution :") needs more room than the English.
-	This:C1470._sizeObj("lastRun.label"; 40; $y+88; 160; 18)
-	This:C1470._sizeObj("lastRunText"; 206; $y+88; 240; 18)
-	$y:=$y+118+$gap
-	
+	This:C1470._sizeObj("summaryText"; 36; $bottom; 408; $sh)
+	var $tabH : Integer:=$bottom+$sh+16-$tabTop
+	This:C1470._sizeObj("mode"; 20; $tabTop; 440; $tabH)
+	$y:=$tabTop+$tabH+$gap
+
 	// ── error section (0, or 1..5 lines) ───────────────────────
 	If ($hasError)
 		var $boxH : Integer:=$errTextH+16
@@ -395,12 +367,6 @@ Function _layout()
 		OBJECT SET VISIBLE:C603(*; "schedulerErrorBox"; False:C215)
 		OBJECT SET VISIBLE:C603(*; "error"; False:C215)
 	End if 
-	
-	// ── summary sentence ───────────────────────────────────────
-	// The plain-language restatement of what is about to be saved, so the schedule can be
-	// checked without reverse-engineering the radios above.
-	This:C1470._sizeObj("summaryText"; 24; $y; 432; $sh)
-	$y:=$y+$sh+$gap
 	
 	// ── buttons bar + fit the window to the content ──────────────────────────
 	// The buttons sit a gap under the real last section; the window height must be that plus the
@@ -415,12 +381,14 @@ Function _layout()
 	OBJECT GET COORDINATES:C663(*; "save"; $svl; $svt; $svr; $svb)
 	This:C1470._moveObjRight("save"; 460; $y)
 	This:C1470._moveObjRight("close"; 460-($svr-$svl)-$btnGap; $y)
+	// The supplementary action, away from the pair on the left margin: it acts at once.
+	This:C1470._moveObj("forceNow"; 20; $y)
 	
 	var $targetH : Integer:=$y+This:C1470._buttonBar
 	If (This:C1470._activated && ($targetH#This:C1470._appliedH))
 		This:C1470._appliedH:=$targetH
 		This:C1470._appliedHD:=True:C214
-		SET TIMER:C645(10)
+		SET TIMER:C645(-1)  // resize on the next cycle, out of the current event
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -456,8 +424,6 @@ Function _fitButtons()
 	This:C1470._fitButton("close"; 76)
 	This:C1470._fitButton("save"; 76)
 	This:C1470._fitButton("forceNow"; 90)
-	This:C1470._fitButton("start"; 116)
-	This:C1470._fitButton("stop"; 116)
 	This:C1470._fitButton("resetAnchor"; 126)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -595,7 +561,7 @@ Function save()
 	// Builds a raw scheduler config object from the current form variables.
 Function currentConfig() : Object
 	
-	var $mode : Text:="disabled"
+	var $mode : Text:="never"
 	Case of 
 		: (Bool:C1537(Form:C1466.modeInterval))
 			$mode:="interval"
@@ -621,9 +587,12 @@ Function preview()
 	var $state : cs:C1710._SchedulerState:=cs:C1710._SchedulerState.me
 	var $next : Object:=cs:C1710._ScheduleCalc.me.nextRun($cfg; This:C1470.scheduler._effectiveLastRun(); $state.armedAt)
 	
-	// The config controls only commit on Save, while "Last run" above is a fact. The summary
-	// says which one it is showing, so an unsaved projection is never read as the armed schedule.
+	// The config controls only commit on Save: the summary says when it shows an unsaved
+	// projection, so it is never read as the armed schedule.
 	Form:C1466.summaryText:=This:C1470._summary($cfg; $next; This:C1470._isDirty($cfg))
+	
+	// Its height may have changed: lay out now, not at the next status refresh.
+	This:C1470._layout()
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// True when the edited configuration differs from the one the window opened with.
@@ -647,8 +616,8 @@ Function _summary($cfg : Object; $next : Object; $pending : Boolean) : Text
 	
 	var $mark : Text:=$pending ? " "+Localized string:C991("schedulerSummaryPending") : ""
 	
-	If (String:C10($cfg.mode)="disabled")
-		return Localized string:C991("schedulerSummaryDisabled")+$mark
+	If (String:C10($cfg.mode)="never")
+		return Localized string:C991("schedulerSummaryNever")+$mark
 	End if 
 	
 	var $text : Text:=""
@@ -705,57 +674,27 @@ Function _relative($timestamp : Text) : Text
 	return Replace string:C233($text; "{m}"; String:C10($minutes-($hours*60)))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Refreshes the read-only status block and the enable state of the runtime buttons.
+	// Refreshes the last run's error, the summary and the Run now button.
 Function paint()
 	
 	var $status : Object:=This:C1470.scheduler.status()
 	
-	Form:C1466.stateText:=This:C1470._stateLabel($status)
-	Form:C1466.lastRunText:=($status.lastExecution#Null:C1517) ? _schedulerFormatDate(String:C10($status.lastExecution)) : "—"
 	Form:C1466.errorText:=($status.error#Null:C1517) ? String:C10($status.error) : ""
 	
-	This:C1470.preview()
+	This:C1470.preview()  // also lays out, with the error box when there is an error
 	
 	// The box shows ~5 lines; the full message is always on the help tip for longer errors.
 	OBJECT SET HELP TIP:C1181(*; "error"; String:C10(Form:C1466.errorText))
-	This:C1470._layout()
-	
-	// While running the spinner replaces the status dot; otherwise the dot shows the state color
-	// (green when armed, grey when idle/disabled).
-	var $running : Boolean:=Bool:C1537($status.running)
-	var $active : Boolean:=$running || Bool:C1537($status.started)
-	OBJECT SET VISIBLE:C603(*; "spinner"; $running)
-	OBJECT SET VISIBLE:C603(*; "schedulerDot"; Not:C34($running))
-	OBJECT SET RGB COLORS:C628(*; "schedulerDot"; ($active ? 0x002ECC71 : 0x009AA0A6); ($active ? 0x002ECC71 : 0x009AA0A6))
-	
-	// A single Start/Stop toggle occupies one slot; show whichever applies.
-	OBJECT SET VISIBLE:C603(*; "start"; Not:C34(Bool:C1537($status.started)))
-	OBJECT SET VISIBLE:C603(*; "stop"; Bool:C1537($status.started))
+
+	// Run now needs a started scheduler and no run in progress; the tip says what it does, or
+	// why it is greyed out.
 	var $canForceNow : Boolean:=Bool:C1537($status.started) && Not:C34(Bool:C1537($status.running))
 	OBJECT SET ENABLED:C1123(*; "forceNow"; $canForceNow)
-	
-	// Explain why the button is greyed out: scheduler not started, vs. a run already in progress.
-	Case of 
+	Case of
 		: ($canForceNow)
-			OBJECT SET HELP TIP:C1181(*; "forceNow"; "")
+			OBJECT SET HELP TIP:C1181(*; "forceNow"; Localized string:C991("schedulerForceNowTip"))
 		: (Bool:C1537($status.running))
 			OBJECT SET HELP TIP:C1181(*; "forceNow"; Localized string:C991("schedulerForceNowTipRunning"))
-		Else 
+		Else
 			OBJECT SET HELP TIP:C1181(*; "forceNow"; Localized string:C991("schedulerForceNowTipStopped"))
-	End case 
-	
-	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-	// Maps a status object to a localized, human-readable state label.
-Function _stateLabel($status : Object) : Text
-	
-	Case of 
-		: (Bool:C1537($status.running))
-			return Localized string:C991("schedulerStateRunning")
-		: (Not:C34(Bool:C1537($status.enabled)))
-			return Localized string:C991("schedulerStateDisabled")
-		: (Bool:C1537($status.started))
-			return Localized string:C991("schedulerStateArmed")
-		Else 
-			return Localized string:C991("schedulerStateIdle")
-	End case 
-	
+	End case
