@@ -23,7 +23,9 @@ If you want to have more control over your embeddings, the component offers an e
 
 **1. Add a field of type Object to the table and associate it with the `4D.Vector` class.**  
 **2. Select **Embedding Studio...** in the **Design** menu to display the Embedding Studio window.**  
-![menu](Documentation/menu.png)
+
+![menu](Documentation/menu.png)  
+
 **3. For each listed `4D.Vector` attribute, write a descriptive phrase based upon attributes of the dataclass.**  
 Use the contextual menu to insert appropriate attributes.  
 This phrase will be vectorized for every entity.  
